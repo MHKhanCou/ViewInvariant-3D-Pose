@@ -1,5 +1,62 @@
-.idea
-*.tar.xz
-*.pyc
-wandb
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Model weights and checkpoints
 checkpoint/*.pth.tr
+*.pt
+yolov8*.pt
+
+# Data (large files, not for git)
+data/motion3d/
+data/motion2d/
+data/__MACOSX/
+*.pkl
+*.pkl.zip
+*.npz
+*.npy
+
+# Output files
+demo_live/output/
+demo/output/
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# Logs
+*.log
+wandb/
+gradio_debug*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary
+*.tmp
+*.bak
+*.orig

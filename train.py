@@ -2,7 +2,10 @@ import argparse
 import os
 
 import numpy as np
-import pkg_resources
+try:
+    import pkg_resources
+except ImportError:
+    pkg_resources = None
 import torch
 import wandb
 from torch import optim
@@ -274,8 +277,19 @@ def train(args, opts):
     if opts.checkpoint:
         checkpoint_path = os.path.join(opts.checkpoint, opts.checkpoint_file if opts.checkpoint_file else "latest_epoch.pth.tr")
         if os.path.exists(checkpoint_path):
-            checkpoint = torch.load(checkpoint_path, map_location=lambda storage, loc: storage)
-            model.load_state_dict(checkpoint['model'], strict=True)
+            checkpoint = torch.load(checkpoint_path, map_location=lambda storage, loc: storage, weights_only=False)
+            # STRICT loading required for valid reproduction
+            # Non-strict fallback can silently evaluate a partly random model
+            print(f"[INFO] Loading checkpoint: {checkpoint_path}")
+            
+            # Handle DataParallel wrapper (checkpoint may have 'module.' prefix)
+            state_dict = checkpoint['model']
+            if list(state_dict.keys())[0].startswith('module.'):
+                print("[INFO] Checkpoint has DataParallel wrapper, removing 'module.' prefix")
+                state_dict = {k.replace('module.', '', 1): v for k, v in state_dict.items()}
+            
+            model.load_state_dict(state_dict, strict=True)
+            print("[INFO] Checkpoint loaded successfully (strict=True, zero missing/unexpected keys)")
 
             if opts.resume:
                 lr = checkpoint['lr']
@@ -304,8 +318,9 @@ def train(args, opts):
                         settings=wandb.Settings(start_method='fork'))
                 wandb.config.update({"run_id": wandb_id})
                 wandb.config.update(args)
-                installed_packages = {d.project_name: d.version for d in pkg_resources.working_set}
-                wandb.config.update({'installed_packages': installed_packages})
+                if pkg_resources is not None:
+                    installed_packages = {d.project_name: d.version for d in pkg_resources.working_set}
+                    wandb.config.update({'installed_packages': installed_packages})
 
     checkpoint_path_latest = os.path.join(opts.new_checkpoint, 'latest_epoch.pth.tr')
     checkpoint_path_best = os.path.join(opts.new_checkpoint, 'best_epoch.pth.tr')
