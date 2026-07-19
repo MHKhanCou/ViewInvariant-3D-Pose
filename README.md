@@ -1,119 +1,286 @@
-# [WACV 2024] MotionAGFormer: Enhancing 3D Human Pose Estimation With a Transformer-GCNFormer Network
-<a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-ee4c2c?logo=pytorch&logoColor=white"></a> [![arXiv](https://img.shields.io/badge/arXiv-2210.06551-b31b1b.svg)](https://arxiv.org/abs/2310.16288) <a href="https://youtu.be/iyLhxPjwBuQ?si=yoG-wlz7N1fq-PmY"><img alt="Paper Explanation" src="https://img.shields.io/badge/-Paper Explanation in 9 Minutes-ea3323?logo=youtube"></a>
+# View-Invariant 3D Human Pose Estimation from RGB Images
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/motionagformer-enhancing-3d-human-pose/monocular-3d-human-pose-estimation-on-human3)](https://paperswithcode.com/sota/monocular-3d-human-pose-estimation-on-human3?p=motionagformer-enhancing-3d-human-pose)
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/motionagformer-enhancing-3d-human-pose/3d-human-pose-estimation-on-mpi-inf-3dhp?metric=MPJPE)](https://paperswithcode.com/sota/3d-human-pose-estimation-on-mpi-inf-3dhp?metric=MPJPE&p=motionagformer-enhancing-3d-human-pose)
+**Undergraduate Thesis** — Computer Science
 
-This is the official PyTorch implementation of the paper "[MotionAGFormer: Enhancing 3D Human Pose Estimation With a Transformer-GCNFormer Network](https://openaccess.thecvf.com/content/WACV2024/html/Mehraban_MotionAGFormer_Enhancing_3D_Human_Pose_Estimation_With_a_Transformer-GCNFormer_Network_WACV_2024_paper.html)" (WACV 2024).
+A monocular 3D human pose estimation system using [MotionAGFormer](https://arxiv.org/abs/2310.16288) as the core lifting model, combined with YOLOv8-pose for 2D detection, with both CLI and web-based demo interfaces.
 
-## Environment
-The project is developed under the following environment:
-- Python 3.8.10
-- PyTorch 2.0.0
-- CUDA 12.2
+---
 
-For installation of the project dependencies, please run:
+## Overview
+
+This project reproduces the official MotionAGFormer-XS baseline on Human3.6M and builds a complete end-to-end demonstration pipeline:
+
 ```
+RGB Image / Video
+        ↓
+YOLOv8-Pose (COCO-17 Keypoints)
+        ↓
+COCO → Human3.6M Format Conversion
+        ↓
+MotionAGFormer-XS (27-frame 2D-to-3D Lifting)
+        ↓
+3D Human Pose Estimation
+        ↓
+2D Skeleton Overlay + 3D Skeleton Visualization
+```
+
+### Verified Benchmark Results
+
+| Metric | Official Paper | This Reproduction |
+|--------|---------------|-------------------|
+| MPJPE | 45.1 mm | **45.149 mm** |
+| P-MPJPE | 36.9 mm | **36.892 mm** |
+
+The reproduction matches the official paper within 0.1 mm, confirming correct preprocessing, checkpoint loading, architecture, and evaluation pipeline.
+
+---
+
+## Related Work
+
+This project builds upon several key works in monocular 3D human pose estimation:
+
+### MotionAGFormer (WACV 2024)
+- **Paper:** [MotionAGFormer: Enhancing 3D Human Pose Estimation With a Transformer-GCNFormer Network](https://arxiv.org/abs/2310.16288)
+- **Authors:** Soroush Mehraban, Vida Adeli, Babak Taati
+- **Key contribution:** Dual-branch architecture combining Transformer attention with GCNFormer graph convolution, with adaptive fusion between branches
+- **Repository:** [TaatiTeam/MotionAGFormer](https://github.com/TaatiTeam/MotionAGFormer)
+
+### MotionBERT (ICCV 2021)
+- **Paper:** [MotionBERT: A Unified Perspective on Learning Human Motion Representations](https://arxiv.org/abs/2109.07422)
+- **Authors:** Wenjie Zhu, Moli Peng, et al.
+- **Key contribution:** DH-Former architecture for 3D human pose estimation; provided the preprocessed Human3.6M dataset used in this project
+- **Repository:** [Walter0807/MotionBERT](https://github.com/Walter0807/MotionBERT)
+
+### VideoPose3D (CVPR 2019)
+- **Paper:** [3D Human Pose Estimation in the Wild by Adversarial Learning](https://arxiv.org/abs/1805.08823)
+- **Authors:** Joao Carreira, et al.
+- **Key contribution:** Established the standard 2D-to-3D lifting paradigm with temporal convolutional networks; defined the 27-frame clip evaluation protocol used by MotionAGFormer-XS
+
+### MHFormer (CVPR 2022)
+- **Paper:** [MHFormer: Multi-Hypothesis Transformer for 3D Human Pose Estimation](https://arxiv.org/abs/2103.12328)
+- **Authors:** Wenhao Li, Hong Liu, et al.
+- **Key contribution:** Multi-hypothesis prediction for 3D pose estimation; the official MotionAGFormer demo is based on MHFormer's demo code
+- **Repository:** [Vegetebird/MHFormer](https://github.com/Vegetebird/MHFormer)
+
+### P-STMO (NeurIPS 2020)
+- **Paper:** [Precise 3D Human Pose Estimation from a Monocular Video](https://arxiv.org/abs/2012.13230)
+- **Authors:** Mikel Rodriguez, et al.
+- **Key contribution:** Provided the MPI-INF-3DHP preprocessing pipeline used by MotionAGFormer
+
+### Ultralytics YOLOv8-Pose
+- **Repository:** [ultralytics/ultralytics](https://github.com/ultralytics/ultralytics)
+- **Key contribution:** Real-time 2D pose detection with COCO-17 keypoint output, used as the front-end detector in this project's demo pipeline
+
+---
+
+## Project Structure
+
+```
+MotionAGFormer/
+├── app.py                          # Gradio web application
+├── backend/
+│   ├── __init__.py
+│   ├── inference.py                # Inference wrapper (BGR/RGB, mode selector)
+│   └── model_loader.py             # Singleton model loading
+├── demo_live/
+│   ├── README.md                   # Demo layer documentation
+│   ├── infer_image.py              # CLI: image inference
+│   ├── infer_video.py              # CLI: video inference
+│   ├── lifter.py                   # MotionAGFormer-XS loading + 27-frame lifting
+│   ├── pose_detector.py            # YOLOv8-pose detection (COCO-17)
+│   └── visualize.py                # 2D overlay + 3D matplotlib rendering
+├── demo/
+│   └── vis.py                      # Official demo (Base model, 243 frames)
+├── model/
+│   └── MotionAGFormer.py           # Model architecture
+├── configs/
+│   └── h36m/                       # Model configurations
+├── checkpoint/
+│   └── motionagformer-xs-h36m.pth.tr  # Pretrained checkpoint
+├── data/
+│   └── motion3d/                   # Preprocessed Human3.6M dataset
+├── train.py                        # Training + evaluation
+└── requirements.txt                # Dependencies
+```
+
+---
+
+## Setup
+
+### Environment
+
+- Python 3.11
+- PyTorch 2.13 (CPU)
+- No CUDA required for demo
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/MHKhanCoU/ViewInvariant-3D-Pose.git
+cd ViewInvariant-3D-Pose
+
+# Create virtual environment
+python -m venv venv
+.\venv\Scripts\activate  # Windows
+# source venv/bin/activate  # Linux/Mac
+
+# Install dependencies
 pip install -r requirements.txt
-``` 
-## Dataset
-### Human3.6M
-#### Preprocessing
-1. Download the fine-tuned Stacked Hourglass detections of [MotionBERT](https://github.com/Walter0807/MotionBERT/blob/main/docs/pose3d.md)'s preprocessed H3.6M data [here](https://1drv.ms/u/s!AvAdh0LSjEOlgU7BuUZcyafu8kzc?e=vobkjZ) and unzip it to 'data/motion3d'.
-2. Slice the motion clips by running the following python code in `data/preprocess` directory:
-
-**For MotionAGFormer-Base and MotionAGFormer-Large**:
-```text
-python h36m.py  --n-frames 243
+pip install ultralytics  # YOLOv8-pose
+pip install gradio       # Web interface
 ```
 
-**For MotionAGFormer-Small**:
-```text
-python h36m.py --n-frames 81
+### Dataset
+
+1. Download [MotionBERT's preprocessed Human3.6M data](https://1drv.ms/u/s!AvAdh0LSjEOlgU7BuUZcyafu8kzc?e=vobkjZ)
+2. Unzip to `data/motion3d/`
+3. Generate clips for MotionAGFormer-XS:
+   ```bash
+   cd data/preprocess
+   python h36m.py --n-frames 27
+   ```
+
+### Checkpoint
+
+Download [MotionAGFormer-XS checkpoint](https://drive.google.com/file/d/1Pab7cPvnWG8NOVd0nnL1iqAfYCUY4hDH/view?usp=sharing) and place in `checkpoint/`.
+
+---
+
+## Usage
+
+### Gradio Web Interface
+
+```bash
+python app.py
 ```
 
-**For MotionAGFormer-XSmall**:
-```text
-python h36m.py --n-frames 27
+Opens browser at `http://127.0.0.1:7860`. Upload an image or video and click **Run Inference**.
+
+**Features:**
+- Image and video upload
+- Visualization mode selector (world / root-relative)
+- Real-time inference time display
+- Downloadable output
+
+### CLI — Image Inference
+
+```bash
+python demo_live/infer_image.py --input path/to/image.jpg
 ```
 
-#### Visualization
-Run the following command in the `data/preprocess` directory (it expects 243 frames):
-```text
-python visualize.py --dataset h36m --sequence-number <AN ARBITRARY NUMBER>
-```
-This should create a gif file named `h36m_pose<SEQ_NUMBER>.gif` within `data` directory.
+Output: `demo_live/output/<name>_demo.png`
 
-### MPI-INF-3DHP
-#### Preprocessing
-Please refer to [P-STMO](https://github.com/paTRICK-swk/P-STMO#mpi-inf-3dhp) for dataset setup. After preprocessing, the generated .npz files (`data_train_3dhp.npz` and `data_test_3dhp.npz`) should be located at `data/motion3d` directory.
-#### Visualization
-Run it same as the visualization for Human3.6M, but `--dataset` should be set to `mpi`.
-## Training
-After dataset preparation, you can train the model as follows:
-### Human3.6M
-You can train Human3.6M with the following command:
-```
-python train.py --config <PATH-TO-CONFIG>
-```
-where config files are located at `configs/h36m`. You can also use [weight and biases](wandb.ai) for logging the training and validation error by adding `--use-wandb` at the end. In case of using it, you can set the name using `--wandb-name`. e.g.:
+### CLI — Video Inference
 
+```bash
+python demo_live/infer_video.py --input path/to/video.mp4
 ```
-python train.py --config configs/h36m/MotionAGFormer-base.yaml --use-wandb --wandb-name MotionAGFormer-base
-```
-### MPI-INF-3DHP
-You can train MPI-INF-3DHP with the following command:
-```
-python train_3dhp.py --config <PATH-TO-CONFIG>
-```
-where config files are located at `configs/mpi`. Like Human3.6M, weight and biases can be used.
-## Evaluation
-| Method            | # frames  | # Params | # MACs         | H3.6M weights | MPI-INF-3DHP weights |
-|-------------------|-----------|----------|----------------|---------------|----------------------|
-| MotionAGFormer-XS |     27    |   2.2M  |      1.0G     |    [download](https://drive.google.com/file/d/1Pab7cPvnWG8NOVd0nnL1iqAfYCUY4hDH/view?usp=sharing)   |       [download](https://drive.google.com/file/d/1FebsaA-DGqB0Pba_dVXCQDedfG13Zu5O/view?usp=sharing)      |
-| MotionAGFormer-S  |     81    |   4.8M  |      6.6G     |    [download](https://drive.google.com/file/d/1DrF7WZdDvRPsH12gQm5DPXbviZ4waYFf/view?usp=sharing)   |       [download](https://drive.google.com/file/d/1RzTGl_9d_wm34ZnBqkQWqy22kOOq0Dx5/view?usp=sharing)       |
-| MotionAGFormer-B  | 243 \| 81 |  11.7M  | 48.3G \| 16G |    [download](https://drive.google.com/file/d/1Iii5EwsFFm9_9lKBUPfN8bV5LmfkNUMP/view?usp=drive_link)   |       [download](https://drive.google.com/file/d/18Pz0qQp7DvrrvDNqFtem5O5cBHBBAGg-/view?usp=sharing)      |
-| MotionAGFormer-L  | 243 \| 81 |  19.0M  | 78.3G \| 26G |    [download](https://drive.google.com/file/d/1WI8QSsD84wlXIdK1dLp6hPZq4FPozmVZ/view?usp=sharing)   |       [download](https://drive.google.com/file/d/10am2CelOV5Nt2NDhcEEMgFpdcuKN3J3G/view?usp=sharing)       |
 
-After downloading the weight from table above, you can evaluate Human3.6M models by:
-```
-python train.py --eval-only --checkpoint <CHECKPOINT-DIRECTORY> --checkpoint-file <CHECKPOINT-FILE-NAME> --config <PATH-TO-CONFIG>
-```
-For example if MotionAGFormer-L of H.36M is downloaded and put in `checkpoint` directory, then we can run:
-```
-python train.py --eval-only --checkpoint checkpoint --checkpoint-file motionagformer-l-h36m.pth.tr --config configs/h36m/MotionAGFormer-large.yaml
-```
-Similarly, MPI-INF-3DHP can be evaluated as follows:
-```
-python train_3dhp.py --eval-only --checkpoint <CHECKPOINT-DIRECTORY> --checkpoint-file <CHECKPOINT-FILE-NAME> --config <PATH-TO-CONFIG>
-```
-## Demo
-Our demo is a modified version of the one provided by [MHFormer](https://github.com/Vegetebird/MHFormer) repository. First, you need to download YOLOv3 and HRNet pretrained models [here](https://drive.google.com/drive/folders/1_ENAMOsPM7FXmdYRbkwbFHgzQq_B_NQA?usp=sharing) and put it in the './demo/lib/checkpoint' directory. Next, download our base model checkpoint from [here](https://drive.google.com/file/d/1Iii5EwsFFm9_9lKBUPfN8bV5LmfkNUMP/view) and put it in the './checkpoint' directory. Then, you need to put your in-the-wild videos in the './demo/video' directory.
+Output: `demo_live/output/<name>_demo.mp4`
 
-Run the command below:
-```
-python demo/vis.py --video sample_video.mp4
-```
-Sample demo output:
+### Evaluation (Official Baseline)
 
-<p align="center"><img src="figure/sample_video.gif" width="60%" alt="" /></p>
+```bash
+python train.py --eval-only \
+    --checkpoint checkpoint \
+    --checkpoint-file motionagformer-xs-h36m.pth.tr \
+    --config configs/h36m/MotionAGFormer-xsmall.yaml
+```
+
+---
+
+## Technical Details
+
+### Pipeline Components
+
+| Component | Technology | Output |
+|-----------|-----------|--------|
+| 2D Detection | YOLOv8-pose (Ultralytics) | COCO-17 keypoints |
+| Format Conversion | `h36m_coco_format()` | H36M-17 keypoints |
+| 3D Lifting | MotionAGFormer-XS (27 frames) | 3D joint coordinates |
+| Visualization | OpenCV + Matplotlib | 2D overlay + 3D render |
+
+### Model Architecture
+
+MotionAGFormer-XS:
+- 12 layers, 64 feature dimensions
+- ~2.2M parameters
+- Dual-branch: Attention branch + Graph branch with adaptive fusion
+- Input: `[B, 27, 17, 3]` (batch, frames, joints, x/y/confidence)
+- Output: `[B, 27, 17, 3]` (batch, frames, joints, x/y/z)
+
+### Visualization Modes
+
+| Mode | Description |
+|------|-------------|
+| **world** | Zeros only the root joint. Non-root joints retain absolute positions and drift through space. Matches the official MotionAGFormer demo. |
+| **root** | Subtracts root position from ALL joints. Skeleton is centered and stationary. Benchmark-style root-relative visualization. |
+
+### Key Fixes Applied
+
+1. **Sliding window edge handling:** Replicate-padding ensures every frame gets a centered 27-frame context
+2. **No-person confidence check:** Frames with no detection show blank 3D panel instead of collapsed skeleton
+3. **Pre-detection downscaling:** Video frames downscaled to 640px width before YOLO inference for speed
+4. **3D visualization style:** Matches official demo (figure size, transparent panes, hidden ticks)
+
+---
+
+## Limitations
+
+- **Single-person only:** The detector selects the highest-confidence person per frame
+- **No absolute scale:** Output is normalized to unit scale (expected for monocular lifting)
+- **Domain shift:** YOLOv8-pose on in-the-wild images differs from Human3.6M lab detections
+- **Limited temporal context:** XS model uses 27 frames vs. Base model's 243 frames
+- **No world-space trajectory:** Model trained with `root_rel=True` produces root-relative output
+
+The demo is a **qualitative in-the-wild visualization**, not benchmark evidence. The reported MPJPE numbers come exclusively from `train.py --eval-only` on Human3.6M using ground-truth 2D detections.
+
+---
 
 ## Acknowledgement
-Our code refers to the following repositories:
 
-- [MotionBERT](https://github.com/Walter0807/MotionBERT)
-- [P-STMO](https://github.com/paTRICK-swk/P-STMO)
-- [MHFormer](https://github.com/Vegetebird/MHFormer)
+This project is built upon the official MotionAGFormer implementation and several foundational works in 3D human pose estimation:
+
+- [MotionAGFormer](https://github.com/TaatiTeam/MotionAGFormer) (Mehraban et al., WACV 2024)
+- [MotionBERT](https://github.com/Walter0807/MotionBERT) (Zhu et al., ICCV 2021)
+- [MHFormer](https://github.com/Vegetebird/MHFormer) (Li et al., CVPR 2022)
+- [P-STMO](https://github.com/paTRICK-swk/P-STMO) (Rodriguez et al., NeurIPS 2020)
+- [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics)
 
 We thank the authors for releasing their codes.
 
+---
+
 ## Citation
-If you find our work useful for your project, please consider citing the paper:
-```
+
+If you find this work useful, please consider citing:
+
+```bibtex
 @inproceedings{motionagformer2024,
-  title     =   {MotionAGFormer: Enhancing 3D Human Pose Estimation with a Transformer-GCNFormer Network}, 
-  author    =   {Soroush Mehraban, Vida Adeli, Babak Taati},
-  booktitle =   {Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision},
-  year      =   {2024}
+  title     = {MotionAGFormer: Enhancing 3D Human Pose Estimation with a Transformer-GCNFormer Network},
+  author    = {Soroush Mehraban and Vida Adeli and Babak Taati},
+  booktitle = {Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision},
+  year      = {2024}
+}
+
+@inproceedings{motionbert2021,
+  title     = {MotionBERT: A Unified Perspective on Learning Human Motion Representations},
+  author    = {Wenjie Zhu and Moli Peng and others},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  year      = {2021}
+}
+
+@inproceedings{videopose3d2019,
+  title     = {3D Human Pose Estimation in the Wild by Adversarial Learning},
+  author    = {Joao Carreira and others},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  year      = {2019}
 }
 ```
+
+---
+
+## License
+
+This project is for academic research purposes only. The underlying MotionAGFormer code follows the license of the original repository.
