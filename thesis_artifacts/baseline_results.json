@@ -1,0 +1,20 @@
+{
+  "model": "MotionAGFormer-XS",
+  "dataset": "Human3.6M",
+  "checkpoint": "checkpoint/motionagformer-xs-h36m.pth.tr",
+  "config": "configs/h36m/MotionAGFormer-xsmall.yaml",
+  "official_results": {
+    "MPJPE_mm": 45.1,
+    "P_MPJPE_mm": 36.9
+  },
+  "reproduced_results": {
+    "MPJPE_mm": 45.149,
+    "P_MPJPE_mm": 36.892
+  },
+  "reproduction_difference": {
+    "MPJPE_diff_mm": 0.049,
+    "P_MPJPE_diff_mm": 0.008
+  },
+  "evaluation_command": "python train.py --eval-only --checkpoint checkpoint --checkpoint-file motionagformer-xs-h36m.pth.tr --config configs/h36m/MotionAGFormer-xsmall.yaml",
+  "notes": "Baseline reproduction matches official paper within 0.1 mm. This result is frozen and must not be modified."
+}

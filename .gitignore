@@ -41,15 +41,20 @@ demo/output/
 *.avi
 *.mov
 *.mkv
+
+# Images (exclude everywhere except thesis_artifacts/figures/)
 *.png
 *.jpg
 *.jpeg
 *.gif
+!thesis_artifacts/figures/*.png
+!thesis_artifacts/figures/*.jpg
 
 # Logs
 *.log
 wandb/
 gradio_debug*.log
+!thesis_artifacts/baseline_evaluation.log
 
 # OS files
 .DS_Store

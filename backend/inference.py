@@ -19,6 +19,8 @@ if _REPO_ROOT not in sys.path:
 from demo_live.lifter import coco_to_h36m, lift_sequence, N_FRAMES
 from demo_live.visualize import draw_2d, render_3d, make_frame, save_video_demo
 from demo_live.pose_detector import detect_video
+from canonical.canonicalizer import Canonicalizer
+from canonical.visualization import render_canonical_3d
 
 from backend.model_loader import get_detector, get_model
 
@@ -28,14 +30,14 @@ MAX_HEIGHT = 480
 DET_WIDTH = 640
 
 
-def predict_image(image_rgb: np.ndarray, mode="world"):
+def predict_image(image_rgb: np.ndarray, mode="camera"):
     """
     Run 3D pose estimation on a single RGB image.
 
     Args:
         image_rgb: (H, W, 3) uint8 RGB numpy array from Gradio.
-        mode:      "world" — skeleton drifts through space (official demo).
-                   "root"  — skeleton centered, root-relative (benchmark style).
+        mode:      "camera"    — camera-relative root pose (qualitative).
+                   "canonical" — canonical body-frame pose (qualitative).
     Returns:
         original_rgb, overlay_2d_rgb, combined_rgb: RGB numpy arrays for display.
         inference_time: seconds (float).
@@ -70,11 +72,17 @@ def predict_image(image_rgb: np.ndarray, mode="world"):
 
     # Lift to 3D.
     h36m = coco_to_h36m(kpts_seq, scores_seq)
-    pose3d = lift_sequence(model, h36m, img_size=(H, W), mode=mode)[-1]
+    pose3d = lift_sequence(model, h36m, img_size=(H, W),
+                           mode="world" if mode == "camera" else "root")[-1]
 
     # Draw results (BGR).
     img_2d_bgr = draw_2d(kpts, frame_small, scores=scores)
-    img_3d_bgr = render_3d(pose3d)
+    if mode == "canonical":
+        can = Canonicalizer()
+        pose_can, _, _ = can(pose3d)
+        img_3d_bgr = render_canonical_3d(pose_can)
+    else:
+        img_3d_bgr = render_3d(pose3d)
     combined_bgr = make_frame(img_2d_bgr, img_3d_bgr)
 
     # BGR -> RGB for Gradio.
@@ -86,14 +94,14 @@ def predict_image(image_rgb: np.ndarray, mode="world"):
     return original_rgb, overlay_2d_rgb, combined_rgb, inference_time
 
 
-def predict_video(video_path: str, mode="world"):
+def predict_video(video_path: str, mode="camera"):
     """
     Run 3D pose estimation on a video file.
 
     Args:
         video_path: path to the uploaded video file.
-        mode:       "world" — skeleton drifts (official demo).
-                    "root"  — skeleton centered (benchmark style).
+        mode:       "camera"    — camera-relative root pose (qualitative).
+                    "canonical" — canonical body-frame pose (qualitative).
     Returns:
         output_path: path to the processed output video.
         inference_time: seconds (float).
@@ -125,9 +133,17 @@ def predict_video(video_path: str, mode="world"):
 
     # Lift to 3D.
     h36m = coco_to_h36m(keypoints, scores)
-    poses3d = lift_sequence(model, h36m, img_size=(proc_H, proc_W), mode=mode)
+    poses3d = lift_sequence(model, h36m, img_size=(proc_H, proc_W),
+                            mode="world" if mode == "camera" else "root")
     if len(poses3d) != T:
         poses3d = poses3d[-T:]
+
+    # Canonical mode: batch-canonicalize with temporal consistency.
+    if mode == "canonical":
+        can = Canonicalizer()
+        poses3d_render, _, _ = can(poses3d)
+    else:
+        poses3d_render = poses3d
 
     # Render each frame at processing resolution.
     cap = cv2.VideoCapture(video_path)
@@ -147,8 +163,10 @@ def predict_video(video_path: str, mode="world"):
             h = img_2d.shape[0]
             w = int(round(h * 9.6 / 5.4))
             img_3d = np.full((h, w, 3), 255, dtype=np.uint8)
+        elif mode == "canonical":
+            img_3d = render_canonical_3d(poses3d_render[i])
         else:
-            img_3d = render_3d(poses3d[i])
+            img_3d = render_3d(poses3d_render[i])
 
         frames_out.append(make_frame(img_2d, img_3d))
     cap.release()

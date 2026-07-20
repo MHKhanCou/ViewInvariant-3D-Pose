@@ -13,11 +13,18 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from backend.inference import predict_image, predict_video
 
+# Map display labels to internal mode values.
+MODE_MAP = {
+    "Camera-relative root pose (qualitative)": "camera",
+    "Canonical body-frame pose (qualitative)": "canonical",
+}
 
-def on_image_run(image, mode):
+
+def on_image_run(image, mode_label):
     if image is None:
         return None, None, None, "**Status:** Ready\n**Inference time:** -"
     try:
+        mode = MODE_MAP.get(mode_label, "camera")
         original, overlay, combined, t = predict_image(image, mode=mode)
         status = f"**Status:** Completed\n**Inference time:** {t:.2f}s"
         return original, overlay, combined, status
@@ -27,10 +34,11 @@ def on_image_run(image, mode):
         return None, None, None, f"**Status:** Error - {e}"
 
 
-def on_video_run(video, mode):
+def on_video_run(video, mode_label):
     if video is None:
         return None, "**Status:** Ready\n**Inference time:** -"
     try:
+        mode = MODE_MAP.get(mode_label, "camera")
         out_path, t = predict_video(video, mode=mode)
         status = f"**Status:** Completed\n**Inference time:** {t:.2f}s"
         return out_path, status
@@ -47,10 +55,14 @@ with gr.Blocks(title="MotionAGFormer Demo") as demo:
     # ── Visualization Mode Selector ──
     with gr.Row():
         mode_select = gr.Radio(
-            choices=["world", "root"],
-            value="world",
+            choices=[
+                "Camera-relative root pose (qualitative)",
+                "Canonical body-frame pose (qualitative)",
+            ],
+            value="Camera-relative root pose (qualitative)",
             label="Visualization Mode",
-            info="world = skeleton moves through space (official demo). root = skeleton centered, root-relative (benchmark style).",
+            info="Camera-relative = root-zeroed pose rendered with fixed viewing angle. "
+                 "Canonical = body-frame normalized pose with equal axis scaling.",
         )
 
     with gr.Tabs():
@@ -93,12 +105,15 @@ with gr.Blocks(title="MotionAGFormer Demo") as demo:
         | P-MPJPE | 36.9 mm |
 
         ### Visualization Modes
-        - **world**: Zeroes only the root joint. Non-root joints retain absolute
-          positions and drift through space across frames. Matches the official
-          MotionAGFormer demo (`demo/vis.py`).
-        - **root**: Subtracts the root position from ALL joints. The skeleton
-          is centered and stationary. Matches benchmark-style root-relative
-          evaluation.
+        - **Camera-relative root pose**: Zeroes only the root joint. Non-root
+          joints retain absolute positions. Rendered with a fixed viewing angle.
+          Matches the official MotionAGFormer demo.
+        - **Canonical body-frame pose**: Constructs a body-fixed coordinate
+          system (vertical + hip axes) and expresses all joints in that frame.
+          Reduces camera-orientation variation under approximately rigid and
+          reliable 3D predictions. Uses equal axis scaling.
+
+        *Both modes are qualitative visualizations, not benchmark evidence.*
         """
     )
 

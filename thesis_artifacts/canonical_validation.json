@@ -1,0 +1,23 @@
+{
+  "test_type": "synthetic_rigid_rotation_invariance",
+  "description": "Mathematical validation of canonical pose representation using synthetic data",
+  "n_rotations": 100,
+  "maximum_raw_synthetic_coordinate_error": 1.1920928955078125e-07,
+  "maximum_relative_error": 5.960464477539063e-08,
+  "relative_error_note": "ratio of max raw error to pose spatial extent (dimensionless)",
+  "orthonormality_error": 0.0,
+  "root_is_zero": true,
+  "root_norm": 0.0,
+  "degenerate_behavior": {
+    "zero_pose_returns_zero": true,
+    "zero_pose_returns_identity_R": true,
+    "zero_pose_valid_is_false": true
+  },
+  "bone_lengths": {
+    "n_bones": 16,
+    "all_positive": true
+  },
+  "joint_format": "H36M-17",
+  "validation_level": "mathematical_synthetic",
+  "note": "This is mathematical validation using synthetic rigid rotations, not evaluation on real cross-view dataset pairs. Exact cross-view correspondence and metric 3D ground-truth semantics could not be verified from the available preprocessed pkl fields."
+}
