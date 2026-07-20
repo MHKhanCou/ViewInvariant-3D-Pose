@@ -173,7 +173,7 @@ def compute_bone_lengths(pose):
     Compute bone lengths for a single (17, 3) pose.
 
     Returns:
-        bone_lengths: (15,) array of Euclidean distances for each bone.
+        bone_lengths: (16,) array of Euclidean distances for each bone.
     """
     pose = np.asarray(pose, dtype=np.float32)
     lengths = np.zeros(len(BONE_CONNECTIONS), dtype=np.float32)

@@ -101,7 +101,7 @@ def bone_length_stability(pred_a, pred_b):
 
     Returns:
         mean_diff: float, mean absolute bone-length difference.
-        per_bone: (15,) array of per-bone absolute differences.
+        per_bone: (16,) array of per-bone absolute differences.
     """
     pred_a = np.asarray(pred_a, dtype=np.float32)
     pred_b = np.asarray(pred_b, dtype=np.float32)

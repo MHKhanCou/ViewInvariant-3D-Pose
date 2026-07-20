@@ -14,8 +14,8 @@
 | `canonical/canonicalizer.py` | Stateful wrapper with reset |
 | `canonical/metrics.py` | canonical_mpjpe, cross_view_consistency_error, bone_length_stability |
 | `canonical/visualization.py` | Equal-axis 3D rendering |
-| `canonical/test_canonical.py` | 17 geometry unit tests |
-| `canonical/test_evaluator.py` | 7 capability-detection tests |
+| `canonical/test_canonical.py` | 18 geometry unit tests |
+| `canonical/test_evaluator.py` | 18 capability-detection tests |
 | `canonical/metadata_capability.py` | Cross-view metadata inspection |
 | `canonical/README.md` | Documentation |
 

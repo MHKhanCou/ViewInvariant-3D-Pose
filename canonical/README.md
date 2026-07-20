@@ -86,7 +86,7 @@ Compares predicted bone lengths across cross-view pairs. Bone lengths are invari
 
 ## Running Tests
 
-### Canonical module tests (17 tests, should all PASS)
+### Canonical module tests (18 tests, should all PASS)
 ```bash
 python -m unittest canonical.test_canonical -v
 ```
