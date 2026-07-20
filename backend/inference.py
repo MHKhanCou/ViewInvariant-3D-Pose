@@ -21,6 +21,7 @@ from demo_live.visualize import draw_2d, render_3d, make_frame, save_video_demo
 from demo_live.pose_detector import detect_video
 from canonical.canonicalizer import Canonicalizer
 from canonical.visualization import render_canonical_3d
+from presentation.avatar_renderer import render_stylized_avatar_3d
 
 from backend.model_loader import get_detector, get_model
 
@@ -30,7 +31,7 @@ MAX_HEIGHT = 480
 DET_WIDTH = 640
 
 
-def predict_image(image_rgb: np.ndarray, mode="camera"):
+def predict_image(image_rgb: np.ndarray, mode="motionagformer"):
     """
     Run 3D pose estimation on a single RGB image.
 
@@ -58,8 +59,8 @@ def predict_image(image_rgb: np.ndarray, mode="camera"):
     detector = get_detector()
     model = get_model()
 
-    # Detect 2D pose on downscaled frame.
-    kpts, scores = detector.detect(frame_small)
+    # Detect 2D pose — try multiple rotations for robustness.
+    kpts, scores = detector.detect_with_rotation(frame_small)
     if kpts is None:
         kpts = np.zeros((17, 2), dtype=np.float32)
         scores = np.zeros((17,), dtype=np.float32)
@@ -70,17 +71,29 @@ def predict_image(image_rgb: np.ndarray, mode="camera"):
     kpts_seq = np.repeat(kpts[None], N_FRAMES, axis=0)
     scores_seq = np.repeat(scores[None], N_FRAMES, axis=0)
 
-    # Lift to 3D.
+    if mode not in {"motionagformer", "canonical", "avatar"}:
+        raise ValueError(f"Unknown visualization mode: {mode}")
+
+    # The default and avatar outputs share the official-style display path.
+    # Canonicalization is applied only in the research-view branch below.
     h36m = coco_to_h36m(kpts_seq, scores_seq)
     pose3d = lift_sequence(model, h36m, img_size=(H, W),
-                           mode="world" if mode == "camera" else "root")[-1]
+                           mode="root" if mode == "canonical" else "world")[-1]
 
     # Draw results (BGR).
     img_2d_bgr = draw_2d(kpts, frame_small, scores=scores)
     if mode == "canonical":
         can = Canonicalizer()
-        pose_can, _, _ = can(pose3d)
+        pose_can, _ = can(pose3d)
+        # Normalize canonical pose for rendering: shift z to non-negative,
+        # scale to [0, 1] range (same convention as camera-relative poses).
+        pose_can[:, 2] -= np.min(pose_can[:, 2])
+        max_val = np.max(pose_can)
+        if max_val > 0:
+            pose_can /= max_val
         img_3d_bgr = render_canonical_3d(pose_can)
+    elif mode == "avatar":
+        img_3d_bgr = render_stylized_avatar_3d(pose3d)
     else:
         img_3d_bgr = render_3d(pose3d)
     combined_bgr = make_frame(img_2d_bgr, img_3d_bgr)
@@ -94,7 +107,7 @@ def predict_image(image_rgb: np.ndarray, mode="camera"):
     return original_rgb, overlay_2d_rgb, combined_rgb, inference_time
 
 
-def predict_video(video_path: str, mode="camera"):
+def predict_video(video_path: str, mode="motionagformer"):
     """
     Run 3D pose estimation on a video file.
 
@@ -107,6 +120,9 @@ def predict_video(video_path: str, mode="camera"):
         inference_time: seconds (float).
     """
     t0 = time.time()
+
+    if mode not in {"motionagformer", "canonical"}:
+        raise ValueError("Avatar View is currently supported for images only.")
 
     detector = get_detector()
     model = get_model()
@@ -134,14 +150,20 @@ def predict_video(video_path: str, mode="camera"):
     # Lift to 3D.
     h36m = coco_to_h36m(keypoints, scores)
     poses3d = lift_sequence(model, h36m, img_size=(proc_H, proc_W),
-                            mode="world" if mode == "camera" else "root")
+                            mode="root" if mode == "canonical" else "world")
     if len(poses3d) != T:
         poses3d = poses3d[-T:]
 
     # Canonical mode: batch-canonicalize with temporal consistency.
     if mode == "canonical":
         can = Canonicalizer()
-        poses3d_render, _, _ = can(poses3d)
+        poses3d_render, _ = can(poses3d)
+        # Normalize each frame: shift z to non-negative, scale to [0, 1].
+        for i in range(len(poses3d_render)):
+            poses3d_render[i, :, 2] -= np.min(poses3d_render[i, :, 2])
+            max_val = np.max(poses3d_render[i])
+            if max_val > 0:
+                poses3d_render[i] /= max_val
     else:
         poses3d_render = poses3d
 

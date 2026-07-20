@@ -82,6 +82,38 @@ class PoseDetector:
 
         return keypoints, scores
 
+    def detect_with_rotation(self, frame):
+        """
+        Detect a person trying 0°, 90°, 180°, 270° rotations.
+        Returns the detection with the highest mean keypoint confidence.
+
+        This handles cases where YOLO fails on rotated images.
+        """
+        best_kpts = None
+        best_scores = None
+        best_mean_conf = -1
+
+        rotations = [0, 90, 180, 270]
+        for angle in rotations:
+            if angle == 0:
+                rotated = frame
+            elif angle == 90:
+                rotated = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
+            elif angle == 180:
+                rotated = cv2.rotate(frame, cv2.ROTATE_180)
+            else:  # 270
+                rotated = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+
+            kpts, scores = self.detect(rotated)
+            if kpts is not None:
+                mean_conf = float(scores.mean())
+                if mean_conf > best_mean_conf:
+                    best_mean_conf = mean_conf
+                    best_kpts = kpts.copy()
+                    best_scores = scores.copy()
+
+        return best_kpts, best_scores
+
 
 def detect_video(detector, video_path, out_kpts_npy=None, det_width=None):
     """
