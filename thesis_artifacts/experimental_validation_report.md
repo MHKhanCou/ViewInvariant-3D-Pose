@@ -23,6 +23,29 @@ Camera B RGB → YOLOv8 → MotionAGFormer-XS → root-relative 3D (model frame)
 
 ---
 
+## 2. Coordinate System Analysis
+
+### What MotionAGFormer predicts
+
+MotionAGFormer is trained with `root_rel=True` (config line 40). It predicts **root-relative 3D joint positions in a model-internal coordinate system**:
+
+- Input: 2D keypoints normalized to `[-1, 1]` by camera resolution
+- Output: 3D positions where joint 0 (pelvis) is at `[0, 0, 0]`
+- The model learns this representation from H36M training data
+- The output is NOT in any specific camera's coordinate system
+
+### Why predictions from different cameras are comparable
+
+MotionAGFormer takes 2D keypoints as input and outputs 3D positions in a fixed model frame. The model does NOT know which camera produced the 2D input. Both Camera A and Camera B predictions land in the **same model frame**, so no camera extrinsic transform is needed.
+
+### Why camera_to_world() is NOT used in evaluation
+
+`camera_to_world()` in `demo/vis.py` applies a **fixed hardcoded quaternion** for visualization only. It is not calibrated to any specific camera and is not used in the official benchmark evaluation.
+
+### Why CanonicalPoseNormalizer is meaningful
+
+Even though predictions are in the model's frame, different cameras produce 2D inputs from different viewing angles. The model maps these different 2D views to 3D poses with different orientations. Canonicalization removes these orientation differences by aligning body axes (torso vertical, hip horizontal).
+
 ## 2. Metric Definitions
 
 ### Cross-View Joint Distance (raw)
