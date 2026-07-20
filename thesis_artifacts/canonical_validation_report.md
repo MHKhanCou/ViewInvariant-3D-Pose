@@ -46,7 +46,7 @@ Exact cross-view correspondence and metric 3D ground-truth semantics could not b
 
 Note: Human3.6M in its raw form may support cross-view evaluation with different preprocessing. The limitation identified here is specific to this preprocessed pkl's metadata fields.
 
-These limitations are detected by `canonical/metadata_capability.py` and verified by `canonical/test_evaluator.py` (17 tests, all passing).
+These limitations are detected by `canonical/metadata_capability.py` and verified by `canonical/test_evaluator.py` (18 tests, all passing).
 
 ## Qualitative Web Demo
 

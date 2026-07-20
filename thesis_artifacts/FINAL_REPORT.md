@@ -62,12 +62,13 @@ All tests pass:
 - Metrics: canonical_mpjpe, cross_view_consistency, bone_length_stability
 - Bone lengths: 16 bones, all positive
 
-### Evaluator tests (17 tests)
+### Evaluator tests (18 tests)
 ```
-Ran 17 tests in 0.981s — OK
+Ran 18 tests in 0.981s — OK
 ```
 
 All tests pass:
+- **Fixture: H36M two-camera same-timestamp** — exact H36M format, different cameras, same timestamp → can_pair=True
 - **Fixture: valid** — synchronized cameras with timestamps allow pairing
 - **Fixture: valid GT** — explicit provenance + plausible depth enables floor
 - **Fixture: valid GT without provenance** — floor NOT enabled

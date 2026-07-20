@@ -46,7 +46,7 @@ The canonical module is validated through synthetic rigid-rotation invariance te
 - Verify orthonormality: R^T R = I
 - Verify degenerate handling: zero pose returns zero output, no NaN
 
-These tests are in `canonical/test_canonical.py` (17 tests, all passing).
+These tests are in `canonical/test_canonical.py` (18 tests, all passing).
 
 ### Cross-view evaluation status
 Exact cross-view correspondence and metric 3D ground-truth semantics could not be verified from the available preprocessed pkl fields. Specifically:
@@ -55,7 +55,7 @@ Exact cross-view correspondence and metric 3D ground-truth semantics could not b
 - Source strings do not uniquely identify cameras in this preprocessed pkl
 - The GT field `joints_2.5d_image` has coordinate semantics that could not be verified as metric 3D
 
-This is detected by `canonical/metadata_capability.py` and verified by `canonical/test_evaluator.py` (tests, all passing).
+This is detected by `canonical/metadata_capability.py` and verified by `canonical/test_evaluator.py` (18 tests, all passing).
 
 Note: Human3.6M in its raw form may support cross-view evaluation with different preprocessing. The limitation identified here is specific to this preprocessed pkl's metadata fields.
 

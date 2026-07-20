@@ -25,6 +25,21 @@ from canonical.metadata_capability import (
 class TestValidSynchronizedCamera(unittest.TestCase):
     """Verify detection works when metadata supports cross-view pairing."""
 
+    def test_h36m_two_camera_same_timestamp(self):
+        """Exact H36M case: same subject/action/subaction, different cameras, same timestamp."""
+        sources = [
+            's_09_act_02_subact_01_ca_01_01234',
+            's_09_act_02_subact_01_ca_02_01234',
+            's_09_act_02_subact_01_ca_01_01235',
+            's_09_act_02_subact_01_ca_02_01235',
+        ]
+        cameras = ['54138969', '55011271', '54138969', '55011271']
+        result = inspect_prediction_metadata(sources, cameras)
+        self.assertTrue(result['has_exact_timestamp'])
+        self.assertTrue(result['has_multi_camera_sequences'])
+        self.assertTrue(result['can_pair'])
+        self.assertEqual(len(result['reasons']), 0)
+
     def test_valid_prediction_pairing(self):
         """Two cameras sharing same sequence+timestamp should allow pairing."""
         sources = [

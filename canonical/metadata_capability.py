@@ -56,14 +56,15 @@ def inspect_prediction_metadata(sources, cameras):
         )
 
     # Check 2: multi-camera sequences
-    # Group by (sequence_id, timestamp) and check camera diversity
+    # Group by (subject, action, subaction) as sequence key, timestamp as sync key.
+    # camera_name is the view identifier (from the pkl, not from source string).
     groups = defaultdict(set)
     for i in range(n):
         parsed = _parse_source(str(sources[i]))
-        seq_id = parsed['sequence_id']
+        seq_key = (parsed['subject'], parsed['action'], parsed['subaction'])
         ts = parsed['timestamp']
         cam = str(cameras[i])
-        groups[(seq_id, ts)].add(cam)
+        groups[(seq_key, ts)].add(cam)
 
     multi_cam_groups = {k: v for k, v in groups.items() if len(v) >= 2}
     has_multi = len(multi_cam_groups) > 0
@@ -158,18 +159,22 @@ def _parse_source(src):
     Parse H36M source string into explicit fields.
 
     Handles multiple formats found in the data:
-      s_09_act_02_subact_01_ca_01     (test split)
-      s_01_act_02_cam_01              (train split)
-      seq1_1000                       (synthetic/test fixtures)
+      s_09_act_02_subact_01_ca_01_01234  (test split with timestamp)
+      s_09_act_02_subact_01_ca_01         (test split without timestamp)
+      s_01_act_02_cam_01                  (train split)
+      seq1_1000                           (synthetic/test fixtures)
+
+    The sequence_id is (subject, action, subaction) only — it excludes
+    camera_id and timestamp. This is the grouping key for cross-view pairing.
 
     Returns:
         dict with:
-            subject:  e.g. 's_09' or None
-            action:   e.g. 'act_02' or None
-            subaction: e.g. 'subact_01' or None
-            camera_id: e.g. 'ca_01' or 'cam_01' or None
-            timestamp: the last numeric part (>=4 digits), or None
-            sequence_id: full source string minus timestamp (for grouping)
+            subject:    e.g. 's_09' or None
+            action:     e.g. 'act_02' or None
+            subaction:  e.g. 'subact_01' or None
+            camera_id:  e.g. 'ca_01' or 'cam_01' or None (view identifier)
+            timestamp:  the last numeric part (>=4 digits), or None (sync key)
+            sequence_id: (subject, action, subaction) joined, for grouping
     """
     parts = str(src).split('_')
     result = {
@@ -182,11 +187,9 @@ def _parse_source(src):
     }
 
     # Check if last part is a numeric timestamp (>= 4 digits)
-    if parts[-1].isdigit() and len(parts[-1]) >= 4:
+    has_timestamp = parts[-1].isdigit() and len(parts[-1]) >= 4
+    if has_timestamp:
         result['timestamp'] = parts[-1]
-        result['sequence_id'] = '_'.join(parts[:-1])
-    else:
-        result['sequence_id'] = src
 
     # Parse H36M-specific fields if format matches
     if len(parts) >= 8:
@@ -201,8 +204,16 @@ def _parse_source(src):
         result['action'] = parts[2] + '_' + parts[3]
         result['camera_id'] = parts[4] + '_' + parts[5]
     elif len(parts) >= 2:
-        # Simple format: prefix_timestamp or prefix_suffix
         result['subject'] = parts[0]
+
+    # sequence_id is (subject, action, subaction) — excludes camera and timestamp
+    if result['subject'] and result['action'] and result['subaction']:
+        result['sequence_id'] = '_'.join([result['subject'], result['action'],
+                                          result['subaction']])
+    elif result['subject'] and result['action']:
+        result['sequence_id'] = '_'.join([result['subject'], result['action']])
+    else:
+        result['sequence_id'] = src
 
     return result
 
