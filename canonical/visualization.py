@@ -18,9 +18,13 @@ BONES_J = [1, 4, 2, 5, 3, 6, 7, 8, 14, 11, 15, 16, 12, 13, 9, 10]
 LR = np.array([0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0], dtype=bool)
 
 
-def render_canonical_3d(pose3d, figsize=(8, 8), dpi=100):
+def render_canonical_3d(pose3d, figsize=(9.6, 5.4), dpi=100):
     """
-    Render a canonical 3D pose with equal axis scaling.
+    Render a canonical 3D pose using the same visual style as render_3d().
+
+    Uses auto-fit axis limits based on the actual pose extent, so the
+    skeleton fills the viewport properly. The visual style (colors, line
+    thickness, viewport angle) matches render_3d() exactly.
 
     Args:
         pose3d: (17, 3) float32 canonical pose.
@@ -34,34 +38,36 @@ def render_canonical_3d(pose3d, figsize=(8, 8), dpi=100):
 
     fig = plt.figure(figsize=figsize, frameon=False, dpi=dpi)
     ax = fig.add_subplot(111, projection="3d")
+    ax.view_init(elev=15, azim=70)
 
-    # --- Equal axis scaling from pose extents ---
-    margin = 0.15
-    mins = pose3d.min(axis=0)
-    maxs = pose3d.max(axis=0)
-    center = (mins + maxs) / 2
-    extent = maxs - mins
-    max_extent = max(extent.max(), 1e-6)
-    half_range = max_extent / 2 * (1 + margin)
-
-    for axis, c in zip(["x", "y", "z"], center):
-        getattr(ax, f"set_{axis}lim3d")([c - half_range, c + half_range])
-
-    # --- Draw bones ---
     lcolor = (0, 0, 1)
     rcolor = (1, 0, 0)
-    for i in range(len(BONES_I)):
-        x = [pose3d[BONES_I[i], 0], pose3d[BONES_J[i], 0]]
-        y = [pose3d[BONES_I[i], 1], pose3d[BONES_J[i], 1]]
-        z = [pose3d[BONES_I[i], 2], pose3d[BONES_J[i], 2]]
-        ax.plot(x, y, z, lw=3, color=lcolor if not LR[i] else rcolor)
 
-    # --- Draw joint markers ---
-    ax.scatter(pose3d[:, 0], pose3d[:, 1], pose3d[:, 2],
-               c="green", s=20, depthshade=True, zorder=5)
+    I = [0, 0, 1, 4, 2, 5, 0, 7, 8, 8, 14, 15, 11, 12, 8, 9]
+    J = [1, 4, 2, 5, 3, 6, 7, 8, 14, 11, 15, 16, 12, 13, 9, 10]
 
-    # --- Clean background ---
-    ax.view_init(elev=15, azim=70)
+    for i in range(len(I)):
+        x = [pose3d[I[i], 0], pose3d[J[i], 0]]
+        y = [pose3d[I[i], 1], pose3d[J[i], 1]]
+        z = [pose3d[I[i], 2], pose3d[J[i], 2]]
+        ax.plot(x, y, z, lw=2, color=lcolor if not LR[i] else rcolor)
+
+    # Auto-fit axis limits based on pose extent (fills 60-80% of viewport).
+    # This ensures the skeleton is large and natural, not tiny.
+    pose_min = pose3d.min(axis=0)
+    pose_max = pose3d.max(axis=0)
+    pose_center = (pose_min + pose_max) / 2
+    pose_extent = np.max(pose_max - pose_min)
+
+    # Use 1.3x the pose extent as axis range (skeleton fills ~75% of viewport)
+    half_range = pose_extent * 0.65
+
+    ax.set_xlim3d([pose_center[0] - half_range, pose_center[0] + half_range])
+    ax.set_ylim3d([pose_center[1] - half_range, pose_center[1] + half_range])
+    ax.set_zlim3d([pose_center[2] - half_range, pose_center[2] + half_range])
+    ax.set_aspect("auto")
+
+    # Transparent panes and hidden ticks (matches official demo).
     white = (1.0, 1.0, 1.0, 0.0)
     ax.xaxis.set_pane_color(white)
     ax.yaxis.set_pane_color(white)

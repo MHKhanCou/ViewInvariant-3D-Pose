@@ -85,12 +85,8 @@ def predict_image(image_rgb: np.ndarray, mode="motionagformer"):
     if mode == "canonical":
         can = Canonicalizer()
         pose_can, _ = can(pose3d)
-        # Normalize canonical pose for rendering: shift z to non-negative,
-        # scale to [0, 1] range (same convention as camera-relative poses).
-        pose_can[:, 2] -= np.min(pose_can[:, 2])
-        max_val = np.max(pose_can)
-        if max_val > 0:
-            pose_can /= max_val
+        # NOTE: pose3d from lift_sequence is already normalized to [0,1].
+        # Do NOT apply additional normalization — it would double-normalize.
         img_3d_bgr = render_canonical_3d(pose_can)
     elif mode == "avatar":
         img_3d_bgr = render_stylized_avatar_3d(pose3d)
@@ -158,12 +154,9 @@ def predict_video(video_path: str, mode="motionagformer"):
     if mode == "canonical":
         can = Canonicalizer()
         poses3d_render, _ = can(poses3d)
-        # Normalize each frame: shift z to non-negative, scale to [0, 1].
-        for i in range(len(poses3d_render)):
-            poses3d_render[i, :, 2] -= np.min(poses3d_render[i, :, 2])
-            max_val = np.max(poses3d_render[i])
-            if max_val > 0:
-                poses3d_render[i] /= max_val
+        # NOTE: lift_sequence already returns poses normalized to [0,1] range.
+        # Do NOT apply additional normalization here — it would double-normalize
+        # and make the pose look like a small scientific plot.
     else:
         poses3d_render = poses3d
 

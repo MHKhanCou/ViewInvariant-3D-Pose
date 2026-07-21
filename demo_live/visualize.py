@@ -30,7 +30,11 @@ H36M_SKELETON = [
     [0, 7], [7, 8], [8, 9], [9, 10], [8, 11], [11, 12], [12, 13],
     [8, 14], [14, 15], [15, 16],
 ]
-H36M_LR = np.array([0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0], dtype=bool)
+# Exact left/right colour mask used by demo/vis.py:show3Dpose().
+H36M_LR = np.array(
+    [0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0],
+    dtype=bool,
+)
 
 
 def draw_2d(kpts_2d, img, scores=None, thresh=0.3):
@@ -79,12 +83,18 @@ def render_3d(pose3d, figsize=(9.6, 5.4), azimuth=70, elev=15):
         z = [pose3d[I[i], 2], pose3d[J[i], 2]]
         ax.plot(x, y, z, lw=2, color=lcolor if not H36M_LR[i] else rcolor)
 
-    R = 0.72
-    RZ = 0.7
-    xr, yr, zr = pose3d[0, 0], pose3d[0, 1], pose3d[0, 2]
-    ax.set_xlim3d([-R + xr, R + xr])
-    ax.set_ylim3d([-R + yr, R + yr])
-    ax.set_zlim3d([-RZ + zr, RZ + zr])
+    # Auto-fit axis limits based on pose extent (fills ~75% of viewport).
+    pose_min = pose3d.min(axis=0)
+    pose_max = pose3d.max(axis=0)
+    pose_center = (pose_min + pose_max) / 2
+    pose_extent = np.max(pose_max - pose_min)
+
+    # Use 1.3x the pose extent as axis range
+    half_range = pose_extent * 0.65
+
+    ax.set_xlim3d([pose_center[0] - half_range, pose_center[0] + half_range])
+    ax.set_ylim3d([pose_center[1] - half_range, pose_center[1] + half_range])
+    ax.set_zlim3d([pose_center[2] - half_range, pose_center[2] + half_range])
     ax.set_aspect("auto")
 
     # Transparent panes and hidden ticks (matches official demo).
@@ -117,10 +127,13 @@ def make_frame(img_2d, img_3d):
     h2 = img_2d.shape[0]
     h3 = img_3d.shape[0]
     target_h = max(h2, h3)
+    # Resize both to exact target height to avoid 1px rounding errors
     if h2 != target_h:
-        img_2d = _resize_to_width(img_2d, int(round(img_2d.shape[1] * target_h / h2)))
+        scale = target_h / float(h2)
+        img_2d = cv2.resize(img_2d, (int(round(img_2d.shape[1] * scale)), target_h))
     if h3 != target_h:
-        img_3d = _resize_to_width(img_3d, int(round(img_3d.shape[1] * target_h / h3)))
+        scale = target_h / float(h3)
+        img_3d = cv2.resize(img_3d, (int(round(img_3d.shape[1] * scale)), target_h))
     return np.hstack([img_2d, img_3d])
 
 

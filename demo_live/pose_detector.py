@@ -85,13 +85,17 @@ class PoseDetector:
     def detect_with_rotation(self, frame):
         """
         Detect a person trying 0°, 90°, 180°, 270° rotations.
-        Returns the detection with the highest mean keypoint confidence.
+        Returns the detection with the highest mean keypoint confidence,
+        remapped back to the original frame coordinates.
 
         This handles cases where YOLO fails on rotated images.
         """
         best_kpts = None
         best_scores = None
         best_mean_conf = -1
+        best_angle = 0
+
+        orig_H, orig_W = frame.shape[:2]
 
         rotations = [0, 90, 180, 270]
         for angle in rotations:
@@ -111,6 +115,24 @@ class PoseDetector:
                     best_mean_conf = mean_conf
                     best_kpts = kpts.copy()
                     best_scores = scores.copy()
+                    best_angle = angle
+
+        # Remap keypoints back to original frame coordinates.
+        if best_kpts is not None and best_angle != 0:
+            rx = best_kpts[:, 0].copy()
+            ry = best_kpts[:, 1].copy()
+            if best_angle == 90:
+                # 90° CCW: rotated (rx, ry) -> original (W-1-ry, rx)
+                best_kpts[:, 0] = orig_W - 1 - ry
+                best_kpts[:, 1] = rx
+            elif best_angle == 180:
+                # 180°: rotated (rx, ry) -> original (W-1-rx, H-1-ry)
+                best_kpts[:, 0] = orig_W - 1 - rx
+                best_kpts[:, 1] = orig_H - 1 - ry
+            elif best_angle == 270:
+                # 270° CW: rotated (rx, ry) -> original (ry, H-1-rx)
+                best_kpts[:, 0] = ry
+                best_kpts[:, 1] = orig_H - 1 - rx
 
         return best_kpts, best_scores
 

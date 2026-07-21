@@ -15,16 +15,26 @@ from backend.inference import predict_image, predict_video
 
 # Map display labels to internal mode values.
 MODE_MAP = {
-    "Camera-relative root pose (qualitative)": "camera",
-    "Canonical body-frame pose (qualitative)": "canonical",
+    "MotionAGFormer View (default)": "motionagformer",
+    "Canonical Body-Frame Pose (Research View)": "canonical",
+    "Blender/Avatar View (Image-only, qualitative)": "avatar",
 }
 
 
-def on_image_run(image, mode_label):
+def on_image_run(image, mode_label, rotation_deg):
     if image is None:
         return None, None, None, "**Status:** Ready\n**Inference time:** -"
     try:
-        mode = MODE_MAP.get(mode_label, "camera")
+        mode = MODE_MAP.get(mode_label, "motionagformer")
+        # Apply rotation if specified
+        if rotation_deg is not None and rotation_deg != 0:
+            import cv2
+            import numpy as np
+            h, w = image.shape[:2]
+            center = (w // 2, h // 2)
+            M = cv2.getRotationMatrix2D(center, rotation_deg, 1.0)
+            image = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_LINEAR,
+                                   borderMode=cv2.BORDER_REPLICATE)
         original, overlay, combined, t = predict_image(image, mode=mode)
         status = f"**Status:** Completed\n**Inference time:** {t:.2f}s"
         return original, overlay, combined, status
@@ -38,7 +48,11 @@ def on_video_run(video, mode_label):
     if video is None:
         return None, "**Status:** Ready\n**Inference time:** -"
     try:
-        mode = MODE_MAP.get(mode_label, "camera")
+        mode = MODE_MAP.get(mode_label, "motionagformer")
+        if mode == "avatar":
+            return None, ("**Status:** Avatar View is currently available for images only. "
+                          "Use an image upload, or select MotionAGFormer View or "
+                          "Canonical Body-Frame Pose for video.")
         out_path, t = predict_video(video, mode=mode)
         status = f"**Status:** Completed\n**Inference time:** {t:.2f}s"
         return out_path, status
@@ -56,13 +70,15 @@ with gr.Blocks(title="MotionAGFormer Demo") as demo:
     with gr.Row():
         mode_select = gr.Radio(
             choices=[
-                "Camera-relative root pose (qualitative)",
-                "Canonical body-frame pose (qualitative)",
+                "MotionAGFormer View (default)",
+                "Canonical Body-Frame Pose (Research View)",
+                "Blender/Avatar View (Image-only, qualitative)",
             ],
-            value="Camera-relative root pose (qualitative)",
+            value="MotionAGFormer View (default)",
             label="Visualization Mode",
-            info="Camera-relative = root-zeroed pose rendered with fixed viewing angle. "
-                 "Canonical = body-frame normalized pose with equal axis scaling.",
+            info="Each option is a separate output layer. The default matches the "
+                 "official MotionAGFormer display style; canonical is research-only; "
+                 "avatar is presentation-only and image-only.",
         )
 
     with gr.Tabs():
@@ -71,6 +87,11 @@ with gr.Blocks(title="MotionAGFormer Demo") as demo:
             with gr.Row():
                 with gr.Column(scale=1):
                     img_input = gr.Image(label="Upload Image", type="numpy", sources=["upload"])
+                    rotation_slider = gr.Slider(
+                        minimum=-180, maximum=180, value=0, step=1,
+                        label="Rotation (degrees)",
+                        info="Rotate input image before detection. Useful for tilted images."
+                    )
                     img_run_btn = gr.Button("Run Inference", variant="primary")
                 with gr.Column(scale=2):
                     with gr.Row():
@@ -105,21 +126,25 @@ with gr.Blocks(title="MotionAGFormer Demo") as demo:
         | P-MPJPE | 36.9 mm |
 
         ### Visualization Modes
-        - **Camera-relative root pose**: Zeroes only the root joint. Non-root
-          joints retain absolute positions. Rendered with a fixed viewing angle.
-          Matches the official MotionAGFormer demo.
-        - **Canonical body-frame pose**: Constructs a body-fixed coordinate
-          system (vertical + hip axes) and expresses all joints in that frame.
-          Reduces camera-orientation variation under approximately rigid and
-          reliable 3D predictions. Uses equal axis scaling.
+        - **MotionAGFormer View (default):** Official-demo-style display of the
+          predicted root-relative pose: fixed visualization rotation, root-zeroing,
+          normalization, camera angle, bounds, and colour convention. It is not
+          world-space trajectory recovery.
+        - **Canonical Body-Frame Pose (Research View):** The thesis contribution.
+          It re-expresses the predicted pose in a body-fixed frame for qualitative
+          viewpoint-normalized comparison. It is separate from the default view.
+        - **Blender/Avatar View (Image-only):** A lightweight stylized renderer
+          driven by predicted joints. It is not Blender, SMPL fitting, or an
+          accuracy improvement; it is presentation-only.
 
-        *Both modes are qualitative visualizations, not benchmark evidence.*
+        *No visualization mode changes the checkpoint, architecture, training,
+        official evaluation, or benchmark results.*
         """
     )
 
     img_run_btn.click(
         fn=on_image_run,
-        inputs=[img_input, mode_select],
+        inputs=[img_input, mode_select, rotation_slider],
         outputs=[img_original, img_overlay, img_combined, img_status],
     )
 

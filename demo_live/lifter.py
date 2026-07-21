@@ -113,6 +113,12 @@ def coco_to_h36m(keypoints, scores):
     scores_m = scores[None]         # (1, T, 17)
     h36m_kpts, h36m_scores, _ = h36m_coco_format(kpts_m, scores_m)
 
+    # Handle empty result from h36m_coco_format (e.g., all-zero keypoints)
+    if len(h36m_kpts) == 0:
+        # Return zero-filled H36M format
+        T = keypoints.shape[0]
+        return np.zeros((T, 17, 3), dtype=np.float32)
+
     h36m_kpts = h36m_kpts[0]        # (T, 17, 2)
     h36m_scores = h36m_scores[0]    # (T, 17)
 
@@ -136,8 +142,10 @@ def lift_sequence(model, h36m_seq, img_size, device="cpu", use_flip=True,
         h36m_seq:  (T, 17, 3) H36M-17 pixel coords + conf.
         img_size:  (H, W) of the source frames.
         use_flip:  average with horizontal flip augmentation (official demo).
-        mode:      "world" — zero root only, non-root joints drift (official demo).
-                   "root"  — subtract root from all joints, centered skeleton.
+        mode:      "world" — official-demo display post-processing: explicitly
+                             zero root before the fixed visualization rotation.
+                             This does not recover world trajectory.
+                   "root"  — subtract root from all joints before rendering.
     Returns:
         poses3d:   (T, 17, 3) camera-to-world 3D poses, normalized to [0,1]-ish
                    scale.
@@ -174,8 +182,8 @@ def lift_sequence(model, h36m_seq, img_size, device="cpu", use_flip=True,
             pose = pred[0, half]  # (17, 3)
 
             if mode == "world":
-                # Official demo style: zero root only, non-root joints retain
-                # absolute positions and drift through space across frames.
+                # Official demo style. MotionAGFormer is root-relative, so this
+                # is only a display convention, not absolute motion recovery.
                 pose[0] = 0
             else:
                 # Root-relative: subtract root from ALL joints so the

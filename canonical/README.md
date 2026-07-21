@@ -2,6 +2,19 @@
 
 A lightweight, deterministic body-frame view normalization for 3D human pose estimation.
 
+## Role in the Application
+
+The web application exposes three separate layers:
+
+- **MotionAGFormer View (default):** official-demo-style qualitative rendering.
+- **Canonical Body-Frame Pose (Research View):** this module; used only for
+  viewpoint-normalized research comparison.
+- **Blender/Avatar View (image-only):** a qualitative presentation renderer
+  driven by predicted joints, not by a new pose-estimation model.
+
+Canonicalization is not world-space trajectory recovery and does not replace
+the default MotionAGFormer display.
+
 ## What This Module Does
 
 Given root-relative 3D pose predictions, this module constructs a **body-fixed orthonormal coordinate system** and re-expresses all joints in that canonical frame. This normalizes camera-orientation variation when body axes are reliably estimated, while preserving intra-body structure.
