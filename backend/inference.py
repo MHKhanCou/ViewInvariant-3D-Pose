@@ -22,6 +22,7 @@ from demo_live.pose_detector import detect_video
 from canonical.canonicalizer import Canonicalizer
 from canonical.visualization import render_canonical_3d
 from presentation.avatar_renderer import render_stylized_avatar_3d
+from lib.utils import camera_to_world
 
 from backend.model_loader import get_detector, get_model
 
@@ -29,6 +30,83 @@ from backend.model_loader import get_detector, get_model
 MAX_HEIGHT = 480
 # Detection width — downscale before YOLO for speed on high-res video.
 DET_WIDTH = 640
+
+# Visualization rotation quaternion (matches official demo).
+VIS_ROT = [0.1407056450843811, -0.1500701755285263, -0.755240797996521, 0.6223280429840088]
+
+
+def estimate_poses(image_rgb: np.ndarray):
+    """
+    Run 3D pose estimation and return raw poses in both coordinate spaces.
+
+    Inference is separated from rendering. The renderer consumes whichever
+    pose representation is selected by the user.
+
+    Args:
+        image_rgb: (H, W, 3) uint8 RGB numpy array from Gradio.
+
+    Returns:
+        dict with keys:
+            camera_pose:      (17, 3) float64 — camera-coordinate pose
+            view_invariant:   (17, 3) float64 — view-invariant (canonical) pose
+            kpts_2d:          (17, 2) float32 — 2D COCO keypoints
+            scores:           (17,) float32 — keypoint confidence scores
+            frame_rgb:        (H, W, 3) uint8 — the (possibly downscaled) input
+            inference_time:   float — seconds
+        Returns None if detection fails completely.
+    """
+    t0 = time.time()
+
+    frame_bgr = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
+
+    H_orig, W_orig = frame_bgr.shape[:2]
+    if H_orig > MAX_HEIGHT:
+        scale = MAX_HEIGHT / H_orig
+        new_w = int(round(W_orig * scale))
+        frame_small = cv2.resize(frame_bgr, (new_w, MAX_HEIGHT))
+    else:
+        frame_small = frame_bgr
+
+    detector = get_detector()
+    model = get_model()
+
+    kpts, scores = detector.detect_with_rotation(frame_small)
+    if kpts is None:
+        kpts = np.zeros((17, 2), dtype=np.float32)
+        scores = np.zeros((17,), dtype=np.float32)
+
+    H, W = frame_small.shape[:2]
+
+    kpts_seq = np.repeat(kpts[None], N_FRAMES, axis=0)
+    scores_seq = np.repeat(scores[None], N_FRAMES, axis=0)
+
+    h36m = coco_to_h36m(kpts_seq, scores_seq)
+    pose3d = lift_sequence(model, h36m, img_size=(H, W), mode="root")[-1]
+
+    # Camera-coordinate pose: root-zero + camera_to_world + normalize.
+    pose_camera = pose3d.copy()
+    pose_camera[0] = 0
+    pose_camera = camera_to_world(pose_camera.astype(np.float64), R=VIS_ROT, t=0)
+    pose_camera[:, 2] -= np.min(pose_camera[:, 2])
+    max_val = np.max(pose_camera)
+    if max_val > 0:
+        pose_camera /= max_val
+
+    # View-invariant pose: root-relative + canonical transform.
+    pose_root = pose3d - pose3d[0:1]
+    canonicalizer = Canonicalizer()
+    pose_canonical, _ = canonicalizer(pose_root)
+
+    frame_rgb_out = cv2.cvtColor(frame_small, cv2.COLOR_BGR2RGB)
+
+    return {
+        "camera_pose": pose_camera,
+        "view_invariant": pose_canonical,
+        "kpts_2d": kpts,
+        "scores": scores,
+        "frame_rgb": frame_rgb_out,
+        "inference_time": time.time() - t0,
+    }
 
 
 def predict_image(image_rgb: np.ndarray, mode="motionagformer"):
