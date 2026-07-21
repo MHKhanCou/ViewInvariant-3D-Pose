@@ -33,7 +33,7 @@ import gradio as gr
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from backend.inference import estimate_poses, predict_video
-from demo_live.plotly_renderer import render_pose_plotly
+from demo_live.plotly_renderer import render_pose_plotly, get_bone_length_summary
 
 
 def on_image_run(image, coord_space, rotation_deg):
@@ -55,7 +55,7 @@ def on_image_run(image, coord_space, rotation_deg):
 
         result = estimate_poses(image)
         if result is None:
-            return None, None, "**Status:** No person detected"
+            return None, None, "**Status:** No person detected", ""
 
         # Select pose based on coordinate space.
         if coord_space == "View-Invariant Coordinate System":
@@ -75,6 +75,9 @@ def on_image_run(image, coord_space, rotation_deg):
                                scores=result["scores"])
         overlay_rgb = cv2.cvtColor(overlay_bgr, cv2.COLOR_BGR2RGB)
 
+        # Bone length summary.
+        bone_summary = get_bone_length_summary(pose)
+
         t = result["inference_time"]
         kp_valid = int(np.sum(result["scores"] > 0.3))
         status = (f"**Status:** Completed\n"
@@ -82,12 +85,12 @@ def on_image_run(image, coord_space, rotation_deg):
                   f"**Keypoints:** {kp_valid}/17 (conf={result['scores'].mean():.3f})\n"
                   f"**Coordinate space:** {space_label}")
 
-        return fig, overlay_rgb, status
+        return fig, overlay_rgb, status, bone_summary
 
     except Exception as e:
         import traceback
         traceback.print_exc()
-        return None, None, f"**Status:** Error — {e}"
+        return None, None, f"**Status:** Error — {e}", ""
 
 
 def on_coord_change(coord_space, _state_image, _state_result):
@@ -132,19 +135,19 @@ with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
                         info="Rotate input image before detection. Useful for tilted images.",
                     )
                     img_run_btn = gr.Button("Run Inference", variant="primary")
-
-                with gr.Column(scale=2):
-                    viewer_3d = gr.Plot(
-                        label="Interactive 3D Viewer",
-                        show_label=True,
-                    )
                     img_overlay = gr.Image(
                         label="2D Pose Detection",
                         type="numpy",
                         interactive=False,
                     )
 
-            img_status = gr.Markdown("**Status:** Ready")
+                with gr.Column(scale=2):
+                    viewer_3d = gr.Plot(
+                        label="Interactive 3D Viewer",
+                        show_label=True,
+                    )
+                    img_status = gr.Markdown("**Status:** Ready")
+                    bone_metrics = gr.Markdown("")
 
         # ── Video Tab ──
         with gr.TabItem("Video"):
@@ -211,14 +214,14 @@ with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
     img_run_btn.click(
         fn=on_image_run,
         inputs=[img_input, coord_space, rotation_slider],
-        outputs=[viewer_3d, img_overlay, img_status],
+        outputs=[viewer_3d, img_overlay, img_status, bone_metrics],
     )
 
     # Re-run when coordinate space changes (after inference).
     coord_space.change(
         fn=on_image_run,
         inputs=[img_input, coord_space, rotation_slider],
-        outputs=[viewer_3d, img_overlay, img_status],
+        outputs=[viewer_3d, img_overlay, img_status, bone_metrics],
     )
 
     def on_video_run(video, cs):
