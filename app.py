@@ -24,6 +24,9 @@ Run:  python app.py
 
 import os
 import sys
+import warnings
+warnings.filterwarnings("ignore", category=EncodingWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 import gradio as gr
 
@@ -218,11 +221,20 @@ with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
         outputs=[viewer_3d, img_overlay, img_status],
     )
 
+    def on_video_run(video, cs):
+        if video is None:
+            return None, "**Status:** Ready"
+        try:
+            mode = "canonical" if "View-Invariant" in cs else "motionagformer"
+            out_path, t = predict_video(video, mode=mode)
+            return out_path, f"**Status:** Completed\n**Inference time:** {t:.2f}s"
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return None, f"**Status:** Error — {e}"
+
     vid_run_btn.click(
-        fn=lambda video, cs: predict_video(
-            video,
-            mode="canonical" if "View-Invariant" in cs else "motionagformer",
-        ),
+        fn=on_video_run,
         inputs=[vid_input, vid_coord],
         outputs=[vid_output, vid_status],
     )
