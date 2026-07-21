@@ -81,19 +81,30 @@ def estimate_poses(image_rgb: np.ndarray):
     scores_seq = np.repeat(scores[None], N_FRAMES, axis=0)
 
     h36m = coco_to_h36m(kpts_seq, scores_seq)
-    pose3d = lift_sequence(model, h36m, img_size=(H, W), mode="root")[-1]
 
-    # Camera-coordinate pose: root-zero + camera_to_world + normalize.
-    pose_camera = pose3d.copy()
-    pose_camera[0] = 0
+    # --- Get the RAW model prediction (before any post-processing) ---
+    from demo_live.lifter import normalize_screen_coordinates
+    import torch
+
+    norm = normalize_screen_coordinates(h36m, w=W, h=H)
+    inp = torch.from_numpy(norm.astype("float32"))[None]
+    with torch.no_grad():
+        pred = model(inp).cpu().numpy()
+
+    raw_pose = pred[0, 13].copy()  # Center frame, (17, 3)
+
+    # --- Camera-coordinate pose: official demo convention ---
+    # Matches lift_sequence(mode="world"): root-zero + camera_to_world + normalize.
+    pose_camera = raw_pose.copy()
+    pose_camera[0] = 0  # Root zero
     pose_camera = camera_to_world(pose_camera.astype(np.float64), R=VIS_ROT, t=0)
     pose_camera[:, 2] -= np.min(pose_camera[:, 2])
     max_val = np.max(pose_camera)
     if max_val > 0:
         pose_camera /= max_val
 
-    # View-invariant pose: root-relative + canonical transform.
-    pose_root = pose3d - pose3d[0:1]
+    # --- View-invariant pose: root-center + canonical transform ---
+    pose_root = raw_pose - raw_pose[0:1]
     canonicalizer = Canonicalizer()
     pose_canonical, _ = canonicalizer(pose_root)
 

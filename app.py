@@ -96,7 +96,7 @@ def on_coord_change(coord_space, _state_image, _state_result):
     return gr.update()
 
 
-with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose", theme=gr.themes.Soft()) as demo:
+with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
     gr.Markdown("# MotionAGFormer — Interactive 3D Pose Viewer")
     gr.Markdown(
         "Upload an RGB image or video to reconstruct 3D human pose. "
@@ -234,4 +234,4 @@ if __name__ == "__main__":
     get_detector()
     get_model()
     print("Models loaded. Starting Gradio server...")
-    demo.launch(server_name="127.0.0.1", server_port=7860, inbrowser=True)
+    demo.launch(server_name="127.0.0.1", server_port=7860, inbrowser=True, theme=gr.themes.Soft())
