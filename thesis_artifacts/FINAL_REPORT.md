@@ -167,7 +167,49 @@ not an accuracy estimator. We consider this delimitation a finding in its own
 right, and it is the reason the framework's abstention claim is scoped to
 degradation rather than to general error prediction.
 
-### 8. Negative result: retrieval
+### 8. A single-view training-free error predictor that works
+
+`bone_consistency/bone_consistency.json`
+
+Sections 4 and 7 establish that *within-frame geometric plausibility* cannot see
+depth error. Section 3 shows that *cross-view disagreement* can (ρ = +0.601) —
+but needs two cameras. This section closes the gap with a **single-camera**
+signal built on a physical invariant: **a person's bones do not change length**,
+so any temporal variation in predicted bone lengths is direct evidence of error,
+and monocular depth ambiguity produces exactly that through foreshortening.
+
+Signal, scale-free by construction: per frame, divide the 16 bone lengths by that
+frame's mean bone length (removing global scale), estimate the subject's own
+skeleton as the median ratio vector over a reference window (no labels, no
+ground truth), then measure each frame's relative deviation from it.
+
+| Quantity | Value |
+|---|---|
+| **ρ(bone deviation, GT error)** | **+0.492** (n = 2460, 26 camera-streams) |
+| ρ(reliability, GT error) — incumbent | −0.192 |
+| Partial ρ controlling for detector confidence | **+0.481** |
+| Causal estimate (reference window disjoint from evaluated frames) | **+0.473** (n = 1230) |
+| Cluster bootstrap 95% CI on \|ρ_bone\| − \|ρ_reliability\| | **[+0.108, +0.515]** |
+| Per stratum (S1 static / dynamic, S2 static / dynamic) | +0.428 / +0.167 / +0.609 / +0.222 |
+
+**Every stratum agrees in sign** — the test that retired the view-selection claim
+(§7), where the two dynamic sequences landed on opposite sides of chance.
+
+Robustness beyond the required checks: the signal is not a detector-confidence
+proxy (partial ρ barely moves); it is not a restatement of scale (the scale-free
+ratio form scores +0.492 versus +0.367 for pure scale deviation); and it is not
+transductive — a **causal** reference window scores +0.473, and a skeleton
+estimated from a *different camera* still scores +0.440, as it should, since it
+is the same person.
+
+**Honesty note.** This signal was found by exploratory probing, not
+pre-registered. It is therefore held to the same three criteria pre-registered
+for the TTA experiment (`thesis_artifacts/tta/PREREGISTRATION.md`, committed
+before that run), plus the two robustness checks above — five in total, all
+passed. It should be replicated on a second dataset before it carries weight in
+a submission.
+
+### 9. Negative result: retrieval
 
 `retrieval/retrieval_results.json`
 

@@ -1,0 +1,58 @@
+{
+  "note": "Signal found by exploratory probing, NOT pre-registered; held to the TTA pre-registration criteria plus two robustness checks.",
+  "verdict_pass": true,
+  "criteria": {
+    "a_rho_floor": true,
+    "b_sign_consistent": true,
+    "c_ci_excludes_zero": true,
+    "d_survives_confidence_control": true,
+    "e_survives_causal_estimate": true
+  },
+  "n_frames": 2460,
+  "n_camera_streams": 26,
+  "pooled": {
+    "spearman_bone_deviation_vs_error": 0.49150896659406995,
+    "spearman_reliability_vs_error": -0.19199814080837724,
+    "partial_given_detector_confidence": 0.4809851711073065,
+    "causal_estimate_rho": 0.4734763700876717,
+    "causal_n": 1230,
+    "bootstrap_ci_delta_abs_rho": [
+      0.10792969379926964,
+      0.5154748914236859
+    ]
+  },
+  "per_stratum": {
+    "S1_static": 0.4276424485013459,
+    "S1_dynamic": 0.1665500939128623,
+    "S2_static": 0.6092200405841836,
+    "S2_dynamic": 0.2224282198656899
+  },
+  "per_camera": {
+    "S1_Seq1_cam0": 0.7373737373737373,
+    "S1_Seq1_cam0_dynamic": 0.017105354538509615,
+    "S1_Seq1_cam1": 0.002248904135696588,
+    "S1_Seq1_cam1_dynamic": 0.2715188554760747,
+    "S1_Seq1_cam2": -0.6167714884696016,
+    "S1_Seq1_cam2_dynamic": 0.16023334953816235,
+    "S1_Seq1_cam4": 0.1839908519153802,
+    "S1_Seq1_cam4_dynamic": 0.02852281408431141,
+    "S1_Seq1_cam5": 0.13596340766152087,
+    "S1_Seq1_cam5_dynamic": -0.1305507326897701,
+    "S1_Seq1_cam6": 0.21021536115875733,
+    "S1_Seq1_cam6_dynamic": 0.24130147926939366,
+    "S1_Seq1_cam7": -0.006975414522584333,
+    "S1_Seq1_cam7_dynamic": 0.2240780609764567,
+    "S1_Seq1_cam8": 0.44608347627215544,
+    "S1_Seq1_cam8_dynamic": 0.5022640461143135,
+    "S2_Seq1_cam0": 0.7510196302649131,
+    "S2_Seq1_cam1": 0.39035639412997897,
+    "S2_Seq2_cam0_dynamic": -0.3051670254878811,
+    "S2_Seq2_cam1_dynamic": 0.6431696645600389,
+    "S2_Seq2_cam2_dynamic": 0.5712341134801027,
+    "S2_Seq2_cam4_dynamic": 0.6191888325578164,
+    "S2_Seq2_cam5_dynamic": 0.14083616917841515,
+    "S2_Seq2_cam6_dynamic": 0.015431627196333075,
+    "S2_Seq2_cam7_dynamic": 0.1031738315160775,
+    "S2_Seq2_cam8_dynamic": -0.26986596291409126
+  }
+}

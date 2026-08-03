@@ -150,6 +150,22 @@ def main():
     results.append(check("switch-away rate when picked view degraded %", 100.0,
                          ad["switched_away_from_degraded_view_pct"], src, unit="%"))
 
+    # ---------- bone-length inconsistency (single-view error predictor) ----------
+    bc = load("bone_consistency/bone_consistency.json")
+    p = bc["pooled"]
+    src = "bone_consistency/bone_consistency.json"
+    results.append(check("rho(bone deviation, GT error)", 0.492,
+                         p["spearman_bone_deviation_vs_error"], src, tol=0.005))
+    results.append(check("  partial | detector confidence", 0.481,
+                         p["partial_given_detector_confidence"], src, tol=0.005))
+    results.append(check("  causal reference-window estimate", 0.473,
+                         p["causal_estimate_rho"], src, tol=0.005))
+    results.append(check("  bootstrap CI lower bound > 0", 0.108,
+                         p["bootstrap_ci_delta_abs_rho"][0], src, tol=0.01))
+    results.append(check("  strata with consistent sign (of 4)", 4.0,
+                         float(sum(1 for v in bc["per_stratum"].values() if v > 0)),
+                         src, tol=0))
+
     # ---------- baseline integrity ----------
     b = load("baseline_results.json")
     flat = json.dumps(b)
