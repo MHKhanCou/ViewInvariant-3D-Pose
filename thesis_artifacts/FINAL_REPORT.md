@@ -113,34 +113,54 @@ search, and no training. Reference validity checked first: GT canonicalized
 from different cameras agrees to **0.00 mm**, so the reference frame is
 genuinely view-independent.
 
-Error vs GT (similarity-aligned, 8 cameras, 54 frames; Wilcoxon p = 1.6e-10
-for every strategy against the baseline):
+Error vs GT (similarity-aligned; Wilcoxon p = 1.6e-10 for every strategy
+against the baseline) on two windows: the **static** window (frames 0–79,
+low body rotation) and a **dynamic** window (frames 576–721, 138° net body
+rotation) chosen by a ground-truth-only motion scan.
 
-| Strategy | Error | vs arbitrary single view |
+| Strategy | Static (54 f) | Dynamic (120 f) |
 |---|---|---|
-| Worst single view | 276.3 mm | −85.9% |
-| **Arbitrary single view** (deployment baseline) | **148.7 mm** | — |
-| Reliability-weighted fusion | 113.5 mm | +23.7% |
-| Median fusion | 101.0 mm | +32.1% |
-| **Reliability-selected view** | **98.3 mm** | **+33.8%** |
-| Best view (oracle — requires GT) | 87.9 mm | +40.9% |
+| Worst single view | 276.3 mm | — |
+| **Arbitrary single view** (deployment baseline) | **148.7 mm** | **214.9 mm** |
+| Reliability-weighted fusion | 113.5 mm (+23.7%) | 192.0 mm (+10.6%) |
+| Median fusion | 101.0 mm (+32.1%) | 196.2 mm (+8.7%) |
+| Reliability-*selected* view | 98.3 mm (+33.8%) | 211.7 mm (**+1.5%**) |
+| Best view (oracle — requires GT) | 87.9 mm | 176.5 mm |
 
-The gain grows with camera count (2 views: 140 mm → 8 views: 98 mm) while
-the arbitrary-view baseline stays flat, and tracks the oracle at a roughly
-constant offset. On the held-out subject (2 cameras only) weighted fusion
-gives +8.2% against a +10.8% oracle ceiling.
+**Fusion is the supported contribution; selection is not.** Fusion helps in
+both regimes because averaging suppresses independent per-view error without
+needing to know which view is best. On the static window fusion gains scale
+with camera count (2 views 130 mm → 8 views 113 mm) while the arbitrary-view
+baseline stays flat; the held-out subject reproduces it (+8.2% against a
++10.8% oracle ceiling).
 
-**Honest qualification — selection is not per-frame adaptive on clean data.**
-The score picks the same camera in all 54 frames, and a best-fixed-camera
-policy (which needs GT to choose that camera) would score 90.2 mm, better
-than the adaptive 98.3 mm. On clean synchronized studio footage there is
-little per-frame variation to exploit; the score identifies a consistently
-good viewpoint rather than switching between them.
+**Negative result — the reliability score does not rank views by accuracy.**
+The apparent +33.8% from selection on the static window is an artifact, and
+we report it as one. Three pieces of evidence:
 
-Where adaptivity does matter — a degraded view — it behaves correctly: when
-the currently-selected view is corrupted (torso-axis collapse), selection
-switches away from it in **100% of frames**, and the switch reduces error in
-**100% of switches**, avoiding **172.1 mm** on average.
+1. On static footage the score picks the *same* camera in all 54 frames — it
+   is not selecting per frame. A best-fixed-camera policy (which needs GT to
+   choose the camera) scores 90.2 mm, better than the 98.3 mm "adaptive" pick.
+2. On the dynamic window the score *does* switch (6 distinct cameras, 22%
+   switch rate), but its choices are no better than chance: the picked view's
+   true-error rank is **4.78 of 8** against a random expectation of 4.5.
+3. Directly: the **within-frame** Spearman correlation between reliability and
+   error across simultaneous views is ≈ 0 in both regimes (−0.112 static,
+   −0.097 dynamic).
+
+The static gain therefore came from a constant camera choice combined with a
+large within-frame error spread (188 mm), which beats an average dragged down
+by poor views — not from identifying good ones.
+
+**What this delimits.** The score measures geometric *plausibility*. That
+detects corruption strongly (ρ = −0.813 under induced degradation, §4; and it
+switches away from a deliberately corrupted view in 100% of frames) but does
+not detect viewpoint-induced depth error, because a pose can be perfectly
+plausible — symmetric, correct bone ratios, well-conditioned axes — and still
+be wrong in depth. Analytic geometric reliability is a corruption detector,
+not an accuracy estimator. We consider this delimitation a finding in its own
+right, and it is the reason the framework's abstention claim is scoped to
+degradation rather than to general error prediction.
 
 ### 8. Negative result: retrieval
 

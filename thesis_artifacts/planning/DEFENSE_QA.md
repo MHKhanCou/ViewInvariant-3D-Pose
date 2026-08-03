@@ -100,20 +100,35 @@ limb-orientation variance, not metric deflation.
 
 **Q: Is the view selection actually adaptive, or does it just always pick the
 same camera?**
-A: On clean footage it picks the same camera in all 54 frames — we checked
-and we report it. Studio footage has little per-frame variation to exploit.
-The claim we make is therefore not "per-frame adaptation" but "training-free
-identification of a good viewpoint", worth +33.8% over an arbitrary view.
-Adaptivity is demonstrated where it matters: corrupt the selected view and
-selection switches away in 100% of frames, avoiding 172 mm mean error.
+A: It is not adaptive, and we tested this rather than assuming it. On static
+footage it picks the same camera in all 54 frames. On a dynamic window (138°
+body rotation) it does switch — 6 cameras, 22% switch rate — but its choices
+rank 4.78 of 8 by true error against a random expectation of 4.5, i.e. no
+better than chance. We therefore do NOT claim view selection. Fusion is the
+supported contribution.
 
-**Q: A fixed best camera beats your adaptive selection (90.2 vs 98.3 mm).
-Doesn't that defeat the method?**
-A: Choosing that fixed camera requires ground truth — it is an oracle, in the
-same class as the 87.9 mm best-view bound, not a deployable baseline. Without
-GT you cannot know which camera is best, so the honest comparison is against
-an arbitrary view (148.7 mm), which we beat by 33.8%. We report the fixed-
-camera number precisely because it bounds how much room is left.
+**Q: Then what does the reliability score actually do?**
+A: It measures geometric plausibility, which detects corruption but not
+viewpoint-induced depth error. Under induced degradation it tracks error at
+ρ = −0.813 and abstains on 100% of joint-dropout cases; across simultaneous
+clean views its within-frame correlation with error is ≈ 0 (−0.112 static,
+−0.097 dynamic). A pose can be perfectly plausible — symmetric, correct bone
+ratios — and still be wrong in depth. We state this as a delimitation: it is
+a corruption detector, not an accuracy estimator.
+
+**Q: Your report shows a +33.8% selection gain. Is that real?**
+A: It is real as a number and misleading as a claim, so we explain it. That
+window has a 188 mm within-frame error spread, so picking one constant decent
+camera beats an average dragged down by bad views. It reflects a lucky
+constant, not ranking ability — which is why the dynamic window collapses it
+to +1.5%. We report both and headline neither.
+
+**Q: A fixed best camera beats your selection (90.2 vs 98.3 mm). Doesn't that
+defeat the method?**
+A: For selection, yes — that comparison is part of why we withdrew the
+selection claim. Fusion is unaffected: it needs no ranking, only averaging,
+and it beats the deployable baseline in both regimes (+23.7% static, +10.6%
+dynamic).
 
 **Q: Why is fusion better than selection at 2 views but worse at 8?**
 A: With few views, averaging suppresses independent errors and no single view

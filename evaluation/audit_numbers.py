@@ -104,13 +104,34 @@ def main():
     src = "fusion/fusion_results.json"
     results.append(check("arbitrary single view (mm)", 148.7,
                          st["mean_single"]["mean_mm"], src, tol=0.1, unit="mm"))
-    results.append(check("reliability-selected view (mm)", 98.3,
+    results.append(check("weighted fusion, static (mm)", 113.5,
+                         st["weighted_mean"]["mean_mm"], src, tol=0.1, unit="mm"))
+    results.append(check("weighted fusion gain, static %", 23.7,
+                         st["weighted_mean"]["improvement_vs_mean_single_pct"],
+                         src, unit="%"))
+    results.append(check("reliability-selected view, static (mm)", 98.3,
                          st["reliability_pick"]["mean_mm"], src, tol=0.1, unit="mm"))
     results.append(check("oracle best view (mm)", 87.9,
                          st["oracle_best"]["mean_mm"], src, tol=0.1, unit="mm"))
-    results.append(check("selection improvement over baseline %", 33.8,
-                         st["reliability_pick"]["improvement_vs_mean_single_pct"],
-                         src, unit="%"))
+
+    # --- withdrawn selection claim: the numbers that retire it ---
+    dyn = fu.get("S1_dynamic")
+    if dyn:
+        ds = dyn["strategies"]
+        results.append(check("dynamic: arbitrary single view (mm)", 214.9,
+                             ds["mean_single"]["mean_mm"], src, tol=0.1, unit="mm"))
+        results.append(check("dynamic: weighted fusion gain %", 10.6,
+                             ds["weighted_mean"]["improvement_vs_mean_single_pct"],
+                             src, unit="%"))
+        results.append(check("dynamic: SELECTION gain (near-zero) %", 1.5,
+                             ds["reliability_pick"]["improvement_vs_mean_single_pct"],
+                             src, unit="%"))
+        results.append(check("dynamic: picked-view true-error rank (~random 4.5)", 4.78,
+                             dyn["selection"]["mean_true_error_rank_of_picked_view"],
+                             src, tol=0.02))
+        results.append(check("dynamic: distinct cameras picked (of 8)", 6.0,
+                             float(dyn["selection"]["distinct_cameras_picked"]),
+                             src, tol=0))
     results.append(check("best FIXED camera, GT-chosen (mm)", 90.2,
                          fu["S1"]["fixed_camera_baseline"]["best_fixed_camera_mm"],
                          src, tol=0.1, unit="mm"))
