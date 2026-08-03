@@ -132,6 +132,14 @@ def main():
         results.append(check("dynamic: distinct cameras picked (of 8)", 6.0,
                              float(dyn["selection"]["distinct_cameras_picked"]),
                              src, tol=0))
+    d2 = fu.get("S2_dynamic_heldout")
+    if d2:
+        results.append(check("dynamic S2: weighted fusion gain %", 10.2,
+                             d2["strategies"]["weighted_mean"]
+                             ["improvement_vs_mean_single_pct"], src, unit="%"))
+        results.append(check("dynamic S2: selection rank (straddles random 4.5)", 3.67,
+                             d2["selection"]["mean_true_error_rank_of_picked_view"],
+                             src, tol=0.02))
     results.append(check("best FIXED camera, GT-chosen (mm)", 90.2,
                          fu["S1"]["fixed_camera_baseline"]["best_fixed_camera_mm"],
                          src, tol=0.1, unit="mm"))

@@ -118,14 +118,13 @@ against the baseline) on two windows: the **static** window (frames 0–79,
 low body rotation) and a **dynamic** window (frames 576–721, 138° net body
 rotation) chosen by a ground-truth-only motion scan.
 
-| Strategy | Static (54 f) | Dynamic (120 f) |
-|---|---|---|
-| Worst single view | 276.3 mm | — |
-| **Arbitrary single view** (deployment baseline) | **148.7 mm** | **214.9 mm** |
-| Reliability-weighted fusion | 113.5 mm (+23.7%) | 192.0 mm (+10.6%) |
-| Median fusion | 101.0 mm (+32.1%) | 196.2 mm (+8.7%) |
-| Reliability-*selected* view | 98.3 mm (+33.8%) | 211.7 mm (**+1.5%**) |
-| Best view (oracle — requires GT) | 87.9 mm | 176.5 mm |
+| Strategy | S1 static (54 f) | S1 dynamic (120 f) | S2 dynamic, held-out subject (120 f) |
+|---|---|---|---|
+| **Arbitrary single view** (deployment baseline) | **148.7 mm** | **214.9 mm** | **212.1 mm** |
+| Reliability-weighted fusion | 113.5 mm (+23.7%) | 192.0 mm (+10.6%) | 190.5 mm (+10.2%) |
+| Median fusion | 101.0 mm (+32.1%) | 196.2 mm (+8.7%) | 191.4 mm (+9.8%) |
+| Reliability-*selected* view | 98.3 mm (+33.8%) | 211.7 mm (+1.5%) | 199.5 mm (+6.0%) |
+| Best view (oracle — requires GT) | 87.9 mm | 176.5 mm | 171.9 mm |
 
 **Fusion is the supported contribution; selection is not.** Fusion helps in
 both regimes because averaging suppresses independent per-view error without
@@ -141,12 +140,18 @@ we report it as one. Three pieces of evidence:
 1. On static footage the score picks the *same* camera in all 54 frames — it
    is not selecting per frame. A best-fixed-camera policy (which needs GT to
    choose the camera) scores 90.2 mm, better than the 98.3 mm "adaptive" pick.
-2. On the dynamic window the score *does* switch (6 distinct cameras, 22%
-   switch rate), but its choices are no better than chance: the picked view's
-   true-error rank is **4.78 of 8** against a random expectation of 4.5.
+2. On dynamic windows the score *does* switch (S1: 6 cameras, 22% switch rate;
+   S2: all 8 cameras, 24%), but the quality of its choices **straddles chance**
+   across the two sequences: the picked view's true-error rank is **4.78 of 8**
+   on S1 (random expectation 4.5, i.e. slightly worse than random) and **3.67**
+   on S2 (slightly better). A signal that lands on both sides of chance on two
+   sequences of the same protocol is not a usable ranking signal.
 3. Directly: the **within-frame** Spearman correlation between reliability and
    error across simultaneous views is ≈ 0 in both regimes (−0.112 static,
    −0.097 dynamic).
+
+By contrast, **fusion replicates tightly across subjects and regimes**
+(+23.7% / +10.6% / +10.2% / +8.2%), which is what a real effect looks like.
 
 The static gain therefore came from a constant camera choice combined with a
 large within-frame error spread (188 mm), which beats an average dragged down

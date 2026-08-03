@@ -158,6 +158,190 @@
       }
     }
   },
+  "S1_dynamic": {
+    "n_frames": 120,
+    "n_cameras": 8,
+    "strategies": {
+      "reliability_pick": {
+        "mean_mm": 211.69398827051543,
+        "median_mm": 212.44625846446814,
+        "std_mm": 46.69837629893041,
+        "improvement_vs_mean_single_pct": 1.4873681323411714,
+        "wilcoxon_p_vs_mean_single": 0.35797891503999035
+      },
+      "median": {
+        "mean_mm": 196.2484351482313,
+        "median_mm": 194.27949057037495,
+        "std_mm": 40.745733444527126,
+        "improvement_vs_mean_single_pct": 8.675017158933162,
+        "wilcoxon_p_vs_mean_single": 8.613624888379368e-19
+      },
+      "weighted_mean": {
+        "mean_mm": 192.0376335809208,
+        "median_mm": 194.18307082068495,
+        "std_mm": 37.04582968974001,
+        "improvement_vs_mean_single_pct": 10.634530265834153,
+        "wilcoxon_p_vs_mean_single": 2.126529093599547e-21
+      },
+      "top3_weighted": {
+        "mean_mm": 197.26872187164506,
+        "median_mm": 199.2973318207811,
+        "std_mm": 42.93983840574428,
+        "improvement_vs_mean_single_pct": 8.200222710568006,
+        "wilcoxon_p_vs_mean_single": 7.102984047181799e-16
+      },
+      "top5_weighted": {
+        "mean_mm": 195.06005029841756,
+        "median_mm": 195.89950542525,
+        "std_mm": 39.37509776052636,
+        "improvement_vs_mean_single_pct": 9.228036733004409,
+        "wilcoxon_p_vs_mean_single": 3.8477835685036254e-20
+      },
+      "mean_single": {
+        "mean_mm": 214.89019657388064,
+        "median_mm": 215.07230102062647,
+        "std_mm": 30.657052219215643,
+        "improvement_vs_mean_single_pct": 0.0
+      },
+      "oracle_best": {
+        "mean_mm": 176.4639159853499,
+        "median_mm": 171.81673392345238,
+        "std_mm": 37.65513801149998,
+        "improvement_vs_mean_single_pct": 17.881821135251062,
+        "wilcoxon_p_vs_mean_single": 1.9719517121524354e-21
+      },
+      "worst_single": {
+        "mean_mm": 273.04524062273344,
+        "median_mm": 268.03321946103546,
+        "std_mm": 39.480356941518416,
+        "improvement_vs_mean_single_pct": -27.062678975612897,
+        "wilcoxon_p_vs_mean_single": 1.9719517121524354e-21
+      }
+    },
+    "selection": {
+      "mean_true_error_rank_of_picked_view": 4.775,
+      "random_expectation": 4.5,
+      "picked_best_view_pct": 12.5,
+      "distinct_cameras_picked": 6,
+      "picked_cameras": [
+        0,
+        2,
+        4,
+        5,
+        6,
+        7
+      ],
+      "switch_rate_pct": 21.84873949579832
+    },
+    "fixed_camera_baseline": {
+      "best_fixed_camera": 4,
+      "best_fixed_camera_mm": 204.40614733178438,
+      "per_camera_mm": {
+        "0": 214.5338087330921,
+        "1": 238.81073914680576,
+        "2": 212.5114768214386,
+        "4": 204.40614733178438,
+        "5": 206.89212121983567,
+        "6": 212.25419974846739,
+        "7": 204.97274379044762,
+        "8": 224.74033579917372
+      }
+    },
+    "adaptive_beats_best_fixed": false
+  },
+  "S2_dynamic_heldout": {
+    "n_frames": 120,
+    "n_cameras": 8,
+    "strategies": {
+      "reliability_pick": {
+        "mean_mm": 199.45744275861938,
+        "median_mm": 205.14247951455678,
+        "std_mm": 36.12840403647052,
+        "improvement_vs_mean_single_pct": 5.969279127841432,
+        "wilcoxon_p_vs_mean_single": 8.207969959795032e-09
+      },
+      "median": {
+        "mean_mm": 191.3597430118785,
+        "median_mm": 193.77411051989418,
+        "std_mm": 31.298795506695615,
+        "improvement_vs_mean_single_pct": 9.786797963244421,
+        "wilcoxon_p_vs_mean_single": 1.9719517121524354e-21
+      },
+      "weighted_mean": {
+        "mean_mm": 190.50081521619043,
+        "median_mm": 189.8457789317348,
+        "std_mm": 32.28902816926042,
+        "improvement_vs_mean_single_pct": 10.191724441237138,
+        "wilcoxon_p_vs_mean_single": 1.9719517121524354e-21
+      },
+      "top3_weighted": {
+        "mean_mm": 198.97896058408332,
+        "median_mm": 203.1835942603443,
+        "std_mm": 37.20490884336606,
+        "improvement_vs_mean_single_pct": 6.194851175561666,
+        "wilcoxon_p_vs_mean_single": 1.3830126949731264e-09
+      },
+      "top5_weighted": {
+        "mean_mm": 196.3909266004743,
+        "median_mm": 197.00021871736277,
+        "std_mm": 34.22412998677865,
+        "improvement_vs_mean_single_pct": 7.414934506394832,
+        "wilcoxon_p_vs_mean_single": 6.563965928002648e-20
+      },
+      "mean_single": {
+        "mean_mm": 212.11944448431478,
+        "median_mm": 213.65011021875523,
+        "std_mm": 28.189662288374908,
+        "improvement_vs_mean_single_pct": 0.0
+      },
+      "oracle_best": {
+        "mean_mm": 171.9439211059345,
+        "median_mm": 164.76280337353413,
+        "std_mm": 29.058566359974265,
+        "improvement_vs_mean_single_pct": 18.94004742283354,
+        "wilcoxon_p_vs_mean_single": 1.9719517121524354e-21
+      },
+      "worst_single": {
+        "mean_mm": 259.82796130897873,
+        "median_mm": 256.26244283668314,
+        "std_mm": 30.748930246932748,
+        "improvement_vs_mean_single_pct": -22.49134535527777,
+        "wilcoxon_p_vs_mean_single": 1.9719517121524354e-21
+      }
+    },
+    "selection": {
+      "mean_true_error_rank_of_picked_view": 3.6666666666666665,
+      "random_expectation": 4.5,
+      "picked_best_view_pct": 12.5,
+      "distinct_cameras_picked": 8,
+      "picked_cameras": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "switch_rate_pct": 24.369747899159663
+    },
+    "fixed_camera_baseline": {
+      "best_fixed_camera": 1,
+      "best_fixed_camera_mm": 201.38290515336467,
+      "per_camera_mm": {
+        "0": 223.85986896997073,
+        "1": 201.38290515336467,
+        "2": 213.31713665866926,
+        "4": 205.06874465613458,
+        "5": 211.77486533322195,
+        "6": 215.44356665749675,
+        "7": 224.5105750468251,
+        "8": 201.59789339883505
+      }
+    },
+    "adaptive_beats_best_fixed": true
+  },
   "S2_heldout": {
     "n_frames": 54,
     "n_cameras": 2,
