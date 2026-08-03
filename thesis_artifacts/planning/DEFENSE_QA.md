@@ -68,12 +68,39 @@ transfer because they are properties of the skeleton, not of a dataset.
 
 ## Method scope
 
-**Q: Why not a learned canonicalizer (3DPCNet)?**
-A: Different goal. 3DPCNet learns SO(3) canonicalization with training data;
-ours is a deterministic Gram-Schmidt construction requiring zero training,
-running in O(17) per frame, and failing loudly (degenerate-axis gates) rather
-than silently. The trade-off is honest: we do not claim to beat learned
-methods on accuracy; we claim comparability without training.
+**Q: 3DPCNet (2025) already does post-hoc canonicalization of frozen
+estimators — and reports a hand-built anatomical baseline like yours losing
+to it badly (62.9–64.6 mm vs 47.6 mm; 20.6–21.6° vs 3.4°). What is left of
+your contribution?**
+A: We accept that finding and do not contest it. Canonicalization is not our
+claim — it is the substrate, and where a learned canonicalizer is available
+and its training data acceptable, it is the better choice for accuracy. Our
+contribution sits downstream: a *label-free* analytic reliability signal on a
+frozen predictor, what it enables (calibration-free multi-view fusion), and
+where it stops working. 3DPCNet has no reliability, no abstention, and no
+multi-view component; it also requires self-supervised training on
+synthetically rotated poses. The honest framing is a requirement profile
+(no training, no labels, no camera parameters), not an accuracy win.
+
+**Q: Then is anything in your method actually new?**
+A: We claim a *combination* and a *delimitation*, not a primitive. Every
+canonicalization competitor requires training (MoViD: GT SMPL; V-VIPE: 3D-GT
+VAE; 3DPCNet: self-supervised); every post-hoc uncertainty competitor requires
+a labeled calibration set (conformal keypoint detection, CHAMP, CUPS). Ours
+requires neither. We deliberately avoid "first to" phrasing: we have not
+systematically searched the view-selection and part-based normalization
+literatures, so we state what our method requires, not who got there first.
+
+**Q: Isn't the hip/shoulder body frame just standard preprocessing?**
+A: Yes — V-VIPE does the same alignment via Kabsch and calls it preprocessing,
+and we cite it as such. We do not claim it. What we add on top is the
+multi-scale per-limb extension (every published anatomical baseline we found
+uses a single global frame) and the reliability layer.
+
+**Q: Why not a learned canonicalizer, then?**
+A: For accuracy, use one. Ours applies where training is not an option:
+frozen third-party predictors, no labels for the deployment distribution, no
+camera calibration. That is a deployment constraint, not a claim of superiority.
 
 **Q: Is this model-agnostic?**
 A: Untested claim — we avoid it. It is model-independent by construction

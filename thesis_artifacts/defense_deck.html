@@ -70,14 +70,16 @@
       </ul>
     </div>
     <div class="col">
-      <p class="sub">Positioning (37-paper survey, 2019–2026):</p>
+      <p class="sub">Positioning — what each method <b>requires</b>:</p>
       <table>
-        <tr><th></th><th>Closest work</th><th>Ours</th></tr>
-        <tr><td>Canonicalization</td><td>3DPCNet '25 (learned SO(3))</td><td>training-free</td></tr>
-        <tr><td>Reliability</td><td>learned OOD (fails off-distribution)</td><td>training-free</td></tr>
-        <tr><td>Bone-length</td><td>BLAPose '24 (training loss)</td><td>analytical metric</td></tr>
-        <tr><td>All-in-one</td><td>—</td><td>integrated framework</td></tr>
+        <tr><th>Method</th><th>Train</th><th>Labels</th><th>Cam params</th><th>Frozen</th><th>Uncert.</th></tr>
+        <tr><td>3DPCNet '25</td><td>✓</td><td>synth rot.</td><td>—</td><td>✓</td><td>✗</td></tr>
+        <tr><td>MoViD '26</td><td>✓</td><td>GT SMPL</td><td>—</td><td>✗</td><td>✗</td></tr>
+        <tr><td>V-VIPE '24</td><td>✓ VAE</td><td>3D GT</td><td>—</td><td>✗</td><td>✗</td></tr>
+        <tr><td>Conformal KP '23</td><td>✗</td><td><b>labeled calib.</b></td><td>—</td><td>✓</td><td>✓</td></tr>
+        <tr class="dev"><td><b>Ours</b></td><td><b>✗</b></td><td><b>✗</b></td><td><b>✗</b></td><td><b>✓</b></td><td><b>✓</b></td></tr>
       </table>
+      <p class="note"><b>Said plainly:</b> 3DPCNet already does post-hoc canonicalization of frozen estimators, and reports a hand-built anatomical baseline of our family losing to it (62.9–64.6 mm vs 47.6 mm). <b>We do not claim canonicalization as novel or more accurate.</b> It is the substrate. The claim is the requirement profile — and what it buys: label-free abstention and calibration-free fusion.</p>
     </div>
   </div>
 </section>
@@ -250,10 +252,10 @@
 <section class="slide">
   <h2>Contributions</h2>
   <ul>
-    <li><b>1 · Training-free geometric canonicalization</b> — +32.4% mean cross-view improvement on 27 held-out pairs; approaches the per-pair Procrustes oracle.</li>
-    <li><b>2 · Training-free reliability estimation</b> — tracks induced error at ρ −0.813; 100% abstention on joint dropout; 0% false abstention on clean data.</li>
+    <li><b>1 · Label-free analytic reliability</b> — tracks induced error at ρ −0.813; 100% abstention on joint dropout; 0% false abstention on clean data. Every comparable method needs a <i>labeled</i> calibration set; this needs none.</li>
+    <li><b>2 · A requirement profile no competitor matches</b> — no training, no labels, no camera parameters, frozen backbone. (Canonicalization itself is <i>substrate</i>, not a claim — see positioning.)</li>
     <li><b>3 · Analytical consistency metrics</b> — canonical cross-view distance is a 3× stronger GT-error proxy than raw (ρ +0.601 vs +0.188).</li>
-    <li><b>4 · Integrated framework</b> — plus a multi-scale extension improving every pair while preserving error information.</li>
+    <li><b>4 · Multi-scale per-limb frames</b> — improve every one of 29 pairs while preserving error information; published anatomical baselines use a single global frame.</li>
     <li><b>5 · Training-free multi-view fusion</b> — a shared body frame turns N uncalibrated views into a fusable set: +23.7% (static) and +10.6% (dynamic) over an arbitrary view, with no calibration or correspondence.</li>
     <li><b>6 · A delimitation</b> — analytic geometric reliability detects corruption (ρ −0.813) but not viewpoint-induced depth error (within-frame ρ ≈ 0). We report where our own signal stops working.</li>
   </ul>

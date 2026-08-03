@@ -183,6 +183,31 @@ representation.
 MPJPE 45.149 mm (official 45.1), P-MPJPE 36.892 mm (official 36.9).
 (MPJPE terminology is correct here: this is the official GT benchmark.)
 
+## Positioning against prior work
+
+A literature sweep (2026-08-04) requires two claims to be withdrawn:
+
+- **Canonicalization is not claimed as novel or more accurate.** 3DPCNet
+  (arXiv 2509.23455, 2025) already performs estimator-agnostic post-hoc
+  canonicalization of frozen 3D predictors, and reports a hand-built
+  anatomical-landmark baseline of the same family as ours losing to it
+  (62.9–64.6 mm / 20.6–21.6° vs 47.6 mm / 3.4°). Canonicalization here is
+  **substrate**, not contribution.
+- **The hip/spine body frame is established preprocessing**, e.g. V-VIPE
+  (CVPR-W 2024) aligns hips and spine analytically via Kabsch. Pr-VIPE staked
+  calibration-free cross-view comparability in 2019.
+
+What remains defensible is a **requirement profile**: every canonicalization
+competitor requires training (MoViD: GT SMPL supervision; V-VIPE: 3D-GT VAE;
+3DPCNet: self-supervised on synthetic rotations), and every post-hoc
+uncertainty competitor requires a **labeled calibration set** (conformal
+keypoint detection CVPR 2023, CHAMP, CUPS). This framework requires no
+training, no labels, and no camera parameters — and offers **no coverage
+guarantee**, which we state rather than imply.
+
+We avoid "first to" phrasing entirely: the view-selection and part-based
+limb-frame literatures have not been systematically searched.
+
 ## Limitations
 
 - One dataset (MPI-INF-3DHP), two subjects, one model (MotionAGFormer-XS).
