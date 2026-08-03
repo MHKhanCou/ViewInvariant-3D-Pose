@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Thesis Defense — Training-Free Reliability-Aware Geometric Canonicalization</title>
+<style>
+  :root {
+    --ink: #1a1a19; --ink2: #6b6a63; --surface: #fcfcfb;
+    --blue: #2a78d6; --orange: #eb6834; --aqua: #1baf7a; --red: #e34948;
+  }
+  * { margin: 0; box-sizing: border-box; }
+  body { font-family: Georgia, 'Times New Roman', serif; background: #333; color: var(--ink); }
+  .slide {
+    width: 100vw; height: 100vh; padding: 5vh 7vw; background: var(--surface);
+    display: none; flex-direction: column; overflow: hidden;
+  }
+  .slide.active { display: flex; }
+  h1 { font-size: 2.4em; margin-bottom: 0.4em; line-height: 1.25; }
+  h2 { font-size: 1.9em; margin-bottom: 0.6em; border-bottom: 3px solid var(--blue); padding-bottom: 0.25em; }
+  p, li { font-size: 1.25em; line-height: 1.55; margin-bottom: 0.5em; }
+  ul { padding-left: 1.2em; margin-bottom: 0.6em; }
+  .sub { color: var(--ink2); font-size: 1.05em; }
+  .big { font-size: 3.2em; font-weight: bold; color: var(--blue); margin: 0.25em 0; }
+  .cols { display: flex; gap: 3em; flex: 1; min-height: 0; }
+  .col { flex: 1; min-width: 0; }
+  img.fig { max-width: 100%; max-height: 68vh; object-fit: contain; display: block; margin: auto; }
+  table { border-collapse: collapse; font-size: 1.15em; margin: 0.8em 0; }
+  th, td { border: 1px solid #ccc; padding: 0.45em 0.9em; text-align: left; }
+  th { background: #f0efe9; }
+  .dev { background: #fdeee6; }
+  .good { color: var(--aqua); font-weight: bold; }
+  .bad { color: var(--red); font-weight: bold; }
+  .src { position: absolute; bottom: 1.2vh; right: 2vw; color: var(--ink2); font-size: 0.8em; font-family: monospace; }
+  .n { position: absolute; bottom: 1.2vh; left: 2vw; color: var(--ink2); font-size: 0.9em; }
+  .note { background: #f0efe9; border-left: 4px solid var(--orange); padding: 0.7em 1em; margin: 0.7em 0; font-size: 1.1em; }
+</style>
+</head>
+<body>
+
+<!-- 1 · Title -->
+<section class="slide active">
+  <div style="margin:auto; text-align:center; max-width: 90%;">
+    <h1>A Lightweight, Training-Free, Reliability-Aware Geometric Canonicalization Framework for Cross-View Comparability of Frozen Monocular 3D Pose Predictions</h1>
+    <p class="sub" style="margin-top:2em;">Undergraduate Thesis Defense · August 2026</p>
+    <p class="sub">Frozen model: MotionAGFormer-XS · Dataset: MPI-INF-3DHP (local S1, S2)</p>
+  </div>
+</section>
+
+<!-- 2 · Problem -->
+<section class="slide">
+  <h2>Problem</h2>
+  <ul>
+    <li>Monocular 3D pose predictions live in <b>camera-relative coordinates</b> — the same motion seen by two cameras produces two different 3D poses.</li>
+    <li>Comparing predictions across views (gait analysis, sports, multi-device capture) requires a shared frame — normally obtained by <b>retraining</b> or <b>camera calibration</b>.</li>
+    <li>Goal: cross-view comparability for a <b>frozen</b> model, <b>no training, no extrinsics</b> — plus a signal for <em>when not to trust the output</em>.</li>
+  </ul>
+  <p class="note">Claim discipline: the contribution is <b>comparability</b>, never accuracy improvement. Prediction-vs-prediction distance is <b>cross-view joint distance</b>, never MPJPE.</p>
+</section>
+
+<!-- 3 · Method -->
+<section class="slide">
+  <h2>Method — deterministic body-frame construction</h2>
+  <div class="cols">
+    <div class="col">
+      <ul>
+        <li><b>Gram-Schmidt body frame:</b> y = torso vertical, x = hip line, z = x×y. Re-express joints in this frame. O(17) per frame, zero parameters.</li>
+        <li><b>Reliability score:</b> geometric mean of 6 training-free components (axis conditioning, torso-hip angle, bilateral symmetry, bone ratios, detector confidence, temporal stability).</li>
+        <li><b>Hard gates:</b> degenerate geometry → abstain loudly, never silently.</li>
+        <li><b>Multi-scale extension:</b> per-limb frames (torso, 2 arms, 2 legs) built by the same construction.</li>
+      </ul>
+    </div>
+    <div class="col">
+      <p class="sub">Positioning (37-paper survey, 2019–2026):</p>
+      <table>
+        <tr><th></th><th>Closest work</th><th>Ours</th></tr>
+        <tr><td>Canonicalization</td><td>3DPCNet '25 (learned SO(3))</td><td>training-free</td></tr>
+        <tr><td>Reliability</td><td>learned OOD (fails off-distribution)</td><td>training-free</td></tr>
+        <tr><td>Bone-length</td><td>BLAPose '24 (training loss)</td><td>analytical metric</td></tr>
+        <tr><td>All-in-one</td><td>—</td><td>integrated framework</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · Protocol -->
+<section class="slide">
+  <h2>Protocol — corrected, auditable</h2>
+  <ul>
+    <li><b>We found and fixed our own protocol flaw:</b> earlier numbers lifted a single frame repeated 27×. The corrected protocol uses <b>true 27-frame detection windows</b>; only fully-windowed frames are reported.</li>
+    <li><b>8 synchronized cameras</b> (S1/Seq1) → 28 pairs + held-out subject S2 → <b>29 pairs × 54 frames</b>, from already-local AVIs. Frame↔annotation sync verified by GT overlay.</li>
+    <li><b>Development pair labeled:</b> all tuning happened on S1 cam0-1. The other 27 pairs + S2 are held out.</li>
+    <li>Raw root-relative outputs only — no display transforms in any quantitative path.</li>
+  </ul>
+  <p class="note">Invalidated history, owned up front: 67% and 40% used display post-processing and repeated frames — invalid. Legacy 28.4% is valid but superseded by the corrected protocol.</p>
+</section>
+
+<!-- 5 · Headline -->
+<section class="slide">
+  <h2>Result 1 — generalization across 29 pairs</h2>
+  <div class="cols">
+    <div class="col" style="flex: 1.4;"><img class="fig" src="figures/fig_29pairs.png" alt="29-pair improvements"></div>
+    <div class="col">
+      <table>
+        <tr><th>Scope</th><th>Improvement</th></tr>
+        <tr class="dev"><td>Dev pair</td><td>+20.5%</td></tr>
+        <tr><td><b>27 held-out pairs</b></td><td><b>+32.4% mean</b></td></tr>
+        <tr><td>Held-out subject S2</td><td>+13.4%</td></tr>
+      </table>
+      <p>Held-out mean <b>exceeds</b> the dev pair — no tuning-pair overfit.</p>
+      <p class="sub">The two small negatives are near-aligned camera pairs (raw distance already ~0.06–0.10): little orientation variance to remove.</p>
+    </div>
+  </div>
+  <div class="src">cross_view_eval/results_multicam.json</div>
+</section>
+
+<!-- 6 · Oracle -->
+<section class="slide">
+  <h2>Result 2 — how close to the best possible rigid alignment?</h2>
+  <div class="cols">
+    <div class="col" style="flex: 1.4;"><img class="fig" src="figures/fig_oracle.png" alt="oracle dumbbell"></div>
+    <div class="col">
+      <p>Per-frame <b>Procrustes oracle</b>: the optimal rotation, computable only with both poses jointly — a lower bound no rotation method can beat.</p>
+      <p>The training-free frame approaches the oracle on many pairs (cam5-cam8: 0.0457 vs 0.0418).</p>
+      <p class="sub">The oracle needs both views simultaneously; our method canonicalizes each view independently — deployable where the oracle is not.</p>
+    </div>
+  </div>
+  <div class="src">cross_view_eval/results_multicam.json</div>
+</section>
+
+<!-- 7 · GT anchoring -->
+<section class="slide">
+  <h2>Result 3 — anchored against ground truth</h2>
+  <ul>
+    <li>GT bridge validated: world-transformed GT across cameras agrees to <b>0.0&nbsp;mm</b>.</li>
+    <li>Per-frame GT error = similarity-aligned (Umeyama) joint distance — <em>not</em> MPJPE.</li>
+  </ul>
+  <div class="big">ρ(canonical cross-view distance, GT error) = +0.601</div>
+  <p>vs <b>+0.188</b> for raw distance (p ≈ 10⁻¹⁵⁴, n = 1566).</p>
+  <p class="note">Canonicalization makes cross-view consistency a <b>3× stronger training-free proxy for actual prediction error</b> — consistency is necessary-not-sufficient, and we say so, but it demonstrably carries error information.</p>
+  <div class="src">gt_validation/gt_results.json</div>
+</section>
+
+<!-- 8 · Degradation -->
+<section class="slide">
+  <h2>Result 4 — reliability under controlled degradation</h2>
+  <div class="cols">
+    <div class="col" style="flex: 1.4;"><img class="fig" src="figures/fig_degradation.png" alt="degradation scatter"></div>
+    <div class="col">
+      <ul>
+        <li>2240 corrupted lifts, 5 physically-motivated operators, seeded, identity controls exact.</li>
+        <li><b>ρ(reliability, induced error) = −0.813</b> pooled.</li>
+        <li>Joint dropout → <b>100% abstention</b>.</li>
+        <li>Clean frames → reliability 0.872, <b>0% abstention</b>.</li>
+      </ul>
+      <p class="sub">The score separates clean from corrupted without any threshold tuning.</p>
+    </div>
+  </div>
+  <div class="src">degradation/analysis.json</div>
+</section>
+
+<!-- 9 · Ablation -->
+<section class="slide">
+  <h2>Result 5 — reliability-aware ablation (3 conditions)</h2>
+  <div class="cols">
+    <div class="col" style="flex: 1.3;"><img class="fig" src="figures/fig_coverage_error.png" alt="coverage-error"></div>
+    <div class="col">
+      <table>
+        <tr><th>Condition (dev pair)</th><th>Distance</th></tr>
+        <tr><td>1 · Raw</td><td>0.1439</td></tr>
+        <tr><td>2 · Canonical</td><td>0.1143 (+20.5%)</td></tr>
+        <tr><td>3 · Reliability-aware, t=0.5</td><td>0.1044 @ 89% coverage</td></tr>
+        <tr><td>3 · Reliability-aware, t=0.8</td><td><b>0.0904</b> @ 69% coverage</td></tr>
+      </table>
+      <p class="sub">Coverage always reported next to error. Abstention fires on real data under the corrected protocol.</p>
+    </div>
+  </div>
+  <div class="src">coverage_error/ablation_results.json</div>
+</section>
+
+<!-- 10 · Multi-scale -->
+<section class="slide">
+  <h2>Result 6 — multi-scale (per-limb) canonicalization</h2>
+  <div class="cols">
+    <div class="col" style="flex: 1.4;"><img class="fig" src="figures/fig_multiscale.png" alt="multiscale deltas"></div>
+    <div class="col">
+      <p>Pre-declared gate: beat global on the dev pair or be reported as a negative result.</p>
+      <p class="big" style="font-size:2.2em;">All 29 pairs positive</p>
+      <p>dev +37.1% · held-out +36.4% · S2 +34.9%</p>
+      <p class="note">Not metric shrinkage: multi-scale distance keeps full GT-error correlation (ρ +0.610 vs +0.601 global).</p>
+    </div>
+  </div>
+  <div class="src">cross_view_eval/multiscale_results.json</div>
+</section>
+
+<!-- 11 · Negative result -->
+<section class="slide">
+  <h2>Negative result — retrieval</h2>
+  <ul>
+    <li>Cross-view retrieval got <b class="bad">worse</b> under canonicalization (R@1 0.02 → 0.00, MRR −6.9%).</li>
+    <li>Expected in hindsight: retrieval across similar standing poses partly relies on view information — which canonicalization removes <em>by construction</em>.</li>
+    <li>This delimits scope: the framework is for <b>cross-view comparison</b>, not general-purpose representation.</li>
+  </ul>
+  <p class="note">A method that helped every task would be suspicious. This result is evidence the method does exactly what it claims — removes view information.</p>
+  <div class="src">retrieval/retrieval_results.json</div>
+</section>
+
+<!-- 12 · Demo -->
+<section class="slide">
+  <h2>Live demo</h2>
+  <ul>
+    <li>Gradio app: 2D detection overlay · interactive 3D viewer · Camera vs <b>View-Invariant</b> coordinate systems.</li>
+    <li><b>Live reliability verdict</b> on every inference: 🟢 RELIABLE / 🟠 ABSTAIN with the 6-component breakdown — same code path as the offline evaluation.</li>
+    <li>Degrade the input (rotate, occlude) and watch the score drop and abstention fire.</li>
+  </ul>
+  <p class="sub">Baseline integrity: frozen MotionAGFormer-XS reproduces official H36M MPJPE 45.1 mm / P-MPJPE 36.9 mm (baseline_results.json).</p>
+</section>
+
+<!-- 13 · Limitations -->
+<section class="slide">
+  <h2>Limitations — stated, not hidden</h2>
+  <ul>
+    <li><b>One dataset, two subjects, one model.</b> Model-independent by construction (consumes any 17×3 pose); model-<i>agnostic</i> is untested and not claimed.</li>
+    <li><b>Reliability on clean data</b> correlates with error only moderately (ρ −0.24; per-camera −0.75…+0.71) — clean studio error variance is small (restriction of range). Strong under degradation (−0.813).</li>
+    <li><b>Near-aligned camera pairs</b> gain little and can regress slightly (−6.1% worst).</li>
+    <li><b>Abstention threshold 0.5</b> frozen at implementation time — deliberately not calibrated on reporting pairs.</li>
+  </ul>
+</section>
+
+<!-- 14 · Contributions -->
+<section class="slide">
+  <h2>Contributions</h2>
+  <ul>
+    <li><b>1 · Training-free geometric canonicalization</b> — +32.4% mean cross-view improvement on 27 held-out pairs; approaches the per-pair Procrustes oracle.</li>
+    <li><b>2 · Training-free reliability estimation</b> — tracks induced error at ρ −0.813; 100% abstention on joint dropout; 0% false abstention on clean data.</li>
+    <li><b>3 · Analytical consistency metrics</b> — canonical cross-view distance is a 3× stronger GT-error proxy than raw (ρ +0.601 vs +0.188).</li>
+    <li><b>4 · Integrated framework</b> — plus a multi-scale extension improving every pair while preserving error information.</li>
+  </ul>
+  <p class="sub" style="margin-top:1em;">Every number traceable to a JSON artifact; evaluation regenerable from a cached prediction store with one command.</p>
+</section>
+
+<!-- 15 · Close -->
+<section class="slide">
+  <div style="margin:auto; text-align:center;">
+    <h1 style="font-size:2em;">Cross-view comparability for frozen monocular 3D pose predictions —<br>training-free, reliability-aware, honestly scoped.</h1>
+    <p class="sub" style="margin-top:2em;">Thank you. Questions welcome — every number has a file.</p>
+  </div>
+</section>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  let i = 0;
+  const nums = slides.map((s, k) => {
+    const n = document.createElement('div');
+    n.className = 'n'; n.textContent = `${k + 1} / ${slides.length}`;
+    s.style.position = 'relative'; s.appendChild(n);
+  });
+  function show(k) {
+    i = Math.max(0, Math.min(slides.length - 1, k));
+    slides.forEach((s, j) => s.classList.toggle('active', j === i));
+  }
+  addEventListener('keydown', e => {
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(i + 1);
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) show(i - 1);
+    if (e.key === 'Home') show(0);
+  });
+  addEventListener('click', e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+</script>
+</body>
+</html>
