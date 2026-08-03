@@ -209,6 +209,14 @@ before that run), plus the two robustness checks above — five in total, all
 passed. It should be replicated on a second dataset before it carries weight in
 a submission.
 
+**Scope limit — frame-level, not joint-level.** The signal predicts *which
+frames* to distrust, not *which joints within a frame*. Assigning each joint the
+mean deviation of the bones touching it gives only ρ = +0.167 pooled over 41 820
+joint-frames, and **within-frame joint ranking is chance**: mean ρ = −0.010,
+positive in 49% of frames. This mirrors the reliability score's limitation
+exactly (§7): these geometric signals discriminate *between* poses, not *inside*
+one. Claim frame-level triage only; spatial error localization remains open.
+
 #### 8a. Why it works where test-time augmentation does not
 
 `tta/tta_results.json` — pre-registered, **FAILED all three criteria**
