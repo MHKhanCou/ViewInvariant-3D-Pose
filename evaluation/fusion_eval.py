@@ -66,11 +66,14 @@ def check_reference_validity(gt, cams, frames):
     return float(np.mean(diffs)) if diffs else None
 
 
-def collect(subject, sequence, cache, gt):
+def collect(subject, sequence, cache, gt, condition="static"):
     """Per-frame stacked canonical poses, reliabilities, and per-view errors."""
     prefix = f"{subject}_{sequence}_cam"
-    cams = sorted(int(k.split("cam")[1]) for k in cache if k.startswith(prefix))
-    per_cam = {c: cache[f"{prefix}{c}"] for c in cams}
+    suffix = "" if condition == "static" else f"_{condition}"
+    keys = [k for k in cache
+            if k.startswith(prefix) and k[len(prefix):].lstrip("0123456789") == suffix]
+    cams = sorted(int(k[len(prefix):].split("_")[0]) for k in keys)
+    per_cam = {c: cache[f"{prefix}{c}{suffix}"] for c in cams}
     frames = sorted(set.intersection(
         *[set(per_cam[c]["centers"].tolist()) for c in cams]))
 
@@ -290,6 +293,55 @@ def main():
         print(f"{k:>5s} " + " ".join(
             f"{vals[n]:15.1f}mm" for n in
             ["mean_single", "reliability_pick", "weighted_mean", "oracle_best"]))
+
+    # ---------- dynamic windows: does selection become per-frame adaptive? ----------
+    for label, subj, seq in [("S1_dynamic", "S1", "Seq1"),
+                             ("S2_dynamic_heldout", "S2", "Seq2")]:
+        gt_d = load_gt17(subj, seq)
+        cams_d, frames_d, rows_d = collect(subj, seq, cache, gt_d, "dynamic")
+        if not rows_d:
+            continue
+        out_d, ranks_d = evaluate(rows_d)
+        summary_d = summarize(out_d)
+        picked_d = [r["cams"][int(np.argmax(r["rels"]))] for r in rows_d]
+        distinct_d = sorted(set(picked_d))
+        fixed_d = fixed_camera_baseline(rows_d, cams_d)
+        rd = np.array(ranks_d)
+
+        # Switch rate: how often does the chosen view change between frames?
+        switches = sum(1 for a, b in zip(picked_d[:-1], picked_d[1:]) if a != b)
+
+        results[label] = {
+            "n_frames": len(rows_d), "n_cameras": len(cams_d),
+            "strategies": summary_d,
+            "selection": {
+                "mean_true_error_rank_of_picked_view": float(rd.mean()),
+                "random_expectation": float((len(cams_d) + 1) / 2),
+                "picked_best_view_pct": float(100 * (rd == 1).mean()),
+                "distinct_cameras_picked": len(distinct_d),
+                "picked_cameras": [int(c) for c in distinct_d],
+                "switch_rate_pct": float(100 * switches / max(len(picked_d) - 1, 1)),
+            },
+            "fixed_camera_baseline": fixed_d,
+            "adaptive_beats_best_fixed": bool(
+                summary_d["reliability_pick"]["mean_mm"] < fixed_d["best_fixed_camera_mm"]),
+        }
+        s = results[label]
+        print(f"\n=== {label}: {s['n_cameras']} cams, {s['n_frames']} frames ===")
+        for name in ["mean_single", "weighted_mean", "median",
+                     "reliability_pick", "oracle_best"]:
+            e = summary_d[name]
+            print(f"  {name:18s} {e['mean_mm']:7.1f}mm "
+                  f"({e['improvement_vs_mean_single_pct']:+5.1f}%)")
+        print(f"  best FIXED camera (needs GT): cam{fixed_d['best_fixed_camera']} "
+              f"at {fixed_d['best_fixed_camera_mm']:.1f}mm")
+        print(f"  distinct cameras picked: {s['selection']['distinct_cameras_picked']}"
+              f" of {s['n_cameras']} {s['selection']['picked_cameras']}"
+              f" | switch rate {s['selection']['switch_rate_pct']:.0f}%")
+        print(f"  picked-view true-error rank "
+              f"{s['selection']['mean_true_error_rank_of_picked_view']:.2f} "
+              f"(random {s['selection']['random_expectation']:.1f})")
+        print(f"  ADAPTIVE BEATS BEST-FIXED (GT-chosen): {s['adaptive_beats_best_fixed']}")
 
     # ---------- held-out subject ----------
     gt_s2 = load_gt17("S2", "Seq1")

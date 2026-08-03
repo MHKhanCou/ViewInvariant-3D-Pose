@@ -21,7 +21,12 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MPI_ROOT = "E:/Thesis/mpi_inf_3dhp"
 
 # Sequences eligible for evaluation (have annot.mat + calibration).
-SEQUENCES = [("S1", "Seq1"), ("S2", "Seq1")]
+SEQUENCES = [("S1", "Seq1"), ("S2", "Seq1"), ("S2", "Seq2")]
+
+# Frame-directory prefixes = experimental conditions.
+#   "frames_"     static window (frames 0..79), low body rotation
+#   "frames_dyn_" dynamic window chosen by GT motion/rotation scan
+CONDITIONS = {"frames_": "static", "frames_dyn_": "dynamic"}
 
 # The pair every prior number/tuning decision was made on. Never held-out.
 DEV_PAIR = ("S1", "Seq1", 0, 1)
@@ -30,18 +35,35 @@ WINDOW = 27
 HALF = WINDOW // 2  # 13
 
 
-def get_frame_dir(subject, sequence, camera_id):
-    """Directory containing extracted JPEG frames for one camera."""
-    return os.path.join(MPI_ROOT, subject, sequence, f"frames_cam{camera_id}")
+def get_frame_dir(subject, sequence, camera_id, prefix="frames_"):
+    """Directory containing extracted JPEG frames for one camera/condition."""
+    return os.path.join(MPI_ROOT, subject, sequence, f"{prefix}cam{camera_id}")
 
 
-def get_frame_paths(subject, sequence, camera_id):
+def get_frame_paths(subject, sequence, camera_id, prefix="frames_"):
     """Sorted list of extracted frame paths for a camera."""
-    frame_dir = get_frame_dir(subject, sequence, camera_id)
+    frame_dir = get_frame_dir(subject, sequence, camera_id, prefix)
     if not os.path.exists(frame_dir):
         return []
     frames = sorted(f for f in os.listdir(frame_dir) if f.endswith(".jpg"))
     return [os.path.join(frame_dir, f) for f in frames]
+
+
+def frame_id_from_path(path):
+    """
+    True source-video frame index parsed from 'frame_%06d.jpg'.
+
+    Extractions need not start at frame 0 (dynamic windows are extracted from
+    the middle of a sequence), so positional indices are NOT valid annot.mat
+    indices — every GT lookup must go through this.
+    """
+    return int(os.path.basename(path).split("_")[1].split(".")[0])
+
+
+def get_frame_ids(subject, sequence, camera_id):
+    """True frame indices for a camera's extracted frames, sorted."""
+    return [frame_id_from_path(p)
+            for p in get_frame_paths(subject, sequence, camera_id)]
 
 
 def discover_cameras():
@@ -57,16 +79,21 @@ def discover_cameras():
         if not os.path.exists(seq_dir):
             continue
         for name in sorted(os.listdir(seq_dir)):
-            if not name.startswith("frames_cam"):
+            prefix = next((p for p in CONDITIONS
+                           if name.startswith(p + "cam")), None)
+            if prefix is None:
                 continue
-            cam = int(name.replace("frames_cam", ""))
-            paths = get_frame_paths(subject, sequence, cam)
+            cam = int(name[len(prefix) + 3:])
+            paths = get_frame_paths(subject, sequence, cam, prefix)
             if paths:
                 cameras.append({
                     "subject": subject,
                     "sequence": sequence,
                     "camera": cam,
+                    "condition": CONDITIONS[prefix],
+                    "prefix": prefix,
                     "frame_paths": paths,
+                    "frame_ids": [frame_id_from_path(p) for p in paths],
                     "n_frames": len(paths),
                 })
     return cameras
@@ -91,10 +118,12 @@ def build_pairing_table():
     cameras = discover_cameras()
     by_seq = {}
     for cam in cameras:
-        by_seq.setdefault((cam["subject"], cam["sequence"]), []).append(cam)
+        # Pair only within the same sequence AND condition.
+        by_seq.setdefault(
+            (cam["subject"], cam["sequence"], cam["condition"]), []).append(cam)
 
     table = []
-    for (subject, sequence), cams in by_seq.items():
+    for (subject, sequence, condition), cams in by_seq.items():
         cams = sorted(cams, key=lambda c: c["camera"])
         for i in range(len(cams)):
             for j in range(i + 1, len(cams)):
@@ -102,19 +131,22 @@ def build_pairing_table():
                 n_matched = min(a["n_frames"], b["n_frames"])
                 centers = evaluated_centers(n_matched)
                 frame_pairs = [
-                    (k, a["frame_paths"][k], b["frame_paths"][k]) for k in centers
+                    (a["frame_ids"][k], a["frame_paths"][k], b["frame_paths"][k])
+                    for k in centers
                 ]
-                is_dev = (subject, sequence, a["camera"], b["camera"]) == DEV_PAIR
+                is_dev = (condition == "static" and
+                          (subject, sequence, a["camera"], b["camera"]) == DEV_PAIR)
                 table.append({
                     "subject": subject,
                     "sequence": sequence,
+                    "condition": condition,
                     "cam_a": a["camera"],
                     "cam_b": b["camera"],
                     "n_frames": len(frame_pairs),
                     "frame_pairs": frame_pairs,
                     "is_dev_pair": is_dev,
                 })
-                print(f"Pairing table: {subject}/{sequence} "
+                print(f"Pairing table: {subject}/{sequence} [{condition}] "
                       f"cam{a['camera']} <-> cam{b['camera']}: "
                       f"{len(frame_pairs)} fully-windowed frame pairs"
                       f"{'  [DEV PAIR]' if is_dev else ''}")

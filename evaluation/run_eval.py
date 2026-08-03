@@ -56,7 +56,14 @@ COVERAGE_THRESHOLDS = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
 
 
 def cam_key(cam_info):
-    return f"{cam_info['subject']}_{cam_info['sequence'].replace('/', '_')}_cam{cam_info['camera']}"
+    """
+    Cache key. The condition suffix keeps the static and dynamic windows of the
+    same camera in separate entries ('' for static preserves existing keys).
+    """
+    cond = cam_info.get("condition", "static")
+    suffix = "" if cond == "static" else f"_{cond}"
+    return (f"{cam_info['subject']}_{cam_info['sequence'].replace('/', '_')}"
+            f"_cam{cam_info['camera']}{suffix}")
 
 
 def predict_camera(model, detector, cam_info, device="cpu"):
@@ -123,8 +130,14 @@ def predict_camera(model, detector, cam_info, device="cpu"):
         if meta["valid"]:
             prev_R = R
 
+    # `centers` are positions in this camera's extracted list; `frame_ids` are
+    # the true source-video indices used for GT lookup and cross-camera pairing
+    # (they differ whenever an extraction does not start at frame 0).
+    frame_ids = np.array([cam_info["frame_ids"][c] for c in centers], dtype=np.int32)
+
     return {
-        "centers": np.array(centers, dtype=np.int32),
+        "centers": frame_ids,
+        "positions": np.array(centers, dtype=np.int32),
         "raw": raw,
         "canonical": canonical,
         "R": R_all,
@@ -158,12 +171,13 @@ def save_cache(cams):
 
 def evaluate_pair_from_cache(pair_info, cache):
     """Compute all pair metrics from cached per-camera predictions."""
+    cond = pair_info.get("condition", "static")
     key_a = cam_key({"subject": pair_info["subject"],
                      "sequence": pair_info["sequence"],
-                     "camera": pair_info["cam_a"]})
+                     "camera": pair_info["cam_a"], "condition": cond})
     key_b = cam_key({"subject": pair_info["subject"],
                      "sequence": pair_info["sequence"],
-                     "camera": pair_info["cam_b"]})
+                     "camera": pair_info["cam_b"], "condition": cond})
     a, b = cache[key_a], cache[key_b]
 
     # Match frames by center index (cameras are synchronized).
@@ -208,6 +222,7 @@ def evaluate_pair_from_cache(pair_info, cache):
     return {
         "subject": pair_info["subject"],
         "sequence": pair_info["sequence"],
+        "condition": cond,
         "cam_a": pair_info["cam_a"],
         "cam_b": pair_info["cam_b"],
         "is_dev_pair": pair_info["is_dev_pair"],
