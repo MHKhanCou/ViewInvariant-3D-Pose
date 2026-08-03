@@ -1,5 +1,62 @@
 {
   "note": "Signal found by exploratory probing, NOT pre-registered; held to the TTA pre-registration criteria plus two robustness checks.",
+  "component_analysis": {
+    "selection_threshold_abs_rho_on_S1": 0.25,
+    "selected_components": [
+      "torso_hip_angle",
+      "bilateral_symmetry",
+      "abnormal_bone_ratio",
+      "temporal_stability"
+    ],
+    "dropped_components": [
+      "axis_conditioning",
+      "detector_confidence"
+    ],
+    "individual": {
+      "axis_conditioning": {
+        "pooled_rho": -0.09155633296996038,
+        "s1_rho": -0.12350112523787916
+      },
+      "torso_hip_angle": {
+        "pooled_rho": -0.31159401414241816,
+        "s1_rho": -0.2762521184647122
+      },
+      "bilateral_symmetry": {
+        "pooled_rho": -0.350273097544842,
+        "s1_rho": -0.4055613599368468
+      },
+      "abnormal_bone_ratio": {
+        "pooled_rho": -0.31583417674844333,
+        "s1_rho": -0.2956299957788488
+      },
+      "detector_confidence": {
+        "pooled_rho": -0.05964277153614538,
+        "s1_rho": -0.07456450337873242
+      },
+      "temporal_stability": {
+        "pooled_rho": -0.3622496872352573,
+        "s1_rho": -0.5154319531393627
+      }
+    },
+    "incumbent_composite_all_six": {
+      "s1_selection_rho": -0.22232864982881517,
+      "s2_heldout_rho": -0.16179293289184282
+    },
+    "pruned_composite": {
+      "s1_selection_rho": -0.5091951062911246,
+      "s2_heldout_rho": -0.35682800076721327
+    },
+    "bone_deviation_alone": {
+      "s1_selection_rho": 0.5715405620069125,
+      "s2_heldout_rho": 0.368405421098131
+    },
+    "bone_deviation_plus_pruned": {
+      "s1_selection_rho": 0.5611777798651612,
+      "s2_heldout_rho": 0.395283463305024
+    },
+    "n_s1": 1392,
+    "n_s2_heldout": 1068
+  },
   "verdict_pass": true,
   "criteria": {
     "a_rho_floor": true,

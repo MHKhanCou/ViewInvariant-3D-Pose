@@ -166,6 +166,29 @@ def main():
                          float(sum(1 for v in bc["per_stratum"].values() if v > 0)),
                          src, tol=0))
 
+    ca = bc.get("component_analysis") or {}
+    if ca:
+        results.append(check("  pruned composite, held-out S2", -0.357,
+                             ca["pruned_composite"]["s2_heldout_rho"], src, tol=0.005))
+        results.append(check("  incumbent composite, held-out S2", -0.162,
+                             ca["incumbent_composite_all_six"]["s2_heldout_rho"],
+                             src, tol=0.005))
+        results.append(check("  bone+pruned combo, held-out S2", 0.395,
+                             ca["bone_deviation_plus_pruned"]["s2_heldout_rho"],
+                             src, tol=0.005))
+
+    # ---------- TTA dispersion (pre-registered, FAILED) ----------
+    tta = load("tta/tta_results.json")
+    tp = tta["pooled"]
+    src = "tta/tta_results.json"
+    results.append(check("TTA verdict is FAIL (0=fail)", 0.0,
+                         float(bool(tta["verdict_pass"])), src, tol=0))
+    results.append(check("  rho(TTA dispersion, error) below floor", 0.100,
+                         tp["spearman_disp_vs_error"], src, tol=0.005))
+    results.append(check("  TTA strata with positive sign (mixed=2 of 4)", 2.0,
+                         float(sum(1 for v in tta["per_stratum"].values() if v > 0)),
+                         src, tol=0))
+
     # ---------- baseline integrity ----------
     b = load("baseline_results.json")
     flat = json.dumps(b)

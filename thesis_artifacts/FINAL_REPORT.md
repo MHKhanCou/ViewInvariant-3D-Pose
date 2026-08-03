@@ -209,6 +209,53 @@ before that run), plus the two robustness checks above — five in total, all
 passed. It should be replicated on a second dataset before it carries weight in
 a submission.
 
+#### 8a. Why it works where test-time augmentation does not
+
+`tta/tta_results.json` — pre-registered, **FAILED all three criteria**
+
+We also tested whether the model's *self-disagreement* predicts its error, by
+harvesting the augmented predictions the pipeline already computes and discards
+(4 rotated detections, of which 3 are dropped; flipped and unflipped lifts,
+which are averaged). Dispersion over K = 6 fixed arms gives:
+
+| Criterion | Required | Observed |
+|---|---|---|
+| pooled ρ | ≥ +0.30 | **+0.100** |
+| same sign across strata | yes | **no** (−0.175, +0.413, −0.088, +0.278) |
+| bootstrap CI excludes 0 | yes | **no** ([−0.592, +0.476]) |
+| partial ρ given detector confidence | reported | **−0.083** (collapses) |
+
+The contrast is the finding: **the model agrees with itself while being wrong.**
+Perturbing the input does not move a confidently-wrong depth estimate, so
+self-consistency carries almost no error information — consistent with Khanal &
+Zhou (2026) on learned confidence failing off-distribution. A *physical
+invariant* the prediction must satisfy (constant bone length) does carry that
+information, because the world constrains it and the model does not.
+
+#### 8b. The incumbent score's defect is its combination rule, not its parts
+
+`bone_consistency/bone_consistency.json` → `component_analysis`
+
+Four of the six components individually predict error roughly twice as well as
+their geometric mean: temporal_stability −0.362, bilateral_symmetry −0.350,
+abnormal_bone_ratio −0.316, torso_hip_angle −0.312, versus the composite's
+−0.192. The mean is diluted by axis_conditioning (−0.092, and the only component
+without a consistent sign across strata) and detector_confidence (−0.060).
+
+Selecting components on subject **S1 only** and scoring on held-out subject
+**S2** (so the selection cannot be curve-fitting):
+
+| Signal | S1 (selection) | S2 (held-out) |
+|---|---|---|
+| Incumbent composite, all six | −0.222 | −0.162 |
+| Pruned composite (4 components) | −0.509 | **−0.357** |
+| Bone deviation alone | +0.572 | +0.368 |
+| **Bone deviation + pruned composite** | +0.561 | **+0.395** |
+
+Pruning more than doubles held-out performance, and the two signals combine to
+beat either alone — they are complementary, one measuring within-frame
+plausibility and the other a cross-time physical invariant.
+
 ### 9. Negative result: retrieval
 
 `retrieval/retrieval_results.json`

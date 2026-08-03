@@ -81,6 +81,51 @@ def parse_key(key):
     return p[0], p[1], int(p[2].replace("cam", "")), (p[3] if len(p) > 3 else "static")
 
 
+def geometric_mean(M):
+    """Same combination rule the incumbent reliability score uses."""
+    return np.exp(np.mean(np.log(np.clip(M, 1e-8, None)), axis=1))
+
+
+def component_analysis(comps, err, rel, bone_dev, subject, keys, threshold=0.25):
+    """
+    Is the incumbent score weak because its COMPONENTS are weak, or because the
+    geometric mean over all six dilutes the good ones?
+
+    Components are selected on subject S1 ONLY and the pruned composite is scored
+    on the held-out subject S2, so the selection cannot be curve-fitting.
+    """
+    tr, te = subject == "S1", subject == "S2"
+    if not (tr.any() and te.any()):
+        return None
+
+    individual = {}
+    for i, k in enumerate(keys):
+        r_all = float(spearmanr(comps[:, i], err)[0])
+        individual[k] = {"pooled_rho": r_all,
+                         "s1_rho": float(spearmanr(comps[tr, i], err[tr])[0])}
+
+    sel = [i for i in range(len(keys))
+           if abs(individual[keys[i]]["s1_rho"]) >= threshold]
+    pruned = geometric_mean(comps[:, sel])
+    # rank-average of the two independent signals (both direction-normalised)
+    combo = (rankdata(bone_dev) / len(bone_dev)
+             + (1 - rankdata(pruned) / len(pruned)))
+
+    score = lambda v: {"s1_selection_rho": float(spearmanr(v[tr], err[tr])[0]),
+                       "s2_heldout_rho": float(spearmanr(v[te], err[te])[0])}
+    return {
+        "selection_threshold_abs_rho_on_S1": threshold,
+        "selected_components": [keys[i] for i in sel],
+        "dropped_components": [k for i, k in enumerate(keys) if i not in sel],
+        "individual": individual,
+        "incumbent_composite_all_six": score(rel),
+        "pruned_composite": score(pruned),
+        "bone_deviation_alone": score(bone_dev),
+        "bone_deviation_plus_pruned": score(combo),
+        "n_s1": int(tr.sum()), "n_s2_heldout": int(te.sum()),
+    }
+
+
 def main():
     cache = load_cache()
     if not cache:
@@ -176,9 +221,26 @@ def main():
         print(f"    {k:32s} {v}")
     print(f"\n  VERDICT: {'PASS' if passed else 'FAIL'}")
 
+    # --- is the incumbent weak in its parts, or in its combination rule? ---
+    from evaluation.run_eval import COMPONENT_KEYS
+    comps = np.vstack([f["components"] for _, f in sorted(cache.items())])
+    subj_arr = np.concatenate([np.full(len(per_cam[k]["err"]), per_cam[k]["subject"])
+                               for k in keys])
+    ca = component_analysis(comps, err, rel, dev, subj_arr, COMPONENT_KEYS)
+    if ca:
+        print("\n  component analysis (select on S1, score on held-out S2):")
+        print(f"    selected: {ca['selected_components']}")
+        print(f"    dropped:  {ca['dropped_components']}")
+        for name in ["incumbent_composite_all_six", "pruned_composite",
+                     "bone_deviation_alone", "bone_deviation_plus_pruned"]:
+            s = ca[name]
+            print(f"    {name:32s} S1 {s['s1_selection_rho']:+.3f} | "
+                  f"S2 held-out {s['s2_heldout_rho']:+.3f}")
+
     out = {
         "note": "Signal found by exploratory probing, NOT pre-registered; held to "
                 "the TTA pre-registration criteria plus two robustness checks.",
+        "component_analysis": ca,
         "verdict_pass": passed,
         "criteria": crit,
         "n_frames": int(len(err)),
