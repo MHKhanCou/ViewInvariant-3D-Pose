@@ -1,0 +1,440 @@
+{
+  "gate": "PASS \u2014 multiscale beats global on dev pair",
+  "results": [
+    {
+      "pair": "S1/Seq1 cam0-cam1",
+      "is_dev_pair": true,
+      "global": 0.11434900636474292,
+      "combined_multiscale": 0.07191099612801163,
+      "per_level": {
+        "global": 0.11434900636474292,
+        "torso": 0.03611817228159419,
+        "left_arm": 0.08276185131183376,
+        "right_arm": 0.0742018952689789,
+        "left_leg": 0.11040604204215386,
+        "right_leg": 0.06956000877889218
+      },
+      "multiscale_vs_global_pct": 37.1127057294799
+    },
+    {
+      "pair": "S1/Seq1 cam0-cam2",
+      "is_dev_pair": false,
+      "global": 0.11618328391125908,
+      "combined_multiscale": 0.05971931659237102,
+      "per_level": {
+        "global": 0.11618328391125908,
+        "torso": 0.024804370253588313,
+        "left_arm": 0.04784850093225638,
+        "right_arm": 0.08497463449559829,
+        "left_leg": 0.10211834214903691,
+        "right_leg": 0.039965354561529776
+      },
+      "multiscale_vs_global_pct": 48.59904576463452
+    },
+    {
+      "pair": "S1/Seq1 cam0-cam4",
+      "is_dev_pair": false,
+      "global": 0.10147715766948683,
+      "combined_multiscale": 0.053214666399138945,
+      "per_level": {
+        "global": 0.10147715766948683,
+        "torso": 0.022444245957390026,
+        "left_arm": 0.05813386463732631,
+        "right_arm": 0.07752195842288158,
+        "left_leg": 0.09921227950878718,
+        "right_leg": 0.02933207397452659
+      },
+      "multiscale_vs_global_pct": 47.55995573658044
+    },
+    {
+      "pair": "S1/Seq1 cam0-cam5",
+      "is_dev_pair": false,
+      "global": 0.1283945546106056,
+      "combined_multiscale": 0.06498574920826489,
+      "per_level": {
+        "global": 0.1283945546106056,
+        "torso": 0.03402685346426787,
+        "left_arm": 0.05756449057824082,
+        "right_arm": 0.08861657708055443,
+        "left_leg": 0.10466485542969571,
+        "right_leg": 0.038264993845519644
+      },
+      "multiscale_vs_global_pct": 49.38589926546857
+    },
+    {
+      "pair": "S1/Seq1 cam0-cam6",
+      "is_dev_pair": false,
+      "global": 0.11938249223210194,
+      "combined_multiscale": 0.07587211323833024,
+      "per_level": {
+        "global": 0.11938249223210194,
+        "torso": 0.020601248765295302,
+        "left_arm": 0.04953236077670698,
+        "right_arm": 0.09342820390507027,
+        "left_leg": 0.14054817430399083,
+        "right_leg": 0.10229198517346824
+      },
+      "multiscale_vs_global_pct": 36.44619757910513
+    },
+    {
+      "pair": "S1/Seq1 cam0-cam7",
+      "is_dev_pair": false,
+      "global": 0.1262693076773926,
+      "combined_multiscale": 0.07253707193390087,
+      "per_level": {
+        "global": 0.1262693076773926,
+        "torso": 0.0426556914354916,
+        "left_arm": 0.06159227196541098,
+        "right_arm": 0.09224986754081867,
+        "left_leg": 0.10886741182939322,
+        "right_leg": 0.05137528472200588
+      },
+      "multiscale_vs_global_pct": 42.55367890411901
+    },
+    {
+      "pair": "S1/Seq1 cam0-cam8",
+      "is_dev_pair": false,
+      "global": 0.14209384843707085,
+      "combined_multiscale": 0.07041148468852043,
+      "per_level": {
+        "global": 0.14209384843707085,
+        "torso": 0.043584672113259636,
+        "left_arm": 0.05810962072401135,
+        "right_arm": 0.09235602403404536,
+        "left_leg": 0.10652267022265328,
+        "right_leg": 0.040234138585489104
+      },
+      "multiscale_vs_global_pct": 50.44719707221979
+    },
+    {
+      "pair": "S1/Seq1 cam1-cam2",
+      "is_dev_pair": false,
+      "global": 0.10599965781525329,
+      "combined_multiscale": 0.07028247871332699,
+      "per_level": {
+        "global": 0.10599965781525329,
+        "torso": 0.041622959077358246,
+        "left_arm": 0.08766383429368337,
+        "right_arm": 0.047717385545924855,
+        "left_leg": 0.07980319305702492,
+        "right_leg": 0.0754818534133611
+      },
+      "multiscale_vs_global_pct": 33.69556075754295
+    },
+    {
+      "pair": "S1/Seq1 cam1-cam4",
+      "is_dev_pair": false,
+      "global": 0.05853703355899564,
+      "combined_multiscale": 0.03962580907951902,
+      "per_level": {
+        "global": 0.05853703355899564,
+        "torso": 0.021880702012115054,
+        "left_arm": 0.038489349013953296,
+        "right_arm": 0.01988592323053766,
+        "left_leg": 0.058530583080870134,
+        "right_leg": 0.05292486220046326
+      },
+      "multiscale_vs_global_pct": 32.30642779398316
+    },
+    {
+      "pair": "S1/Seq1 cam1-cam5",
+      "is_dev_pair": false,
+      "global": 0.1313320580455992,
+      "combined_multiscale": 0.0925311620036761,
+      "per_level": {
+        "global": 0.1313320580455992,
+        "torso": 0.053117131607400045,
+        "left_arm": 0.10111004762627461,
+        "right_arm": 0.06964402080134109,
+        "left_leg": 0.1213140820187551,
+        "right_leg": 0.10196410216115138
+      },
+      "multiscale_vs_global_pct": 29.54411635615366
+    },
+    {
+      "pair": "S1/Seq1 cam1-cam6",
+      "is_dev_pair": false,
+      "global": 0.08261049952771929,
+      "combined_multiscale": 0.05726364068686962,
+      "per_level": {
+        "global": 0.08261049952771929,
+        "torso": 0.02693255545778407,
+        "left_arm": 0.07009507122415083,
+        "right_arm": 0.047910368276966944,
+        "left_leg": 0.08641920183543805,
+        "right_leg": 0.044075356727397
+      },
+      "multiscale_vs_global_pct": 30.682369657315455
+    },
+    {
+      "pair": "S1/Seq1 cam1-cam7",
+      "is_dev_pair": false,
+      "global": 0.12449268279252229,
+      "combined_multiscale": 0.09394028851831401,
+      "per_level": {
+        "global": 0.12449268279252229,
+        "torso": 0.06159145626480932,
+        "left_arm": 0.06976327824371832,
+        "right_arm": 0.07654494612857148,
+        "left_leg": 0.12257648963067266,
+        "right_leg": 0.11414944587482347
+      },
+      "multiscale_vs_global_pct": 24.5415180947835
+    },
+    {
+      "pair": "S1/Seq1 cam1-cam8",
+      "is_dev_pair": false,
+      "global": 0.13882976742806258,
+      "combined_multiscale": 0.09185922104451391,
+      "per_level": {
+        "global": 0.13882976742806258,
+        "torso": 0.06181091649664773,
+        "left_arm": 0.08311248915614905,
+        "right_arm": 0.0809339018607581,
+        "left_leg": 0.10088890377018186,
+        "right_leg": 0.10263950322513227
+      },
+      "multiscale_vs_global_pct": 33.833195325265805
+    },
+    {
+      "pair": "S1/Seq1 cam2-cam4",
+      "is_dev_pair": false,
+      "global": 0.06675618949035804,
+      "combined_multiscale": 0.04240781772467825,
+      "per_level": {
+        "global": 0.06675618949035804,
+        "torso": 0.02104474321283676,
+        "left_arm": 0.0506574739874513,
+        "right_arm": 0.03009755636944815,
+        "left_leg": 0.06355288548877945,
+        "right_leg": 0.039994786527973634
+      },
+      "multiscale_vs_global_pct": 36.47357938127453
+    },
+    {
+      "pair": "S1/Seq1 cam2-cam5",
+      "is_dev_pair": false,
+      "global": 0.07678988769098564,
+      "combined_multiscale": 0.03539306704920751,
+      "per_level": {
+        "global": 0.07678988769098564,
+        "torso": 0.014993704182820188,
+        "left_arm": 0.02163592603540531,
+        "right_arm": 0.038643273835380874,
+        "left_leg": 0.07076858908489898,
+        "right_leg": 0.03801532065564835
+      },
+      "multiscale_vs_global_pct": 53.909208473341344
+    },
+    {
+      "pair": "S1/Seq1 cam2-cam6",
+      "is_dev_pair": false,
+      "global": 0.09843815021492817,
+      "combined_multiscale": 0.06913311793296426,
+      "per_level": {
+        "global": 0.09843815021492817,
+        "torso": 0.017867882563560096,
+        "left_arm": 0.04875913207177763,
+        "right_arm": 0.08966627475564126,
+        "left_leg": 0.11488969306702967,
+        "right_leg": 0.1020411862819283
+      },
+      "multiscale_vs_global_pct": 29.769994883060903
+    },
+    {
+      "pair": "S1/Seq1 cam2-cam7",
+      "is_dev_pair": false,
+      "global": 0.07507323584070912,
+      "combined_multiscale": 0.054072435255403874,
+      "per_level": {
+        "global": 0.07507323584070912,
+        "torso": 0.022723485439739847,
+        "left_arm": 0.07654705740235469,
+        "right_arm": 0.07013188950993397,
+        "left_leg": 0.05902692089202227,
+        "right_leg": 0.045880214759597075
+      },
+      "multiscale_vs_global_pct": 27.973751697428995
+    },
+    {
+      "pair": "S1/Seq1 cam2-cam8",
+      "is_dev_pair": false,
+      "global": 0.08014381442356992,
+      "combined_multiscale": 0.03677982143643829,
+      "per_level": {
+        "global": 0.08014381442356992,
+        "torso": 0.02232125166941572,
+        "left_arm": 0.0426957372713972,
+        "right_arm": 0.05015232731346731,
+        "left_leg": 0.030093572205967374,
+        "right_leg": 0.03695768052367149
+      },
+      "multiscale_vs_global_pct": 54.107722846765924
+    },
+    {
+      "pair": "S1/Seq1 cam4-cam5",
+      "is_dev_pair": false,
+      "global": 0.09554058823872495,
+      "combined_multiscale": 0.06116163185625165,
+      "per_level": {
+        "global": 0.09554058823872495,
+        "torso": 0.03295990459069058,
+        "left_arm": 0.06408622164141249,
+        "right_arm": 0.056132568322398047,
+        "left_leg": 0.09909380310111576,
+        "right_leg": 0.04997973295825499
+      },
+      "multiscale_vs_global_pct": 35.983613892528524
+    },
+    {
+      "pair": "S1/Seq1 cam4-cam6",
+      "is_dev_pair": false,
+      "global": 0.08302443377949574,
+      "combined_multiscale": 0.06123960666634418,
+      "per_level": {
+        "global": 0.08302443377949574,
+        "torso": 0.014502551768802933,
+        "left_arm": 0.04493924940901774,
+        "right_arm": 0.06323953904211521,
+        "left_leg": 0.12423627161317402,
+        "right_leg": 0.08623557110075597
+      },
+      "multiscale_vs_global_pct": 26.239055325580164
+    },
+    {
+      "pair": "S1/Seq1 cam4-cam7",
+      "is_dev_pair": false,
+      "global": 0.09318967784444492,
+      "combined_multiscale": 0.06748527674763291,
+      "per_level": {
+        "global": 0.09318967784444492,
+        "torso": 0.04031083008481397,
+        "left_arm": 0.059086983678517516,
+        "right_arm": 0.07107252393055845,
+        "left_leg": 0.09405061947526755,
+        "right_leg": 0.06333208035815645
+      },
+      "multiscale_vs_global_pct": 27.582884383095074
+    },
+    {
+      "pair": "S1/Seq1 cam4-cam8",
+      "is_dev_pair": false,
+      "global": 0.10088638050688638,
+      "combined_multiscale": 0.06024483681001045,
+      "per_level": {
+        "global": 0.10088638050688638,
+        "torso": 0.040724246521238926,
+        "left_arm": 0.05372412661435427,
+        "right_arm": 0.07022761760486497,
+        "left_leg": 0.06638961174973736,
+        "right_leg": 0.05137731541913969
+      },
+      "multiscale_vs_global_pct": 40.2844700074276
+    },
+    {
+      "pair": "S1/Seq1 cam5-cam6",
+      "is_dev_pair": false,
+      "global": 0.12979571203942653,
+      "combined_multiscale": 0.08865236849696548,
+      "per_level": {
+        "global": 0.12979571203942653,
+        "torso": 0.029105728940555343,
+        "left_arm": 0.059911412842295786,
+        "right_arm": 0.1023485739197996,
+        "left_leg": 0.14376058401884856,
+        "right_leg": 0.13412005647465033
+      },
+      "multiscale_vs_global_pct": 31.698538338434023
+    },
+    {
+      "pair": "S1/Seq1 cam5-cam7",
+      "is_dev_pair": false,
+      "global": 0.05272577558126715,
+      "combined_multiscale": 0.035711124539375305,
+      "per_level": {
+        "global": 0.05272577558126715,
+        "torso": 0.013269696056980777,
+        "left_arm": 0.07572245432270898,
+        "right_arm": 0.05279840273713624,
+        "left_leg": 0.024952718022244948,
+        "right_leg": 0.016466302900678582
+      },
+      "multiscale_vs_global_pct": 32.27008205060326
+    },
+    {
+      "pair": "S1/Seq1 cam5-cam8",
+      "is_dev_pair": false,
+      "global": 0.04569574148842582,
+      "combined_multiscale": 0.031431126339292084,
+      "per_level": {
+        "global": 0.04569574148842582,
+        "torso": 0.011356622342848115,
+        "left_arm": 0.053082572779169786,
+        "right_arm": 0.02962143332869918,
+        "left_leg": 0.06082803259293238,
+        "right_leg": 0.004653197933091885
+      },
+      "multiscale_vs_global_pct": 31.216508769743434
+    },
+    {
+      "pair": "S1/Seq1 cam6-cam7",
+      "is_dev_pair": false,
+      "global": 0.12467263542391636,
+      "combined_multiscale": 0.09492764221849265,
+      "per_level": {
+        "global": 0.12467263542391636,
+        "torso": 0.037289103769041876,
+        "left_arm": 0.06593896786647814,
+        "right_arm": 0.09299824048799497,
+        "left_leg": 0.14985030337616248,
+        "right_leg": 0.14498678098122278
+      },
+      "multiscale_vs_global_pct": 23.858477928443335
+    },
+    {
+      "pair": "S1/Seq1 cam6-cam8",
+      "is_dev_pair": false,
+      "global": 0.14519971995442002,
+      "combined_multiscale": 0.09603174624067766,
+      "per_level": {
+        "global": 0.14519971995442002,
+        "torso": 0.03802742588299292,
+        "left_arm": 0.07459104343972824,
+        "right_arm": 0.11222061680422889,
+        "left_leg": 0.14136583496023108,
+        "right_leg": 0.13426742771709407
+      },
+      "multiscale_vs_global_pct": 33.86230615952758
+    },
+    {
+      "pair": "S1/Seq1 cam7-cam8",
+      "is_dev_pair": false,
+      "global": 0.06492225315283846,
+      "combined_multiscale": 0.04011718390716447,
+      "per_level": {
+        "global": 0.06492225315283846,
+        "torso": 0.006883298072756993,
+        "left_arm": 0.07738624982259891,
+        "right_arm": 0.07534927667842971,
+        "left_leg": 0.04243116508479471,
+        "right_leg": 0.013289473743902313
+      },
+      "multiscale_vs_global_pct": 38.20734500276581
+    },
+    {
+      "pair": "S2/Seq1 cam0-cam1",
+      "is_dev_pair": false,
+      "global": 0.07426705756397159,
+      "combined_multiscale": 0.048341923772736835,
+      "per_level": {
+        "global": 0.07426705756397159,
+        "torso": 0.02378741272345737,
+        "left_arm": 0.04891205820496435,
+        "right_arm": 0.03887126722407562,
+        "left_leg": 0.07581000844085659,
+        "right_leg": 0.05174877874001309
+      },
+      "multiscale_vs_global_pct": 34.90798564209112
+    }
+  ]
+}

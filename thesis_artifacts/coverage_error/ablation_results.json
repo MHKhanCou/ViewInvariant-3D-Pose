@@ -1,60 +1,2148 @@
-{
-  "raw_distance": 0.11716544270515442,
-  "canonical_distance": 0.08391461238265037,
-  "improvement_pct": 28.379383506602206,
-  "reliability_a_mean": 0.869796207888231,
-  "reliability_b_mean": 0.8657021088363558,
-  "reliability_a_min": 0.8529485214962119,
-  "reliability_b_min": 0.8540921881110068,
-  "reliability_aware": [
-    {
-      "threshold": 0.3,
-      "coverage": 1.0,
-      "n_kept": 50,
-      "n_total": 50,
-      "abstained": 0
+[
+  {
+    "pair": "S1/Seq1 cam0-cam1",
+    "is_dev_pair": true,
+    "conditions": {
+      "raw": 0.14389324409400006,
+      "canonical": 0.11434900636474292,
+      "improvement_pct": 20.532053408954354
     },
-    {
-      "threshold": 0.4,
-      "coverage": 1.0,
-      "n_kept": 50,
-      "n_total": 50,
-      "abstained": 0
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10438554408028722,
+        "filtered_raw_distance": 0.13519246713980346,
+        "improvement_pct": 22.787455330376204
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10438554408028722,
+        "filtered_raw_distance": 0.13519246713980346,
+        "improvement_pct": 22.787455330376204
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10438554408028722,
+        "filtered_raw_distance": 0.13519246713980346,
+        "improvement_pct": 22.787455330376204
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10438554408028722,
+        "filtered_raw_distance": 0.13519246713980346,
+        "improvement_pct": 22.787455330376204
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 0.8703703703703703,
+        "n_kept": 47,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.1031270203121165,
+        "filtered_raw_distance": 0.13338871314355774,
+        "improvement_pct": 22.68684667410541
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.6851851851851852,
+        "n_kept": 37,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09042058059492626,
+        "filtered_raw_distance": 0.11708594492110333,
+        "improvement_pct": 22.77418040580801
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam0-cam2",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.15786635546482106,
+      "canonical": 0.11618328391125908,
+      "improvement_pct": 26.404024740313105
     },
-    {
-      "threshold": 0.5,
-      "coverage": 1.0,
-      "n_kept": 50,
-      "n_total": 50,
-      "abstained": 0
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10565772489644587,
+        "filtered_raw_distance": 0.14745729076127348,
+        "improvement_pct": 28.346896683799226
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10565772489644587,
+        "filtered_raw_distance": 0.14745729076127348,
+        "improvement_pct": 28.346896683799226
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10565772489644587,
+        "filtered_raw_distance": 0.14745729076127348,
+        "improvement_pct": 28.346896683799226
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10565772489644587,
+        "filtered_raw_distance": 0.14745729076127348,
+        "improvement_pct": 28.346896683799226
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 0.8703703703703703,
+        "n_kept": 47,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10342419773657271,
+        "filtered_raw_distance": 0.14501190273120879,
+        "improvement_pct": 28.67882167695036
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.37037037037037035,
+        "n_kept": 20,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07398207280784845,
+        "filtered_raw_distance": 0.1164291870304092,
+        "improvement_pct": 36.45745135321982
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam0-cam4",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.13743347750580626,
+      "canonical": 0.10147715766948683,
+      "improvement_pct": 26.162708307224747
     },
-    {
-      "threshold": 0.6,
-      "coverage": 1.0,
-      "n_kept": 50,
-      "n_total": 50,
-      "abstained": 0
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08989873365499079,
+        "filtered_raw_distance": 0.12592759801610212,
+        "improvement_pct": 28.610777088358653
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08989873365499079,
+        "filtered_raw_distance": 0.12592759801610212,
+        "improvement_pct": 28.610777088358653
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08989873365499079,
+        "filtered_raw_distance": 0.12592759801610212,
+        "improvement_pct": 28.610777088358653
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08989873365499079,
+        "filtered_raw_distance": 0.12592759801610212,
+        "improvement_pct": 28.610777088358653
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 0.8703703703703703,
+        "n_kept": 47,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08807927520668253,
+        "filtered_raw_distance": 0.123390478190316,
+        "improvement_pct": 28.61744560967653
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.6851851851851852,
+        "n_kept": 37,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06940908961602159,
+        "filtered_raw_distance": 0.10085920381887274,
+        "improvement_pct": 31.182195587554517
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam0-cam5",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.20912391861680626,
+      "canonical": 0.1283945546106056,
+      "improvement_pct": 38.60360141497121
     },
-    {
-      "threshold": 0.7,
-      "coverage": 1.0,
-      "n_kept": 50,
-      "n_total": 50,
-      "abstained": 0
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11934948495278756,
+        "filtered_raw_distance": 0.20273214607124682,
+        "improvement_pct": 41.129471933452436
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11934948495278756,
+        "filtered_raw_distance": 0.20273214607124682,
+        "improvement_pct": 41.129471933452436
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11934948495278756,
+        "filtered_raw_distance": 0.20273214607124682,
+        "improvement_pct": 41.129471933452436
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11934948495278756,
+        "filtered_raw_distance": 0.20273214607124682,
+        "improvement_pct": 41.129471933452436
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 0.8703703703703703,
+        "n_kept": 47,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11698023974895477,
+        "filtered_raw_distance": 0.2011261998925616,
+        "improvement_pct": 41.83739373018347
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.6851851851851852,
+        "n_kept": 37,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09765620509514937,
+        "filtered_raw_distance": 0.1875980047697962,
+        "improvement_pct": 47.943899928475
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.05555555555555555,
+        "n_kept": 3,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07958048085371654,
+        "filtered_raw_distance": 0.1785015161366252,
+        "improvement_pct": 55.41747623431637
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam0-cam6",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.15221367868178723,
+      "canonical": 0.11938249223210194,
+      "improvement_pct": 21.569143282004934
     },
-    {
-      "threshold": 0.8,
-      "coverage": 1.0,
-      "n_kept": 50,
-      "n_total": 50,
-      "abstained": 0
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11228112891937296,
+        "filtered_raw_distance": 0.14932394750420921,
+        "improvement_pct": 24.80701803291938
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11228112891937296,
+        "filtered_raw_distance": 0.14932394750420921,
+        "improvement_pct": 24.80701803291938
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11228112891937296,
+        "filtered_raw_distance": 0.14932394750420921,
+        "improvement_pct": 24.80701803291938
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11228112891937296,
+        "filtered_raw_distance": 0.14932394750420921,
+        "improvement_pct": 24.80701803291938
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 0.8703703703703703,
+        "n_kept": 47,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11074047535657883,
+        "filtered_raw_distance": 0.1486570165751668,
+        "improvement_pct": 25.506055544587024
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.6851851851851852,
+        "n_kept": 37,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09831429494393838,
+        "filtered_raw_distance": 0.1434819786674799,
+        "improvement_pct": 31.47969113822845
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.05555555555555555,
+        "n_kept": 3,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08434136460224788,
+        "filtered_raw_distance": 0.14092657597760988,
+        "improvement_pct": 40.152264385073934
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam0-cam7",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.2006108135160967,
+      "canonical": 0.1262693076773926,
+      "improvement_pct": 37.05757657611963
     },
-    {
-      "threshold": 0.9,
-      "coverage": 0.0,
-      "n_kept": 0,
-      "n_total": 50,
-      "abstained": 50
-    }
-  ]
-}
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11638074119885762,
+        "filtered_raw_distance": 0.1952874990180513,
+        "improvement_pct": 40.40543210187765
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11638074119885762,
+        "filtered_raw_distance": 0.1952874990180513,
+        "improvement_pct": 40.40543210187765
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11638074119885762,
+        "filtered_raw_distance": 0.1952874990180513,
+        "improvement_pct": 40.40543210187765
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11638074119885762,
+        "filtered_raw_distance": 0.1952874990180513,
+        "improvement_pct": 40.40543210187765
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 0.8703703703703703,
+        "n_kept": 47,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.11416191591861401,
+        "filtered_raw_distance": 0.1937886878193812,
+        "improvement_pct": 41.08948401311356
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.6851851851851852,
+        "n_kept": 37,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09480958895103352,
+        "filtered_raw_distance": 0.18181454251397466,
+        "improvement_pct": 47.85368230720805
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam0-cam8",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.19510489904423267,
+      "canonical": 0.14209384843707085,
+      "improvement_pct": 27.170537934643846
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.13342376813913384,
+        "filtered_raw_distance": 0.18655443974171637,
+        "improvement_pct": 28.4799823987795
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.13342376813913384,
+        "filtered_raw_distance": 0.18655443974171637,
+        "improvement_pct": 28.4799823987795
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.13342376813913384,
+        "filtered_raw_distance": 0.18655443974171637,
+        "improvement_pct": 28.4799823987795
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 0.8888888888888888,
+        "n_kept": 48,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.13342376813913384,
+        "filtered_raw_distance": 0.18655443974171637,
+        "improvement_pct": 28.4799823987795
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 0.8703703703703703,
+        "n_kept": 47,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.13138832675015671,
+        "filtered_raw_distance": 0.1845112493480194,
+        "improvement_pct": 28.791156520578255
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.6851851851851852,
+        "n_kept": 37,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.1132468142219492,
+        "filtered_raw_distance": 0.166569664947851,
+        "improvement_pct": 32.01234194869511
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.05555555555555555,
+        "n_kept": 3,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09674810866514842,
+        "filtered_raw_distance": 0.15121676310087392,
+        "improvement_pct": 36.02024889224118
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam1-cam2",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.10052744226815416,
+      "canonical": 0.10599965781525329,
+      "improvement_pct": -5.443504205052929
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10599965781525329,
+        "filtered_raw_distance": 0.10052744226815416,
+        "improvement_pct": -5.443504205052929
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10599965781525329,
+        "filtered_raw_distance": 0.10052744226815416,
+        "improvement_pct": -5.443504205052929
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10599965781525329,
+        "filtered_raw_distance": 0.10052744226815416,
+        "improvement_pct": -5.443504205052929
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10599965781525329,
+        "filtered_raw_distance": 0.10052744226815416,
+        "improvement_pct": -5.443504205052929
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10599965781525329,
+        "filtered_raw_distance": 0.10052744226815416,
+        "improvement_pct": -5.443504205052929
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.37037037037037035,
+        "n_kept": 20,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10393701046705246,
+        "filtered_raw_distance": 0.0994368188729657,
+        "improvement_pct": -4.525679366146984
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam1-cam4",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.06189008656670857,
+      "canonical": 0.05853703355899564,
+      "improvement_pct": 5.417754593215552
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05853703355899564,
+        "filtered_raw_distance": 0.06189008656670857,
+        "improvement_pct": 5.417754593215552
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05853703355899564,
+        "filtered_raw_distance": 0.06189008656670857,
+        "improvement_pct": 5.417754593215552
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05853703355899564,
+        "filtered_raw_distance": 0.06189008656670857,
+        "improvement_pct": 5.417754593215552
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05853703355899564,
+        "filtered_raw_distance": 0.06189008656670857,
+        "improvement_pct": 5.417754593215552
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05853703355899564,
+        "filtered_raw_distance": 0.06189008656670857,
+        "improvement_pct": 5.417754593215552
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05853703355899564,
+        "filtered_raw_distance": 0.06189008656670857,
+        "improvement_pct": 5.417754593215552
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam1-cam5",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.18858148780964154,
+      "canonical": 0.1313320580455992,
+      "improvement_pct": 30.35792666024103
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.1313320580455992,
+        "filtered_raw_distance": 0.18858148780964154,
+        "improvement_pct": 30.35792666024103
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.1313320580455992,
+        "filtered_raw_distance": 0.18858148780964154,
+        "improvement_pct": 30.35792666024103
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.1313320580455992,
+        "filtered_raw_distance": 0.18858148780964154,
+        "improvement_pct": 30.35792666024103
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.1313320580455992,
+        "filtered_raw_distance": 0.18858148780964154,
+        "improvement_pct": 30.35792666024103
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.1313320580455992,
+        "filtered_raw_distance": 0.18858148780964154,
+        "improvement_pct": 30.35792666024103
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.1313320580455992,
+        "filtered_raw_distance": 0.18858148780964154,
+        "improvement_pct": 30.35792666024103
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam1-cam6",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.15016040746878723,
+      "canonical": 0.08261049952771929,
+      "improvement_pct": 44.985165583750195
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08261049952771929,
+        "filtered_raw_distance": 0.15016040746878723,
+        "improvement_pct": 44.985165583750195
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08261049952771929,
+        "filtered_raw_distance": 0.15016040746878723,
+        "improvement_pct": 44.985165583750195
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08261049952771929,
+        "filtered_raw_distance": 0.15016040746878723,
+        "improvement_pct": 44.985165583750195
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08261049952771929,
+        "filtered_raw_distance": 0.15016040746878723,
+        "improvement_pct": 44.985165583750195
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08261049952771929,
+        "filtered_raw_distance": 0.15016040746878723,
+        "improvement_pct": 44.985165583750195
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08261049952771929,
+        "filtered_raw_distance": 0.15016040746878723,
+        "improvement_pct": 44.985165583750195
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam1-cam7",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.17093551711413357,
+      "canonical": 0.12449268279252229,
+      "improvement_pct": 27.169797772689584
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12449268279252229,
+        "filtered_raw_distance": 0.17093551711413357,
+        "improvement_pct": 27.169797772689584
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12449268279252229,
+        "filtered_raw_distance": 0.17093551711413357,
+        "improvement_pct": 27.169797772689584
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12449268279252229,
+        "filtered_raw_distance": 0.17093551711413357,
+        "improvement_pct": 27.169797772689584
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12449268279252229,
+        "filtered_raw_distance": 0.17093551711413357,
+        "improvement_pct": 27.169797772689584
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12449268279252229,
+        "filtered_raw_distance": 0.17093551711413357,
+        "improvement_pct": 27.169797772689584
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12449268279252229,
+        "filtered_raw_distance": 0.17093551711413357,
+        "improvement_pct": 27.169797772689584
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam1-cam8",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.19931577511187654,
+      "canonical": 0.13882976742806258,
+      "improvement_pct": 30.346824103542723
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.13882976742806258,
+        "filtered_raw_distance": 0.19931577511187654,
+        "improvement_pct": 30.346824103542723
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.13882976742806258,
+        "filtered_raw_distance": 0.19931577511187654,
+        "improvement_pct": 30.346824103542723
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.13882976742806258,
+        "filtered_raw_distance": 0.19931577511187654,
+        "improvement_pct": 30.346824103542723
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.13882976742806258,
+        "filtered_raw_distance": 0.19931577511187654,
+        "improvement_pct": 30.346824103542723
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.13882976742806258,
+        "filtered_raw_distance": 0.19931577511187654,
+        "improvement_pct": 30.346824103542723
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.13882976742806258,
+        "filtered_raw_distance": 0.19931577511187654,
+        "improvement_pct": 30.346824103542723
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam2-cam4",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.06293125908750993,
+      "canonical": 0.06675618949035804,
+      "improvement_pct": -6.077949906467461
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06675618949035804,
+        "filtered_raw_distance": 0.06293125908750993,
+        "improvement_pct": -6.077949906467461
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06675618949035804,
+        "filtered_raw_distance": 0.06293125908750993,
+        "improvement_pct": -6.077949906467461
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06675618949035804,
+        "filtered_raw_distance": 0.06293125908750993,
+        "improvement_pct": -6.077949906467461
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06675618949035804,
+        "filtered_raw_distance": 0.06293125908750993,
+        "improvement_pct": -6.077949906467461
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06675618949035804,
+        "filtered_raw_distance": 0.06293125908750993,
+        "improvement_pct": -6.077949906467461
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.37037037037037035,
+        "n_kept": 20,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06410247553139925,
+        "filtered_raw_distance": 0.061560352242875836,
+        "improvement_pct": -4.129481388433098
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam2-cam5",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.18775743958918956,
+      "canonical": 0.07678988769098564,
+      "improvement_pct": 59.10154726278716
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07678988769098564,
+        "filtered_raw_distance": 0.18775743958918956,
+        "improvement_pct": 59.10154726278716
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07678988769098564,
+        "filtered_raw_distance": 0.18775743958918956,
+        "improvement_pct": 59.10154726278716
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07678988769098564,
+        "filtered_raw_distance": 0.18775743958918956,
+        "improvement_pct": 59.10154726278716
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07678988769098564,
+        "filtered_raw_distance": 0.18775743958918956,
+        "improvement_pct": 59.10154726278716
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07678988769098564,
+        "filtered_raw_distance": 0.18775743958918956,
+        "improvement_pct": 59.10154726278716
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.37037037037037035,
+        "n_kept": 20,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07555941417813301,
+        "filtered_raw_distance": 0.18691391006348593,
+        "improvement_pct": 59.57528567431445
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam2-cam6",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.19330486072087633,
+      "canonical": 0.09843815021492817,
+      "improvement_pct": 49.076215751724675
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09843815021492817,
+        "filtered_raw_distance": 0.19330486072087633,
+        "improvement_pct": 49.076215751724675
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09843815021492817,
+        "filtered_raw_distance": 0.19330486072087633,
+        "improvement_pct": 49.076215751724675
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09843815021492817,
+        "filtered_raw_distance": 0.19330486072087633,
+        "improvement_pct": 49.076215751724675
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09843815021492817,
+        "filtered_raw_distance": 0.19330486072087633,
+        "improvement_pct": 49.076215751724675
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09843815021492817,
+        "filtered_raw_distance": 0.19330486072087633,
+        "improvement_pct": 49.076215751724675
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.37037037037037035,
+        "n_kept": 20,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09654149189591407,
+        "filtered_raw_distance": 0.19110758021202753,
+        "improvement_pct": 49.48316974721543
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam2-cam7",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.15411261850145191,
+      "canonical": 0.07507323584070912,
+      "improvement_pct": 51.286769006522434
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07507323584070912,
+        "filtered_raw_distance": 0.15411261850145191,
+        "improvement_pct": 51.286769006522434
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07507323584070912,
+        "filtered_raw_distance": 0.15411261850145191,
+        "improvement_pct": 51.286769006522434
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07507323584070912,
+        "filtered_raw_distance": 0.15411261850145191,
+        "improvement_pct": 51.286769006522434
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07507323584070912,
+        "filtered_raw_distance": 0.15411261850145191,
+        "improvement_pct": 51.286769006522434
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07507323584070912,
+        "filtered_raw_distance": 0.15411261850145191,
+        "improvement_pct": 51.286769006522434
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.37037037037037035,
+        "n_kept": 20,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07303504571318627,
+        "filtered_raw_distance": 0.1520981574646174,
+        "improvement_pct": 51.981636772834406
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam2-cam8",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.1959035278706645,
+      "canonical": 0.08014381442356992,
+      "improvement_pct": 59.090162747614805
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08014381442356992,
+        "filtered_raw_distance": 0.1959035278706645,
+        "improvement_pct": 59.090162747614805
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08014381442356992,
+        "filtered_raw_distance": 0.1959035278706645,
+        "improvement_pct": 59.090162747614805
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08014381442356992,
+        "filtered_raw_distance": 0.1959035278706645,
+        "improvement_pct": 59.090162747614805
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08014381442356992,
+        "filtered_raw_distance": 0.1959035278706645,
+        "improvement_pct": 59.090162747614805
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08014381442356992,
+        "filtered_raw_distance": 0.1959035278706645,
+        "improvement_pct": 59.090162747614805
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.37037037037037035,
+        "n_kept": 20,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08260120078921318,
+        "filtered_raw_distance": 0.19455993868034935,
+        "improvement_pct": 57.544599700495304
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam4-cam5",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.19098891837283902,
+      "canonical": 0.09554058823872495,
+      "improvement_pct": 49.975847262396975
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09554058823872495,
+        "filtered_raw_distance": 0.19098891837283902,
+        "improvement_pct": 49.975847262396975
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09554058823872495,
+        "filtered_raw_distance": 0.19098891837283902,
+        "improvement_pct": 49.975847262396975
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09554058823872495,
+        "filtered_raw_distance": 0.19098891837283902,
+        "improvement_pct": 49.975847262396975
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09554058823872495,
+        "filtered_raw_distance": 0.19098891837283902,
+        "improvement_pct": 49.975847262396975
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09554058823872495,
+        "filtered_raw_distance": 0.19098891837283902,
+        "improvement_pct": 49.975847262396975
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09554058823872495,
+        "filtered_raw_distance": 0.19098891837283902,
+        "improvement_pct": 49.975847262396975
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam4-cam6",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.1638383606992506,
+      "canonical": 0.08302443377949574,
+      "improvement_pct": 49.32540009241224
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08302443377949574,
+        "filtered_raw_distance": 0.1638383606992506,
+        "improvement_pct": 49.32540009241224
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08302443377949574,
+        "filtered_raw_distance": 0.1638383606992506,
+        "improvement_pct": 49.32540009241224
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08302443377949574,
+        "filtered_raw_distance": 0.1638383606992506,
+        "improvement_pct": 49.32540009241224
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08302443377949574,
+        "filtered_raw_distance": 0.1638383606992506,
+        "improvement_pct": 49.32540009241224
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08302443377949574,
+        "filtered_raw_distance": 0.1638383606992506,
+        "improvement_pct": 49.32540009241224
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.08302443377949574,
+        "filtered_raw_distance": 0.1638383606992506,
+        "improvement_pct": 49.32540009241224
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam4-cam7",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.17133893389347513,
+      "canonical": 0.09318967784444492,
+      "improvement_pct": 45.61091532040066
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09318967784444492,
+        "filtered_raw_distance": 0.17133893389347513,
+        "improvement_pct": 45.61091532040066
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09318967784444492,
+        "filtered_raw_distance": 0.17133893389347513,
+        "improvement_pct": 45.61091532040066
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09318967784444492,
+        "filtered_raw_distance": 0.17133893389347513,
+        "improvement_pct": 45.61091532040066
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09318967784444492,
+        "filtered_raw_distance": 0.17133893389347513,
+        "improvement_pct": 45.61091532040066
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09318967784444492,
+        "filtered_raw_distance": 0.17133893389347513,
+        "improvement_pct": 45.61091532040066
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.09318967784444492,
+        "filtered_raw_distance": 0.17133893389347513,
+        "improvement_pct": 45.61091532040066
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam4-cam8",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.18648793616956183,
+      "canonical": 0.10088638050688638,
+      "improvement_pct": 45.90192664518702
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10088638050688638,
+        "filtered_raw_distance": 0.18648793616956183,
+        "improvement_pct": 45.90192664518702
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10088638050688638,
+        "filtered_raw_distance": 0.18648793616956183,
+        "improvement_pct": 45.90192664518702
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10088638050688638,
+        "filtered_raw_distance": 0.18648793616956183,
+        "improvement_pct": 45.90192664518702
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10088638050688638,
+        "filtered_raw_distance": 0.18648793616956183,
+        "improvement_pct": 45.90192664518702
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10088638050688638,
+        "filtered_raw_distance": 0.18648793616956183,
+        "improvement_pct": 45.90192664518702
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.10088638050688638,
+        "filtered_raw_distance": 0.18648793616956183,
+        "improvement_pct": 45.90192664518702
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam5-cam6",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.13950629199703987,
+      "canonical": 0.12979571203942653,
+      "improvement_pct": 6.960675263176941
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12979571203942653,
+        "filtered_raw_distance": 0.13950629199703987,
+        "improvement_pct": 6.960675263176941
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12979571203942653,
+        "filtered_raw_distance": 0.13950629199703987,
+        "improvement_pct": 6.960675263176941
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12979571203942653,
+        "filtered_raw_distance": 0.13950629199703987,
+        "improvement_pct": 6.960675263176941
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12979571203942653,
+        "filtered_raw_distance": 0.13950629199703987,
+        "improvement_pct": 6.960675263176941
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12979571203942653,
+        "filtered_raw_distance": 0.13950629199703987,
+        "improvement_pct": 6.960675263176941
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12979571203942653,
+        "filtered_raw_distance": 0.13950629199703987,
+        "improvement_pct": 6.960675263176941
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.3148148148148148,
+        "n_kept": 17,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.135427944800433,
+        "filtered_raw_distance": 0.14260279315584384,
+        "improvement_pct": 5.031351908773485
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam5-cam7",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.08344479216916474,
+      "canonical": 0.05272577558126715,
+      "improvement_pct": 36.81358151821146
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05272577558126715,
+        "filtered_raw_distance": 0.08344479216916474,
+        "improvement_pct": 36.81358151821146
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05272577558126715,
+        "filtered_raw_distance": 0.08344479216916474,
+        "improvement_pct": 36.81358151821146
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05272577558126715,
+        "filtered_raw_distance": 0.08344479216916474,
+        "improvement_pct": 36.81358151821146
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05272577558126715,
+        "filtered_raw_distance": 0.08344479216916474,
+        "improvement_pct": 36.81358151821146
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05272577558126715,
+        "filtered_raw_distance": 0.08344479216916474,
+        "improvement_pct": 36.81358151821146
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.05272577558126715,
+        "filtered_raw_distance": 0.08344479216916474,
+        "improvement_pct": 36.81358151821146
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.05555555555555555,
+        "n_kept": 3,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.052335795015096664,
+        "filtered_raw_distance": 0.08220554582501471,
+        "improvement_pct": 36.335444902342395
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam5-cam8",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.08355656065967859,
+      "canonical": 0.04569574148842582,
+      "improvement_pct": 45.31160554281054
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.04569574148842582,
+        "filtered_raw_distance": 0.08355656065967859,
+        "improvement_pct": 45.31160554281054
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.04569574148842582,
+        "filtered_raw_distance": 0.08355656065967859,
+        "improvement_pct": 45.31160554281054
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.04569574148842582,
+        "filtered_raw_distance": 0.08355656065967859,
+        "improvement_pct": 45.31160554281054
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.04569574148842582,
+        "filtered_raw_distance": 0.08355656065967859,
+        "improvement_pct": 45.31160554281054
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.04569574148842582,
+        "filtered_raw_distance": 0.08355656065967859,
+        "improvement_pct": 45.31160554281054
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.04569574148842582,
+        "filtered_raw_distance": 0.08355656065967859,
+        "improvement_pct": 45.31160554281054
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.04569574148842582,
+        "filtered_raw_distance": 0.08355656065967859,
+        "improvement_pct": 45.31160554281054
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam6-cam7",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.1543542671956154,
+      "canonical": 0.12467263542391636,
+      "improvement_pct": 19.22955050804205
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12467263542391636,
+        "filtered_raw_distance": 0.1543542671956154,
+        "improvement_pct": 19.22955050804205
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12467263542391636,
+        "filtered_raw_distance": 0.1543542671956154,
+        "improvement_pct": 19.22955050804205
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12467263542391636,
+        "filtered_raw_distance": 0.1543542671956154,
+        "improvement_pct": 19.22955050804205
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12467263542391636,
+        "filtered_raw_distance": 0.1543542671956154,
+        "improvement_pct": 19.22955050804205
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12467263542391636,
+        "filtered_raw_distance": 0.1543542671956154,
+        "improvement_pct": 19.22955050804205
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.12467263542391636,
+        "filtered_raw_distance": 0.1543542671956154,
+        "improvement_pct": 19.22955050804205
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_kept": 0,
+        "n_total": 54,
+        "filtered_canonical_distance": null,
+        "filtered_raw_distance": null,
+        "improvement_pct": null
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam6-cam8",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.14650112778769492,
+      "canonical": 0.14519971995442002,
+      "improvement_pct": 0.8883261534756604
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.14519971995442002,
+        "filtered_raw_distance": 0.14650112778769492,
+        "improvement_pct": 0.8883261534756604
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.14519971995442002,
+        "filtered_raw_distance": 0.14650112778769492,
+        "improvement_pct": 0.8883261534756604
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.14519971995442002,
+        "filtered_raw_distance": 0.14650112778769492,
+        "improvement_pct": 0.8883261534756604
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.14519971995442002,
+        "filtered_raw_distance": 0.14650112778769492,
+        "improvement_pct": 0.8883261534756604
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.14519971995442002,
+        "filtered_raw_distance": 0.14650112778769492,
+        "improvement_pct": 0.8883261534756604
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.14519971995442002,
+        "filtered_raw_distance": 0.14650112778769492,
+        "improvement_pct": 0.8883261534756604
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.3148148148148148,
+        "n_kept": 17,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.1467572231503094,
+        "filtered_raw_distance": 0.15077973447278617,
+        "improvement_pct": 2.6678063444943834
+      }
+    ]
+  },
+  {
+    "pair": "S1/Seq1 cam7-cam8",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.13998512371505345,
+      "canonical": 0.06492225315283846,
+      "improvement_pct": 53.622033949128145
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06492225315283846,
+        "filtered_raw_distance": 0.13998512371505345,
+        "improvement_pct": 53.622033949128145
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06492225315283846,
+        "filtered_raw_distance": 0.13998512371505345,
+        "improvement_pct": 53.622033949128145
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06492225315283846,
+        "filtered_raw_distance": 0.13998512371505345,
+        "improvement_pct": 53.622033949128145
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06492225315283846,
+        "filtered_raw_distance": 0.13998512371505345,
+        "improvement_pct": 53.622033949128145
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06492225315283846,
+        "filtered_raw_distance": 0.13998512371505345,
+        "improvement_pct": 53.622033949128145
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_kept": 54,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06492225315283846,
+        "filtered_raw_distance": 0.13998512371505345,
+        "improvement_pct": 53.622033949128145
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.05555555555555555,
+        "n_kept": 3,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06617568184932072,
+        "filtered_raw_distance": 0.13992346438871692,
+        "improvement_pct": 52.70580089020653
+      }
+    ]
+  },
+  {
+    "pair": "S2/Seq1 cam0-cam1",
+    "is_dev_pair": false,
+    "conditions": {
+      "raw": 0.0857757858643559,
+      "canonical": 0.07426705756397159,
+      "improvement_pct": 13.417222802929462
+    },
+    "reliability_aware": [
+      {
+        "threshold": 0.3,
+        "coverage": 0.9629629629629629,
+        "n_kept": 52,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07258685312878627,
+        "filtered_raw_distance": 0.08549675739256128,
+        "improvement_pct": 15.099875898800175
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 0.9629629629629629,
+        "n_kept": 52,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07258685312878627,
+        "filtered_raw_distance": 0.08549675739256128,
+        "improvement_pct": 15.099875898800175
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 0.9629629629629629,
+        "n_kept": 52,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07258685312878627,
+        "filtered_raw_distance": 0.08549675739256128,
+        "improvement_pct": 15.099875898800175
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 0.9444444444444444,
+        "n_kept": 51,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07201848566239956,
+        "filtered_raw_distance": 0.08534016510736904,
+        "improvement_pct": 15.610093357809973
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 0.9444444444444444,
+        "n_kept": 51,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07201848566239956,
+        "filtered_raw_distance": 0.08534016510736904,
+        "improvement_pct": 15.610093357809973
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.8518518518518519,
+        "n_kept": 46,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.07290359626969566,
+        "filtered_raw_distance": 0.0857675881426701,
+        "improvement_pct": 14.99866342466788
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.3888888888888889,
+        "n_kept": 21,
+        "n_total": 54,
+        "filtered_canonical_distance": 0.06706758712728818,
+        "filtered_raw_distance": 0.08303349546411687,
+        "improvement_pct": 19.228274382027433
+      }
+    ]
+  }
+]

@@ -36,10 +36,10 @@ from backend.inference import estimate_poses, predict_video
 from demo_live.plotly_renderer import render_pose_plotly, get_bone_length_summary
 
 
-def on_image_run(image, coord_space, rotation_deg):
+def on_image_run(image, coord_space, rotation_deg, show_avatar=False):
     """Run inference and return the Plotly viewer + 2D overlay + status."""
     if image is None:
-        return None, None, "**Status:** Ready"
+        return None, None, "**Status:** Ready", "", gr.update(visible=False)
 
     import cv2
     import numpy as np
@@ -55,7 +55,7 @@ def on_image_run(image, coord_space, rotation_deg):
 
         result = estimate_poses(image)
         if result is None:
-            return None, None, "**Status:** No person detected", ""
+            return None, None, "**Status:** No person detected", "", gr.update(visible=False)
 
         # Select pose based on coordinate space.
         if coord_space == "View-Invariant Coordinate System":
@@ -80,17 +80,42 @@ def on_image_run(image, coord_space, rotation_deg):
 
         t = result["inference_time"]
         kp_valid = int(np.sum(result["scores"] > 0.3))
+
+        # --- Live reliability verdict (same scoring as offline evaluation) ---
+        rel = result["reliability"]
+        if result["hard_failure"]:
+            verdict = f"🔴 ABSTAIN — hard geometric failure: {result['failure_reason']}"
+        elif result["abstain"]:
+            verdict = f"🟠 ABSTAIN — reliability {rel:.3f} below threshold 0.5"
+        else:
+            verdict = f"🟢 RELIABLE — score {rel:.3f}"
+        comps = result["reliability_components"]
+        comp_line = " · ".join(
+            f"{name.replace('_', ' ')} {val:.2f}" for name, val in comps.items())
+
         status = (f"**Status:** Completed\n"
+                  f"**Reliability:** {verdict}\n"
+                  f"<sub>{comp_line}</sub>\n"
                   f"**Inference time:** {t:.2f}s\n"
                   f"**Keypoints:** {kp_valid}/17 (conf={result['scores'].mean():.3f})\n"
                   f"**Coordinate space:** {space_label}")
 
-        return fig, overlay_rgb, status, bone_summary
+        # Optional qualitative avatar render (presentation layer only).
+        if show_avatar:
+            from presentation.avatar_renderer import render_stylized_avatar_3d
+            avatar_bgr = render_stylized_avatar_3d(
+                result["motionagformer_display_pose"])
+            avatar_rgb = cv2.cvtColor(avatar_bgr, cv2.COLOR_BGR2RGB)
+            avatar_update = gr.update(value=avatar_rgb, visible=True)
+        else:
+            avatar_update = gr.update(visible=False)
+
+        return fig, overlay_rgb, status, bone_summary, avatar_update
 
     except Exception as e:
         import traceback
         traceback.print_exc()
-        return None, None, f"**Status:** Error — {e}", ""
+        return None, None, f"**Status:** Error — {e}", "", gr.update(visible=False)
 
 
 def on_coord_change(coord_space, _state_image, _state_result):
@@ -134,6 +159,11 @@ with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
                         label="Rotation (degrees)",
                         info="Rotate input image before detection. Useful for tilted images.",
                     )
+                    show_avatar = gr.Checkbox(
+                        value=False,
+                        label="Show stylized avatar",
+                        info="Qualitative presentation render of the predicted pose.",
+                    )
                     img_run_btn = gr.Button("Run Inference", variant="primary")
                     img_overlay = gr.Image(
                         label="2D Pose Detection",
@@ -148,6 +178,12 @@ with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
                     )
                     img_status = gr.Markdown("**Status:** Ready")
                     bone_metrics = gr.Markdown("")
+                    avatar_view = gr.Image(
+                        label="Stylized Avatar (qualitative)",
+                        type="numpy",
+                        interactive=False,
+                        visible=False,
+                    )
 
         # ── Video Tab ──
         with gr.TabItem("Video"):
@@ -213,15 +249,15 @@ with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
     # ── Event Handlers ──
     img_run_btn.click(
         fn=on_image_run,
-        inputs=[img_input, coord_space, rotation_slider],
-        outputs=[viewer_3d, img_overlay, img_status, bone_metrics],
+        inputs=[img_input, coord_space, rotation_slider, show_avatar],
+        outputs=[viewer_3d, img_overlay, img_status, bone_metrics, avatar_view],
     )
 
     # Re-run when coordinate space changes (after inference).
     coord_space.change(
         fn=on_image_run,
-        inputs=[img_input, coord_space, rotation_slider],
-        outputs=[viewer_3d, img_overlay, img_status, bone_metrics],
+        inputs=[img_input, coord_space, rotation_slider, show_avatar],
+        outputs=[viewer_3d, img_overlay, img_status, bone_metrics, avatar_view],
     )
 
     def on_video_run(video, cs):

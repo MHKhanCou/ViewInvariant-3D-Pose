@@ -8,8 +8,9 @@ degradation sweep substitute corrupted keypoints without re-running YOLO
 (the sweep re-lifts ~3000 times; re-detecting each time would dominate runtime
 for no scientific gain, since the detector is not what we are perturbing).
 
-`tests/test_lifting_consistency.py` asserts this reproduces the original
-inline implementation exactly.
+`lift_from_coco` (legacy single-frame protocol) now delegates to
+`lift_from_coco_window` with a repeated window, so the two paths share one
+implementation by construction.
 """
 
 import copy
@@ -55,6 +56,32 @@ def lift_from_coco(model, kpts, scores, width, height, device="cpu"):
     """
     kpts_seq = np.repeat(np.asarray(kpts, dtype=np.float32)[None], N_FRAMES, axis=0)
     scores_seq = np.repeat(np.asarray(scores, dtype=np.float32)[None], N_FRAMES, axis=0)
+    return lift_from_coco_window(model, kpts_seq, scores_seq, width, height, device)
+
+
+def lift_from_coco_window(model, kpts_seq, scores_seq, width, height, device="cpu"):
+    """
+    Lift a TRUE 27-frame window of COCO-17 keypoints to a raw root-relative
+    3D pose for the window's centre frame.
+
+    Identical to `lift_from_coco` except the temporal window is real detections
+    from consecutive frames rather than one frame repeated 27x (the protocol
+    flaw flagged by the examiner). Same flip augmentation, same raw output.
+
+    Args:
+        model: loaded MotionAGFormer-XS
+        kpts_seq: (27, 17, 2) COCO-17 keypoints in pixel coordinates
+        scores_seq: (27, 17) COCO-17 confidences
+        width, height: source frame dimensions, for screen normalization
+        device: torch device
+
+    Returns:
+        (17, 3) float64 raw root-relative pose (centre frame of the window)
+    """
+    kpts_seq = np.asarray(kpts_seq, dtype=np.float32)
+    scores_seq = np.asarray(scores_seq, dtype=np.float32)
+    assert kpts_seq.shape == (N_FRAMES, 17, 2), f"expected ({N_FRAMES},17,2), got {kpts_seq.shape}"
+
     h36m = coco_to_h36m(kpts_seq, scores_seq)
 
     norm = normalize_screen_coordinates(h36m, w=width, h=height)
@@ -66,5 +93,5 @@ def lift_from_coco(model, kpts, scores, width, height, device="cpu"):
         out_flip = model(inp_aug).cpu().numpy()
         pred = (out_nonflip + flip_data(out_flip)) / 2.0
 
-    raw_pose = pred[0, 13].copy()          # centre frame of the 27-frame window
-    return raw_pose - raw_pose[0:1]        # root-centre
+    raw_pose = pred[0, N_FRAMES // 2].copy()  # centre frame of the window
+    return raw_pose - raw_pose[0:1]           # root-centre

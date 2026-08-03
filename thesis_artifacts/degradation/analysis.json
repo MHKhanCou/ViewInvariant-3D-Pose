@@ -1,0 +1,230 @@
+{
+  "n_records": 1760,
+  "clean": {
+    "n": 80,
+    "reliability_mean": 0.8724705022391788,
+    "reliability_min": 0.8529485214962119,
+    "abstention_rate": 0.0
+  },
+  "operators": {
+    "hip_axis_collapse": {
+      "n": 320,
+      "severity_unit": "hip width scale",
+      "spearman_reliability_vs_drift": -0.3873410629010049,
+      "p_drift": 6.758260187899516e-13,
+      "spearman_severity_vs_reliability": 0.058034518200689486,
+      "p_severity": 0.30068621290112374,
+      "abstention_rate_overall": 0.0,
+      "hard_gate_rate_overall": 0.0,
+      "per_severity": {
+        "0.05": {
+          "n": 80,
+          "reliability_mean": 0.86963104630817,
+          "drift_mean": 0.006006550185702508,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        },
+        "0.15": {
+          "n": 80,
+          "reliability_mean": 0.8701351435987791,
+          "drift_mean": 0.005437902313860832,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        },
+        "0.3": {
+          "n": 80,
+          "reliability_mean": 0.8706607292040873,
+          "drift_mean": 0.004409342326471233,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        },
+        "0.6": {
+          "n": 80,
+          "reliability_mean": 0.8715976334063422,
+          "drift_mean": 0.002484972194361035,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        }
+      }
+    },
+    "jitter": {
+      "n": 400,
+      "severity_unit": "sigma / bbox diagonal",
+      "spearman_reliability_vs_drift": -0.43388783679897996,
+      "p_drift": 8.588190986526627e-20,
+      "spearman_severity_vs_reliability": -0.1779253672090544,
+      "p_severity": 0.0003489662038231103,
+      "abstention_rate_overall": 0.0175,
+      "hard_gate_rate_overall": 0.0175,
+      "per_severity": {
+        "0.005": {
+          "n": 80,
+          "reliability_mean": 0.8696808927530142,
+          "drift_mean": 0.01730991855729371,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        },
+        "0.01": {
+          "n": 80,
+          "reliability_mean": 0.8675850714912926,
+          "drift_mean": 0.03722473435336724,
+          "abstention_rate": 0.0125,
+          "hard_gate_rate": 0.0125
+        },
+        "0.02": {
+          "n": 80,
+          "reliability_mean": 0.8688401850643437,
+          "drift_mean": 0.0717313555534929,
+          "abstention_rate": 0.025,
+          "hard_gate_rate": 0.025
+        },
+        "0.04": {
+          "n": 80,
+          "reliability_mean": 0.8490495922631138,
+          "drift_mean": 0.09315442310180515,
+          "abstention_rate": 0.0375,
+          "hard_gate_rate": 0.0375
+        },
+        "0.08": {
+          "n": 80,
+          "reliability_mean": 0.8408350631352178,
+          "drift_mean": 0.13045967742800713,
+          "abstention_rate": 0.0125,
+          "hard_gate_rate": 0.0125
+        }
+      }
+    },
+    "joint_dropout": {
+      "n": 400,
+      "severity_unit": "joints removed",
+      "spearman_reliability_vs_drift": null,
+      "p_drift": null,
+      "spearman_severity_vs_reliability": null,
+      "p_severity": null,
+      "abstention_rate_overall": 1.0,
+      "hard_gate_rate_overall": 0.065,
+      "per_severity": {
+        "1.0": {
+          "n": 80,
+          "reliability_mean": 0.0,
+          "drift_mean": 0.5904865331947804,
+          "abstention_rate": 1.0,
+          "hard_gate_rate": 0.325
+        },
+        "2.0": {
+          "n": 80,
+          "reliability_mean": 0.0,
+          "drift_mean": 0.7899884797632695,
+          "abstention_rate": 1.0,
+          "hard_gate_rate": 0.0
+        },
+        "3.0": {
+          "n": 80,
+          "reliability_mean": 0.0,
+          "drift_mean": 0.7377050176262856,
+          "abstention_rate": 1.0,
+          "hard_gate_rate": 0.0
+        },
+        "4.0": {
+          "n": 80,
+          "reliability_mean": 0.0,
+          "drift_mean": 0.667602913081646,
+          "abstention_rate": 1.0,
+          "hard_gate_rate": 0.0
+        },
+        "6.0": {
+          "n": 80,
+          "reliability_mean": 0.0,
+          "drift_mean": 0.5502570845186711,
+          "abstention_rate": 1.0,
+          "hard_gate_rate": 0.0
+        }
+      }
+    },
+    "limb_foreshorten": {
+      "n": 320,
+      "severity_unit": "limb scale",
+      "spearman_reliability_vs_drift": -0.35444547798318343,
+      "p_drift": 6.626300672612057e-11,
+      "spearman_severity_vs_reliability": 0.35498486315458244,
+      "p_severity": 6.171827471479641e-11,
+      "abstention_rate_overall": 0.03125,
+      "hard_gate_rate_overall": 0.03125,
+      "per_severity": {
+        "0.1": {
+          "n": 80,
+          "reliability_mean": 0.8424103837750175,
+          "drift_mean": 0.11631772937253118,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        },
+        "0.3": {
+          "n": 80,
+          "reliability_mean": 0.841893943076958,
+          "drift_mean": 0.11039501875638962,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        },
+        "0.5": {
+          "n": 80,
+          "reliability_mean": 0.8416697818704085,
+          "drift_mean": 0.09586076638661326,
+          "abstention_rate": 0.125,
+          "hard_gate_rate": 0.125
+        },
+        "0.7": {
+          "n": 80,
+          "reliability_mean": 0.8610050195334725,
+          "drift_mean": 0.05177259417250753,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        }
+      }
+    },
+    "torso_axis_collapse": {
+      "n": 320,
+      "severity_unit": "torso height scale",
+      "spearman_reliability_vs_drift": -0.5542491870037793,
+      "p_drift": 3.640030580415076e-27,
+      "spearman_severity_vs_reliability": 0.7698499721481453,
+      "p_severity": 5.555220150346247e-64,
+      "abstention_rate_overall": 0.0,
+      "hard_gate_rate_overall": 0.0,
+      "per_severity": {
+        "0.05": {
+          "n": 80,
+          "reliability_mean": 0.7891177368172038,
+          "drift_mean": 0.12979236310347914,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        },
+        "0.15": {
+          "n": 80,
+          "reliability_mean": 0.8043805989016348,
+          "drift_mean": 0.11936944713816047,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        },
+        "0.3": {
+          "n": 80,
+          "reliability_mean": 0.8191062797251369,
+          "drift_mean": 0.10143744451925159,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        },
+        "0.6": {
+          "n": 80,
+          "reliability_mean": 0.8613498610814698,
+          "drift_mean": 0.06260939976200461,
+          "abstention_rate": 0.0,
+          "hard_gate_rate": 0.0
+        }
+      }
+    }
+  },
+  "pooled": {
+    "spearman_reliability_vs_drift": -0.812838096563073,
+    "p_value": 0.0,
+    "n": 1760
+  }
+}

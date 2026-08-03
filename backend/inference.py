@@ -22,6 +22,9 @@ from demo_live.pose_detector import detect_video
 from canonical.canonicalizer import Canonicalizer
 from canonical.visualization import render_canonical_3d
 from presentation.avatar_renderer import render_stylized_avatar_3d
+from evaluation.reliability import (
+    compute_reliability_score, has_hard_geometric_failure, should_abstain,
+)
 from lib.utils import camera_to_world
 
 from backend.model_loader import get_detector, get_model
@@ -134,6 +137,12 @@ def estimate_poses(image_rgb: np.ndarray):
     canonicalizer = Canonicalizer()
     pose_canonical, _ = canonicalizer(pose_root_relative)
 
+    # --- Training-free reliability score (same code path as offline eval) ---
+    reliability, rel_components, _ = compute_reliability_score(
+        pose_root_relative, scores)
+    hard_failure, failure_reason = has_hard_geometric_failure(pose_root_relative)
+    abstain = should_abstain(reliability, hard_failure)
+
     frame_rgb_out = cv2.cvtColor(frame_small, cv2.COLOR_BGR2RGB)
 
     return {
@@ -144,6 +153,11 @@ def estimate_poses(image_rgb: np.ndarray):
         "scores": scores,
         "frame_rgb": frame_rgb_out,
         "inference_time": time.time() - t0,
+        "reliability": float(reliability),
+        "reliability_components": {k: float(v) for k, v in rel_components.items()},
+        "hard_failure": bool(hard_failure),
+        "failure_reason": failure_reason,
+        "abstain": bool(abstain),
     }
 
 

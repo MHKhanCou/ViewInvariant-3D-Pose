@@ -1,247 +1,299 @@
 """
-Cross-view evaluation on MPI-INF-3DHP synchronized camera pairs.
+Cross-view evaluation on MPI-INF-3DHP synchronized cameras — corrected protocol.
 
-Evaluation pipeline:
-1. For each synchronized frame pair (camera A, camera B):
-   a. Load both frames
-   b. Run YOLO + MotionAGFormer on each frame (single-frame repeated 27x)
-   c. Get raw root-relative output
-   d. Compute canonical pose
-   e. Compute reliability score + hard gate
-2. Compare raw and canonical cross-view distances
-3. Report coverage, abstention, and failure reasons
+Protocol (corrects the examiner-flagged single-frame-repeated-27x flaw):
+1. Per camera: run YOLO once per physical frame, then lift each fully-windowed
+   center frame (13..N-14) with a TRUE 27-frame detection window.
+2. Canonicalize each frame INDEPENDENTLY (no temporal state enters the metric).
+3. Reliability per frame; the temporal_stability component receives the
+   previous frame's rotation from the SAME camera stream (legitimate video
+   continuity — never crosses cameras).
+4. All predictions cached to predictions_cache.npz; every pair metric,
+   ablation, and GT analysis derives from the cache without re-inference.
+5. Pair metrics for ALL camera pairs per sequence: raw / canonical /
+   Procrustes-oracle distances, coverage-error curves WITH an error axis.
 
 Constraint checklist:
-- Hard gates frozen at implementation time (0.5 threshold)
-- Raw root-relative prediction only (no display transforms)
-- True 27-frame windows from each camera (replicate-padded)
-- Confidence intervals grouped by sequence
+- Hard gates + 0.5 threshold frozen at implementation time (no tuning here)
+- Raw root-relative predictions only (no display transforms)
+- Dev pair (S1/Seq1 cam0-1) labeled; all other pairs held-out
 """
 
+import json
 import os
 import sys
-import time
-import numpy as np
-import torch
+
 import cv2
+import numpy as np
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, REPO_ROOT)
 
-from evaluation.protocol import build_pairing_table, load_frames_as_sequence
+from evaluation.protocol import (
+    build_pairing_table, discover_cameras, evaluated_centers, HALF, WINDOW,
+)
 from evaluation.reliability import (
-    compute_reliability_score, should_abstain, has_hard_geometric_failure,
-    compute_bone_lengths
+    compute_reliability_score, has_hard_geometric_failure,
 )
 from evaluation.metrics import (
-    cross_view_joint_distance, cross_view_joint_distance_sequence,
-    bone_length_deviation, joint_angle_consistency
+    cross_view_joint_distance_sequence, bone_length_deviation,
+    joint_angle_consistency,
 )
-from evaluation.lifting import lift_from_coco
-from canonical.canonicalizer import Canonicalizer
+from evaluation.lifting import lift_from_coco_window
+from evaluation.oracle import procrustes_cross_view_distance
 from canonical.body_frame import canonicalize_single
-from backend.model_loader import get_model, get_detector
-from demo_live.lifter import coco_to_h36m, N_FRAMES, normalize_screen_coordinates
+
+OUTPUT_DIR = os.path.join(REPO_ROOT, "thesis_artifacts", "cross_view_eval")
+CACHE_PATH = os.path.join(OUTPUT_DIR, "predictions_cache.npz")
+
+# Fixed order for the cached per-component reliability breakdown.
+COMPONENT_KEYS = [
+    "axis_conditioning", "torso_hip_angle", "bilateral_symmetry",
+    "abnormal_bone_ratio", "detector_confidence", "temporal_stability",
+]
+
+COVERAGE_THRESHOLDS = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
 
 
-def predict_single_frame(model, detector, frame_rgb, device="cpu"):
+def cam_key(cam_info):
+    return f"{cam_info['subject']}_{cam_info['sequence'].replace('/', '_')}_cam{cam_info['camera']}"
+
+
+def predict_camera(model, detector, cam_info, device="cpu"):
     """
-    Run full pipeline on a single frame. Returns raw root-relative pose.
+    Predict every fully-windowed frame of one camera with true temporal windows.
 
-    Returns:
-        raw_pose: (17, 3) raw root-relative
-        scores: (17,) COCO-17 confidence
-        reliability: float
-        hard_failure: bool
-        failure_reason: str
+    Returns dict of arrays: centers, raw, canonical, R, valid, reliability,
+    components, hard_failure.
     """
-    H, W = frame_rgb.shape[:2]
+    paths = cam_info["frame_paths"]
+    n = len(paths)
+    centers = evaluated_centers(n)
 
-    kpts, scores = detector.detect_with_rotation(frame_rgb)
-    if kpts is None:
-        kpts = np.zeros((17, 2), dtype=np.float32)
-        scores = np.zeros((17,), dtype=np.float32)
+    # --- One detector pass per physical frame ---
+    kpts_all = np.zeros((n, 17, 2), dtype=np.float32)
+    scores_all = np.zeros((n, 17), dtype=np.float32)
+    wh = None
+    for i, path in enumerate(paths):
+        if i % 20 == 0:
+            print(f"    detect {i}/{n}...")
+        frame = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2RGB)
+        if wh is None:
+            wh = (frame.shape[1], frame.shape[0])
+        kpts, scores = detector.detect_with_rotation(frame)
+        if kpts is not None:
+            kpts_all[i] = kpts
+            scores_all[i] = scores
+    W, H = wh
 
-    # Lift to raw root-relative 3D (27-frame window + flip augmentation).
-    # Shared with the degradation sweep so both run identical model code.
-    raw_root = lift_from_coco(model, kpts, scores, W, H, device=device)
+    # --- Lift each center with its true window; sequential reliability chain ---
+    C = len(centers)
+    raw = np.zeros((C, 17, 3), dtype=np.float64)
+    canonical = np.zeros((C, 17, 3), dtype=np.float32)
+    R_all = np.zeros((C, 3, 3), dtype=np.float32)
+    valid = np.zeros(C, dtype=bool)
+    reliability = np.zeros(C, dtype=np.float64)
+    components = np.zeros((C, len(COMPONENT_KEYS)), dtype=np.float64)
+    hard_failure = np.zeros(C, dtype=bool)
 
-    # Reliability
-    reliability, components, metadata = compute_reliability_score(raw_root, scores)
-    hard_failure, failure_reason = has_hard_geometric_failure(raw_root)
+    prev_R = None
+    for j, c in enumerate(centers):
+        if j % 20 == 0:
+            print(f"    lift {j}/{C}...")
+        lo = c - HALF
+        window_kpts = kpts_all[lo:lo + WINDOW]
+        window_scores = scores_all[lo:lo + WINDOW]
+        pose = lift_from_coco_window(model, window_kpts, window_scores, W, H, device)
 
-    return raw_root, scores, reliability, hard_failure, failure_reason
+        # Metric canonicalization: independent per frame, no temporal state.
+        can, R, meta = canonicalize_single(pose.astype(np.float32))
 
+        # Reliability: prev_R from the same camera stream only.
+        rel, comps, _ = compute_reliability_score(
+            pose, scores_all[c], prev_rotation=prev_R)
+        hard, _ = has_hard_geometric_failure(pose)
 
-def evaluate_cross_view_pair(model, detector, pair_info, device="cpu"):
-    """
-    Evaluate a single synchronized camera pair.
-
-    Returns:
-        dict with per-frame and aggregate metrics
-    """
-    subject = pair_info["subject"]
-    sequence = pair_info["sequence"]
-    cam_a = pair_info["cam_a"]
-    cam_b = pair_info["cam_b"]
-    frame_pairs = pair_info["frame_pairs"]
-
-    print(f"\nEvaluating: {subject}/{sequence} cam{cam_a} <-> cam{cam_b} ({len(frame_pairs)} frames)")
-
-    # Predict for both cameras
-    raw_a_list = []
-    raw_b_list = []
-    can_a_list = []
-    can_b_list = []
-    reliability_a_list = []
-    reliability_b_list = []
-    hard_failure_a_list = []
-    hard_failure_b_list = []
-    failure_reason_a_list = []
-    failure_reason_b_list = []
-
-    for i, (frame_idx, path_a, path_b) in enumerate(frame_pairs):
-        if i % 10 == 0:
-            print(f"  Frame {i}/{len(frame_pairs)}...")
-
-        # Load and predict camera A
-        frame_a = cv2.cvtColor(cv2.imread(path_a), cv2.COLOR_BGR2RGB)
-        raw_a, scores_a, rel_a, hard_a, reason_a = predict_single_frame(model, detector, frame_a, device)
-
-        # Load and predict camera B
-        frame_b = cv2.cvtColor(cv2.imread(path_b), cv2.COLOR_BGR2RGB)
-        raw_b, scores_b, rel_b, hard_b, reason_b = predict_single_frame(model, detector, frame_b, device)
-
-        # Canonicalize
-        can_a, R_a, meta_a = canonicalize_single(raw_a.astype(np.float32))
-        can_b, R_b, meta_b = canonicalize_single(raw_b.astype(np.float32))
-
-        raw_a_list.append(raw_a)
-        raw_b_list.append(raw_b)
-        can_a_list.append(can_a)
-        can_b_list.append(can_b)
-        reliability_a_list.append(rel_a)
-        reliability_b_list.append(rel_b)
-        hard_failure_a_list.append(hard_a)
-        hard_failure_b_list.append(hard_b)
-        failure_reason_a_list.append(reason_a)
-        failure_reason_b_list.append(reason_b)
-
-    raw_a_arr = np.array(raw_a_list)
-    raw_b_arr = np.array(raw_b_list)
-    can_a_arr = np.array(can_a_list)
-    can_b_arr = np.array(can_b_list)
-
-    # Compute cross-view distances
-    raw_per_frame, raw_mean = cross_view_joint_distance_sequence(raw_a_arr, raw_b_arr)
-    can_per_frame, can_mean = cross_view_joint_distance_sequence(can_a_arr, can_b_arr)
-
-    # Compute bone-length and joint-angle consistency
-    bl_devs = []
-    ja_diffs = []
-    for i in range(len(frame_pairs)):
-        bl_mean, _ = bone_length_deviation(raw_a_arr[i], raw_b_arr[i])
-        bl_devs.append(bl_mean)
-        ja_mean, _ = joint_angle_consistency(raw_a_arr[i], raw_b_arr[i])
-        ja_diffs.append(ja_mean)
-
-    # Aggregate reliability
-    reliabilities = np.array(reliability_a_list + reliability_b_list)
-    n_hard = sum(hard_failure_a_list) + sum(hard_failure_b_list)
-    n_total_frames = len(frame_pairs) * 2  # Both cameras
-
-    # Coverage analysis at different thresholds
-    all_rels = np.concatenate([reliability_a_list, reliability_b_list])
-    all_hard = np.array(hard_failure_a_list + hard_failure_b_list)
-    coverage_results = {}
-    for threshold in [0.3, 0.4, 0.5, 0.6, 0.7, 0.8]:
-        mask = (all_rels >= threshold) & (~all_hard)
-        coverage = mask.sum() / len(mask) if len(mask) > 0 else 0
-        if mask.sum() > 0:
-            filtered_raw = raw_per_frame[
-                np.array([not h for h in hard_failure_a_list])
-                & (np.array(reliability_a_list) >= threshold)
-            ] if len(raw_per_frame) > 0 else np.array([])
-            filtered_can = can_per_frame[
-                np.array([not h for h in hard_failure_a_list])
-                & (np.array(reliability_a_list) >= threshold)
-            ] if len(can_per_frame) > 0 else np.array([])
-        coverage_results[threshold] = {
-            "coverage": float(coverage),
-            "n_frames": int(mask.sum()),
-        }
+        raw[j] = pose
+        canonical[j] = can
+        R_all[j] = R
+        valid[j] = meta["valid"]
+        reliability[j] = rel
+        components[j] = [comps.get(k, np.nan) for k in COMPONENT_KEYS]
+        hard_failure[j] = hard
+        if meta["valid"]:
+            prev_R = R
 
     return {
-        "subject": subject,
-        "sequence": sequence,
-        "cam_a": cam_a,
-        "cam_b": cam_b,
-        "n_frames": len(frame_pairs),
-        "raw_cross_view_distance": raw_mean,
-        "canonical_cross_view_distance": can_mean,
-        "improvement_pct": (1 - can_mean / max(raw_mean, 1e-8)) * 100,
+        "centers": np.array(centers, dtype=np.int32),
+        "raw": raw,
+        "canonical": canonical,
+        "R": R_all,
+        "valid": valid,
+        "reliability": reliability,
+        "components": components,
+        "hard_failure": hard_failure,
+    }
+
+
+def load_cache():
+    """Load the prediction cache as {cam_key: {field: array}}."""
+    if not os.path.exists(CACHE_PATH):
+        return {}
+    data = np.load(CACHE_PATH)
+    cams = {}
+    for full_key in data.files:
+        key, field = full_key.rsplit("__", 1)
+        cams.setdefault(key, {})[field] = data[full_key]
+    return cams
+
+
+def save_cache(cams):
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    flat = {}
+    for key, fields in cams.items():
+        for field, arr in fields.items():
+            flat[f"{key}__{field}"] = arr
+    np.savez_compressed(CACHE_PATH, **flat)
+
+
+def evaluate_pair_from_cache(pair_info, cache):
+    """Compute all pair metrics from cached per-camera predictions."""
+    key_a = cam_key({"subject": pair_info["subject"],
+                     "sequence": pair_info["sequence"],
+                     "camera": pair_info["cam_a"]})
+    key_b = cam_key({"subject": pair_info["subject"],
+                     "sequence": pair_info["sequence"],
+                     "camera": pair_info["cam_b"]})
+    a, b = cache[key_a], cache[key_b]
+
+    # Match frames by center index (cameras are synchronized).
+    common, ia, ib = np.intersect1d(a["centers"], b["centers"],
+                                    return_indices=True)
+    raw_a, raw_b = a["raw"][ia], b["raw"][ib]
+    can_a, can_b = a["canonical"][ia], b["canonical"][ib]
+    rel_a, rel_b = a["reliability"][ia], b["reliability"][ib]
+    hard_a, hard_b = a["hard_failure"][ia], b["hard_failure"][ib]
+
+    raw_per_frame, raw_mean = cross_view_joint_distance_sequence(raw_a, raw_b)
+    can_per_frame, can_mean = cross_view_joint_distance_sequence(can_a, can_b)
+
+    oracle_per_frame = np.array([
+        procrustes_cross_view_distance(raw_a[i], raw_b[i])
+        for i in range(len(common))
+    ])
+
+    bl_devs = [bone_length_deviation(raw_a[i], raw_b[i])[0]
+               for i in range(len(common))]
+    ja_diffs = [joint_angle_consistency(raw_a[i], raw_b[i])[0]
+                for i in range(len(common))]
+
+    # Coverage-error: joint reliability gate (both views must pass).
+    pair_rel = np.minimum(rel_a, rel_b)
+    pair_ok = ~(hard_a | hard_b)
+    coverage_results = {}
+    for t in COVERAGE_THRESHOLDS:
+        mask = (pair_rel >= t) & pair_ok
+        entry = {"coverage": float(mask.mean()), "n_frames": int(mask.sum())}
+        if mask.any():
+            entry["filtered_raw_distance"] = float(raw_per_frame[mask].mean())
+            entry["filtered_canonical_distance"] = float(can_per_frame[mask].mean())
+        else:
+            entry["filtered_raw_distance"] = None
+            entry["filtered_canonical_distance"] = None
+        coverage_results[str(t)] = entry
+
+    rels = np.concatenate([rel_a, rel_b])
+    n_hard = int(hard_a.sum() + hard_b.sum())
+
+    return {
+        "subject": pair_info["subject"],
+        "sequence": pair_info["sequence"],
+        "cam_a": pair_info["cam_a"],
+        "cam_b": pair_info["cam_b"],
+        "is_dev_pair": pair_info["is_dev_pair"],
+        "n_frames": int(len(common)),
+        "raw_cross_view_distance": float(raw_mean),
+        "canonical_cross_view_distance": float(can_mean),
+        "oracle_cross_view_distance": float(oracle_per_frame.mean()),
+        "improvement_pct": float((1 - can_mean / max(raw_mean, 1e-8)) * 100),
+        "oracle_gap_closed_pct": float(
+            (raw_mean - can_mean) / max(raw_mean - oracle_per_frame.mean(), 1e-8) * 100),
         "bone_length_deviation": float(np.mean(bl_devs)),
         "joint_angle_diff": float(np.mean(ja_diffs)),
-        "reliability_mean": float(np.mean(reliabilities)),
-        "reliability_min": float(np.min(reliabilities)),
+        "reliability_mean": float(rels.mean()),
+        "reliability_min": float(rels.min()),
         "hard_failure_count": n_hard,
-        "hard_failure_rate": n_hard / max(n_total_frames, 1),
+        "hard_failure_rate": float(n_hard / max(len(common) * 2, 1)),
         "coverage_at_threshold": coverage_results,
         "per_frame_raw": raw_per_frame.tolist(),
         "per_frame_canonical": can_per_frame.tolist(),
-        "per_frame_reliability_a": reliability_a_list,
-        "per_frame_reliability_b": reliability_b_list,
+        "per_frame_oracle": oracle_per_frame.tolist(),
+        "per_frame_reliability_a": rel_a.tolist(),
+        "per_frame_reliability_b": rel_b.tolist(),
+        "frame_centers": common.tolist(),
     }
 
 
 def main():
     print("Loading models...")
+    from backend.model_loader import get_model, get_detector
     model = get_model()
     detector = get_detector()
 
-    # Build pairing table
+    cache = load_cache()
+    cameras = discover_cameras()
+
+    for cam_info in cameras:
+        key = cam_key(cam_info)
+        if key in cache:
+            print(f"  {key}: cached ({len(cache[key]['centers'])} frames), skip")
+            continue
+        print(f"  Predicting {key} ({cam_info['n_frames']} frames, "
+              f"{len(evaluated_centers(cam_info['n_frames']))} windowed centers)")
+        cache[key] = predict_camera(model, detector, cam_info)
+        save_cache(cache)  # checkpoint after each camera
+
     print("\nBuilding pairing table...")
     table = build_pairing_table()
 
-    if not table:
-        print("ERROR: No valid camera pairs found.")
-        return
+    all_results = [evaluate_pair_from_cache(pair, cache) for pair in table]
 
-    # Evaluate each pair
-    all_results = []
-    for pair in table:
-        result = evaluate_cross_view_pair(model, detector, pair)
-        all_results.append(result)
-
-    # Print summary
+    # --- Summary ---
     print("\n" + "=" * 80)
-    print("CROSS-VIEW EVALUATION SUMMARY")
+    print("CROSS-VIEW EVALUATION SUMMARY (corrected protocol: true 27-frame windows)")
     print("=" * 80)
-
     for r in all_results:
-        print(f"\n{r['subject']}/{r['sequence']} cam{r['cam_a']} <-> cam{r['cam_b']}:")
-        print(f"  Frames: {r['n_frames']}")
-        print(f"  Raw cross-view distance:       {r['raw_cross_view_distance']:.4f}")
-        print(f"  Canonical cross-view distance:  {r['canonical_cross_view_distance']:.4f}")
-        print(f"  Improvement:                    {r['improvement_pct']:.1f}%")
-        print(f"  Bone-length deviation:          {r['bone_length_deviation']:.4f}")
-        print(f"  Joint-angle difference:         {r['joint_angle_diff']:.1f} degrees")
-        print(f"  Reliability: {r['reliability_mean']:.4f} (min={r['reliability_min']:.4f})")
-        print(f"  Hard failures: {r['hard_failure_count']}/{r['n_frames']*2}")
-        print(f"  Hard failure rate: {r['hard_failure_rate']:.1%}")
-        print(f"\n  Coverage at thresholds:")
-        for t, info in r['coverage_at_threshold'].items():
-            print(f"    t={t}: {info['coverage']:.1%} ({info['n_frames']}/{r['n_frames']*2})")
+        tag = "  [DEV PAIR]" if r["is_dev_pair"] else ""
+        print(f"{r['subject']}/{r['sequence']} cam{r['cam_a']}-cam{r['cam_b']}{tag}: "
+              f"raw {r['raw_cross_view_distance']:.4f}  "
+              f"can {r['canonical_cross_view_distance']:.4f}  "
+              f"oracle {r['oracle_cross_view_distance']:.4f}  "
+              f"impr {r['improvement_pct']:+.1f}%  "
+              f"rel {r['reliability_mean']:.3f}")
 
-    # Save results
-    import json
-    output_dir = os.path.join(REPO_ROOT, "thesis_artifacts", "cross_view_eval")
-    os.makedirs(output_dir, exist_ok=True)
+    held_out = [r for r in all_results
+                if not r["is_dev_pair"] and r["subject"] == "S1"]
+    s2 = [r for r in all_results if r["subject"] == "S2"]
+    dev = [r for r in all_results if r["is_dev_pair"]]
 
-    with open(os.path.join(output_dir, "results.json"), "w") as f:
+    def agg(rs, name):
+        if not rs:
+            return
+        imp = np.array([r["improvement_pct"] for r in rs])
+        print(f"\n{name}: n={len(rs)} pairs, "
+              f"improvement mean {imp.mean():+.1f}% "
+              f"(min {imp.min():+.1f}%, max {imp.max():+.1f}%)")
+
+    agg(dev, "Dev pair (S1/Seq1 cam0-1)")
+    agg(held_out, "Held-out pairs (S1/Seq1, 27 pairs)")
+    agg(s2, "Held-out subject (S2/Seq1)")
+
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    out_path = os.path.join(OUTPUT_DIR, "results_multicam.json")
+    with open(out_path, "w") as f:
         json.dump(all_results, f, indent=2)
-
-    print(f"\nResults saved to: {output_dir}")
+    print(f"\nResults saved to: {out_path}")
+    print(f"Prediction cache:  {CACHE_PATH}")
 
 
 if __name__ == "__main__":
