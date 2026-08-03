@@ -38,6 +38,37 @@ DET_WIDTH = 640
 VIS_ROT = [0.1407056450843811, -0.1500701755285263, -0.755240797996521, 0.6223280429840088]
 
 
+# L/R limb chains for display-side symmetrization (H36M-17).
+_LIMB_CHAINS = [[0, 1, 2, 3], [0, 4, 5, 6], [8, 11, 12, 13], [8, 14, 15, 16]]
+_MIRROR_BONE = {  # bone (a,b) -> mirrored bone (a',b')
+    (0, 1): (0, 4), (1, 2): (4, 5), (2, 3): (5, 6),
+    (0, 4): (0, 1), (4, 5): (1, 2), (5, 6): (2, 3),
+    (8, 11): (8, 14), (11, 12): (14, 15), (12, 13): (15, 16),
+    (8, 14): (8, 11), (14, 15): (11, 12), (15, 16): (12, 13),
+}
+
+
+def equalize_limb_lengths(pose):
+    """
+    DISPLAY-ONLY: rebuild each limb chain with left/right-averaged bone
+    lengths, keeping every bone's direction. Removes the visual L/R length
+    mismatch that monocular depth ambiguity produces. Never applied to
+    evaluated or scored poses.
+    """
+    p = np.asarray(pose, dtype=np.float64)
+    out = p.copy()
+    for chain in _LIMB_CHAINS:
+        for a, b in zip(chain[:-1], chain[1:]):
+            v = p[b] - p[a]
+            n = np.linalg.norm(v)
+            ma, mb = _MIRROR_BONE[(a, b)]
+            n_mirror = np.linalg.norm(p[mb] - p[ma])
+            target = (n + n_mirror) / 2.0
+            direction = v / n if n > 1e-8 else np.zeros(3)
+            out[b] = out[a] + direction * target
+    return out.astype(p.dtype)
+
+
 def estimate_poses(image_rgb: np.ndarray):
     """
     Run 3D pose estimation and return raw poses in both coordinate spaces.

@@ -36,7 +36,8 @@ from backend.inference import estimate_poses, predict_video
 from demo_live.plotly_renderer import render_pose_plotly, get_bone_length_summary
 
 
-def on_image_run(image, coord_space, rotation_deg, show_avatar=False):
+def on_image_run(image, coord_space, rotation_deg, show_avatar=False,
+                 equalize_limbs=True):
     """Run inference and return the Plotly viewer + 2D overlay + status."""
     if image is None:
         return None, None, "**Status:** Ready", "", gr.update(visible=False)
@@ -70,6 +71,12 @@ def on_image_run(image, coord_space, rotation_deg, show_avatar=False):
         else:
             pose = result["motionagformer_display_pose"]
             space_label = "Camera"
+
+        # Display-only limb-length equalization (never touches scored poses).
+        if equalize_limbs:
+            from backend.inference import equalize_limb_lengths
+            pose = equalize_limb_lengths(pose)
+            space_label += ", limbs equalized (display)"
 
         # Render interactive 3D viewer.
         fig = render_pose_plotly(pose, title=f"3D Pose — {space_label}")
@@ -165,6 +172,12 @@ with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
                         label="Rotation (degrees)",
                         info="Rotate input image before detection. Useful for tilted images.",
                     )
+                    equalize_limbs = gr.Checkbox(
+                        value=True,
+                        label="Equalize limb lengths (display only)",
+                        info="Averages left/right bone lengths for display. "
+                             "Raw predictions and reliability scoring are unaffected.",
+                    )
                     show_avatar = gr.Checkbox(
                         value=False,
                         label="Show stylized avatar",
@@ -255,14 +268,19 @@ with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
     # ── Event Handlers ──
     img_run_btn.click(
         fn=on_image_run,
-        inputs=[img_input, coord_space, rotation_slider, show_avatar],
+        inputs=[img_input, coord_space, rotation_slider, show_avatar, equalize_limbs],
         outputs=[viewer_3d, img_overlay, img_status, bone_metrics, avatar_view],
     )
 
-    # Re-run when coordinate space changes (after inference).
+    # Re-run when coordinate space or display options change (after inference).
     coord_space.change(
         fn=on_image_run,
-        inputs=[img_input, coord_space, rotation_slider, show_avatar],
+        inputs=[img_input, coord_space, rotation_slider, show_avatar, equalize_limbs],
+        outputs=[viewer_3d, img_overlay, img_status, bone_metrics, avatar_view],
+    )
+    equalize_limbs.change(
+        fn=on_image_run,
+        inputs=[img_input, coord_space, rotation_slider, show_avatar, equalize_limbs],
         outputs=[viewer_3d, img_overlay, img_status, bone_metrics, avatar_view],
     )
 
