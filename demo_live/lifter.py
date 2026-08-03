@@ -32,7 +32,7 @@ from lib.preprocess import h36m_coco_format
 from lib.utils import normalize_screen_coordinates, camera_to_world
 
 
-N_FRAMES = 27  # MotionAGFormer-XS receptive field.
+N_FRAMES = 27  # MotionAGFormer receptive field.
 
 # Fixed camera rotation used in the official demo for visualization alignment.
 VIS_ROT = np.array(
@@ -87,6 +87,51 @@ def build_xs_model(device="cpu"):
     return model
 
 
+def build_base_model(device="cpu"):
+    """Build the MotionAGFormer-Base model (MPI-INF-3DHP pretrained, 81 frames).
+
+    WARNING: This model requires 81-frame input windows, not 27.
+    It is NOT yet integrated into the main pipeline. Do not call from
+    production code until a dedicated 81-frame inference path is built.
+    """
+    MPI_BASE_NFRAMES = 81  # Official MPI-INF-3DHP Base config requires 81 frames.
+    args = dict(
+        n_layers=16,
+        dim_in=3,
+        dim_feat=128,
+        dim_rep=512,
+        dim_out=3,
+        mlp_ratio=4,
+        act_layer=nn.GELU,
+        attn_drop=0.0,
+        drop=0.0,
+        drop_path=0.0,
+        use_layer_scale=True,
+        layer_scale_init_value=1e-5,
+        use_adaptive_fusion=True,
+        num_heads=8,
+        qkv_bias=False,
+        qkv_scale=None,
+        hierarchical=False,
+        num_joints=17,
+        use_temporal_similarity=True,
+        temporal_connection_len=1,
+        use_tcn=False,
+        graph_only=False,
+        neighbour_num=2,
+        n_frames=MPI_BASE_NFRAMES,
+    )
+    model = MotionAGFormer(**args).to(device)
+    model.eval()
+
+    ckpt_path = os.path.join(REPO_ROOT, "checkpoint", "motionagformer-b-mpi.pth.tr")
+    state = torch.load(ckpt_path, map_location=device, weights_only=False)["model"]
+    state = {k.replace("module.", ""): v for k, v in state.items()}
+    model.load_state_dict(state, strict=True)
+    print(f"Loaded MotionAGFormer-Base (MPI-INF-3DHP, {MPI_BASE_NFRAMES} frames)")
+    return model
+
+
 def _flip_data(data, left=LEFT_JOINTS, right=RIGHT_JOINTS):
     flipped = copy.deepcopy(data)
     flipped[..., 0] *= -1
@@ -128,7 +173,7 @@ def coco_to_h36m(keypoints, scores):
 
 
 def lift_sequence(model, h36m_seq, img_size, device="cpu", use_flip=True,
-                   mode="world"):
+                   mode="world", apply_display_postprocess=True):
     """
     Lift a full sequence using a centered 27-frame sliding window.
 
@@ -146,9 +191,16 @@ def lift_sequence(model, h36m_seq, img_size, device="cpu", use_flip=True,
                              zero root before the fixed visualization rotation.
                              This does not recover world trajectory.
                    "root"  — subtract root from all joints before rendering.
+        apply_display_postprocess: If True, applies the official display
+                                   post-processing (camera_to_world, z-shift,
+                                   global max-normalization). If False, returns
+                                   the raw root-relative pose (after mode
+                                   handling only). Default True preserves
+                                   existing behavior for the default view.
     Returns:
         poses3d:   (T, 17, 3) camera-to-world 3D poses, normalized to [0,1]-ish
-                   scale.
+                   scale when apply_display_postprocess=True; otherwise raw
+                   root-relative pose.
     """
     T = h36m_seq.shape[0]
     H, W = img_size
@@ -172,9 +224,9 @@ def lift_sequence(model, h36m_seq, img_size, device="cpu", use_flip=True,
             if use_flip:
                 flipped = _flip_data(norm)
                 inp_aug = torch.from_numpy(flipped.astype("float32"))[None].to(device)
-                out_nonflip = model(inp)
-                out_flip = _flip_data(out_nonflip.cpu().numpy())
-                pred = (out_nonflip.cpu().numpy() + out_flip) / 2.0
+                out_nonflip = model(inp).cpu().numpy()
+                out_flip = model(inp_aug).cpu().numpy()
+                pred = (out_nonflip + _flip_data(out_flip)) / 2.0
             else:
                 pred = model(inp).cpu().numpy()
 
@@ -190,12 +242,13 @@ def lift_sequence(model, h36m_seq, img_size, device="cpu", use_flip=True,
                 # skeleton is centered and stationary across frames.
                 pose -= pose[0:1]
 
-            # Post-process exactly like the official demo.
-            pose = camera_to_world(pose, R=VIS_ROT, t=0)
-            pose[:, 2] -= np.min(pose[:, 2])
-            max_value = np.max(pose)
-            if max_value > 0:
-                pose /= max_value
+            # Post-process exactly like the official demo (if requested).
+            if apply_display_postprocess:
+                pose = camera_to_world(pose, R=VIS_ROT, t=0)
+                pose[:, 2] -= np.min(pose[:, 2])
+                max_value = np.max(pose)
+                if max_value > 0:
+                    pose /= max_value
             out.append(pose)
 
     return np.array(out, dtype=np.float32)  # (T, 17, 3)

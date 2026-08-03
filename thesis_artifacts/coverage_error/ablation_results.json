@@ -1,0 +1,60 @@
+{
+  "raw_distance": 0.11716544270515442,
+  "canonical_distance": 0.08391461238265037,
+  "improvement_pct": 28.379383506602206,
+  "reliability_a_mean": 0.869796207888231,
+  "reliability_b_mean": 0.8657021088363558,
+  "reliability_a_min": 0.8529485214962119,
+  "reliability_b_min": 0.8540921881110068,
+  "reliability_aware": [
+    {
+      "threshold": 0.3,
+      "coverage": 1.0,
+      "n_kept": 50,
+      "n_total": 50,
+      "abstained": 0
+    },
+    {
+      "threshold": 0.4,
+      "coverage": 1.0,
+      "n_kept": 50,
+      "n_total": 50,
+      "abstained": 0
+    },
+    {
+      "threshold": 0.5,
+      "coverage": 1.0,
+      "n_kept": 50,
+      "n_total": 50,
+      "abstained": 0
+    },
+    {
+      "threshold": 0.6,
+      "coverage": 1.0,
+      "n_kept": 50,
+      "n_total": 50,
+      "abstained": 0
+    },
+    {
+      "threshold": 0.7,
+      "coverage": 1.0,
+      "n_kept": 50,
+      "n_total": 50,
+      "abstained": 0
+    },
+    {
+      "threshold": 0.8,
+      "coverage": 1.0,
+      "n_kept": 50,
+      "n_total": 50,
+      "abstained": 0
+    },
+    {
+      "threshold": 0.9,
+      "coverage": 0.0,
+      "n_kept": 0,
+      "n_total": 50,
+      "abstained": 50
+    }
+  ]
+}

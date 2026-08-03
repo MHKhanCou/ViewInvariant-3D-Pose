@@ -159,7 +159,7 @@ Opens browser at `http://127.0.0.1:7860`. Upload an image or video and click **R
 
 **Features:**
 - Image and video upload
-- Visualization mode selector (world / root-relative)
+- Three explicitly separate visualization layers
 - Real-time inference time display
 - Downloadable output
 
@@ -199,7 +199,7 @@ python train.py --eval-only \
 | 2D Detection | YOLOv8-pose (Ultralytics) | COCO-17 keypoints |
 | Format Conversion | `h36m_coco_format()` | H36M-17 keypoints |
 | 3D Lifting | MotionAGFormer-XS (27 frames) | 3D joint coordinates |
-| Visualization | OpenCV + Matplotlib | 2D overlay + 3D render |
+| Visualization | OpenCV + Matplotlib | Separate default, research, and presentation renders |
 
 ### Model Architecture
 
@@ -212,10 +212,11 @@ MotionAGFormer-XS:
 
 ### Visualization Modes
 
-| Mode | Description |
-|------|-------------|
-| **world** | Zeros only the root joint. Non-root joints retain absolute positions and drift through space. Matches the official MotionAGFormer demo. |
-| **root** | Subtracts root position from ALL joints. Skeleton is centered and stationary. Benchmark-style root-relative visualization. |
+| Mode | Purpose | Technical interpretation |
+|------|---------|--------------------------|
+| **MotionAGFormer View (default)** | Normal qualitative use | Matches the official `demo/vis.py` display style: fixed `camera_to_world()` rotation, root-zeroing, normalization, camera angle, bounds, and bone colours. It is not world-space trajectory recovery. |
+| **Canonical Body-Frame Pose (Research View)** | Thesis contribution | A deterministic body-frame coordinate representation for viewpoint-normalized qualitative comparison. It is separate from the default display and does not claim recovered world motion. |
+| **Blender/Avatar View (image-only)** | Supervisor-facing presentation | A lightweight stylized renderer driven by the predicted joints from the default display path. It is not Blender, SMPL fitting, a learned MoViD component, or a quantitative improvement. |
 
 ### Key Fixes Applied
 
@@ -223,6 +224,7 @@ MotionAGFormer-XS:
 2. **No-person confidence check:** Frames with no detection show blank 3D panel instead of collapsed skeleton
 3. **Pre-detection downscaling:** Video frames downscaled to 640px width before YOLO inference for speed
 4. **3D visualization style:** Matches official demo (figure size, transparent panes, hidden ticks)
+5. **Mode separation:** Default MotionAGFormer display, canonical research view, and avatar presentation view never change or replace one another
 
 ---
 
@@ -233,6 +235,7 @@ MotionAGFormer-XS:
 - **Domain shift:** YOLOv8-pose on in-the-wild images differs from Human3.6M lab detections
 - **Limited temporal context:** XS model uses 27 frames vs. Base model's 243 frames
 - **No world-space trajectory:** Model trained with `root_rel=True` produces root-relative output
+- **Avatar layer is qualitative:** The stylized image renderer changes only presentation, never the prediction or benchmark result
 
 The demo is a **qualitative in-the-wild visualization**, not benchmark evidence. The reported MPJPE numbers come exclusively from `train.py --eval-only` on Human3.6M using ground-truth 2D detections.
 

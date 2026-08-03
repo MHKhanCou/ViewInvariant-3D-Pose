@@ -99,33 +99,46 @@ def estimate_poses(image_rgb: np.ndarray):
         return flipped
 
     norm = normalize_screen_coordinates(h36m, w=W, h=H)
-    inp = torch.from_numpy(norm.astype("float32"))[None]
+    flipped_norm = _flip_data(norm)
+
+    # Get the device from the model (not from params which may be on different device)
     with torch.no_grad():
+        device = next(model.parameters()).device
+        inp = torch.from_numpy(norm.astype(np.float32))[None].to(device)
+        flipped_inp = torch.from_numpy(flipped_norm.astype(np.float32))[None].to(device)
+
         out_nonflip = model(inp).cpu().numpy()
-        out_flip = _flip_data(out_nonflip)
-        pred = (out_nonflip + out_flip) / 2.0
+        out_flip = model(flipped_inp).cpu().numpy()
+        out_flip_unflipped = _flip_data(out_flip)
+        pred = (out_nonflip + out_flip_unflipped) / 2.0
 
     raw_pose = pred[0, 13].copy()  # Center frame, (17, 3)
 
-    # --- Camera-coordinate pose: official demo convention ---
-    # Matches lift_sequence(mode="world"): root-zero + camera_to_world + normalize.
-    pose_camera = raw_pose.copy()
-    pose_camera[0] = 0  # Root zero
-    pose_camera = camera_to_world(pose_camera.astype(np.float64), R=VIS_ROT, t=0)
-    pose_camera[:, 2] -= np.min(pose_camera[:, 2])
-    max_val = np.max(pose_camera)
-    if max_val > 0:
-        pose_camera /= max_val
+    # --- Raw root-relative pose (no transforms applied) ---
+    # This is the true model output, suitable for reliability scoring
+    # and quantitative evaluation.
+    pose_root_relative = raw_pose - raw_pose[0:1]
 
-    # --- View-invariant pose: root-center + canonical transform ---
-    pose_root = raw_pose - raw_pose[0:1]
+    # --- Display pose: same pipeline as lift_sequence(mode="world") ---
+    # Root-zero + camera_to_world quaternion + z-shift + global normalize.
+    # This is a DISPLAY convention, not a physical camera-coordinate pose.
+    pose_display = raw_pose.copy()
+    pose_display[0] = 0  # Root zero (matches mode="world")
+    pose_display = camera_to_world(pose_display.astype(np.float64), R=VIS_ROT, t=0)
+    pose_display[:, 2] -= np.min(pose_display[:, 2])
+    max_val = np.max(pose_display)
+    if max_val > 0:
+        pose_display /= max_val
+
+    # --- View-invariant pose: canonical transform on raw root-relative ---
     canonicalizer = Canonicalizer()
-    pose_canonical, _ = canonicalizer(pose_root)
+    pose_canonical, _ = canonicalizer(pose_root_relative)
 
     frame_rgb_out = cv2.cvtColor(frame_small, cv2.COLOR_BGR2RGB)
 
     return {
-        "camera_pose": pose_camera,
+        "raw_root_relative": pose_root_relative,
+        "motionagformer_display_pose": pose_display,
         "view_invariant": pose_canonical,
         "kpts_2d": kpts,
         "scores": scores,
@@ -181,7 +194,8 @@ def predict_image(image_rgb: np.ndarray, mode="motionagformer"):
     # Canonicalization is applied only in the research-view branch below.
     h36m = coco_to_h36m(kpts_seq, scores_seq)
     pose3d = lift_sequence(model, h36m, img_size=(H, W),
-                           mode="root" if mode == "canonical" else "world")[-1]
+                           mode="root" if mode == "canonical" else "world",
+                           apply_display_postprocess=(mode != "canonical"))[-1]
 
     # Draw results (BGR).
     img_2d_bgr = draw_2d(kpts, frame_small, scores=scores)
@@ -249,7 +263,8 @@ def predict_video(video_path: str, mode="motionagformer"):
     # Lift to 3D.
     h36m = coco_to_h36m(keypoints, scores)
     poses3d = lift_sequence(model, h36m, img_size=(proc_H, proc_W),
-                            mode="root" if mode == "canonical" else "world")
+                            mode="root" if mode == "canonical" else "world",
+                            apply_display_postprocess=(mode != "canonical"))
     if len(poses3d) != T:
         poses3d = poses3d[-T:]
 

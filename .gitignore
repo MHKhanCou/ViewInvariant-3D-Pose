@@ -65,3 +65,12 @@ desktop.ini
 *.tmp
 *.bak
 *.orig
+
+# Bulky/diagnostic artifacts (not defense evidence)
+thesis_artifacts/rotation_analysis/
+thesis_artifacts/rotation_test/
+thesis_artifacts/diagnostic/
+thesis_artifacts/diagnostic_v2/
+thesis_artifacts/diagnostic_v3/
+thesis_artifacts/app_log.txt
+thesis_artifacts/benchmark/results/

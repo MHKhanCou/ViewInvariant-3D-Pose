@@ -62,7 +62,7 @@ def on_image_run(image, coord_space, rotation_deg):
             pose = result["view_invariant"]
             space_label = "View-Invariant"
         else:
-            pose = result["camera_pose"]
+            pose = result["motionagformer_display_pose"]
             space_label = "Camera"
 
         # Render interactive 3D viewer.

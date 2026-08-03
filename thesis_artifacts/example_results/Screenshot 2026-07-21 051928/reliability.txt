@@ -1,0 +1,12 @@
+Reliability Score: 0.8479
+Hard Failure: False
+Abstain: False
+Components:
+  axis_conditioning: 1.0000
+  torso_hip_angle: 0.9995
+  bilateral_symmetry: 0.8004
+  abnormal_bone_ratio: 0.8750
+  detector_confidence: 0.5311
+  temporal_stability: 1.0000
+Inference time: 0.59s
+Keypoints: 15/17 (conf=0.767)

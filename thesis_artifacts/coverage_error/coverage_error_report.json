@@ -1,0 +1,73 @@
+{
+  "mpi_cross_view": {
+    "subject": "S1",
+    "sequence": "Seq1",
+    "n_frames": 50,
+    "raw_distance": 0.11716544270515442,
+    "canonical_distance": 0.08391461238265037,
+    "improvement_pct": 28.379383506602206,
+    "bone_length_deviation": 0.034896051697433,
+    "reliability_mean": 0.8677491583622937,
+    "reliability_min": 0.8529485214962119,
+    "hard_failure_rate": 0.0,
+    "coverage_curve": [
+      {
+        "threshold": 0.3,
+        "coverage": 1.0,
+        "n_retained": 50,
+        "n_total": 50,
+        "mean_error": 0.08391461238265037
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 1.0,
+        "n_retained": 50,
+        "n_total": 50,
+        "mean_error": 0.08391461238265037
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 1.0,
+        "n_retained": 50,
+        "n_total": 50,
+        "mean_error": 0.08391461238265037
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 1.0,
+        "n_retained": 50,
+        "n_total": 50,
+        "mean_error": 0.08391461238265037
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 1.0,
+        "n_retained": 50,
+        "n_total": 50,
+        "mean_error": 0.08391461238265037
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 1.0,
+        "n_retained": 50,
+        "n_total": 50,
+        "mean_error": 0.08391461238265037
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.0,
+        "n_retained": 0,
+        "n_total": 50,
+        "mean_error": Infinity
+      }
+    ]
+  },
+  "example_benchmark": {
+    "n_images": 22,
+    "reliability_mean": 0.8981045454545455,
+    "reliability_std": 0.07239981464863722,
+    "reliability_min": 0.7378,
+    "reliability_max": 0.9752,
+    "hard_failure_count": 0
+  }
+}

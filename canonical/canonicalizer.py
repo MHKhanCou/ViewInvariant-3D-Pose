@@ -3,7 +3,7 @@ Stateful canonicalizer with temporal sign consistency across calls.
 """
 
 import numpy as np
-from canonical.body_frame import canonicalize_single, canonicalize_batch
+from .body_frame import canonicalize_single, canonicalize_batch
 
 
 class Canonicalizer:

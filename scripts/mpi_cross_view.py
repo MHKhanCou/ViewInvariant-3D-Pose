@@ -63,7 +63,8 @@ def run_inference_on_frame(detector, model, rgb_frame, device="cpu"):
     from demo_live.lifter import coco_to_h36m, lift_sequence
     h36m = coco_to_h36m(kpts_seq, scores_seq)
     pose3d = lift_sequence(model, h36m, img_size=(H, W), mode="root",
-                          use_flip=False)[-1]
+                          use_flip=True,
+                          apply_display_postprocess=False)[-1]
 
     return pose3d, kpts, scores
 
