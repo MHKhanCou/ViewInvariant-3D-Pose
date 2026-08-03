@@ -37,6 +37,16 @@ arm count would partly measure how many arms survived rather than model disagree
 Chosen because it is the *identical* metric used to compute GT error, making the
 comparison against `reliability` maximally clean.
 
+**Known property, found by unit test before the run and recorded here rather than
+silently fixed:** `disp_procrustes` is invariant to a global rotation/translation of all
+arms but **equivariant to a global scale** — it reports an absolute distance in the poses'
+own units. So does the GT error it is compared against. This means a frame whose predicted
+skeleton is simply *larger* has both a larger dispersion and a larger absolute error, which
+could inflate ρ without any genuine predictive content. The primary predictor is **not**
+changed post-hoc (that would break pre-registration), but `disp_scale` is reported
+alongside it, and if the correlation is driven by scale it will show up as `disp_scale`
+correlating with error at a similar magnitude. Read the two together.
+
 ## Pass criterion — all three required
 
 - **(a) Usefulness floor.** Pooled ρ(disp, GT error) ≥ **+0.30**. Deliberately stricter

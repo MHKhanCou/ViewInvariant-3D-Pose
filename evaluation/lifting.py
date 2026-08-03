@@ -59,7 +59,8 @@ def lift_from_coco(model, kpts, scores, width, height, device="cpu"):
     return lift_from_coco_window(model, kpts_seq, scores_seq, width, height, device)
 
 
-def lift_from_coco_window(model, kpts_seq, scores_seq, width, height, device="cpu"):
+def lift_from_coco_window(model, kpts_seq, scores_seq, width, height, device="cpu",
+                          return_arms=False):
     """
     Lift a TRUE 27-frame window of COCO-17 keypoints to a raw root-relative
     3D pose for the window's centre frame.
@@ -74,9 +75,15 @@ def lift_from_coco_window(model, kpts_seq, scores_seq, width, height, device="cp
         scores_seq: (27, 17) COCO-17 confidences
         width, height: source frame dimensions, for screen normalization
         device: torch device
+        return_arms: if True, also return the two flip-augmentation branches
+            that are otherwise averaged away. Both are computed either way,
+            so their disagreement is free — it is simply discarded by default.
 
     Returns:
-        (17, 3) float64 raw root-relative pose (centre frame of the window)
+        (17, 3) float64 raw root-relative pose (centre frame of the window),
+        or (pose, {"nonflip": (17,3), "flip": (17,3)}) when return_arms=True.
+        Each arm is root-centred identically to the returned mean; the flip
+        arm is already un-mirrored, so both live in the same camera frame.
     """
     kpts_seq = np.asarray(kpts_seq, dtype=np.float32)
     scores_seq = np.asarray(scores_seq, dtype=np.float32)
@@ -91,7 +98,18 @@ def lift_from_coco_window(model, kpts_seq, scores_seq, width, height, device="cp
     with torch.no_grad():
         out_nonflip = model(inp).cpu().numpy()
         out_flip = model(inp_aug).cpu().numpy()
-        pred = (out_nonflip + flip_data(out_flip)) / 2.0
+        out_flip_unmirrored = flip_data(out_flip)
+        pred = (out_nonflip + out_flip_unmirrored) / 2.0
 
-    raw_pose = pred[0, N_FRAMES // 2].copy()  # centre frame of the window
-    return raw_pose - raw_pose[0:1]           # root-centre
+    c = N_FRAMES // 2
+    raw_pose = pred[0, c].copy()              # centre frame of the window
+    mean_pose = raw_pose - raw_pose[0:1]      # root-centre
+
+    if not return_arms:
+        return mean_pose
+
+    arms = {}
+    for name, out in (("nonflip", out_nonflip), ("flip", out_flip_unmirrored)):
+        arm = out[0, c].copy()
+        arms[name] = arm - arm[0:1]           # root-centre, same as the mean
+    return mean_pose, arms

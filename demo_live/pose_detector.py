@@ -26,6 +26,40 @@ COCO_KEYPOINTS = [
 NUM_KEYPOINTS = 17
 
 
+def _unrotate_kpts(kpts, angle, orig_W, orig_H):
+    """
+    Map keypoints detected on a cv2-rotated frame back to original-frame
+    coordinates. Arithmetic extracted verbatim from detect_with_rotation so
+    the default path is unchanged.
+
+    Args:
+        kpts: (17, 2) keypoints in the rotated frame.
+        angle: one of 0, 90, 180, 270 (as applied by detect_with_rotation).
+        orig_W, orig_H: dimensions of the ORIGINAL (unrotated) frame.
+
+    Returns:
+        (17, 2) keypoints in original-frame coordinates (a copy).
+    """
+    out = kpts.copy()
+    if angle == 0:
+        return out
+    rx = out[:, 0].copy()
+    ry = out[:, 1].copy()
+    if angle == 90:
+        # 90° CCW: rotated (rx, ry) -> original (W-1-ry, rx)
+        out[:, 0] = orig_W - 1 - ry
+        out[:, 1] = rx
+    elif angle == 180:
+        # 180°: rotated (rx, ry) -> original (W-1-rx, H-1-ry)
+        out[:, 0] = orig_W - 1 - rx
+        out[:, 1] = orig_H - 1 - ry
+    elif angle == 270:
+        # 270° CW: rotated (rx, ry) -> original (ry, H-1-rx)
+        out[:, 0] = ry
+        out[:, 1] = orig_H - 1 - rx
+    return out
+
+
 class PoseDetector:
     """
     Wrap a Ultralytics pose model.
@@ -82,18 +116,32 @@ class PoseDetector:
 
         return keypoints, scores
 
-    def detect_with_rotation(self, frame):
+    def detect_with_rotation(self, frame, return_all=False):
         """
         Detect a person trying 0°, 90°, 180°, 270° rotations.
         Returns the detection with the highest mean keypoint confidence,
         remapped back to the original frame coordinates.
 
         This handles cases where YOLO fails on rotated images.
+
+        Args:
+            frame: (H, W, 3) RGB image.
+            return_all: if True, additionally return every angle's detection,
+                each already remapped to original-frame coordinates. All four
+                detections are computed either way, so this costs nothing —
+                by default three of them are discarded.
+
+        Returns:
+            (best_kpts, best_scores)                     when return_all=False
+            (best_kpts, best_scores, per_angle)          when return_all=True,
+            where per_angle maps each of 0/90/180/270 to (kpts, scores), or
+            (None, None) if the detector failed at that angle.
         """
         best_kpts = None
         best_scores = None
         best_mean_conf = -1
         best_angle = 0
+        per_angle = {}
 
         orig_H, orig_W = frame.shape[:2]
 
@@ -109,6 +157,11 @@ class PoseDetector:
                 rotated = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
 
             kpts, scores = self.detect(rotated)
+            if return_all:
+                per_angle[angle] = (
+                    (_unrotate_kpts(kpts, angle, orig_W, orig_H), scores.copy())
+                    if kpts is not None else (None, None)
+                )
             if kpts is not None:
                 mean_conf = float(scores.mean())
                 if mean_conf > best_mean_conf:
@@ -119,21 +172,10 @@ class PoseDetector:
 
         # Remap keypoints back to original frame coordinates.
         if best_kpts is not None and best_angle != 0:
-            rx = best_kpts[:, 0].copy()
-            ry = best_kpts[:, 1].copy()
-            if best_angle == 90:
-                # 90° CCW: rotated (rx, ry) -> original (W-1-ry, rx)
-                best_kpts[:, 0] = orig_W - 1 - ry
-                best_kpts[:, 1] = rx
-            elif best_angle == 180:
-                # 180°: rotated (rx, ry) -> original (W-1-rx, H-1-ry)
-                best_kpts[:, 0] = orig_W - 1 - rx
-                best_kpts[:, 1] = orig_H - 1 - ry
-            elif best_angle == 270:
-                # 270° CW: rotated (rx, ry) -> original (ry, H-1-rx)
-                best_kpts[:, 0] = ry
-                best_kpts[:, 1] = orig_H - 1 - rx
+            best_kpts = _unrotate_kpts(best_kpts, best_angle, orig_W, orig_H)
 
+        if return_all:
+            return best_kpts, best_scores, per_angle
         return best_kpts, best_scores
 
 
