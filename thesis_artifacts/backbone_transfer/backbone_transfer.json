@@ -1,0 +1,52 @@
+{
+  "abstention_threshold": 0.5,
+  "module_params_added": 0,
+  "backbones": [
+    {
+      "backbone": "MotionBERT (DSTformer)",
+      "backbone_params_M": 42.3,
+      "module_params_added": 0,
+      "n_frames": 243,
+      "canonicalization_valid_pct": 100.0,
+      "reliability_mean": 0.670729750038312,
+      "reliability_std": 0.026385744889213143,
+      "gt_error_mean_mm": 125.78117016057672,
+      "spearman_reliability_vs_error": -0.7073793072302759,
+      "p_value": 3.504170823007646e-38,
+      "hard_gate_rate_pct": 0.0,
+      "abstention_rate_pct": 0.0,
+      "error_on_kept_mm": 125.78117016057672
+    },
+    {
+      "backbone": "PoseMLP17 (plain MLP)",
+      "backbone_params_M": 1.0,
+      "module_params_added": 0,
+      "n_frames": 243,
+      "canonicalization_valid_pct": 100.0,
+      "reliability_mean": 0.536289117723879,
+      "reliability_std": 0.0004953801796749501,
+      "gt_error_mean_mm": 56.55206761279257,
+      "spearman_reliability_vs_error": 0.37504369744806904,
+      "p_value": 1.55994849353766e-09,
+      "hard_gate_rate_pct": 0.0,
+      "abstention_rate_pct": 0.0,
+      "error_on_kept_mm": 56.55206761279257
+    },
+    {
+      "backbone": "MotionAGFormer-XS",
+      "backbone_params_M": 2.2,
+      "module_params_added": 0,
+      "n_frames": 54,
+      "canonicalization_valid_pct": 100.0,
+      "reliability_mean": 0.8642598265637149,
+      "reliability_std": 0.005555420270462963,
+      "gt_error_mean_mm": null,
+      "spearman_reliability_vs_error": null,
+      "p_value": null,
+      "hard_gate_rate_pct": 0.0,
+      "abstention_rate_pct": 0.0,
+      "error_on_kept_mm": null,
+      "note": "cached cross-view window; magnitudes not comparable"
+    }
+  ]
+}
