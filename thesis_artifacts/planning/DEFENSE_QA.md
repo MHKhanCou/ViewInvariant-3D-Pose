@@ -66,6 +66,36 @@ no training distribution to leave. That is the thesis position: reliability
 signals derived from geometry (axis conditioning, symmetry, bone ratios)
 transfer because they are properties of the skeleton, not of a dataset.
 
+## "Training-free" — the terminology question
+
+**Q: You call this training-free, but you use MotionAGFormer, which was trained
+on Human3.6M. Isn't that a contradiction?**
+A: Yes, if "training-free" is read as "no training anywhere" — and we no longer
+use it that way. The pipeline is not training-free: the backbone and the 2D
+detector are both trained, by their authors, and we freeze them. What is
+training-free is everything we ADD: our modules contribute **zero learned
+parameters**, which is checkable by reading the code. That is the precise line
+against 3DPCNet, which is also estimator-agnostic but trains a canonicalization
+network of its own. See the accounting table in FINAL_REPORT.md.
+
+**Q: Then what exactly is your contribution free of?**
+A: Three things, stated separately because they are different claims.
+(1) Zero added trained parameters. (2) The bone-length signal is additionally
+label-free — the subject's skeleton is the median of the model's own unlabeled
+predictions, computed at test time. (3) No camera calibration anywhere. What we
+are NOT free of: hand-set constants (the abstention threshold and the bone
+ratio bounds were chosen by a human, not learned), and the pruned composite in
+§8b, which used ground-truth error on S1 to select components and is therefore
+NOT label-free — we report it as analysis, not as a deployable method.
+
+**Q: Isn't the per-subject median just fitting to the test data?**
+A: It is adaptive, and we say so. It is estimated per subject at test time from
+unlabeled predictions, with no parameters shared across subjects, so it is
+unsupervised test-time adaptation rather than training. We also verified it is
+not transductive leakage: a CAUSAL reference window disjoint from the scored
+frames gives ρ = +0.473 versus +0.492, and a skeleton estimated from a different
+camera still gives +0.440.
+
 ## Method scope
 
 **Q: 3DPCNet (2025) already does post-hoc canonicalization of frozen

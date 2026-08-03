@@ -280,6 +280,40 @@ representation.
 MPJPE 45.149 mm (official 45.1), P-MPJPE 36.892 mm (official 36.9).
 (MPJPE terminology is correct here: this is the official GT benchmark.)
 
+## What "training-free" does and does not mean here
+
+The phrase is attackable and must be used precisely. **The pipeline is not
+training-free — the backbone and detector are both trained.** What is
+training-free is everything this work adds on top of them.
+
+| Element | Trained parameters | Labels used | Status |
+|---|---|---|---|
+| MotionAGFormer-XS backbone | **yes** (H36M, by its authors) | yes | frozen, not ours |
+| YOLOv8-pose detector | **yes** (by its authors) | yes | frozen, not ours |
+| Gram-Schmidt canonicalization | **0** — closed form | none | training-free |
+| Multi-scale per-limb frames | **0** — closed form | none | training-free |
+| Multi-view fusion | **0** — weighted average | none | training-free |
+| Reliability score | **0 learned** — but ~6 hand-set constants (0.1×, 3×, 0.3, 2.5 bone thresholds; 0.5 abstention) | none | training-free, **not tuning-free** |
+| Bone-length inconsistency (§8) | **0**; per-subject median estimated at test time from unlabeled predictions | **none** | training-free and label-free |
+| **Pruned composite (§8b)** | **0** | **YES — ground-truth error on S1 selects 4 of 6 components** | **NOT label-free** |
+
+Precise claims, then:
+
+- The framework **adds zero learned parameters** to a frozen pipeline. That is
+  checkable by reading the code and is what distinguishes it from 3DPCNet, which
+  is also estimator-agnostic but *trains* a canonicalization network.
+- The bone-length signal is additionally **label-free**: the subject's skeleton
+  is the median of the model's own unlabeled predictions, computed at test time.
+  It is adaptive (per-subject) but not learned — no parameters cross subjects.
+- The **pruned composite is not label-free** and must not be presented as such.
+  Selecting 4 of 6 components consumed ground-truth error on S1. It is reported
+  as an *analysis of why the incumbent underperforms*, not as a deployable
+  training-free method. A label-free selection rule (e.g. dropping components
+  whose sign is unstable across cameras, which would also have dropped
+  `axis_conditioning`) is future work and was not tested here.
+- Hand-set constants are not learned but they were chosen by a human, so
+  "training-free" never implies "no free parameters".
+
 ## Positioning against prior work
 
 A literature sweep (2026-08-04) requires two claims to be withdrawn:

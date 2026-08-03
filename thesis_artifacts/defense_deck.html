@@ -64,7 +64,7 @@
     <div class="col">
       <ul>
         <li><b>Gram-Schmidt body frame:</b> y = torso vertical, x = hip line, z = x×y. Re-express joints in this frame. O(17) per frame, zero parameters.</li>
-        <li><b>Reliability score:</b> geometric mean of 6 training-free components (axis conditioning, torso-hip angle, bilateral symmetry, bone ratios, detector confidence, temporal stability).</li>
+        <li><b>Reliability score:</b> geometric mean of 6 analytic components (axis conditioning, torso-hip angle, bilateral symmetry, bone ratios, detector confidence, temporal stability) — zero learned parameters, though the thresholds are hand-set.</li>
         <li><b>Hard gates:</b> degenerate geometry → abstain loudly, never silently.</li>
         <li><b>Multi-scale extension:</b> per-limb frames (torso, 2 arms, 2 legs) built by the same construction.</li>
       </ul>
@@ -82,6 +82,22 @@
       <p class="note"><b>Said plainly:</b> 3DPCNet already does post-hoc canonicalization of frozen estimators, and reports a hand-built anatomical baseline of our family losing to it (62.9–64.6 mm vs 47.6 mm). <b>We do not claim canonicalization as novel or more accurate.</b> It is the substrate. The claim is the requirement profile — and what it buys: label-free abstention and calibration-free fusion.</p>
     </div>
   </div>
+</section>
+
+<!-- 3b · What training-free means -->
+<section class="slide">
+  <h2>"Training-free" — said precisely</h2>
+  <p><b>The pipeline is NOT training-free.</b> The backbone and detector are both trained, by their authors. We freeze them. What is training-free is everything we add.</p>
+  <table>
+    <tr><th>Element</th><th>Learned params</th><th>Labels</th></tr>
+    <tr><td>MotionAGFormer-XS backbone</td><td>trained (H36M)</td><td>yes — not ours</td></tr>
+    <tr><td>YOLOv8-pose detector</td><td>trained</td><td>yes — not ours</td></tr>
+    <tr><td>Canonicalization · multi-scale · fusion</td><td><b>0</b></td><td>none</td></tr>
+    <tr><td>Reliability score</td><td><b>0</b> learned, ~6 hand-set constants</td><td>none</td></tr>
+    <tr class="dev"><td><b>Bone-length inconsistency</b></td><td><b>0</b></td><td><b>none</b></td></tr>
+    <tr><td>Pruned composite (analysis only)</td><td>0</td><td class="bad"><b>uses GT on S1</b></td></tr>
+  </table>
+  <p class="note">Three separate claims, not one: (1) <b>zero added trained parameters</b> — checkable in the code, and the line against 3DPCNet, which trains its canonicalizer; (2) the bone signal is additionally <b>label-free</b> (subject skeleton = median of the model's own unlabeled predictions at test time); (3) <b>no camera calibration</b> anywhere. We are <i>not</i> free of hand-set constants, and the pruned composite is <i>not</i> label-free — reported as analysis, never as a deployable method.</p>
 </section>
 
 <!-- 4 · Protocol -->
