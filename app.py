@@ -59,7 +59,13 @@ def on_image_run(image, coord_space, rotation_deg, show_avatar=False):
 
         # Select pose based on coordinate space.
         if coord_space == "View-Invariant Coordinate System":
-            pose = result["view_invariant"]
+            pose = np.asarray(result["view_invariant"], dtype=np.float64)
+            # Display-only axis remap: the canonical body frame carries the
+            # body vertical on +y, but the viewer draws +z as up, which made
+            # the skeleton appear to lie on its side. Rotate +90° about x —
+            # (x, y, z) -> (x, -z, y) — a proper rotation (no mirroring), so
+            # the body stands upright. Evaluated coordinates are untouched.
+            pose = np.column_stack([pose[:, 0], -pose[:, 2], pose[:, 1]])
             space_label = "View-Invariant"
         else:
             pose = result["motionagformer_display_pose"]
