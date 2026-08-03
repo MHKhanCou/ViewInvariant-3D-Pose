@@ -204,6 +204,38 @@ def fig_multiscale():
     _save(fig, "fig_multiscale.png", "cross_view_eval/multiscale_results.json")
 
 
+def fig_fusion():
+    """Error vs number of available cameras, per training-free strategy."""
+    d = _load("fusion/fusion_results.json")["S1"]
+    curve = d["view_count_curve"]
+    ks = sorted(curve, key=int)
+    x = [int(k) for k in ks]
+
+    series = [
+        ("mean_single", "arbitrary single view (deployment baseline)", ORANGE, "-"),
+        ("weighted_mean", "reliability-weighted fusion", AQUA, "-"),
+        ("median", "median fusion", YELLOW, "-"),
+        ("reliability_pick", "reliability-selected view", BLUE, "-"),
+        ("oracle_best", "best view (oracle — needs ground truth)", INK2, "--"),
+    ]
+
+    fig, ax = plt.subplots(figsize=(7.4, 5))
+    for key, label, color, ls in series:
+        y = [curve[k][key] for k in ks]
+        ax.plot(x, y, color=color, linewidth=2.2, linestyle=ls,
+                marker="o", markersize=6)
+        ax.annotate(label, (x[-1], y[-1]), textcoords="offset points",
+                    xytext=(8, 0), fontsize=8.5, color=color, va="center")
+
+    ax.set_xlabel("Number of available cameras")
+    ax.set_ylabel("Error vs ground truth (mm, similarity-aligned)")
+    ax.set_title("Training-free view selection and fusion\n"
+                 "(no calibration, no correspondence, no training)", fontsize=11)
+    ax.set_xlim(1.8, 11.6)
+    ax.set_xticks(x)
+    _save(fig, "fig_fusion.png", "fusion/fusion_results.json")
+
+
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
     fig_pairs()
@@ -211,3 +243,4 @@ if __name__ == "__main__":
     fig_degradation()
     fig_coverage()
     fig_multiscale()
+    fig_fusion()

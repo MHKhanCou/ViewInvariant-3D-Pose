@@ -1,0 +1,222 @@
+{
+  "seed": 12345,
+  "n_subsets_per_frame": 20,
+  "reference_validity_mm": 0.0039057314457970863,
+  "S1": {
+    "n_frames": 54,
+    "n_cameras": 8,
+    "strategies": {
+      "reliability_pick": {
+        "mean_mm": 98.34487946998199,
+        "median_mm": 99.49377402033585,
+        "std_mm": 6.080559739704628,
+        "improvement_vs_mean_single_pct": 33.84518269611356,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      },
+      "median": {
+        "mean_mm": 100.95437056912003,
+        "median_mm": 100.53771878931056,
+        "std_mm": 3.4279142904482027,
+        "improvement_vs_mean_single_pct": 32.08982534705822,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      },
+      "weighted_mean": {
+        "mean_mm": 113.45004269455642,
+        "median_mm": 111.65789671629963,
+        "std_mm": 5.935157528792286,
+        "improvement_vs_mean_single_pct": 23.684213270429154,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      },
+      "top3_weighted": {
+        "mean_mm": 110.07092428555518,
+        "median_mm": 102.35680251528285,
+        "std_mm": 10.755372624830976,
+        "improvement_vs_mean_single_pct": 25.957284956524507,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      },
+      "top5_weighted": {
+        "mean_mm": 119.5703872169295,
+        "median_mm": 119.2405761603107,
+        "std_mm": 3.2339136053159057,
+        "improvement_vs_mean_single_pct": 19.567168479723808,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      },
+      "mean_single": {
+        "mean_mm": 148.65868197961822,
+        "median_mm": 139.06558813321732,
+        "std_mm": 16.02175975908211,
+        "improvement_vs_mean_single_pct": 0.0
+      },
+      "oracle_best": {
+        "mean_mm": 87.90843305572433,
+        "median_mm": 90.3255530516198,
+        "std_mm": 6.577557632245376,
+        "improvement_vs_mean_single_pct": 40.865590973168345,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      },
+      "worst_single": {
+        "mean_mm": 276.32745947525603,
+        "median_mm": 236.6426722756139,
+        "std_mm": 80.77820392926098,
+        "improvement_vs_mean_single_pct": -85.88047182682664,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      }
+    },
+    "selection": {
+      "mean_true_error_rank_of_picked_view": 1.6296296296296295,
+      "random_expectation": 4.5,
+      "picked_best_view_pct": 37.03703703703704,
+      "picked_top2_pct": 100.0,
+      "distinct_cameras_picked": 1,
+      "picked_cameras": [
+        8
+      ]
+    },
+    "fixed_camera_baseline": {
+      "best_fixed_camera": 2,
+      "best_fixed_camera_mm": 90.21723476081307,
+      "per_camera_mm": {
+        "0": 213.09430842211617,
+        "1": 181.51950797878686,
+        "2": 90.21723476081307,
+        "4": 127.91255625823482,
+        "5": 110.77355942051116,
+        "6": 231.226692667839,
+        "7": 136.18071685866275,
+        "8": 98.34487946998199
+      }
+    },
+    "selection_adaptivity_under_degradation": {
+      "n_frames": 54,
+      "switched_away_from_degraded_view_pct": 100.0,
+      "switch_reduced_error_pct": 100.0,
+      "mean_error_avoided_mm": 172.1068630229974
+    },
+    "view_count_curve": {
+      "2": {
+        "reliability_pick": 140.17877216442383,
+        "median": 133.93723429273518,
+        "weighted_mean": 129.94840722382196,
+        "top3_weighted": 129.94840722382196,
+        "top5_weighted": 129.94840722382196,
+        "mean_single": 147.5749100732155,
+        "oracle_best": 112.70319449274804
+      },
+      "3": {
+        "reliability_pick": 128.5572422375993,
+        "median": 120.31003650693646,
+        "weighted_mean": 122.80938180674964,
+        "top3_weighted": 122.80938180674964,
+        "top5_weighted": 122.80938180674964,
+        "mean_single": 147.62110479987226,
+        "oracle_best": 102.47594766101119
+      },
+      "4": {
+        "reliability_pick": 120.23801723509642,
+        "median": 113.29604579200006,
+        "weighted_mean": 120.35396544743962,
+        "top3_weighted": 125.84511471725429,
+        "top5_weighted": 120.35396544743962,
+        "mean_single": 149.06657587641524,
+        "oracle_best": 98.0476082703072
+      },
+      "5": {
+        "reliability_pick": 110.76815936560152,
+        "median": 109.02892347246299,
+        "weighted_mean": 117.76640079777947,
+        "top3_weighted": 122.7928612228221,
+        "top5_weighted": 117.76640079777948,
+        "mean_single": 149.05005082328807,
+        "oracle_best": 94.06459832160921
+      },
+      "6": {
+        "reliability_pick": 104.59957681394275,
+        "median": 104.67567139493153,
+        "weighted_mean": 115.53984494808073,
+        "top3_weighted": 119.53153438220127,
+        "top5_weighted": 119.05811127553916,
+        "mean_single": 148.86621784822594,
+        "oracle_best": 91.74495739770595
+      },
+      "7": {
+        "reliability_pick": 99.85497699578788,
+        "median": 103.14866403240767,
+        "weighted_mean": 114.28565189939047,
+        "top3_weighted": 114.84477002268036,
+        "top5_weighted": 118.46518720522799,
+        "mean_single": 148.78483352521815,
+        "oracle_best": 89.62112135471938
+      },
+      "8": {
+        "reliability_pick": 98.34487946998199,
+        "median": 100.95437056912003,
+        "weighted_mean": 113.45004269455642,
+        "top3_weighted": 110.0709242855552,
+        "top5_weighted": 119.57038721692952,
+        "mean_single": 148.65868197961822,
+        "oracle_best": 87.90843305572434
+      }
+    }
+  },
+  "S2_heldout": {
+    "n_frames": 54,
+    "n_cameras": 2,
+    "strategies": {
+      "reliability_pick": {
+        "mean_mm": 115.10964640480213,
+        "median_mm": 109.55985022583229,
+        "std_mm": 27.1151203662149,
+        "improvement_vs_mean_single_pct": 1.4009916818023105,
+        "wilcoxon_p_vs_mean_single": 0.27606897183100276
+      },
+      "median": {
+        "mean_mm": 107.6914221948925,
+        "median_mm": 100.34051754052841,
+        "std_mm": 20.752162824704893,
+        "improvement_vs_mean_single_pct": 7.755190251806965,
+        "wilcoxon_p_vs_mean_single": 4.191798386692771e-10
+      },
+      "weighted_mean": {
+        "mean_mm": 107.13513276164392,
+        "median_mm": 99.80683513369709,
+        "std_mm": 20.02258356529514,
+        "improvement_vs_mean_single_pct": 8.231688861344132,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      },
+      "top3_weighted": {
+        "mean_mm": 107.13513276164392,
+        "median_mm": 99.80683513369709,
+        "std_mm": 20.02258356529514,
+        "improvement_vs_mean_single_pct": 8.231688861344132,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      },
+      "top5_weighted": {
+        "mean_mm": 107.13513276164392,
+        "median_mm": 99.80683513369709,
+        "std_mm": 20.02258356529514,
+        "improvement_vs_mean_single_pct": 8.231688861344132,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      },
+      "mean_single": {
+        "mean_mm": 116.74523747066652,
+        "median_mm": 110.80619829818785,
+        "std_mm": 21.25392768630056,
+        "improvement_vs_mean_single_pct": 0.0
+      },
+      "oracle_best": {
+        "mean_mm": 104.19498343633212,
+        "median_mm": 99.67121882314467,
+        "std_mm": 15.32866858323,
+        "improvement_vs_mean_single_pct": 10.750120781147743,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      },
+      "worst_single": {
+        "mean_mm": 129.29549150500094,
+        "median_mm": 120.25766504567488,
+        "std_mm": 29.206370191456504,
+        "improvement_vs_mean_single_pct": -10.750120781147743,
+        "wilcoxon_p_vs_mean_single": 1.6256984569330967e-10
+      }
+    }
+  }
+}

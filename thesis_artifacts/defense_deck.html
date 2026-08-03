@@ -192,6 +192,26 @@
   <div class="src">cross_view_eval/multiscale_results.json</div>
 </section>
 
+<!-- 10b · Fusion -->
+<section class="slide">
+  <h2>Result 7 — training-free multi-view selection &amp; fusion</h2>
+  <div class="cols">
+    <div class="col" style="flex: 1.4;"><img class="fig" src="figures/fig_fusion.png" alt="fusion curves"></div>
+    <div class="col">
+      <p>A shared body frame makes N uncalibrated views directly comparable — so they can be <b>selected</b> and <b>fused</b>. No extrinsics, no correspondence, no training.</p>
+      <table>
+        <tr><th>Strategy</th><th>Error</th></tr>
+        <tr><td>Arbitrary single view</td><td>148.7 mm</td></tr>
+        <tr><td>Weighted fusion</td><td>113.5 mm</td></tr>
+        <tr><td><b>Reliability-selected</b></td><td><b>98.3 mm (+33.8%)</b></td></tr>
+        <tr><td>Oracle best view (needs GT)</td><td>87.9 mm</td></tr>
+      </table>
+      <p class="note"><b>Honest caveat:</b> on clean footage the score picks one consistently good camera, not a per-frame choice — and a GT-chosen fixed camera would score 90.2 mm. Adaptivity shows where it matters: corrupt the selected view and selection switches away in <b>100%</b> of frames, avoiding <b>172 mm</b>.</p>
+    </div>
+  </div>
+  <div class="src">fusion/fusion_results.json</div>
+</section>
+
 <!-- 11 · Negative result -->
 <section class="slide">
   <h2>Negative result — retrieval</h2>
@@ -234,6 +254,7 @@
     <li><b>2 · Training-free reliability estimation</b> — tracks induced error at ρ −0.813; 100% abstention on joint dropout; 0% false abstention on clean data.</li>
     <li><b>3 · Analytical consistency metrics</b> — canonical cross-view distance is a 3× stronger GT-error proxy than raw (ρ +0.601 vs +0.188).</li>
     <li><b>4 · Integrated framework</b> — plus a multi-scale extension improving every pair while preserving error information.</li>
+    <li><b>5 · Training-free multi-view selection &amp; fusion</b> — a shared body frame turns N uncalibrated views into a selectable, fusable set: +33.8% over an arbitrary view, within 12% of a GT-requiring oracle.</li>
   </ul>
   <p class="sub" style="margin-top:1em;">Every number traceable to a JSON artifact; evaluation regenerable from a cached prediction store with one command.</p>
 </section>

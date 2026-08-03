@@ -102,7 +102,47 @@ retains error information — ρ(multi-scale distance, GT error) = +0.610,
 matching global canonical (+0.601) — so the reduction is removed
 orientation variance, not metric shrinkage.
 
-### 7. Negative result: retrieval
+### 7. Training-free multi-view selection and fusion
+
+`fusion/fusion_results.json`
+
+Because canonicalization expresses every camera in the same body frame,
+predictions from N uncalibrated cameras become directly comparable — and
+therefore selectable and fusable — with no extrinsics, no correspondence
+search, and no training. Reference validity checked first: GT canonicalized
+from different cameras agrees to **0.00 mm**, so the reference frame is
+genuinely view-independent.
+
+Error vs GT (similarity-aligned, 8 cameras, 54 frames; Wilcoxon p = 1.6e-10
+for every strategy against the baseline):
+
+| Strategy | Error | vs arbitrary single view |
+|---|---|---|
+| Worst single view | 276.3 mm | −85.9% |
+| **Arbitrary single view** (deployment baseline) | **148.7 mm** | — |
+| Reliability-weighted fusion | 113.5 mm | +23.7% |
+| Median fusion | 101.0 mm | +32.1% |
+| **Reliability-selected view** | **98.3 mm** | **+33.8%** |
+| Best view (oracle — requires GT) | 87.9 mm | +40.9% |
+
+The gain grows with camera count (2 views: 140 mm → 8 views: 98 mm) while
+the arbitrary-view baseline stays flat, and tracks the oracle at a roughly
+constant offset. On the held-out subject (2 cameras only) weighted fusion
+gives +8.2% against a +10.8% oracle ceiling.
+
+**Honest qualification — selection is not per-frame adaptive on clean data.**
+The score picks the same camera in all 54 frames, and a best-fixed-camera
+policy (which needs GT to choose that camera) would score 90.2 mm, better
+than the adaptive 98.3 mm. On clean synchronized studio footage there is
+little per-frame variation to exploit; the score identifies a consistently
+good viewpoint rather than switching between them.
+
+Where adaptivity does matter — a degraded view — it behaves correctly: when
+the currently-selected view is corrupted (torso-axis collapse), selection
+switches away from it in **100% of frames**, and the switch reduces error in
+**100% of switches**, avoiding **172.1 mm** on average.
+
+### 8. Negative result: retrieval
 
 `retrieval/retrieval_results.json`
 
@@ -128,6 +168,9 @@ MPJPE 45.149 mm (official 45.1), P-MPJPE 36.892 mm (official 36.9).
 - Near-aligned camera pairs gain little and can regress slightly.
 - Abstention threshold (0.5) was frozen at implementation time, not
   calibrated on the reporting pairs.
+- Multi-view selection is not per-frame adaptive on clean footage (see §7);
+  adaptivity is demonstrated only under induced degradation. Fusion results
+  come from one sequence of 54 synchronized frames.
 
 ## Invalidated figures (do not cite)
 

@@ -96,6 +96,39 @@ distance retains full error information — rho(multi-scale dist, GT error)
 = +0.610, matching global canonical's +0.601 — so the reduction is removed
 limb-orientation variance, not metric deflation.
 
+## Multi-view selection & fusion
+
+**Q: Is the view selection actually adaptive, or does it just always pick the
+same camera?**
+A: On clean footage it picks the same camera in all 54 frames — we checked
+and we report it. Studio footage has little per-frame variation to exploit.
+The claim we make is therefore not "per-frame adaptation" but "training-free
+identification of a good viewpoint", worth +33.8% over an arbitrary view.
+Adaptivity is demonstrated where it matters: corrupt the selected view and
+selection switches away in 100% of frames, avoiding 172 mm mean error.
+
+**Q: A fixed best camera beats your adaptive selection (90.2 vs 98.3 mm).
+Doesn't that defeat the method?**
+A: Choosing that fixed camera requires ground truth — it is an oracle, in the
+same class as the 87.9 mm best-view bound, not a deployable baseline. Without
+GT you cannot know which camera is best, so the honest comparison is against
+an arbitrary view (148.7 mm), which we beat by 33.8%. We report the fixed-
+camera number precisely because it bounds how much room is left.
+
+**Q: Why is fusion better than selection at 2 views but worse at 8?**
+A: With few views, averaging suppresses independent errors and no single view
+is clearly best. With many views, the pool contains genuinely bad views whose
+inclusion drags a mean-based fusion down, while selection can ignore them —
+median fusion sits between the two because it is robust to that minority.
+Practical rule: fuse when you have 2-3 views, select when you have 5+.
+
+**Q: Is this just triangulation?**
+A: No. Triangulation requires camera extrinsics and 2D correspondences. Here
+each view is independently lifted to 3D and canonicalized into a body-fixed
+frame; fusion is then a weighted average in that shared frame. No calibration,
+no correspondence search, no training — which is also why it does not reach
+true triangulation accuracy.
+
 ## Data & generalization
 
 **Q: 1 subject, 1 sequence was your entire evaluation. Now?**
@@ -126,4 +159,5 @@ world-transformed GT from different cameras agrees to 0.0 mm
 | Reliability-vs-error, abstention under degradation | `thesis_artifacts/degradation/analysis.json` |
 | GT correlations + bridge sanity | `thesis_artifacts/gt_validation/gt_results.json` |
 | Ablation 3 conditions | `thesis_artifacts/coverage_error/ablation_results.json` |
+| Multi-view selection & fusion | `thesis_artifacts/fusion/fusion_results.json` |
 | H36M baseline reproduction (45.1mm) | `thesis_artifacts/baseline_results.json` |
