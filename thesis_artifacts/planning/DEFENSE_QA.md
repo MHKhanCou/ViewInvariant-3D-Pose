@@ -19,8 +19,9 @@ Evidence: `thesis_artifacts/cross_view_eval/results_multicam.json`.
 **Q: Is 28.4% still the number?**
 A: 28.4% is the legacy single-frame-protocol figure on the dev pair; it
 reproduces exactly (re-run 2026-08-03). The corrected protocol replaces it as
-the primary claim: `[FREEZE: dev-pair corrected %, held-out mean %, S2 %]`.
-Both are reported, clearly labeled; the corrected number is primary.
+the primary claim: dev pair +20.5%, 27 held-out pairs mean +32.4%, held-out
+subject S2 +13.4%. Both are reported, clearly labeled; the corrected numbers
+are primary. Held-out exceeding dev is the anti-overfit evidence.
 
 **Q: Why is this not MPJPE?**
 A: MPJPE compares prediction to ground truth. Our cross-view metric compares
@@ -32,10 +33,12 @@ the alignment (Umeyama) differs from the H36M protocols.
 **Q: Both cameras could be wrong identically — cross-view consistency would
 not see it. How do you know your metric means anything?**
 A: We anchored it against ground truth: Spearman rho between per-frame
-cross-view distance and actual GT error is `[FREEZE: rho_c]`
+canonical cross-view distance and actual GT error is +0.601 (p~1e-154,
+n=1566) vs +0.188 for raw distance
 (`thesis_artifacts/gt_validation/gt_results.json`). Consistency is a
 necessary-not-sufficient signal, and we say so; the GT correlation shows it
-carries real error information in practice.
+carries real error information in practice — and canonicalization
+strengthens it 3x.
 
 ## Reliability & abstention
 
@@ -86,9 +89,12 @@ evidence the method does what it says — removes view — and defines where it
 should not be used.
 
 **Q: What does multi-scale add?**
-A: `[FREEZE: per-level result or honest negative]`. Gate declared in advance:
-if per-limb frames do not beat the global frame on the dev pair, it is
-reported as a negative result with the per-level numbers, not spun.
+A: Gate passed on every pair: dev +37.1%, held-out mean +36.4%, S2 +34.9%
+over global canonicalization (`multiscale_results.json`). Anticipating the
+"you just removed DOF and shrank the metric" objection: the multi-scale
+distance retains full error information — rho(multi-scale dist, GT error)
+= +0.610, matching global canonical's +0.601 — so the reduction is removed
+limb-orientation variance, not metric deflation.
 
 ## Data & generalization
 
@@ -108,7 +114,7 @@ model-normalized space. How is the comparison valid?**
 A: Per-frame similarity (Umeyama) alignment — rotation, translation, scale —
 before measuring distance. Convention differences are absorbed by the
 alignment; what remains is shape error. The GT bridge itself is validated:
-world-transformed GT from different cameras agrees to `[FREEZE: sanity mm]`
+world-transformed GT from different cameras agrees to 0.0 mm
 (`gt_results.json: sanity`).
 
 ## Numbers audit trail
