@@ -42,11 +42,21 @@ BONE_NAMES = [
     "L_UpperArm", "L_Forearm", "L_Hand",
 ]
 
-# Colors
-LEFT_COLOR = "#2563EB"
-RIGHT_COLOR = "#DC2626"
-JOINT_COLOR = "#059669"
+# Colors — match the official demo (matplotlib 'b'/'r').
+LEFT_COLOR = "#0000FF"
+RIGHT_COLOR = "#FF0000"
+JOINT_COLOR = "#333333"
 ROOT_COLOR = "#F59E0B"
+
+# Official demo bone order + left/right flags (demo_live/visualize.py).
+OFFICIAL_I = [0, 0, 1, 4, 2, 5, 0, 7, 8, 8, 14, 15, 11, 12, 8, 9]
+OFFICIAL_J = [1, 4, 2, 5, 3, 6, 7, 8, 14, 11, 15, 16, 12, 13, 9, 10]
+OFFICIAL_LR = [0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0]
+OFFICIAL_BONE_NAMES = [
+    "Pelvis-L_Hip", "Pelvis-R_Hip", "L_Thigh", "R_Thigh", "L_Shin", "R_Shin",
+    "Spine", "Thorax", "L_Shoulder", "R_Shoulder", "L_UpperArm", "L_Forearm",
+    "R_UpperArm", "R_Forearm", "Neck", "Head",
+]
 
 
 def compute_bone_lengths(pose3d):
@@ -102,18 +112,18 @@ def render_pose_plotly(
     """
     fig = go.Figure()
 
-    # --- Draw bones with anatomical thickness ---
-    for idx, (i, j) in enumerate(H36M_SKELETON):
-        color = RIGHT_COLOR if H36M_LR[idx] else LEFT_COLOR
-        width = BONE_WIDTHS[idx]
+    # --- Draw bones: official demo style (thin uniform blue/red lines) ---
+    for idx in range(len(OFFICIAL_I)):
+        i, j = OFFICIAL_I[idx], OFFICIAL_J[idx]
+        color = RIGHT_COLOR if OFFICIAL_LR[idx] else LEFT_COLOR
         bone_len = np.linalg.norm(pose3d[i] - pose3d[j])
         fig.add_trace(go.Scatter3d(
             x=[float(pose3d[i, 0]), float(pose3d[j, 0])],
             y=[float(pose3d[i, 1]), float(pose3d[j, 1])],
             z=[float(pose3d[i, 2]), float(pose3d[j, 2])],
             mode="lines",
-            line=dict(width=width, color=color),
-            hovertemplate=f"{BONE_NAMES[idx]}<br>Length: {bone_len:.3f}<extra></extra>",
+            line=dict(width=4, color=color),
+            hovertemplate=f"{OFFICIAL_BONE_NAMES[idx]}<br>Length: {bone_len:.3f}<extra></extra>",
             showlegend=False,
         ))
 
@@ -126,8 +136,9 @@ def render_pose_plotly(
         "L_Shoulder", "L_Elbow", "L_Wrist",
     ]
 
-    # Joint sizes — larger for core
-    joint_sizes = [10, 6, 5, 5, 6, 5, 5, 7, 8, 6, 7, 6, 5, 4, 6, 5, 4]
+    # Small uniform markers — official style has no joint balls; keep tiny
+    # ones purely as hover targets.
+    joint_sizes = [3] * 17
 
     joint_colors = []
     for name in joint_names:
@@ -149,13 +160,13 @@ def render_pose_plotly(
         showlegend=False,
     ))
 
-    # --- Highlight root joint ---
+    # --- Root joint: small diamond, subtle ---
     fig.add_trace(go.Scatter3d(
         x=[float(pose3d[0, 0])],
         y=[float(pose3d[0, 1])],
         z=[float(pose3d[0, 2])],
         mode="markers",
-        marker=dict(size=12, color=ROOT_COLOR, symbol="diamond"),
+        marker=dict(size=5, color=ROOT_COLOR, symbol="diamond"),
         hovertemplate="Pelvis (root)<br>X: %{x:.3f}<br>Y: %{y:.3f}<br>Z: %{z:.3f}<extra></extra>",
         showlegend=False,
     ))
@@ -167,31 +178,22 @@ def render_pose_plotly(
     pose_extent = float(np.max(pose_max - pose_min))
     half_range = pose_extent * 0.65
 
+    # Official-demo-like axes: light gray grid on softly shaded panes.
+    axis_style = dict(
+        showbackground=True,
+        backgroundcolor="rgba(245,245,245,0.9)",
+        gridcolor="#d9d9d9",
+        showgrid=show_grid,
+        showticklabels=False,
+        zeroline=False,
+    )
     scene = dict(
-        xaxis=dict(
-            range=[pose_center[0] - half_range, pose_center[0] + half_range],
-            showbackground=False,
-            showgrid=show_grid,
-            showticklabels=False,
-            title="X" if show_axes else "",
-            zeroline=False,
-        ),
-        yaxis=dict(
-            range=[pose_center[1] - half_range, pose_center[1] + half_range],
-            showbackground=False,
-            showgrid=show_grid,
-            showticklabels=False,
-            title="Y" if show_axes else "",
-            zeroline=False,
-        ),
-        zaxis=dict(
-            range=[pose_center[2] - half_range, pose_center[2] + half_range],
-            showbackground=False,
-            showgrid=show_grid,
-            showticklabels=False,
-            title="Z" if show_axes else "",
-            zeroline=False,
-        ),
+        xaxis=dict(range=[pose_center[0] - half_range, pose_center[0] + half_range],
+                   title="X" if show_axes else "", **axis_style),
+        yaxis=dict(range=[pose_center[1] - half_range, pose_center[1] + half_range],
+                   title="Y" if show_axes else "", **axis_style),
+        zaxis=dict(range=[pose_center[2] - half_range, pose_center[2] + half_range],
+                   title="Z" if show_axes else "", **axis_style),
         aspectmode="data",
         bgcolor="rgba(255,255,255,1)",
     )
@@ -203,8 +205,9 @@ def render_pose_plotly(
         margin=dict(l=0, r=0, t=40, b=0),
         paper_bgcolor="white",
         showlegend=False,
+        # Match the official demo viewpoint (elev=15, azim=70).
         scene_camera=dict(
-            eye=dict(x=1.5, y=0.8, z=0.8),
+            eye=dict(x=0.66, y=1.82, z=0.52),
             up=dict(x=0, y=0, z=1),
         ),
     )
