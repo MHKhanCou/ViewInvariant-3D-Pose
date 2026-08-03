@@ -323,14 +323,15 @@ def main():
             continue
         if (subject, sequence) not in gts:
             gts[(subject, sequence)] = load_gt17(subject, sequence)
-        gt17 = gts[(subject, sequence)]
+        # load_gt17 returns {camera_id: (n_frames, 17, 3)} — index camera first.
+        gt_cam = gts[(subject, sequence)][cnum]
 
         disp, err, rel, conf = [], [], [], []
         cached = pred_cache.get(key)
         for row in res["rows"]:
             c = row["center"]
             disp.append(row["disp_procrustes"])
-            err.append(similarity_align_error(row["arm0_raw"], gt17[c]))
+            err.append(similarity_align_error(row["arm0_raw"], gt_cam[c]))
             if cached is not None:
                 idx = np.where(cached["centers"] == c)[0]
                 if len(idx):

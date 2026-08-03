@@ -1,0 +1,151 @@
+{
+  "preregistration": "thesis_artifacts/tta/PREREGISTRATION.md",
+  "verdict_pass": false,
+  "criteria": {
+    "rho_floor_met": false,
+    "sign_consistent": false,
+    "ci_excludes_zero": false
+  },
+  "pooled": {
+    "n": 78,
+    "spearman_disp_vs_error": 0.109573970333464,
+    "spearman_reliability_vs_error": 0.1239154616240267,
+    "partial_spearman_given_detector_confidence": -0.31701890989988873,
+    "bootstrap_ci_delta_abs_rho": [
+      -0.6020623338143886,
+      0.6384495433281354
+    ]
+  },
+  "per_stratum": {
+    "S1_static": -0.25304347826086954,
+    "S1_dynamic": -0.19652173913043475,
+    "S2_static": -0.7142857142857143,
+    "S2_dynamic": 0.7052173913043478
+  },
+  "per_camera": {
+    "S1_Seq1_cam0": {
+      "n": 3,
+      "spearman_disp_vs_error": 0.5
+    },
+    "S1_Seq1_cam1": {
+      "n": 3,
+      "spearman_disp_vs_error": -0.5
+    },
+    "S1_Seq1_cam2": {
+      "n": 3,
+      "spearman_disp_vs_error": 0.5
+    },
+    "S1_Seq1_cam4": {
+      "n": 3,
+      "spearman_disp_vs_error": -0.5
+    },
+    "S1_Seq1_cam5": {
+      "n": 3,
+      "spearman_disp_vs_error": 0.5
+    },
+    "S1_Seq1_cam6": {
+      "n": 3,
+      "spearman_disp_vs_error": 1.0
+    },
+    "S1_Seq1_cam7": {
+      "n": 3,
+      "spearman_disp_vs_error": -1.0
+    },
+    "S1_Seq1_cam8": {
+      "n": 3,
+      "spearman_disp_vs_error": 0.5
+    },
+    "S1_Seq1_cam0_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": 0.5
+    },
+    "S1_Seq1_cam1_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": -0.5
+    },
+    "S1_Seq1_cam2_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": 0.5
+    },
+    "S1_Seq1_cam4_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": 1.0
+    },
+    "S1_Seq1_cam5_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": 1.0
+    },
+    "S1_Seq1_cam6_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": 0.5
+    },
+    "S1_Seq1_cam7_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": 0.5
+    },
+    "S1_Seq1_cam8_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": 1.0
+    },
+    "S2_Seq1_cam0": {
+      "n": 3,
+      "spearman_disp_vs_error": -0.5
+    },
+    "S2_Seq1_cam1": {
+      "n": 3,
+      "spearman_disp_vs_error": 1.0
+    },
+    "S2_Seq2_cam0_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": 0.5
+    },
+    "S2_Seq2_cam1_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": -1.0
+    },
+    "S2_Seq2_cam2_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": 1.0
+    },
+    "S2_Seq2_cam4_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": -1.0
+    },
+    "S2_Seq2_cam5_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": -1.0
+    },
+    "S2_Seq2_cam6_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": -1.0
+    },
+    "S2_Seq2_cam7_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": 0.5
+    },
+    "S2_Seq2_cam8_dynamic": {
+      "n": 3,
+      "spearman_disp_vs_error": 1.0
+    }
+  },
+  "diagnostics": {
+    "mirror_frames": 47,
+    "total_frames": 78,
+    "skipped": 0,
+    "rotation_frames_ok": 0
+  },
+  "exploratory": true,
+  "arms": {
+    "K_primary": 6,
+    "jitter_sigmas": [
+      0.0,
+      0.005,
+      0.01
+    ],
+    "flip_arms": [
+      "nonflip",
+      "flip"
+    ],
+    "rotation_included": false
+  }
+}
