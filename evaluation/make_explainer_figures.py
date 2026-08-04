@@ -38,7 +38,8 @@ from evaluation.h36m_crossview import ACTION_NAMES
 from evaluation.h36m_multiscale import SEGMENTS_LONGAXIS, canonicalize_with
 from evaluation.h36m_replication import OUT_DIR as PRED_DIR
 from evaluation.h36m_replication import aggregate_by_video, parse_video
-from evaluation.make_figures import BLUE, GRID, INK, INK2, MAGENTA, ORANGE, SURFACE
+from evaluation.make_figures import (AQUA, BLUE, GRID, INK, INK2, MAGENTA,
+                                     ORANGE, SURFACE)
 from evaluation.metrics import cross_view_joint_distance
 
 OUT = os.path.join(REPO_ROOT, "thesis_artifacts", "figures")
@@ -433,11 +434,83 @@ def figure_three():
     _finish(fig, "fig_architecture.png", "canonical/body_frame.py and demo_live/")
 
 
+def figure_four():
+    """
+    How the frame is built, for a reader who does not want the algebra.
+
+    Two panels: the two anatomical vectors the construction starts from, and the
+    orthonormal triad Gram-Schmidt produces from them. Drawn on a real predicted
+    pose rather than a schematic, so the proportions are honest, including the
+    fact that the hip axis really is about half the torso axis.
+    """
+    meta = np.load(os.path.join(PRED_DIR, "meta.npz"), allow_pickle=True)
+    pn = np.load(os.path.join(PRED_DIR, "preds.npz"))
+    vids = aggregate_by_video(meta, pn, int(pn["n_clips"]))
+    pose = next(iter(vids.values()))["pred"][0]
+    pose = pose - pose[0:1]
+
+    _, R, meta_c = canonicalize_single(pose.astype(np.float32))
+    y_ax = pose[8] - pose[0]                     # torso: pelvis -> thorax
+    x_raw = pose[1] - pose[4]                    # hips: right -> left
+
+    fig = plt.figure(figsize=(10.2, 5.4))
+    fig.patch.set_facecolor(SURFACE)
+    r = _row_radius([pose], y_is_down=True)
+    scale = 0.85 * r[1]
+
+    def arrow3(ax, origin, vec, colour, label, lw=2.6):
+        o = to_display(np.vstack([origin, origin + vec]), True)
+        ax.plot(o[:, 0], o[:, 1], o[:, 2], color=colour, lw=lw, zorder=6)
+        ax.scatter(*o[1], color=colour, s=26, zorder=7)
+        ax.text(o[1, 0], o[1, 1], o[1, 2], "  " + label, color=colour,
+                fontsize=10, weight="bold", zorder=8)
+
+    ax = fig.add_subplot(1, 2, 1, projection="3d")
+    ax.set_facecolor(SURFACE)
+    draw_skeleton(ax, pose, radius=r, y_is_down=True,
+                  colour_left="#c9c9c2", colour_right="#c9c9c2")
+    arrow3(ax, pose[0], y_ax, BLUE, r"$\mathbf{y}$  torso")
+    arrow3(ax, pose[4], x_raw, ORANGE, r"$\mathbf{x}_{raw}$  hips")
+
+    ax = fig.add_subplot(1, 2, 2, projection="3d")
+    ax.set_facecolor(SURFACE)
+    draw_skeleton(ax, pose, radius=r, y_is_down=True,
+                  colour_left="#c9c9c2", colour_right="#c9c9c2")
+    for vec, colour, lab in ((R[:, 1], BLUE, r"$\mathbf{y}$"),
+                             (R[:, 2], AQUA, r"$\mathbf{z}$"),
+                             (R[:, 0], ORANGE, r"$\mathbf{x}$")):
+        arrow3(ax, pose[0], np.asarray(vec, dtype=np.float64) * scale, colour, lab)
+
+    fig.text(0.28, 0.955, "1.  Two anatomical vectors", ha="center",
+             fontsize=11.5, color=INK, weight="bold")
+    fig.text(0.28, 0.905,
+             "torso from pelvis to thorax, hips from one hip to the other",
+             ha="center", fontsize=9, color=INK2)
+    fig.text(0.76, 0.955, "2.  An orthonormal frame", ha="center",
+             fontsize=11.5, color=INK, weight="bold")
+    fig.text(0.76, 0.905,
+             r"$\mathbf{z}=\mathbf{x}_{raw}\times\mathbf{y}$,  "
+             r"$\mathbf{x}=\mathbf{y}\times\mathbf{z}$",
+             ha="center", fontsize=10, color=INK2)
+    fig.text(0.5, 0.085,
+             "Both vectors come from the joints, so both rotate with the body. "
+             "The frame therefore rotates with it too, which is why an unknown "
+             "camera rotation cancels.",
+             ha="center", fontsize=9.5, color=INK)
+    fig.text(0.5, 0.042,
+             "Drawn on a real predicted pose: the hip axis really is about half "
+             "the torso axis, which is why it is the weaker of the two.",
+             ha="center", fontsize=8.5, color=INK2)
+    fig.subplots_adjust(left=0.01, right=0.99, top=0.88, bottom=0.15, wspace=0.02)
+    _finish(fig, "fig_frame_construction.png", "canonical/body_frame.py")
+
+
 def main():
     print("Loading cached predictions...")
     groups = load_groups()
     print("Writing figures:")
     figure_three()
+    figure_four()
     raw_d, can_d = figure_one(groups)
     r_hip, r_acc = figure_two(groups)
     print("\n  figure 1: raw %.1f mm -> canonical %.1f mm (%.1f%%)"

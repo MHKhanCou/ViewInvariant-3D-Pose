@@ -399,7 +399,14 @@ R &= [\,\mathbf{x} \mid \mathbf{y} \mid \mathbf{z}\,], \qquad
 P_{\text{can}} = P R .
 \end{align}
 
-Here $\mathbf{y}$ is the torso vertical axis and $\mathbf{x}_{\text{raw}}$ the hip axis, and the cross products complete a right-handed orthonormal basis by Gram-Schmidt orthonormalization. The construction is closed form, costs $O(17)$ operations per frame, and has no free parameters.
+Here $\mathbf{y}$ is the torso vertical axis and $\mathbf{x}_{\text{raw}}$ the hip axis, and the cross products complete a right-handed orthonormal basis by Gram-Schmidt orthonormalization. The construction is closed form, costs $O(17)$ operations per frame, and has no free parameters. Figure \ref{fig:framecon} shows it on a real predicted pose.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/fig_frame_construction.png}
+\caption{Constructing the body frame. Left: the two anatomical vectors the construction starts from. Right: the orthonormal triad Gram-Schmidt produces. Both source vectors are differences of predicted joints, so both rotate with the body, and the frame rotates with it.}
+\label{fig:framecon}
+\end{figure}
 
 \subsection{Why This Construction Achieves View Invariance}
 
