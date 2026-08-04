@@ -1,0 +1,3609 @@
+{
+  "summary": {
+    "n_pairs": 180,
+    "bootstrap": {
+      "multiscale_vs_global_pct": {
+        "mean": 24.52016800226091,
+        "ci95": [
+          22.469644150338105,
+          26.541129904373108
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "combined_multiscale_mm": {
+        "mean": 44.72419469816057,
+        "ci95": [
+          42.754949501239366,
+          46.79901089389636
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "unit": "subject-action group (6 pairs each)"
+    },
+    "n_pairs_improved": 177,
+    "all_pairs_improved": false,
+    "mean_multiscale_vs_global_pct": 24.52016800226091,
+    "median_multiscale_vs_global_pct": 25.052001266064806,
+    "worst_pair_pct": -5.673018100338223,
+    "best_pair_pct": 44.64501679872529,
+    "mean_global_distance_mm": 60.0804108305095,
+    "mean_multiscale_distance_mm": 44.72419469816057,
+    "per_level_distance_mm": {
+      "global": 60.0804108305095,
+      "torso": 26.135000305369047,
+      "left_arm": 56.62205782483359,
+      "right_arm": 56.0431652876581,
+      "left_leg": 68.24219649019172,
+      "right_leg": 29.790880552646385
+    },
+    "segment_fallback_rate_pct": {
+      "torso": 0.0,
+      "left_arm": 0.0,
+      "right_arm": 0.0,
+      "left_leg": 0.0,
+      "right_leg": 0.0
+    },
+    "by_subject": {
+      "S11": {
+        "n_pairs": 90,
+        "mean_pct": 26.39016998384276,
+        "pairs_improved": 90
+      },
+      "S9": {
+        "n_pairs": 90,
+        "mean_pct": 22.65016602067906,
+        "pairs_improved": 87
+      }
+    },
+    "by_action": {
+      "Directions": {
+        "n": 12,
+        "mean_pct": 24.923862116420214,
+        "pairs_improved": 12
+      },
+      "Discussion": {
+        "n": 12,
+        "mean_pct": 23.33327648683121,
+        "pairs_improved": 12
+      },
+      "Eating": {
+        "n": 12,
+        "mean_pct": 26.883831663079235,
+        "pairs_improved": 12
+      },
+      "Greeting": {
+        "n": 12,
+        "mean_pct": 25.292445773334,
+        "pairs_improved": 12
+      },
+      "Phoning": {
+        "n": 12,
+        "mean_pct": 22.549653575323514,
+        "pairs_improved": 12
+      },
+      "Posing": {
+        "n": 12,
+        "mean_pct": 22.501290233514037,
+        "pairs_improved": 11
+      },
+      "Purchases": {
+        "n": 12,
+        "mean_pct": 28.305680552394303,
+        "pairs_improved": 12
+      },
+      "Sitting": {
+        "n": 12,
+        "mean_pct": 27.34801012714048,
+        "pairs_improved": 12
+      },
+      "SittingDown": {
+        "n": 12,
+        "mean_pct": 33.94478220071242,
+        "pairs_improved": 12
+      },
+      "Smoking": {
+        "n": 12,
+        "mean_pct": 21.108385409364107,
+        "pairs_improved": 12
+      },
+      "Photo": {
+        "n": 12,
+        "mean_pct": 32.51076876091401,
+        "pairs_improved": 12
+      },
+      "Waiting": {
+        "n": 12,
+        "mean_pct": 20.245908411557455,
+        "pairs_improved": 11
+      },
+      "Walking": {
+        "n": 12,
+        "mean_pct": 15.386641310725828,
+        "pairs_improved": 11
+      },
+      "WalkDog": {
+        "n": 12,
+        "mean_pct": 24.59590573756218,
+        "pairs_improved": 12
+      },
+      "WalkTogether": {
+        "n": 12,
+        "mean_pct": 18.87207767504067,
+        "pairs_improved": 12
+      }
+    },
+    "mpi_reference": {
+      "pairs_improved": "29 of 29",
+      "note": "On MPI-INF-3DHP one pair was the development pair. Here all 180 pairs are held out."
+    },
+    "long_axis_variant": {
+      "mean_multiscale_vs_global_pct": 54.89229854127323,
+      "mean_multiscale_distance_mm": 27.09484209716519,
+      "n_pairs_improved": 180,
+      "per_level_distance_mm": {
+        "global": 60.0804108305095,
+        "torso": 26.135000305369047,
+        "left_arm": 26.904131599493663,
+        "right_arm": 26.183984256622555,
+        "left_leg": 27.91963900369472,
+        "right_leg": 29.790880552646385
+      },
+      "bootstrap": {
+        "mean": 54.89229854127323,
+        "ci95": [
+          53.45996796986789,
+          56.25992040816572
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "segment_fallback_rate_pct": {
+        "torso": 0.0,
+        "left_arm": 0.0,
+        "right_arm": 0.0,
+        "left_leg": 0.0,
+        "right_leg": 0.0
+      },
+      "note": "Symmetric legs, plus both arms rebuilt from shoulder-to-elbow and elbow-to-wrist instead of thorax-to-shoulder."
+    },
+    "symmetric_leg_variant": {
+      "mean_multiscale_vs_global_pct": 36.819063183814876,
+      "mean_multiscale_distance_mm": 37.60844927199178,
+      "n_pairs_improved": 180,
+      "per_level_distance_mm": {
+        "global": 60.0804108305095,
+        "torso": 26.135000305369047,
+        "left_arm": 56.62205782483359,
+        "right_arm": 56.0431652876581,
+        "left_leg": 27.91963900369472,
+        "right_leg": 29.790880552646385
+      },
+      "note": "Both legs use hip-to-knee as primary axis and knee-to-ankle as secondary. The shipped table uses root-to-hip for the left leg only. canonical/multiscale.py is unmodified."
+    },
+    "prediction_cache": "preds_motionbert.npz"
+  },
+  "per_pair": [
+    {
+      "subject": "S11",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 154,
+      "global": 59.80908648998707,
+      "combined_multiscale": 35.022264876923,
+      "multiscale_vs_global_pct": 41.44323725327881,
+      "per_level": {
+        "global": 59.80908648998707,
+        "torso": 27.381549246899493,
+        "left_arm": 62.55209804510142,
+        "right_arm": 33.46449970889401,
+        "left_leg": 27.741709257101085,
+        "right_leg": 27.797257426497225
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 154,
+      "global": 49.74584537357479,
+      "combined_multiscale": 36.53540380899008,
+      "multiscale_vs_global_pct": 26.55586906882107,
+      "per_level": {
+        "global": 49.74584537357479,
+        "torso": 21.781240457064147,
+        "left_arm": 46.76809897360864,
+        "right_arm": 42.293734426622265,
+        "left_leg": 66.36627744699453,
+        "right_leg": 17.78968328624577
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 154,
+      "global": 59.752162338851335,
+      "combined_multiscale": 46.257666154341265,
+      "multiscale_vs_global_pct": 22.584113538826422,
+      "per_level": {
+        "global": 59.752162338851335,
+        "torso": 29.007439935362186,
+        "left_arm": 44.31764731469092,
+        "right_arm": 44.84465029332545,
+        "left_leg": 85.97320036454634,
+        "right_leg": 37.360961966700366
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 154,
+      "global": 53.96102793805011,
+      "combined_multiscale": 39.32069899819114,
+      "multiscale_vs_global_pct": 27.131301050578173,
+      "per_level": {
+        "global": 53.96102793805011,
+        "torso": 25.6943276454876,
+        "left_arm": 54.283912671076784,
+        "right_arm": 38.28817693289224,
+        "left_leg": 73.5709627077177,
+        "right_leg": 17.148563694644285
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 154,
+      "global": 57.10788910110276,
+      "combined_multiscale": 44.3410789811766,
+      "multiscale_vs_global_pct": 22.355598010852805,
+      "per_level": {
+        "global": 57.10788910110276,
+        "torso": 21.01871265374221,
+        "left_arm": 56.57985977693038,
+        "right_arm": 39.57713573009937,
+        "left_leg": 87.49459073450659,
+        "right_leg": 24.03569893403487
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 154,
+      "global": 63.89156960821771,
+      "combined_multiscale": 36.535100713952794,
+      "multiscale_vs_global_pct": 42.817024314810915,
+      "per_level": {
+        "global": 63.89156960821771,
+        "torso": 34.66208317372706,
+        "left_arm": 38.16946128436497,
+        "right_arm": 50.79967304948089,
+        "left_leg": 31.16269965605302,
+        "right_leg": 25.131659399379384
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 219,
+      "global": 53.818188793583005,
+      "combined_multiscale": 36.244128684474994,
+      "multiscale_vs_global_pct": 32.65449934874704,
+      "per_level": {
+        "global": 53.818188793583005,
+        "torso": 25.715044117409345,
+        "left_arm": 57.66106557410602,
+        "right_arm": 44.92020474394707,
+        "left_leg": 40.249206107501024,
+        "right_leg": 19.653350689639783
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 219,
+      "global": 50.53145462628369,
+      "combined_multiscale": 39.711834824792874,
+      "multiscale_vs_global_pct": 21.41165316041198,
+      "per_level": {
+        "global": 50.53145462628369,
+        "torso": 18.945694357292837,
+        "left_arm": 48.66922404668102,
+        "right_arm": 49.35852025088654,
+        "left_leg": 74.82621353619719,
+        "right_leg": 19.938630106786615
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 219,
+      "global": 55.04629237902219,
+      "combined_multiscale": 42.94959044783083,
+      "multiscale_vs_global_pct": 21.975507174759954,
+      "per_level": {
+        "global": 55.04629237902219,
+        "torso": 29.280723240821874,
+        "left_arm": 39.30377177234109,
+        "right_arm": 53.3422254318516,
+        "left_leg": 74.47807617274593,
+        "right_leg": 30.173748242800638
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 219,
+      "global": 49.83984172942976,
+      "combined_multiscale": 41.09241152027426,
+      "multiscale_vs_global_pct": 17.551079428870363,
+      "per_level": {
+        "global": 49.83984172942976,
+        "torso": 27.76830634461146,
+        "left_arm": 40.33741782680494,
+        "right_arm": 51.58674518811648,
+        "left_leg": 85.97965965096809,
+        "right_leg": 17.1396481359386
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 219,
+      "global": 56.43520187134068,
+      "combined_multiscale": 42.4223483359977,
+      "multiscale_vs_global_pct": 24.829987438140254,
+      "per_level": {
+        "global": 56.43520187134068,
+        "torso": 19.82407302725805,
+        "left_arm": 48.06130517018985,
+        "right_arm": 59.83059220771267,
+        "left_leg": 73.46766373882555,
+        "right_leg": 22.150277144288363
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 219,
+      "global": 60.462677001953125,
+      "combined_multiscale": 38.323772761375395,
+      "multiscale_vs_global_pct": 36.615818780009654,
+      "per_level": {
+        "global": 60.462677001953125,
+        "torso": 32.54097709046107,
+        "left_arm": 40.63376457614986,
+        "right_arm": 62.46461042639327,
+        "left_leg": 40.4798621978934,
+        "right_leg": 19.556974643985974
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 219,
+      "global": 74.97867274175496,
+      "combined_multiscale": 47.47093868691083,
+      "multiscale_vs_global_pct": 36.68741129839355,
+      "per_level": {
+        "global": 74.97867274175496,
+        "torso": 25.657121954443248,
+        "left_arm": 68.36354665886866,
+        "right_arm": 55.43131631476694,
+        "left_leg": 64.08258222553827,
+        "right_leg": 38.32631787861863
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 219,
+      "global": 69.19662064504406,
+      "combined_multiscale": 42.283790213876664,
+      "multiscale_vs_global_pct": 38.893272793221186,
+      "per_level": {
+        "global": 69.19662064504406,
+        "torso": 29.890407614511986,
+        "left_arm": 50.284534502247155,
+        "right_arm": 48.47755873039977,
+        "left_leg": 75.74233328588477,
+        "right_leg": 18.762330180433786
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 219,
+      "global": 65.60721300726067,
+      "combined_multiscale": 50.095361944747296,
+      "multiscale_vs_global_pct": 23.643514716585656,
+      "per_level": {
+        "global": 65.60721300726067,
+        "torso": 24.61196974749979,
+        "left_arm": 57.35049394058855,
+        "right_arm": 62.71615378932866,
+        "left_leg": 75.89039523416459,
+        "right_leg": 46.75827473701408
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 219,
+      "global": 55.083384744652875,
+      "combined_multiscale": 44.823533463151485,
+      "multiscale_vs_global_pct": 18.626036379322798,
+      "per_level": {
+        "global": 55.083384744652875,
+        "torso": 24.815529122200186,
+        "left_arm": 57.940752612945694,
+        "right_arm": 59.98242650402191,
+        "left_leg": 60.14694405037518,
+        "right_leg": 34.22547309692592
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 219,
+      "global": 61.12279783971778,
+      "combined_multiscale": 37.29997620081793,
+      "multiscale_vs_global_pct": 38.97534550262309,
+      "per_level": {
+        "global": 61.12279783971778,
+        "torso": 22.856193246362416,
+        "left_arm": 65.68493806934792,
+        "right_arm": 61.0544228270718,
+        "left_leg": 29.283494354927377,
+        "right_leg": 16.22827505521034
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 219,
+      "global": 64.56015784555375,
+      "combined_multiscale": 47.51006656803497,
+      "multiscale_vs_global_pct": 26.40961832575973,
+      "per_level": {
+        "global": 64.56015784555375,
+        "torso": 36.1004606708544,
+        "left_arm": 48.208713919060415,
+        "right_arm": 72.5684601465861,
+        "left_leg": 53.19120153226809,
+        "right_leg": 40.46709410131794
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 179,
+      "global": 56.470043288928835,
+      "combined_multiscale": 40.57075995972703,
+      "multiscale_vs_global_pct": 28.155252596236135,
+      "per_level": {
+        "global": 56.470043288928835,
+        "torso": 27.83550375400309,
+        "left_arm": 61.783809033186074,
+        "right_arm": 43.506592404243,
+        "left_leg": 54.766521102223315,
+        "right_leg": 26.048223657980976
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 179,
+      "global": 48.86969829538015,
+      "combined_multiscale": 37.186469413714704,
+      "multiscale_vs_global_pct": 23.906897912586267,
+      "per_level": {
+        "global": 48.86969829538015,
+        "torso": 21.403773462306187,
+        "left_arm": 50.71866109784089,
+        "right_arm": 51.20620926531999,
+        "left_leg": 56.55181781939288,
+        "right_leg": 16.30644796014498
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 179,
+      "global": 57.88996779585684,
+      "combined_multiscale": 44.61548561224058,
+      "multiscale_vs_global_pct": 22.93053993470403,
+      "per_level": {
+        "global": 57.88996779585684,
+        "torso": 26.837446932020136,
+        "left_arm": 51.03662523344242,
+        "right_arm": 51.51824425851832,
+        "left_leg": 75.02936936490363,
+        "right_leg": 34.72843850258342
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 179,
+      "global": 52.36733944855589,
+      "combined_multiscale": 44.209960703077265,
+      "multiscale_vs_global_pct": 15.577225865163891,
+      "per_level": {
+        "global": 52.36733944855589,
+        "torso": 28.90708073024643,
+        "left_arm": 52.94063630183982,
+        "right_arm": 52.09021241172066,
+        "left_leg": 80.11993149272557,
+        "right_leg": 23.94024199480451
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 179,
+      "global": 48.700634737920495,
+      "combined_multiscale": 36.28980552417606,
+      "multiscale_vs_global_pct": 25.483916750844337,
+      "per_level": {
+        "global": 48.700634737920495,
+        "torso": 18.64889193380345,
+        "left_arm": 54.15135676501183,
+        "right_arm": 46.19460901334965,
+        "left_leg": 55.82470541692979,
+        "right_leg": 19.14462706230206
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 179,
+      "global": 60.297740573989614,
+      "combined_multiscale": 43.66007201764837,
+      "multiscale_vs_global_pct": 27.592524028202426,
+      "per_level": {
+        "global": 60.297740573989614,
+        "torso": 29.774393758294302,
+        "left_arm": 53.232414618550735,
+        "right_arm": 60.440567357580086,
+        "left_leg": 57.88368786113888,
+        "right_leg": 28.546796574938895
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 349,
+      "global": 56.02128067125905,
+      "combined_multiscale": 42.55797473065832,
+      "multiscale_vs_global_pct": 24.0324851186558,
+      "per_level": {
+        "global": 56.02128067125905,
+        "torso": 28.827596675359075,
+        "left_arm": 64.732131528991,
+        "right_arm": 40.35190830941187,
+        "left_leg": 57.42440549145455,
+        "right_leg": 36.00347035730466
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 349,
+      "global": 64.61486432203932,
+      "combined_multiscale": 46.05859867412928,
+      "multiscale_vs_global_pct": 28.718261413389268,
+      "per_level": {
+        "global": 64.61486432203932,
+        "torso": 24.678494311335434,
+        "left_arm": 53.82572263974515,
+        "right_arm": 59.72704711274636,
+        "left_leg": 86.10074351783469,
+        "right_leg": 27.14489628524015
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 349,
+      "global": 59.69202121964157,
+      "combined_multiscale": 44.401450203619575,
+      "multiscale_vs_global_pct": 25.615770254719827,
+      "per_level": {
+        "global": 59.69202121964157,
+        "torso": 25.729438251615594,
+        "left_arm": 56.46110975161665,
+        "right_arm": 50.09759033443593,
+        "left_leg": 69.38854930189072,
+        "right_leg": 35.042882253242425
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 349,
+      "global": 55.44299971681611,
+      "combined_multiscale": 46.57647072210011,
+      "multiscale_vs_global_pct": 15.992152372712876,
+      "per_level": {
+        "global": 55.44299971681611,
+        "torso": 26.60601952014475,
+        "left_arm": 59.416853076749,
+        "right_arm": 61.56256376228223,
+        "left_leg": 77.34994442346786,
+        "right_leg": 28.63565021941177
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 349,
+      "global": 48.09881737170725,
+      "combined_multiscale": 35.18777437401364,
+      "multiscale_vs_global_pct": 26.842745213291163,
+      "per_level": {
+        "global": 48.09881737170725,
+        "torso": 20.408855066600022,
+        "left_arm": 53.419906784265294,
+        "right_arm": 43.63073844281172,
+        "left_leg": 45.80754814585164,
+        "right_leg": 25.230559793106124
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 349,
+      "global": 63.20689627092684,
+      "combined_multiscale": 46.304476686056844,
+      "multiscale_vs_global_pct": 26.74141681062826,
+      "per_level": {
+        "global": 63.20689627092684,
+        "torso": 28.076970043018417,
+        "left_arm": 49.60192034101076,
+        "right_arm": 72.14380056058779,
+        "left_leg": 72.35492051706615,
+        "right_leg": 25.387909137758623
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 141,
+      "global": 59.16302900111422,
+      "combined_multiscale": 41.86041894195773,
+      "multiscale_vs_global_pct": 29.245646058504924,
+      "per_level": {
+        "global": 59.16302900111422,
+        "torso": 25.13286886823938,
+        "left_arm": 73.85108000166873,
+        "right_arm": 56.49118548589395,
+        "left_leg": 40.64753175965438,
+        "right_leg": 22.16199270884196
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 141,
+      "global": 52.99749252643991,
+      "combined_multiscale": 36.74118338239954,
+      "multiscale_vs_global_pct": 30.673732603349613,
+      "per_level": {
+        "global": 52.99749252643991,
+        "torso": 18.253863449637773,
+        "left_arm": 47.79280373728867,
+        "right_arm": 50.05598231241213,
+        "left_leg": 54.18105818024764,
+        "right_leg": 19.87480333003592
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 141,
+      "global": 47.817487770783984,
+      "combined_multiscale": 39.8344377828828,
+      "multiscale_vs_global_pct": 16.69483354326019,
+      "per_level": {
+        "global": 47.817487770783984,
+        "torso": 27.698478482293744,
+        "left_arm": 39.57128214328847,
+        "right_arm": 51.78833929021308,
+        "left_leg": 62.40111827850342,
+        "right_leg": 28.940203801959964
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 141,
+      "global": 43.707661148504165,
+      "combined_multiscale": 43.384374577948385,
+      "multiscale_vs_global_pct": 0.7396565317401849,
+      "per_level": {
+        "global": 43.707661148504165,
+        "torso": 26.339917040885762,
+        "left_arm": 56.23080191375516,
+        "right_arm": 51.58935098445162,
+        "left_leg": 81.51973532277641,
+        "right_leg": 19.83207450183571
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 141,
+      "global": 61.122958947580756,
+      "combined_multiscale": 42.852726415539465,
+      "multiscale_vs_global_pct": 29.890949074814756,
+      "per_level": {
+        "global": 61.122958947580756,
+        "torso": 20.113306444587437,
+        "left_arm": 65.32320432460054,
+        "right_arm": 49.85162314962834,
+        "left_leg": 70.54049957897647,
+        "right_leg": 20.66256066586109
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 141,
+      "global": 60.83791803130021,
+      "combined_multiscale": 39.286565483039155,
+      "multiscale_vs_global_pct": 35.42421115918728,
+      "per_level": {
+        "global": 60.83791803130021,
+        "torso": 26.761921686483614,
+        "left_arm": 45.71127194884821,
+        "right_arm": 54.834145437741114,
+        "left_leg": 53.74067156365577,
+        "right_leg": 18.938374982658008
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 103,
+      "global": 57.797358762870715,
+      "combined_multiscale": 40.70159630636567,
+      "multiscale_vs_global_pct": 29.578795333269515,
+      "per_level": {
+        "global": 57.797358762870715,
+        "torso": 25.367068985133496,
+        "left_arm": 72.26131289213606,
+        "right_arm": 46.43994534131393,
+        "left_leg": 38.322101796715,
+        "right_leg": 25.05973628886695
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 103,
+      "global": 50.797861099243164,
+      "combined_multiscale": 38.27944516672672,
+      "multiscale_vs_global_pct": 24.643588650434257,
+      "per_level": {
+        "global": 50.797861099243164,
+        "torso": 23.376398021735035,
+        "left_arm": 40.86835819540672,
+        "right_arm": 44.38940873192352,
+        "left_leg": 69.0517434240545,
+        "right_leg": 19.671753762995156
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 103,
+      "global": 66.14139534663228,
+      "combined_multiscale": 46.50683877074603,
+      "multiscale_vs_global_pct": 29.68573080895244,
+      "per_level": {
+        "global": 66.14139534663228,
+        "torso": 28.180247260528862,
+        "left_arm": 57.595387097701284,
+        "right_arm": 59.31440768195588,
+        "left_leg": 63.755199895321745,
+        "right_leg": 36.49063539967953
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 103,
+      "global": 55.3589157178564,
+      "combined_multiscale": 40.87483165333572,
+      "multiscale_vs_global_pct": 26.163959096201626,
+      "per_level": {
+        "global": 55.3589157178564,
+        "torso": 27.04192327295692,
+        "left_arm": 60.44047610273639,
+        "right_arm": 50.82960893575427,
+        "left_leg": 61.21455551814107,
+        "right_leg": 17.72687715002634
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 103,
+      "global": 47.456366566778385,
+      "combined_multiscale": 35.66162411217551,
+      "multiscale_vs_global_pct": 24.853867474253143,
+      "per_level": {
+        "global": 47.456366566778385,
+        "torso": 19.90540294276858,
+        "left_arm": 58.205512750495984,
+        "right_arm": 43.93743241874917,
+        "left_leg": 48.99988988302287,
+        "right_leg": 19.495850225096767
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 103,
+      "global": 65.81233519026377,
+      "combined_multiscale": 36.43040708893711,
+      "multiscale_vs_global_pct": 44.64501679872529,
+      "per_level": {
+        "global": 65.81233519026377,
+        "torso": 32.96556753325231,
+        "left_arm": 42.95484211838361,
+        "right_arm": 51.00995452658644,
+        "left_leg": 31.382379068911654,
+        "right_leg": 29.473658098757845
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 216,
+      "global": 59.0889226242348,
+      "combined_multiscale": 42.546298071190165,
+      "multiscale_vs_global_pct": 27.9961519323079,
+      "per_level": {
+        "global": 59.0889226242348,
+        "torso": 23.494993880943017,
+        "left_arm": 45.73011185946288,
+        "right_arm": 40.78133632518627,
+        "left_leg": 72.19015027858593,
+        "right_leg": 39.14757153722975
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 216,
+      "global": 68.73103043768141,
+      "combined_multiscale": 47.540888768655286,
+      "multiscale_vs_global_pct": 30.830531033925467,
+      "per_level": {
+        "global": 68.73103043768141,
+        "torso": 20.993950347105663,
+        "left_arm": 40.514484802881874,
+        "right_arm": 36.769390057634425,
+        "left_leg": 101.90732113520305,
+        "right_leg": 50.31187543272972
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 216,
+      "global": 59.49920518309982,
+      "combined_multiscale": 43.99488404945091,
+      "multiscale_vs_global_pct": 26.05803066769834,
+      "per_level": {
+        "global": 59.49920518309982,
+        "torso": 22.73520368558389,
+        "left_arm": 36.421301537089875,
+        "right_arm": 42.3347590720212,
+        "left_leg": 86.0036945519624,
+        "right_leg": 47.454882083115756
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 216,
+      "global": 55.95432588789198,
+      "combined_multiscale": 42.945446526562726,
+      "multiscale_vs_global_pct": 23.249103898407007,
+      "per_level": {
+        "global": 55.95432588789198,
+        "torso": 20.067437962249475,
+        "left_arm": 40.923752775898684,
+        "right_arm": 41.089492722793864,
+        "left_leg": 65.31812191892553,
+        "right_leg": 60.907517223446455
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 216,
+      "global": 49.37751466256601,
+      "combined_multiscale": 29.622313472959732,
+      "multiscale_vs_global_pct": 40.008496427186635,
+      "per_level": {
+        "global": 49.37751466256601,
+        "torso": 16.56552317407396,
+        "left_arm": 37.928465121322205,
+        "right_arm": 40.073282007817866,
+        "left_leg": 40.316947173189234,
+        "right_leg": 24.648520322861494
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 216,
+      "global": 65.88116919552839,
+      "combined_multiscale": 43.75538729738306,
+      "multiscale_vs_global_pct": 33.58437952501774,
+      "per_level": {
+        "global": 65.88116919552839,
+        "torso": 23.302362812889946,
+        "left_arm": 34.31418670548333,
+        "right_arm": 54.14043812840073,
+        "left_leg": 58.86049903984423,
+        "right_leg": 63.0849347114563
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 200,
+      "global": 88.76371292114258,
+      "combined_multiscale": 61.46902307510376,
+      "multiscale_vs_global_pct": 30.74982889718385,
+      "per_level": {
+        "global": 88.76371292114258,
+        "torso": 27.202055773735047,
+        "left_arm": 65.88397684574127,
+        "right_arm": 66.93051043510437,
+        "left_leg": 108.53359293937683,
+        "right_leg": 57.20378149032593
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 200,
+      "global": 83.63830991744994,
+      "combined_multiscale": 58.4901008605957,
+      "multiscale_vs_global_pct": 30.06781112826794,
+      "per_level": {
+        "global": 83.63830991744994,
+        "torso": 25.284520165920256,
+        "left_arm": 61.86441749572754,
+        "right_arm": 71.17201161384583,
+        "left_leg": 96.08154872894288,
+        "right_leg": 66.76063752651214
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 200,
+      "global": 82.8914830493927,
+      "combined_multiscale": 56.40038390159607,
+      "multiscale_vs_global_pct": 31.95877088121506,
+      "per_level": {
+        "global": 82.8914830493927,
+        "torso": 24.75160029411316,
+        "left_arm": 59.92207542896271,
+        "right_arm": 51.82704298496246,
+        "left_leg": 107.21616156578064,
+        "right_leg": 53.48327629566192
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 200,
+      "global": 66.84216625213622,
+      "combined_multiscale": 48.808225841522216,
+      "multiscale_vs_global_pct": 26.979886233171946,
+      "per_level": {
+        "global": 66.84216625213622,
+        "torso": 26.155928568840025,
+        "left_arm": 55.19961852073669,
+        "right_arm": 62.60892427444458,
+        "left_leg": 64.4221642112732,
+        "right_leg": 49.879728145599366
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 200,
+      "global": 67.3543974494934,
+      "combined_multiscale": 47.68586482048035,
+      "multiscale_vs_global_pct": 29.201556800744555,
+      "per_level": {
+        "global": 67.3543974494934,
+        "torso": 18.880855400562286,
+        "left_arm": 52.427718544006346,
+        "right_arm": 53.87573405265808,
+        "left_leg": 85.68354496955871,
+        "right_leg": 44.36696921348572
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 200,
+      "global": 81.12281555175781,
+      "combined_multiscale": 57.32725070953369,
+      "multiscale_vs_global_pct": 29.33276499389018,
+      "per_level": {
+        "global": 81.12281555175781,
+        "torso": 27.34750232219696,
+        "left_arm": 63.80510547161102,
+        "right_arm": 67.22679414749146,
+        "left_leg": 82.79955594539642,
+        "right_leg": 66.0643797326088
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 241,
+      "global": 58.125661929118685,
+      "combined_multiscale": 43.0794078462846,
+      "multiscale_vs_global_pct": 25.885733742150297,
+      "per_level": {
+        "global": 58.125661929118685,
+        "torso": 23.89918526574289,
+        "left_arm": 62.506189896358,
+        "right_arm": 54.162454838574675,
+        "left_leg": 62.119749401614875,
+        "right_leg": 27.75668103071664
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 241,
+      "global": 58.66440160442685,
+      "combined_multiscale": 43.212073559582976,
+      "multiscale_vs_global_pct": 26.3402125006553,
+      "per_level": {
+        "global": 58.66440160442685,
+        "torso": 21.621182948227244,
+        "left_arm": 63.43636642155311,
+        "right_arm": 46.250942052152645,
+        "left_leg": 74.16156346174691,
+        "right_leg": 25.370699001051083
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 241,
+      "global": 60.83200581340869,
+      "combined_multiscale": 49.36036340230728,
+      "multiscale_vs_global_pct": 18.857905896262285,
+      "per_level": {
+        "global": 60.83200581340869,
+        "torso": 26.1984355934428,
+        "left_arm": 62.34580704384325,
+        "right_arm": 61.240123728993524,
+        "left_leg": 80.93176320182832,
+        "right_leg": 34.211252932726595
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 241,
+      "global": 57.94579452103104,
+      "combined_multiscale": 46.31247082785452,
+      "multiscale_vs_global_pct": 20.076217418943642,
+      "per_level": {
+        "global": 57.94579452103104,
+        "torso": 26.8153518502643,
+        "left_arm": 65.31335461288073,
+        "right_arm": 55.26659708695787,
+        "left_leg": 66.86417862389592,
+        "right_leg": 33.30706992980355
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 241,
+      "global": 51.431595537177756,
+      "combined_multiscale": 38.40889107636891,
+      "multiscale_vs_global_pct": 25.32043644532722,
+      "per_level": {
+        "global": 51.431595537177756,
+        "torso": 19.30437465525267,
+        "left_arm": 67.14466343084311,
+        "right_arm": 50.96904897096246,
+        "left_leg": 47.78313849476858,
+        "right_leg": 20.93081430874425
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 241,
+      "global": 60.08581424254105,
+      "combined_multiscale": 49.20738788462279,
+      "multiscale_vs_global_pct": 18.104816411418923,
+      "per_level": {
+        "global": 60.08581424254105,
+        "torso": 28.50198312419084,
+        "left_arm": 69.54694039594088,
+        "right_arm": 68.82174628799882,
+        "left_leg": 59.478114911629454,
+        "right_leg": 34.40948554885833
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 198,
+      "global": 87.24225558656634,
+      "combined_multiscale": 55.14817502763536,
+      "multiscale_vs_global_pct": 36.78731177128445,
+      "per_level": {
+        "global": 87.24225558656634,
+        "torso": 37.17015231257737,
+        "left_arm": 92.17010829424618,
+        "right_arm": 58.3916143889379,
+        "left_leg": 70.9388352259241,
+        "right_leg": 38.29062623086602
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 198,
+      "global": 78.93394269846907,
+      "combined_multiscale": 52.31095905496617,
+      "multiscale_vs_global_pct": 33.72818173444573,
+      "per_level": {
+        "global": 78.93394269846907,
+        "torso": 30.547186779253412,
+        "left_arm": 80.63528306074816,
+        "right_arm": 58.71548200135279,
+        "left_leg": 76.02758711997909,
+        "right_leg": 35.440578352321275
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 198,
+      "global": 89.82140377314404,
+      "combined_multiscale": 59.895704857026686,
+      "multiscale_vs_global_pct": 33.31689069533884,
+      "per_level": {
+        "global": 89.82140377314404,
+        "torso": 37.072950372792256,
+        "left_arm": 78.67007855213049,
+        "right_arm": 67.51942865776293,
+        "left_leg": 91.05817410440156,
+        "right_leg": 46.57117954889933
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 198,
+      "global": 68.25184849055127,
+      "combined_multiscale": 49.92698635717835,
+      "multiscale_vs_global_pct": 26.848887669188613,
+      "per_level": {
+        "global": 68.25184849055127,
+        "torso": 29.250090276352083,
+        "left_arm": 65.24009159357861,
+        "right_arm": 55.73956293529935,
+        "left_leg": 90.0943103896247,
+        "right_leg": 33.3133563947196
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 198,
+      "global": 73.45160945738205,
+      "combined_multiscale": 48.08929822902487,
+      "multiscale_vs_global_pct": 34.52927909370433,
+      "per_level": {
+        "global": 73.45160945738205,
+        "torso": 25.203023048362347,
+        "left_arm": 88.76250643681998,
+        "right_arm": 58.83037354247739,
+        "left_leg": 60.24300433650161,
+        "right_leg": 23.05616864682448
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 198,
+      "global": 84.4895339541965,
+      "combined_multiscale": 57.34897564396714,
+      "multiscale_vs_global_pct": 32.12298262284512,
+      "per_level": {
+        "global": 84.4895339541965,
+        "torso": 34.83244370932531,
+        "left_arm": 88.76117509302466,
+        "right_arm": 60.31490139768581,
+        "left_leg": 85.30570109203609,
+        "right_leg": 38.188289452080774
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 225,
+      "global": 54.289781663682724,
+      "combined_multiscale": 37.033118133544924,
+      "multiscale_vs_global_pct": 31.786209119499343,
+      "per_level": {
+        "global": 54.289781663682724,
+        "torso": 25.422794261508518,
+        "left_arm": 61.965447124905054,
+        "right_arm": 35.72659025404188,
+        "left_leg": 40.60501816855537,
+        "right_leg": 26.765446464220684
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 225,
+      "global": 46.22851776123047,
+      "combined_multiscale": 35.839660059611,
+      "multiscale_vs_global_pct": 22.472833230945778,
+      "per_level": {
+        "global": 46.22851776123047,
+        "torso": 18.022234081692165,
+        "left_arm": 44.46392001681858,
+        "right_arm": 39.388227212693955,
+        "left_leg": 64.01107535044352,
+        "right_leg": 22.897653142081367
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 225,
+      "global": 53.15816535949707,
+      "combined_multiscale": 43.80956064860026,
+      "multiscale_vs_global_pct": 17.586394578658304,
+      "per_level": {
+        "global": 53.15816535949707,
+        "torso": 28.783052974277073,
+        "left_arm": 47.42943219502767,
+        "right_arm": 36.93942554685805,
+        "left_leg": 83.67612233479818,
+        "right_leg": 34.4047347662184
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 225,
+      "global": 47.38620011223687,
+      "combined_multiscale": 37.60493675231933,
+      "multiscale_vs_global_pct": 20.641586235549735,
+      "per_level": {
+        "global": 47.38620011223687,
+        "torso": 28.15653146955702,
+        "left_arm": 49.723348965115015,
+        "right_arm": 40.524101187388105,
+        "left_leg": 50.751375109354655,
+        "right_leg": 27.4044655863444
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 225,
+      "global": 51.73706371731228,
+      "combined_multiscale": 36.42058728959825,
+      "multiscale_vs_global_pct": 29.604456316659544,
+      "per_level": {
+        "global": 51.73706371731228,
+        "torso": 19.347298346625433,
+        "left_arm": 47.683462172614206,
+        "right_arm": 42.665422219170466,
+        "left_leg": 60.35402195188734,
+        "right_leg": 25.069011173248292
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 225,
+      "global": 57.613713056776255,
+      "combined_multiscale": 34.69756392584907,
+      "multiscale_vs_global_pct": 39.775511618812246,
+      "per_level": {
+        "global": 57.613713056776255,
+        "torso": 31.683870730929904,
+        "left_arm": 36.643388985527885,
+        "right_arm": 40.397335902320016,
+        "left_leg": 34.80875064637926,
+        "right_leg": 28.85551006105211
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 162,
+      "global": 40.78643183060634,
+      "combined_multiscale": 34.597136191379875,
+      "multiscale_vs_global_pct": 15.174888710372514,
+      "per_level": {
+        "global": 40.78643183060634,
+        "torso": 25.512195139755438,
+        "left_arm": 43.03617227813344,
+        "right_arm": 44.58831911911199,
+        "left_leg": 50.162527387524825,
+        "right_leg": 19.105659988927254
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 162,
+      "global": 37.66301677845143,
+      "combined_multiscale": 29.602515350153418,
+      "multiscale_vs_global_pct": 21.40163512581328,
+      "per_level": {
+        "global": 37.66301677845143,
+        "torso": 18.379754054693528,
+        "left_arm": 35.11908696610251,
+        "right_arm": 39.004811902105075,
+        "left_leg": 52.33368168348147,
+        "right_leg": 14.946566257211897
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 162,
+      "global": 46.73471727488953,
+      "combined_multiscale": 40.93470777111289,
+      "multiscale_vs_global_pct": 12.410494471725364,
+      "per_level": {
+        "global": 46.73471727488953,
+        "torso": 30.76538609869686,
+        "left_arm": 48.68731462808303,
+        "right_arm": 50.844825197149206,
+        "left_leg": 65.62754873581875,
+        "right_leg": 23.653094434443815
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 162,
+      "global": 44.10828830577709,
+      "combined_multiscale": 41.55708685039002,
+      "multiscale_vs_global_pct": 5.783950258284953,
+      "per_level": {
+        "global": 44.10828830577709,
+        "torso": 31.153709670643746,
+        "left_arm": 50.5674725520758,
+        "right_arm": 51.937773781058226,
+        "left_leg": 74.52656614044567,
+        "right_leg": 18.144486429514707
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 162,
+      "global": 37.08533449526186,
+      "combined_multiscale": 28.767133477293413,
+      "multiscale_vs_global_pct": 22.429893463765872,
+      "per_level": {
+        "global": 37.08533449526186,
+        "torso": 17.216713581556156,
+        "left_arm": 32.35364615770034,
+        "right_arm": 39.6098122537872,
+        "left_leg": 49.285770307352514,
+        "right_leg": 17.212644044263865
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 162,
+      "global": 45.85685483908948,
+      "combined_multiscale": 38.85948481383147,
+      "multiscale_vs_global_pct": 15.259158199600908,
+      "per_level": {
+        "global": 45.85685483908948,
+        "torso": 30.727500915527344,
+        "left_arm": 45.20155343891662,
+        "right_arm": 51.03819802661001,
+        "left_leg": 62.30494286101541,
+        "right_leg": 17.970309326678148
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 144,
+      "global": 78.81341588497162,
+      "combined_multiscale": 53.79798032177819,
+      "multiscale_vs_global_pct": 31.740072781141116,
+      "per_level": {
+        "global": 78.81341588497162,
+        "torso": 23.293881469302708,
+        "left_arm": 80.36073802577124,
+        "right_arm": 53.00940513941977,
+        "left_leg": 100.47877304752667,
+        "right_leg": 33.45661093460189
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 144,
+      "global": 59.78813591268327,
+      "combined_multiscale": 40.08578545517392,
+      "multiscale_vs_global_pct": 32.953612212100694,
+      "per_level": {
+        "global": 59.78813591268327,
+        "torso": 21.715650830003952,
+        "left_arm": 73.9233193066385,
+        "right_arm": 55.509108036756516,
+        "left_leg": 47.5461288690567,
+        "right_leg": 15.663518387410376
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 144,
+      "global": 75.4467273818122,
+      "combined_multiscale": 57.177163177066376,
+      "multiscale_vs_global_pct": 24.21518446027393,
+      "per_level": {
+        "global": 75.4467273818122,
+        "torso": 23.797503054142,
+        "left_arm": 72.65282942851384,
+        "right_arm": 76.68906035688188,
+        "left_leg": 109.84818540679083,
+        "right_leg": 28.95227716697587
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 144,
+      "global": 71.21542432573106,
+      "combined_multiscale": 48.96728275881873,
+      "multiscale_vs_global_pct": 31.240622066860013,
+      "per_level": {
+        "global": 71.21542432573106,
+        "torso": 23.836977899074554,
+        "left_arm": 70.39508276515537,
+        "right_arm": 54.489748630258774,
+        "left_leg": 88.96664060486688,
+        "right_leg": 29.251090125905144
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 144,
+      "global": 58.92579881350199,
+      "combined_multiscale": 44.90735501713223,
+      "multiscale_vs_global_pct": 23.789993650722707,
+      "per_level": {
+        "global": 58.92579881350199,
+        "torso": 20.07107713487413,
+        "left_arm": 83.92186188035541,
+        "right_arm": 75.33356461260054,
+        "left_leg": 40.81593168444104,
+        "right_leg": 22.7001211858458
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 144,
+      "global": 72.46304843160841,
+      "combined_multiscale": 50.12468421459198,
+      "multiscale_vs_global_pct": 30.82724878473706,
+      "per_level": {
+        "global": 72.46304843160841,
+        "torso": 24.487554086579216,
+        "left_arm": 72.36995871861775,
+        "right_arm": 58.78859004709456,
+        "left_leg": 88.81354524691899,
+        "right_leg": 21.93676342566808
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 135,
+      "global": 51.021857537163626,
+      "combined_multiscale": 41.239783703839336,
+      "multiscale_vs_global_pct": 19.17232007125409,
+      "per_level": {
+        "global": 51.021857537163626,
+        "torso": 26.313524571171513,
+        "left_arm": 53.83162282307943,
+        "right_arm": 68.94236855683504,
+        "left_leg": 53.224642230846264,
+        "right_leg": 18.60869313346015
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 135,
+      "global": 45.868194297507955,
+      "combined_multiscale": 35.80447584081579,
+      "multiscale_vs_global_pct": 21.940515886492907,
+      "per_level": {
+        "global": 45.868194297507955,
+        "torso": 18.875262316951044,
+        "left_arm": 39.20696245122839,
+        "right_arm": 59.02231318155925,
+        "left_leg": 59.24052091527868,
+        "right_leg": 15.45782045258416
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 135,
+      "global": 55.54428120365849,
+      "combined_multiscale": 44.31696191010652,
+      "multiscale_vs_global_pct": 20.213276777110355,
+      "per_level": {
+        "global": 55.54428120365849,
+        "torso": 32.33657851042571,
+        "left_arm": 53.65180044527407,
+        "right_arm": 60.634536827935115,
+        "left_leg": 70.05874813927545,
+        "right_leg": 22.883700716937028
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 135,
+      "global": 52.277885606553816,
+      "combined_multiscale": 44.777918045609084,
+      "multiscale_vs_global_pct": 14.346348315212843,
+      "per_level": {
+        "global": 52.277885606553816,
+        "torso": 30.86084415294506,
+        "left_arm": 54.22458556846336,
+        "right_arm": 61.49629170453107,
+        "left_leg": 79.65486590067546,
+        "right_leg": 17.347860025476525
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 135,
+      "global": 44.05456904658565,
+      "combined_multiscale": 33.42861737851744,
+      "multiscale_vs_global_pct": 24.119976424764854,
+      "per_level": {
+        "global": 44.05456904658565,
+        "torso": 17.483966135095667,
+        "left_arm": 42.13468547750402,
+        "right_arm": 54.25401891072591,
+        "left_leg": 49.908491897583005,
+        "right_leg": 16.460436202861644
+      }
+    },
+    {
+      "subject": "S11",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 135,
+      "global": 54.20830148767542,
+      "combined_multiscale": 43.74453572873716,
+      "multiscale_vs_global_pct": 19.30288437706771,
+      "per_level": {
+        "global": 54.20830148767542,
+        "torso": 31.15483803925691,
+        "left_arm": 52.77688553421586,
+        "right_arm": 68.21044110898619,
+        "left_leg": 64.61780609201502,
+        "right_leg": 18.159837843753674
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 268,
+      "global": 62.16159955067421,
+      "combined_multiscale": 48.64245838193751,
+      "multiscale_vs_global_pct": 21.748380457481442,
+      "per_level": {
+        "global": 62.16159955067421,
+        "torso": 25.103496878894408,
+        "left_arm": 61.42689090700292,
+        "right_arm": 82.92684808773781,
+        "left_leg": 74.60077954762018,
+        "right_leg": 18.474534666360313
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 268,
+      "global": 60.76080552143837,
+      "combined_multiscale": 37.89792354783015,
+      "multiscale_vs_global_pct": 37.62768083372669,
+      "per_level": {
+        "global": 60.76080552143837,
+        "torso": 20.004542653240375,
+        "left_arm": 60.066060975416384,
+        "right_arm": 60.22075118235688,
+        "left_leg": 43.18378144947451,
+        "right_leg": 13.921320183508431
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 268,
+      "global": 56.13569334371766,
+      "combined_multiscale": 52.88116196732023,
+      "multiscale_vs_global_pct": 5.797614997769784,
+      "per_level": {
+        "global": 56.13569334371766,
+        "torso": 28.854718450290054,
+        "left_arm": 70.66384525441411,
+        "right_arm": 68.29846302786869,
+        "left_leg": 99.4664689818425,
+        "right_leg": 24.460090998393387
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 268,
+      "global": 53.357296537997115,
+      "combined_multiscale": 48.660628859676535,
+      "multiscale_vs_global_pct": 8.802296936045028,
+      "per_level": {
+        "global": 53.357296537997115,
+        "torso": 25.380140432670935,
+        "left_arm": 56.53362125425196,
+        "right_arm": 57.51678229089993,
+        "left_leg": 98.73894899638731,
+        "right_leg": 25.18819673025786
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 268,
+      "global": 48.80380621952797,
+      "combined_multiscale": 36.94504145721891,
+      "multiscale_vs_global_pct": 24.298852243135048,
+      "per_level": {
+        "global": 48.80380621952797,
+        "torso": 18.35051013462579,
+        "left_arm": 66.87077719062123,
+        "right_arm": 53.336605892252564,
+        "left_leg": 43.05373366199323,
+        "right_leg": 15.987491556512776
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_02",
+      "action_name": "Directions",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 268,
+      "global": 67.95638122843273,
+      "combined_multiscale": 55.77562347098963,
+      "multiscale_vs_global_pct": 17.924376691716347,
+      "per_level": {
+        "global": 67.95638122843273,
+        "torso": 30.7595976786827,
+        "left_arm": 77.57019960702355,
+        "right_arm": 59.02435101679902,
+        "left_leg": 102.85398387731011,
+        "right_leg": 30.10276614730038
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 530,
+      "global": 59.623574404446586,
+      "combined_multiscale": 49.78741133347997,
+      "multiscale_vs_global_pct": 16.497103988171922,
+      "per_level": {
+        "global": 59.623574404446586,
+        "torso": 26.996446219030418,
+        "left_arm": 52.2062965447048,
+        "right_arm": 81.62210678964291,
+        "left_leg": 74.16097105674024,
+        "right_leg": 31.170876348693415
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 530,
+      "global": 63.6104575966889,
+      "combined_multiscale": 40.51377704368447,
+      "multiscale_vs_global_pct": 36.30956516528294,
+      "per_level": {
+        "global": 63.6104575966889,
+        "torso": 26.641612576538662,
+        "left_arm": 49.488850710526954,
+        "right_arm": 54.12358003922228,
+        "left_leg": 54.1566233976832,
+        "right_leg": 21.196937241869154
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 530,
+      "global": 62.7459121524163,
+      "combined_multiscale": 56.07852573394776,
+      "multiscale_vs_global_pct": 10.62600923271746,
+      "per_level": {
+        "global": 62.7459121524163,
+        "torso": 34.87346135085484,
+        "left_arm": 60.98933034393023,
+        "right_arm": 80.11503504537187,
+        "left_leg": 92.3364889072922,
+        "right_leg": 33.543004475449614
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 530,
+      "global": 61.907581804383476,
+      "combined_multiscale": 53.19470393702669,
+      "multiscale_vs_global_pct": 14.074007760289964,
+      "per_level": {
+        "global": 61.907581804383476,
+        "torso": 33.484416108761195,
+        "left_arm": 58.85545028200689,
+        "right_arm": 67.16113375267892,
+        "left_leg": 86.75347685364058,
+        "right_leg": 33.19184664645285
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 530,
+      "global": 51.9265299563138,
+      "combined_multiscale": 37.323262049117176,
+      "multiscale_vs_global_pct": 28.122942009570963,
+      "per_level": {
+        "global": 51.9265299563138,
+        "torso": 24.168413358364464,
+        "left_arm": 56.979339309008616,
+        "right_arm": 56.34528140301974,
+        "left_leg": 42.598825298615225,
+        "right_leg": 20.911639794313682
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_03",
+      "action_name": "Discussion",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 530,
+      "global": 72.61802115530338,
+      "combined_multiscale": 58.580126658025776,
+      "multiscale_vs_global_pct": 19.331144355002028,
+      "per_level": {
+        "global": 72.61802115530338,
+        "torso": 37.447497549596825,
+        "left_arm": 72.52320546384128,
+        "right_arm": 70.24746698523468,
+        "left_leg": 91.48413624313642,
+        "right_leg": 36.64413111479777
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 268,
+      "global": 46.18540464230438,
+      "combined_multiscale": 31.940975644695225,
+      "multiscale_vs_global_pct": 30.84184085411629,
+      "per_level": {
+        "global": 46.18540464230438,
+        "torso": 20.19526987289315,
+        "left_arm": 45.24684978954828,
+        "right_arm": 39.70417228385584,
+        "left_leg": 38.018582979244975,
+        "right_leg": 18.734746022010917
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 268,
+      "global": 52.979279817040286,
+      "combined_multiscale": 37.23522049633425,
+      "multiscale_vs_global_pct": 29.717390223266314,
+      "per_level": {
+        "global": 52.979279817040286,
+        "torso": 17.299210000393995,
+        "left_arm": 39.054553129779755,
+        "right_arm": 44.36441364395085,
+        "left_leg": 56.724160763754774,
+        "right_leg": 30.87994995757715
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 268,
+      "global": 46.704625521133195,
+      "combined_multiscale": 38.09982435738863,
+      "multiscale_vs_global_pct": 18.42387358367966,
+      "per_level": {
+        "global": 46.704625521133195,
+        "torso": 21.537682640018748,
+        "left_arm": 47.43133531043779,
+        "right_arm": 59.71448033247421,
+        "left_leg": 48.389829066262315,
+        "right_leg": 24.041258247930614
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 268,
+      "global": 47.3571930358659,
+      "combined_multiscale": 40.90476917152974,
+      "multiscale_vs_global_pct": 13.625013331025382,
+      "per_level": {
+        "global": 47.3571930358659,
+        "torso": 26.02469775214124,
+        "left_arm": 40.00697048386531,
+        "right_arm": 47.72716199106245,
+        "left_leg": 64.9284161026798,
+        "right_leg": 38.453826083176175
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 268,
+      "global": 41.359345372043435,
+      "combined_multiscale": 30.576304510458193,
+      "multiscale_vs_global_pct": 26.071594616857652,
+      "per_level": {
+        "global": 41.359345372043435,
+        "torso": 16.02356725486357,
+        "left_arm": 42.46876813048747,
+        "right_arm": 46.50556146920617,
+        "left_leg": 41.38813703985357,
+        "right_leg": 14.549177926867756
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_04",
+      "action_name": "Eating",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 268,
+      "global": 50.77606719999171,
+      "combined_multiscale": 40.26995643928869,
+      "multiscale_vs_global_pct": 20.691068332099437,
+      "per_level": {
+        "global": 50.77606719999171,
+        "torso": 26.472056335477685,
+        "left_arm": 39.15911843082798,
+        "right_arm": 56.22966158567969,
+        "left_leg": 41.56017107750053,
+        "right_leg": 44.193385761175584
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 270,
+      "global": 64.9306871484827,
+      "combined_multiscale": 42.817314310427065,
+      "multiscale_vs_global_pct": 34.056890215079726,
+      "per_level": {
+        "global": 64.9306871484827,
+        "torso": 27.260027867776376,
+        "left_arm": 52.56137092555011,
+        "right_arm": 55.98932295905219,
+        "left_leg": 58.75546595078927,
+        "right_leg": 24.213023338935994
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 270,
+      "global": 65.8014779550058,
+      "combined_multiscale": 39.00389453746654,
+      "multiscale_vs_global_pct": 40.724895929941106,
+      "per_level": {
+        "global": 65.8014779550058,
+        "torso": 22.104694956320305,
+        "left_arm": 51.06911791783792,
+        "right_arm": 47.55008106408296,
+        "left_leg": 53.60356483636079,
+        "right_leg": 17.154305349897456
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 270,
+      "global": 58.14285630826597,
+      "combined_multiscale": 51.05853426191542,
+      "multiscale_vs_global_pct": 12.18433784675177,
+      "per_level": {
+        "global": 58.14285630826597,
+        "torso": 31.18743463445593,
+        "left_arm": 53.23208165168762,
+        "right_arm": 56.12912424935235,
+        "left_leg": 97.0817746233057,
+        "right_leg": 30.262985825538635
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 270,
+      "global": 54.51271288130018,
+      "combined_multiscale": 46.22252340669985,
+      "multiscale_vs_global_pct": 15.207809401546346,
+      "per_level": {
+        "global": 54.51271288130018,
+        "torso": 29.79479627609253,
+        "left_arm": 50.40381025031761,
+        "right_arm": 49.70339734465988,
+        "left_leg": 85.15423567383378,
+        "right_leg": 27.230962770073504
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 270,
+      "global": 52.38548514048259,
+      "combined_multiscale": 36.45903363051238,
+      "multiscale_vs_global_pct": 30.402412934155542,
+      "per_level": {
+        "global": 52.38548514048259,
+        "torso": 17.637744027596934,
+        "left_arm": 57.24507703074703,
+        "right_arm": 43.97717512448629,
+        "left_leg": 58.23148279719882,
+        "right_leg": 18.15344235632155
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_05",
+      "action_name": "Greeting",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 270,
+      "global": 69.62317254808214,
+      "combined_multiscale": 50.625344015050814,
+      "multiscale_vs_global_pct": 27.286645864796412,
+      "per_level": {
+        "global": 69.62317254808214,
+        "torso": 32.94363863203261,
+        "left_arm": 62.93642448849148,
+        "right_arm": 50.922334067026775,
+        "left_leg": 80.79573899728281,
+        "right_leg": 33.10729696132518
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 330,
+      "global": 67.13599278421113,
+      "combined_multiscale": 48.65389237259374,
+      "multiscale_vs_global_pct": 27.529346994275716,
+      "per_level": {
+        "global": 67.13599278421113,
+        "torso": 27.162992084387575,
+        "left_arm": 85.65192682959817,
+        "right_arm": 60.613678231383815,
+        "left_leg": 60.50780736749822,
+        "right_leg": 24.19981912988605
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 330,
+      "global": 65.40725999311967,
+      "combined_multiscale": 46.32443121707801,
+      "multiscale_vs_global_pct": 29.17539853840235,
+      "per_level": {
+        "global": 65.40725999311967,
+        "torso": 24.79527119145249,
+        "left_arm": 82.5506218288884,
+        "right_arm": 51.72234292752815,
+        "left_leg": 60.81741438489972,
+        "right_leg": 22.15031558817083
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 330,
+      "global": 63.212106872327396,
+      "combined_multiscale": 50.0194090236317,
+      "multiscale_vs_global_pct": 20.87052386236965,
+      "per_level": {
+        "global": 63.212106872327396,
+        "torso": 30.214024182521936,
+        "left_arm": 84.98531500209461,
+        "right_arm": 58.646468832998565,
+        "left_leg": 61.43376496343902,
+        "right_leg": 29.932669828877305
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 330,
+      "global": 53.8429399432558,
+      "combined_multiscale": 46.935355856924346,
+      "multiscale_vs_global_pct": 12.829136175720057,
+      "per_level": {
+        "global": 53.8429399432558,
+        "torso": 30.00417274128307,
+        "left_arm": 59.17526140646501,
+        "right_arm": 59.610088241461554,
+        "left_leg": 79.13114362485481,
+        "right_leg": 24.963669086947586
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 330,
+      "global": 46.75374712510543,
+      "combined_multiscale": 37.92592852043383,
+      "multiscale_vs_global_pct": 18.881521049103924,
+      "per_level": {
+        "global": 46.75374712510543,
+        "torso": 23.800411735881458,
+        "left_arm": 51.160934130350746,
+        "right_arm": 66.13224734826521,
+        "left_leg": 42.863055897481516,
+        "right_leg": 16.72164586059975
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_06",
+      "action_name": "Phoning",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 330,
+      "global": 55.78777605692546,
+      "combined_multiscale": 48.33057655565666,
+      "multiscale_vs_global_pct": 13.367085100613297,
+      "per_level": {
+        "global": 55.78777605692546,
+        "torso": 34.96594702113759,
+        "left_arm": 62.89313615596656,
+        "right_arm": 63.41088159156568,
+        "left_leg": 62.46832239844582,
+        "right_leg": 30.466263486399797
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 195,
+      "global": 65.0798357450045,
+      "combined_multiscale": 44.79904950459798,
+      "multiscale_vs_global_pct": 31.162933969087746,
+      "per_level": {
+        "global": 65.0798357450045,
+        "torso": 28.602777813642454,
+        "left_arm": 56.162697987678726,
+        "right_arm": 63.57237766461495,
+        "left_leg": 60.90731574082986,
+        "right_leg": 24.01250641162579
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 195,
+      "global": 63.3350469149076,
+      "combined_multiscale": 38.26643444941594,
+      "multiscale_vs_global_pct": 39.58094875838971,
+      "per_level": {
+        "global": 63.3350469149076,
+        "torso": 25.08933054117056,
+        "left_arm": 47.23935228494497,
+        "right_arm": 44.42793633387639,
+        "left_leg": 56.23789539337158,
+        "right_leg": 19.121714384127888
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 195,
+      "global": 50.955236522968,
+      "combined_multiscale": 47.751509387676535,
+      "multiscale_vs_global_pct": 6.287336403290745,
+      "per_level": {
+        "global": 50.955236522968,
+        "torso": 31.60606241470728,
+        "left_arm": 53.68890219957401,
+        "right_arm": 50.3257225281153,
+        "left_leg": 91.88167421389849,
+        "right_leg": 23.67235342294742
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 195,
+      "global": 46.29233281062199,
+      "combined_multiscale": 46.839666288326946,
+      "multiscale_vs_global_pct": -1.1823415336272847,
+      "per_level": {
+        "global": 46.29233281062199,
+        "torso": 29.30825292147123,
+        "left_arm": 53.58132182390262,
+        "right_arm": 58.85078327472393,
+        "left_leg": 88.02404071612236,
+        "right_leg": 24.09031702371744
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 195,
+      "global": 59.24594570062099,
+      "combined_multiscale": 43.72054096613175,
+      "multiscale_vs_global_pct": 26.205007871663543,
+      "per_level": {
+        "global": 59.24594570062099,
+        "torso": 18.453173505342924,
+        "left_arm": 57.28153143907205,
+        "right_arm": 60.81631164061717,
+        "left_leg": 69.21358981010242,
+        "right_leg": 25.511086059227967
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_07",
+      "action_name": "Posing",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 195,
+      "global": 65.50951177156888,
+      "combined_multiscale": 48.94047372280023,
+      "multiscale_vs_global_pct": 25.29256836250704,
+      "per_level": {
+        "global": 65.50951177156888,
+        "torso": 34.81361016982641,
+        "left_arm": 60.77261201662895,
+        "right_arm": 53.92669811737843,
+        "left_leg": 78.23516280834491,
+        "right_leg": 27.187101792066525
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 152,
+      "global": 57.34599059506466,
+      "combined_multiscale": 38.7061239543714,
+      "multiscale_vs_global_pct": 32.50421947074615,
+      "per_level": {
+        "global": 57.34599059506466,
+        "torso": 27.86800235196164,
+        "left_arm": 57.1785951727315,
+        "right_arm": 43.664391705864354,
+        "left_leg": 45.640087585700186,
+        "right_leg": 19.860316124401596
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 152,
+      "global": 57.268811439213,
+      "combined_multiscale": 36.80857517844752,
+      "multiscale_vs_global_pct": 35.72666473527681,
+      "per_level": {
+        "global": 57.268811439213,
+        "torso": 22.630130705080536,
+        "left_arm": 51.89118912972902,
+        "right_arm": 47.74493131198381,
+        "left_leg": 49.476305522416766,
+        "right_leg": 18.07444921292757
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 152,
+      "global": 49.39614669900192,
+      "combined_multiscale": 42.46415006486993,
+      "multiscale_vs_global_pct": 14.033476490327235,
+      "per_level": {
+        "global": 49.39614669900192,
+        "torso": 29.93876287811681,
+        "left_arm": 50.18569839941828,
+        "right_arm": 55.33785377050701,
+        "left_leg": 56.983912455408195,
+        "right_leg": 28.811438930662053
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 152,
+      "global": 50.94587634739123,
+      "combined_multiscale": 42.343429941880075,
+      "multiscale_vs_global_pct": 16.88546163550616,
+      "per_level": {
+        "global": 50.94587634739123,
+        "torso": 27.491461026041133,
+        "left_arm": 56.327108345533674,
+        "right_arm": 54.860700149285165,
+        "left_leg": 69.34297272406127,
+        "right_leg": 17.724179441207333
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 152,
+      "global": 50.270598687623675,
+      "combined_multiscale": 38.89352831087614,
+      "multiscale_vs_global_pct": 22.63165881004019,
+      "per_level": {
+        "global": 50.270598687623675,
+        "torso": 17.293580117978546,
+        "left_arm": 39.76196790996351,
+        "right_arm": 52.28399998890726,
+        "left_leg": 77.37107284445511,
+        "right_leg": 20.292153076121682
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_08",
+      "action_name": "Purchases",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 152,
+      "global": 66.74001748938309,
+      "combined_multiscale": 41.1680943714945,
+      "multiscale_vs_global_pct": 38.315727324998896,
+      "per_level": {
+        "global": 66.74001748938309,
+        "torso": 29.99602393100136,
+        "left_arm": 57.72047628227033,
+        "right_arm": 56.385598025823896,
+        "left_leg": 44.68643958945023,
+        "right_leg": 23.132514697156456
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 295,
+      "global": 81.353002308991,
+      "combined_multiscale": 60.7794699264785,
+      "multiscale_vs_global_pct": 25.28921096774168,
+      "per_level": {
+        "global": 81.353002308991,
+        "torso": 27.93415721634687,
+        "left_arm": 83.16643986136226,
+        "right_arm": 72.15623728218725,
+        "left_leg": 83.13726017192259,
+        "right_leg": 48.59507786379022
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 295,
+      "global": 85.1600502660719,
+      "combined_multiscale": 60.568907340098235,
+      "multiscale_vs_global_pct": 28.87638376109658,
+      "per_level": {
+        "global": 85.1600502660719,
+        "torso": 22.288786118717518,
+        "left_arm": 76.15582163697582,
+        "right_arm": 64.02582216424457,
+        "left_leg": 87.15620584002995,
+        "right_leg": 63.01544991832669
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 295,
+      "global": 70.47169944633872,
+      "combined_multiscale": 56.88243524583719,
+      "multiscale_vs_global_pct": 19.283292878227222,
+      "per_level": {
+        "global": 70.47169944633872,
+        "torso": 24.695679587024753,
+        "left_arm": 85.10480354115114,
+        "right_arm": 78.44614744428861,
+        "left_leg": 83.69033863908153,
+        "right_leg": 28.63612606080912
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 295,
+      "global": 64.73602047936392,
+      "combined_multiscale": 51.353669176263324,
+      "multiscale_vs_global_pct": 20.67218714404374,
+      "per_level": {
+        "global": 64.73602047936392,
+        "torso": 27.304209812616897,
+        "left_arm": 56.849491146863514,
+        "right_arm": 56.286428082999535,
+        "left_leg": 65.19476443791794,
+        "right_leg": 65.5789310673536
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 295,
+      "global": 62.454713588649945,
+      "combined_multiscale": 46.940020654969295,
+      "multiscale_vs_global_pct": 24.84150841818955,
+      "per_level": {
+        "global": 62.454713588649945,
+        "torso": 19.33370339991683,
+        "left_arm": 68.29997080463474,
+        "right_arm": 57.8226806624461,
+        "left_leg": 67.61296142319502,
+        "right_leg": 38.56524228241484
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_09",
+      "action_name": "Sitting",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 295,
+      "global": 73.16464087922694,
+      "combined_multiscale": 53.05398953971216,
+      "multiscale_vs_global_pct": 27.486844871843875,
+      "per_level": {
+        "global": 73.16464087922694,
+        "torso": 26.632224850735422,
+        "left_arm": 51.03161842540159,
+        "right_arm": 62.57291638972396,
+        "left_leg": 72.85326480865479,
+        "right_leg": 64.92727091676097
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 292,
+      "global": 96.15403001602382,
+      "combined_multiscale": 59.404079332743606,
+      "multiscale_vs_global_pct": 38.21987562783997,
+      "per_level": {
+        "global": 96.15403001602382,
+        "torso": 28.849435865062556,
+        "left_arm": 56.06041373618662,
+        "right_arm": 59.109522022613106,
+        "left_leg": 103.1043265159816,
+        "right_leg": 62.437123357433165
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 292,
+      "global": 96.66337497920206,
+      "combined_multiscale": 61.54779546554774,
+      "multiscale_vs_global_pct": 36.32769859443634,
+      "per_level": {
+        "global": 96.66337497920206,
+        "torso": 22.694626587710967,
+        "left_arm": 43.5992535826278,
+        "right_arm": 51.61026669201786,
+        "left_leg": 120.51497091005926,
+        "right_leg": 80.54498043125623
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 292,
+      "global": 103.51766195689162,
+      "combined_multiscale": 61.54718412111883,
+      "multiscale_vs_global_pct": 40.54426756011043,
+      "per_level": {
+        "global": 103.51766195689162,
+        "torso": 32.119579053904914,
+        "left_arm": 60.2358544591355,
+        "right_arm": 54.74597068682109,
+        "left_leg": 113.3538325126857,
+        "right_leg": 64.73691218356564
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 292,
+      "global": 94.05029764567335,
+      "combined_multiscale": 60.54369712855718,
+      "multiscale_vs_global_pct": 35.6262567539653,
+      "per_level": {
+        "global": 94.05029764567335,
+        "torso": 28.907501377471505,
+        "left_arm": 56.5790009433276,
+        "right_arm": 63.57004368141906,
+        "left_leg": 104.87627267510923,
+        "right_leg": 65.59291158310354
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 292,
+      "global": 80.43048392909847,
+      "combined_multiscale": 50.79484918019543,
+      "multiscale_vs_global_pct": 36.846271837712194,
+      "per_level": {
+        "global": 80.43048392909847,
+        "torso": 24.656706354389453,
+        "left_arm": 63.321523650051795,
+        "right_arm": 65.56002309224377,
+        "left_leg": 77.4047210967704,
+        "right_leg": 38.65783194115717
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_10",
+      "action_name": "SittingDown",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 292,
+      "global": 106.09545464711647,
+      "combined_multiscale": 62.08451684533733,
+      "multiscale_vs_global_pct": 41.48239710001119,
+      "per_level": {
+        "global": 106.09545464711647,
+        "torso": 35.52856813391594,
+        "left_arm": 56.29651275399613,
+        "right_arm": 57.262684786156434,
+        "left_leg": 107.79883420957277,
+        "right_leg": 68.59567092216179
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 432,
+      "global": 58.97026635540856,
+      "combined_multiscale": 44.973314801851906,
+      "multiscale_vs_global_pct": 23.735608500050297,
+      "per_level": {
+        "global": 58.97026635540856,
+        "torso": 26.261818512722297,
+        "left_arm": 53.66317902891724,
+        "right_arm": 57.83996124289654,
+        "left_leg": 63.71479641728931,
+        "right_leg": 33.46248680684302
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 432,
+      "global": 59.409375062695254,
+      "combined_multiscale": 44.80719174279107,
+      "multiscale_vs_global_pct": 24.578920927032755,
+      "per_level": {
+        "global": 59.409375062695254,
+        "torso": 20.85935909770153,
+        "left_arm": 48.68548877702819,
+        "right_arm": 57.51922488654101,
+        "left_leg": 69.98273120103059,
+        "right_leg": 37.311685066532206
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 432,
+      "global": 55.37041162561487,
+      "combined_multiscale": 48.41312764309071,
+      "multiscale_vs_global_pct": 12.56498512159454,
+      "per_level": {
+        "global": 55.37041162561487,
+        "torso": 28.417142974005806,
+        "left_arm": 51.96982224451171,
+        "right_arm": 66.14343496163686,
+        "left_leg": 77.26126857598622,
+        "right_leg": 33.094913091924454
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 432,
+      "global": 55.19333383330592,
+      "combined_multiscale": 48.67217986230497,
+      "multiscale_vs_global_pct": 11.815111568900772,
+      "per_level": {
+        "global": 55.19333383330592,
+        "torso": 29.879683589493787,
+        "left_arm": 53.703557040956284,
+        "right_arm": 66.40587702835047,
+        "left_leg": 72.38162084862039,
+        "right_leg": 37.04916868096701
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 432,
+      "global": 49.87950724584085,
+      "combined_multiscale": 37.86313490514402,
+      "multiscale_vs_global_pct": 24.090800018275637,
+      "per_level": {
+        "global": 49.87950724584085,
+        "torso": 19.86075003169201,
+        "left_arm": 46.55787479656714,
+        "right_arm": 63.28661455269213,
+        "left_leg": 47.16520403491126,
+        "right_leg": 25.192733102374607
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_11",
+      "action_name": "Smoking",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 432,
+      "global": 61.41613578796387,
+      "combined_multiscale": 47.947653143494215,
+      "multiscale_vs_global_pct": 21.92987636175763,
+      "per_level": {
+        "global": 61.41613578796387,
+        "torso": 31.990890242435313,
+        "left_arm": 47.746832425947545,
+        "right_arm": 75.83645434953549,
+        "left_leg": 57.88550909801766,
+        "right_leg": 37.54572118211676
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 233,
+      "global": 75.12041976011874,
+      "combined_multiscale": 48.15571515652243,
+      "multiscale_vs_global_pct": 35.89530608282331,
+      "per_level": {
+        "global": 75.12041976011874,
+        "torso": 27.072338141085254,
+        "left_arm": 57.582700025370194,
+        "right_arm": 50.08121823241271,
+        "left_leg": 77.02006613850082,
+        "right_leg": 43.44576302516102
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 233,
+      "global": 76.26929755476922,
+      "combined_multiscale": 43.48120462638626,
+      "multiscale_vs_global_pct": 42.98989761225705,
+      "per_level": {
+        "global": 76.26929755476922,
+        "torso": 30.78127872074111,
+        "left_arm": 59.25720836778567,
+        "right_arm": 49.961289960427344,
+        "left_leg": 60.980969793295145,
+        "right_leg": 19.406614278007474
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 233,
+      "global": 68.11652624760575,
+      "combined_multiscale": 54.83592025200185,
+      "multiscale_vs_global_pct": 19.49689264442005,
+      "per_level": {
+        "global": 68.11652624760575,
+        "torso": 31.27471034823569,
+        "left_arm": 65.8002739198218,
+        "right_arm": 61.87082800640057,
+        "left_leg": 101.05220801635873,
+        "right_leg": 39.84132939858498
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 233,
+      "global": 64.10331972474192,
+      "combined_multiscale": 51.01619177724159,
+      "multiscale_vs_global_pct": 20.415678944079872,
+      "per_level": {
+        "global": 64.10331972474192,
+        "torso": 28.64396493526999,
+        "left_arm": 56.31791058732716,
+        "right_arm": 51.860474508719385,
+        "left_leg": 89.23860558931408,
+        "right_leg": 48.0361969951908
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 233,
+      "global": 70.27243368615409,
+      "combined_multiscale": 42.96687140075946,
+      "multiscale_vs_global_pct": 38.85671927536316,
+      "per_level": {
+        "global": 70.27243368615409,
+        "torso": 23.018886950906253,
+        "left_arm": 56.15271514270439,
+        "right_arm": 63.878490531905015,
+        "left_leg": 59.598409439872775,
+        "right_leg": 26.372389441396034
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_12",
+      "action_name": "Photo",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 233,
+      "global": 88.41263631075749,
+      "combined_multiscale": 57.34337762497014,
+      "multiscale_vs_global_pct": 35.14119698521765,
+      "per_level": {
+        "global": 88.41263631075749,
+        "torso": 34.562280491186314,
+        "left_arm": 63.42202481691418,
+        "right_arm": 64.52615328612757,
+        "left_leg": 96.98736796972578,
+        "right_leg": 46.53026722224485
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 330,
+      "global": 60.095887253501196,
+      "combined_multiscale": 48.42724319226814,
+      "multiscale_vs_global_pct": 19.416709852392167,
+      "per_level": {
+        "global": 60.095887253501196,
+        "torso": 29.765233672748913,
+        "left_arm": 60.513064709576696,
+        "right_arm": 70.49683596871115,
+        "left_leg": 65.68918213699803,
+        "right_leg": 28.58599915937944
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 330,
+      "global": 54.311622521371554,
+      "combined_multiscale": 39.51907087383848,
+      "multiscale_vs_global_pct": 27.236438465288394,
+      "per_level": {
+        "global": 54.311622521371554,
+        "torso": 22.58680722207734,
+        "left_arm": 55.480181350130024,
+        "right_arm": 48.34615337920911,
+        "left_leg": 52.66017068227132,
+        "right_leg": 27.469940200718966
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 330,
+      "global": 54.53851340322783,
+      "combined_multiscale": 51.06376826546409,
+      "multiscale_vs_global_pct": 6.371176845385174,
+      "per_level": {
+        "global": 54.53851340322783,
+        "torso": 31.92698263688521,
+        "left_arm": 68.63519896160473,
+        "right_arm": 71.0888583761273,
+        "left_leg": 72.27105239810366,
+        "right_leg": 30.977165639761722
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 330,
+      "global": 53.8522040049235,
+      "combined_multiscale": 55.19536134546453,
+      "multiscale_vs_global_pct": -2.4941548175414274,
+      "per_level": {
+        "global": 53.8522040049235,
+        "torso": 33.94010758833452,
+        "left_arm": 80.80269344214237,
+        "right_arm": 67.00265474897442,
+        "left_leg": 88.52884230469212,
+        "right_leg": 28.050166913957305
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 330,
+      "global": 49.789124222957724,
+      "combined_multiscale": 40.39242195360588,
+      "multiscale_vs_global_pct": 18.87300171674646,
+      "per_level": {
+        "global": 49.789124222957724,
+        "torso": 19.78650236563249,
+        "left_arm": 56.993885664506394,
+        "right_arm": 62.734759885614565,
+        "left_leg": 52.44577173897714,
+        "right_leg": 24.144061413678255
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_13",
+      "action_name": "Waiting",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 330,
+      "global": 63.11005902145848,
+      "combined_multiscale": 55.73833851669774,
+      "multiscale_vs_global_pct": 11.680737776293693,
+      "per_level": {
+        "global": 63.11005902145848,
+        "torso": 34.36484261137066,
+        "left_arm": 89.25036013632109,
+        "right_arm": 62.885948819825146,
+        "left_leg": 82.59634645057447,
+        "right_leg": 31.03723284331235
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 160,
+      "global": 46.55497581958771,
+      "combined_multiscale": 36.27910044193268,
+      "multiscale_vs_global_pct": 22.07256087400119,
+      "per_level": {
+        "global": 46.55497581958771,
+        "torso": 25.355007773637773,
+        "left_arm": 44.04934641122818,
+        "right_arm": 43.95499863922596,
+        "left_leg": 50.61008254885674,
+        "right_leg": 22.818321770429613
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 160,
+      "global": 45.178090035915375,
+      "combined_multiscale": 32.855804830789566,
+      "multiscale_vs_global_pct": 27.2749140021854,
+      "per_level": {
+        "global": 45.178090035915375,
+        "torso": 19.429264813661575,
+        "left_arm": 40.964452451467515,
+        "right_arm": 39.6720467209816,
+        "left_leg": 52.661661458015445,
+        "right_leg": 17.846795043349267
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 160,
+      "global": 45.71090717315674,
+      "combined_multiscale": 42.141131258010866,
+      "multiscale_vs_global_pct": 7.809461977254717,
+      "per_level": {
+        "global": 45.71090717315674,
+        "torso": 30.340623998641966,
+        "left_arm": 52.56999672651291,
+        "right_arm": 50.361403757333754,
+        "left_leg": 63.396435379981995,
+        "right_leg": 27.259944680333138
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 160,
+      "global": 42.28086062669754,
+      "combined_multiscale": 44.67946150302887,
+      "multiscale_vs_global_pct": -5.673018100338223,
+      "per_level": {
+        "global": 42.28086062669754,
+        "torso": 28.08126723766327,
+        "left_arm": 63.08351596593857,
+        "right_arm": 55.22524556517601,
+        "left_leg": 76.10286449193954,
+        "right_leg": 20.935516014695168
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 160,
+      "global": 43.82656421661377,
+      "combined_multiscale": 32.76029756069183,
+      "multiscale_vs_global_pct": 25.250135057876467,
+      "per_level": {
+        "global": 43.82656421661377,
+        "torso": 20.252023619413375,
+        "left_arm": 39.37587732076645,
+        "right_arm": 40.22929636836052,
+        "left_leg": 53.09567501246929,
+        "right_leg": 18.458273580670358
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_14",
+      "action_name": "Walking",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 160,
+      "global": 49.34803947210312,
+      "combined_multiscale": 41.72592798471451,
+      "multiscale_vs_global_pct": 15.445621688167478,
+      "per_level": {
+        "global": 49.34803947210312,
+        "torso": 29.777819514274597,
+        "left_arm": 54.60471445918083,
+        "right_arm": 51.23403279781341,
+        "left_leg": 58.69492279887199,
+        "right_leg": 23.413992044329643
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 222,
+      "global": 56.31809188224174,
+      "combined_multiscale": 43.460396551871085,
+      "multiscale_vs_global_pct": 22.830488215501752,
+      "per_level": {
+        "global": 56.31809188224174,
+        "torso": 27.04536351642093,
+        "left_arm": 58.60364415409329,
+        "right_arm": 58.06789967176076,
+        "left_leg": 62.61774027884543,
+        "right_leg": 25.989449562253178
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 222,
+      "global": 54.26264366802869,
+      "combined_multiscale": 37.82345426404798,
+      "multiscale_vs_global_pct": 30.29559249739725,
+      "per_level": {
+        "global": 54.26264366802869,
+        "torso": 21.988706550082647,
+        "left_arm": 59.62257541836919,
+        "right_arm": 45.64588286640408,
+        "left_leg": 48.63327107880566,
+        "right_leg": 21.818757175325274
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 222,
+      "global": 52.50486022502452,
+      "combined_multiscale": 47.666702167407884,
+      "multiscale_vs_global_pct": 9.214686101212987,
+      "per_level": {
+        "global": 52.50486022502452,
+        "torso": 27.475139946550936,
+        "left_arm": 58.665695757479284,
+        "right_arm": 64.91940098410254,
+        "left_leg": 80.58100724005484,
+        "right_leg": 25.984458363807953
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 222,
+      "global": 57.60767665210071,
+      "combined_multiscale": 49.60459890451517,
+      "multiscale_vs_global_pct": 13.892380690714246,
+      "per_level": {
+        "global": 57.60767665210071,
+        "torso": 29.869933029552836,
+        "left_arm": 66.98279497644923,
+        "right_arm": 65.75446236670554,
+        "left_leg": 81.62513640979388,
+        "right_leg": 24.446775008966256
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 222,
+      "global": 52.2391598246119,
+      "combined_multiscale": 37.402140823570456,
+      "multiscale_vs_global_pct": 28.402101126540614,
+      "per_level": {
+        "global": 52.2391598246119,
+        "torso": 20.59698451961483,
+        "left_arm": 53.458401001251495,
+        "right_arm": 47.10314565950686,
+        "left_leg": 59.819640183234,
+        "right_leg": 19.253699415438884
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_15",
+      "action_name": "WalkDog",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 222,
+      "global": 63.23333446399586,
+      "combined_multiscale": 53.27478853861491,
+      "multiscale_vs_global_pct": 15.748886263543804,
+      "per_level": {
+        "global": 63.23333446399586,
+        "torso": 29.156805657051706,
+        "left_arm": 69.067513120067,
+        "right_arm": 69.37043292672784,
+        "left_leg": 86.02542603552878,
+        "right_leg": 29.579464716954273
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_01",
+      "cam_b": "ca_02",
+      "n_frames": 171,
+      "global": 56.673775589256955,
+      "combined_multiscale": 45.2389741641039,
+      "multiscale_vs_global_pct": 20.17653016101618,
+      "per_level": {
+        "global": 56.673775589256955,
+        "torso": 25.80211535671301,
+        "left_arm": 49.20024507087574,
+        "right_arm": 82.26577819578829,
+        "left_leg": 58.758667455082055,
+        "right_leg": 21.74382819766887
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_01",
+      "cam_b": "ca_03",
+      "n_frames": 171,
+      "global": 54.36093718545479,
+      "combined_multiscale": 38.47630853262561,
+      "multiscale_vs_global_pct": 29.220667404312863,
+      "per_level": {
+        "global": 54.36093718545479,
+        "torso": 20.030675486514443,
+        "left_arm": 40.41287085047939,
+        "right_arm": 67.0360737516169,
+        "left_leg": 53.5276843344259,
+        "right_leg": 19.486413531833225
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_01",
+      "cam_b": "ca_04",
+      "n_frames": 171,
+      "global": 52.24554908484743,
+      "combined_multiscale": 45.951957401476406,
+      "multiscale_vs_global_pct": 12.046177700515992,
+      "per_level": {
+        "global": 52.24554908484743,
+        "torso": 29.02305421215749,
+        "left_arm": 48.43410708053767,
+        "right_arm": 69.01206259699593,
+        "left_leg": 74.66708729838767,
+        "right_leg": 24.463214507577014
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_02",
+      "cam_b": "ca_03",
+      "n_frames": 171,
+      "global": 49.53988941928797,
+      "combined_multiscale": 49.21095537999917,
+      "multiscale_vs_global_pct": 0.6639781459841676,
+      "per_level": {
+        "global": 49.53988941928797,
+        "torso": 27.5857460066589,
+        "left_arm": 59.461246997989406,
+        "right_arm": 78.77659901401452,
+        "left_leg": 83.43440268890203,
+        "right_leg": 19.398533293378282
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_02",
+      "cam_b": "ca_04",
+      "n_frames": 171,
+      "global": 51.67096463699787,
+      "combined_multiscale": 39.58168627644143,
+      "multiscale_vs_global_pct": 23.39665699196213,
+      "per_level": {
+        "global": 51.67096463699787,
+        "torso": 19.93046458283363,
+        "left_arm": 41.727850536156815,
+        "right_arm": 71.12821727886535,
+        "left_leg": 59.99739615122477,
+        "right_leg": 16.8510870320058
+      }
+    },
+    {
+      "subject": "S9",
+      "action": "act_16",
+      "action_name": "WalkTogether",
+      "cam_a": "ca_03",
+      "cam_b": "ca_04",
+      "n_frames": 171,
+      "global": 59.21417144864623,
+      "combined_multiscale": 46.266637668274996,
+      "multiscale_vs_global_pct": 21.86559984479399,
+      "per_level": {
+        "global": 59.21417144864623,
+        "torso": 29.020363757484837,
+        "left_arm": 50.16144548382675,
+        "right_arm": 83.19163793151142,
+        "left_leg": 61.49983058059425,
+        "right_leg": 20.879432681011178
+      }
+    }
+  ]
+}

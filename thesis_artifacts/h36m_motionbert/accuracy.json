@@ -2,12 +2,26 @@
   "backbone": "MotionBERT / DSTformer",
   "parameters_millions": 42.5,
   "checkpoint": "motionbert_ft_h36m.bin",
-  "mpjpe_action_balanced_mm": 36.70341388713922,
+  "mpjpe_action_balanced_mm": 44.02676960713756,
   "published_mpjpe_at_243_frames_mm": 37.5,
   "window_frames": 27,
   "caveat": "The released checkpoint is fine-tuned at 243 frames and is evaluated here at 27, so it operates below its published accuracy. The window is held identical to the first backbone so that the backbone is the only variable.",
   "per_action_mpjpe_mm": {
-    "Directions": 36.70341388713922
+    "Directions": 38.645010340017784,
+    "Discussion": 42.00128071442215,
+    "Eating": 42.52765447558997,
+    "Greeting": 37.7497717048936,
+    "Phoning": 45.904135241894316,
+    "Posing": 40.37161962141476,
+    "Purchases": 38.21808345253071,
+    "Sitting": 54.921746608415965,
+    "SittingDown": 64.6120729410872,
+    "Smoking": 45.60267033908821,
+    "Photo": 56.366915778862946,
+    "Waiting": 42.27115481337951,
+    "Walking": 32.791436785834755,
+    "WalkDog": 43.56276530085284,
+    "WalkTogether": 34.85522598877869
   },
   "comparison_motionagformer_xs_mm": 45.149
 }

@@ -353,6 +353,35 @@ def main():
                              msc["per_level_distance_mm"][lv],
                              sym["per_level_distance_mm"][lv], src, tol=1e-9, unit="mm"))
 
+    # ---------- second backbone: model independence, measured ----------------
+    mb = load("h36m_crossview/h36m_crossview_motionbert.json")["summary"]
+    src = "h36m_crossview/h36m_crossview_motionbert.json"
+    results.append(check("MotionBERT: cross-view improvement %", 77.5,
+                         mb["mean_improvement_pct"], src, unit="%"))
+    results.append(check("  pairs improved (all of them)", 180.0,
+                         float(mb["n_pairs_improved"]), src, tol=0))
+    results.append(check("  oracle gap closed %", 94.5,
+                         mb["mean_oracle_gap_closed_pct"], src, unit="%"))
+    results.append(check("  frame validity %", 100.0,
+                         mb["mean_validity_pct"], src, unit="%"))
+    # The decisive one: SittingDown fails on one backbone and not the other,
+    # with the frame construction byte-identical, so the failure is the
+    # estimator's and not the frame's.
+    results.append(check("  SittingDown canonical dist (vs 274.1 on XS)", 87.5,
+                         mb["by_action"]["SittingDown"]["mean_canonical_distance_mm"],
+                         src, tol=0.2, unit="mm"))
+    mbm = load("h36m_multiscale/h36m_multiscale_motionbert.json")["summary"]
+    results.append(check("  multi-scale, long axis %", 54.9,
+                         mbm["long_axis_variant"]["mean_multiscale_vs_global_pct"],
+                         "h36m_multiscale_motionbert.json", unit="%"))
+    mbf = load("h36m_fusion/h36m_fusion_motionbert.json")["summary"]
+    results.append(check("  median fusion %", 6.8,
+                         mbf["improvement_vs_single_view_pct"]["naive_median"],
+                         "h36m_fusion_motionbert.json", unit="%"))
+    results.append(check("  MotionBERT accuracy on these clips (mm)", 44.03,
+                         load("h36m_motionbert/accuracy.json")["mpjpe_action_balanced_mm"],
+                         "h36m_motionbert/accuracy.json", tol=0.05, unit="mm"))
+
     # ---------- cost of the added framework ("lightweight", quantified) -------
     cb = load("cost/cost_benchmark.json")
     src = "cost/cost_benchmark.json"

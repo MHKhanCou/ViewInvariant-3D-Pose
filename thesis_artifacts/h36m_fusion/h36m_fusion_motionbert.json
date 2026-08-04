@@ -1,0 +1,294 @@
+{
+  "summary": {
+    "n_frames": 2819,
+    "bootstrap_improvement_pct": {
+      "naive_median": {
+        "mean": 2.530138614687895,
+        "ci95": [
+          -3.871068247024929,
+          8.014860595022824
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "naive_mean": {
+        "mean": -15.02150864271788,
+        "ci95": [
+          -41.09541452323968,
+          4.081185216782799
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "unit": "subject-action group (video)"
+    },
+    "bootstrap_aggregate_ratio_pct": {
+      "naive_median": {
+        "mean": 6.757968692847783,
+        "ci95": [
+          0.16692981987303132,
+          12.410648181470863
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "naive_mean": {
+        "mean": -10.220404290109176,
+        "ci95": [
+          -35.496485255824346,
+          7.953454257754154
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "reliability_weighted_mean": {
+        "mean": -1.8390153757275485,
+        "ci95": [
+          -17.281688913439115,
+          9.654995746289126
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "unit": "subject-action group (video)",
+      "note": "CI on the headline figure, 1 - mean(fused)/mean(single view)."
+    },
+    "mean_views_flipped_of_4": 0.14615111741752396,
+    "mean_views_flipped_anatomical": 0.41255764455480665,
+    "per_frame_improvement_pct": {
+      "naive_mean": {
+        "mean": -15.02150864271788,
+        "median": 5.576994694206238,
+        "frames_improved_pct": 63.6395885065626
+      },
+      "naive_median": {
+        "mean": 2.530138614687895,
+        "median": 5.9486408750813125,
+        "frames_improved_pct": 62.433487052146155
+      }
+    },
+    "overall_mm": {
+      "single_view_mean": 37.81259704873538,
+      "oracle_best_view": 27.435678102370673,
+      "worst_view": 50.60602075371305,
+      "naive_mean": 41.67719733970603,
+      "naive_median": 35.257233578229155,
+      "plain_mean": 44.802696823828065,
+      "median": 36.23754468861398,
+      "reliability_weighted_mean": 38.50797652242352,
+      "anatomical_mean": 44.22238254044104,
+      "anatomical_median": 38.88668328536858
+    },
+    "improvement_vs_single_view_pct": {
+      "naive_mean": -10.220404290109176,
+      "naive_median": 6.757968692847783,
+      "plain_mean": -18.486166835045424,
+      "median": 4.165417038378417,
+      "reliability_weighted_mean": -1.8390153757275485,
+      "anatomical_mean": -16.951455313805354,
+      "anatomical_median": -2.8405513518387826
+    },
+    "best_strategy": "naive_median",
+    "weighting_gain_over_plain_mean_pct": 16.647151459317875,
+    "actions_improved": 9,
+    "n_actions": 15,
+    "by_subject": {
+      "S11": {
+        "n_frames": 1159,
+        "single_view_mean_mm": 35.10905410191524,
+        "naive_mean": {
+          "mm": 35.52357404378973,
+          "improvement_pct": -1.180663941190807
+        },
+        "naive_median": {
+          "mm": 31.906183462240833,
+          "improvement_pct": 9.122634379089378
+        },
+        "plain_mean": {
+          "mm": 38.953604334375875,
+          "improvement_pct": -10.950309915216172
+        },
+        "median": {
+          "mm": 32.393469586610664,
+          "improvement_pct": 7.734712839091951
+        },
+        "reliability_weighted_mean": {
+          "mm": 34.599741648646074,
+          "improvement_pct": 1.4506584307020232
+        },
+        "anatomical_mean": {
+          "mm": 37.767442812188996,
+          "improvement_pct": -7.571803850245962
+        },
+        "anatomical_median": {
+          "mm": 34.86868008017646,
+          "improvement_pct": 0.6846496662684776
+        }
+      },
+      "S9": {
+        "n_frames": 1660,
+        "single_view_mean_mm": 39.70019119052123,
+        "naive_mean": {
+          "mm": 45.97361264089096,
+          "improvement_pct": -15.801993043971962
+        },
+        "naive_median": {
+          "mm": 37.596912544753536,
+          "improvement_pct": 5.297905583562712
+        },
+        "plain_mean": {
+          "mm": 48.88649091736727,
+          "improvement_pct": -23.139182586705907
+        },
+        "median": {
+          "mm": 38.921450136337995,
+          "improvement_pct": 1.9615549216024153
+        },
+        "reliability_weighted_mean": {
+          "mm": 41.23667785899464,
+          "improvement_pct": -3.8702248588673216
+        },
+        "anatomical_mean": {
+          "mm": 48.72917479649171,
+          "improvement_pct": -22.742922225841134
+        },
+        "anatomical_median": {
+          "mm": 41.692024077427426,
+          "improvement_pct": -5.017187139848733
+        }
+      }
+    },
+    "by_action": {
+      "Directions": {
+        "n_frames": 169,
+        "single_view_mm": 32.967464562277655,
+        "fused_mm": 34.85825356621951,
+        "improvement_pct": -5.735318226762742,
+        "anatomical_median_mm": 35.53870646106288,
+        "anatomical_median_improvement_pct": -7.799331652963426
+      },
+      "Discussion": {
+        "n_frames": 300,
+        "single_view_mm": 36.613417424871095,
+        "fused_mm": 100.88278432986051,
+        "improvement_pct": -175.5350126408357,
+        "anatomical_median_mm": 54.965771965427166,
+        "anatomical_median_improvement_pct": -50.124669673936296
+      },
+      "Eating": {
+        "n_frames": 195,
+        "single_view_mm": 34.768131658030406,
+        "fused_mm": 32.62864537018981,
+        "improvement_pct": 6.153584290591119,
+        "anatomical_median_mm": 33.005667129293485,
+        "anatomical_median_improvement_pct": 5.0691953944262185
+      },
+      "Greeting": {
+        "n_frames": 180,
+        "single_view_mm": 32.511186964373145,
+        "fused_mm": 34.976264176827165,
+        "improvement_pct": -7.582243045002746,
+        "anatomical_median_mm": 41.94423410158105,
+        "anatomical_median_improvement_pct": -29.014773122694535
+      },
+      "Phoning": {
+        "n_frames": 272,
+        "single_view_mm": 37.7482427916414,
+        "fused_mm": 33.39921472289743,
+        "improvement_pct": 11.521140448177302,
+        "anatomical_median_mm": 35.524448293819724,
+        "anatomical_median_improvement_pct": 5.891120575059173
+      },
+      "Posing": {
+        "n_frames": 135,
+        "single_view_mm": 33.1793587193208,
+        "fused_mm": 30.743761490492055,
+        "improvement_pct": 7.340700130561794,
+        "anatomical_median_mm": 31.604597848071165,
+        "anatomical_median_improvement_pct": 4.746206473040216
+      },
+      "Purchases": {
+        "n_frames": 103,
+        "single_view_mm": 32.28892390011304,
+        "fused_mm": 30.709805494908725,
+        "improvement_pct": 4.890588519113781,
+        "anatomical_median_mm": 32.0869048267247,
+        "anatomical_median_improvement_pct": 0.6256605949869876
+      },
+      "Sitting": {
+        "n_frames": 205,
+        "single_view_mm": 47.28500331781216,
+        "fused_mm": 37.8721582842784,
+        "improvement_pct": 19.90661810948412,
+        "anatomical_median_mm": 37.98705323562137,
+        "anatomical_median_improvement_pct": 19.66363419644358
+      },
+      "SittingDown": {
+        "n_frames": 197,
+        "single_view_mm": 59.648281016110225,
+        "fused_mm": 48.758712925873596,
+        "improvement_pct": 18.256298261630544,
+        "anatomical_median_mm": 51.22902370335254,
+        "anatomical_median_improvement_pct": 14.114836453516165
+      },
+      "Smoking": {
+        "n_frames": 270,
+        "single_view_mm": 38.4852318096485,
+        "fused_mm": 34.33724300559145,
+        "improvement_pct": 10.778131270128199,
+        "anatomical_median_mm": 34.0122224879686,
+        "anatomical_median_improvement_pct": 11.62266436071847
+      },
+      "Photo": {
+        "n_frames": 172,
+        "single_view_mm": 43.034591865355374,
+        "fused_mm": 42.380800413552244,
+        "improvement_pct": 1.5192230795372241,
+        "anatomical_median_mm": 42.00187676187451,
+        "anatomical_median_improvement_pct": 2.3997325377500323
+      },
+      "Waiting": {
+        "n_frames": 222,
+        "single_view_mm": 34.06404374868729,
+        "fused_mm": 31.554416001237588,
+        "improvement_pct": 7.367380590410422,
+        "anatomical_median_mm": 32.09000544747491,
+        "anatomical_median_improvement_pct": 5.795079162580208
+      },
+      "Walking": {
+        "n_frames": 129,
+        "single_view_mm": 25.703151737470982,
+        "fused_mm": 27.088797907262403,
+        "improvement_pct": -5.390958213779573,
+        "anatomical_median_mm": 27.451940201771343,
+        "anatomical_median_improvement_pct": -6.803789987166886
+      },
+      "WalkDog": {
+        "n_frames": 147,
+        "single_view_mm": 37.168863097340854,
+        "fused_mm": 86.27893409387389,
+        "improvement_pct": -132.12691189375246,
+        "anatomical_median_mm": 46.9142266507473,
+        "anatomical_median_improvement_pct": -26.21915964414756
+      },
+      "WalkTogether": {
+        "n_frames": 123,
+        "single_view_mm": 30.528811344930055,
+        "fused_mm": 32.31019392243997,
+        "improvement_pct": -5.835086592081651,
+        "anatomical_median_mm": 32.981616733037974,
+        "anatomical_median_improvement_pct": -8.03439531397039
+      }
+    },
+    "mpi_reference": {
+      "improvement_pct_by_condition": [
+        23.7,
+        10.6,
+        10.2,
+        8.2
+      ],
+      "note": "MPI-INF-3DHP used up to 8 cameras; Human3.6M has 4, so a smaller gain is expected from averaging alone."
+    },
+    "prediction_cache": "preds_motionbert.npz"
+  }
+}

@@ -204,7 +204,7 @@ The main objectives of this project are:
 \section{Contributions}
 
 \begin{itemize}
-\item A canonicalization and reliability framework that adds zero learned parameters to a frozen estimator, evaluated over 209 camera pairs across two datasets, including a held-out subject on the first and an entirely held-out second dataset.
+\item A canonicalization and reliability framework that adds zero learned parameters to a frozen estimator, evaluated over 209 camera pairs across two datasets and, without a line of code changed, over a second backbone nineteen times larger and of a different architecture family.
 
 \item A cross-dataset replication of the central claim on Human3.6M, where canonicalization improves 179 of 180 held-out camera pairs and closes 90.5 percent of the gap to a per-frame Procrustes oracle.
 
@@ -915,6 +915,49 @@ Pairs improved & 179 / 180 & \textbf{180 / 180} & \textbf{180 / 180} \\
 
 Two remarks are in order. The first concerns what the correction is not: it adds no parameters, consumes no labels and changes no algorithm, since it only makes two segment definitions agree with each other and with the four that were already consistent. The second concerns why it went unnoticed. The MPI-INF-3DHP evaluation reported one combined number per camera pair and confirmed that multi-scale beat the global frame, which it did. The defect was invisible at that granularity and became obvious only when the levels were reported separately on a dataset large enough for the bilateral comparison to be unambiguous. We report the corrected figures as a variant rather than as the headline, because the MPI-INF-3DHP results elsewhere in this chapter were produced with the original definitions and we have not re-run them.
 
+\section{A Second Backbone}
+\label{sec:backbone2}
+
+The framework consumes a seventeen by three array and nothing else, so independence from the estimator is structural. It was not, until this section, empirical. We test it by replacing the backbone and changing nothing else.
+
+MotionBERT is a suitable second choice because it shares almost nothing with the first. It is a dual-stream spatio-temporal transformer of 42.5 million parameters against a 2.24 million parameter transformer and graph-convolution hybrid, a factor of nineteen in size and a different architecture family. We run it over the same clips, with the same windows, and pass its predictions to the same three evaluation modules. Not one line of those modules changes; they take an argument naming a different cache, and that argument is the entire adaptation. A trained canonicalizer would at minimum require validation against the new output distribution, and in general retraining.
+
+One caveat belongs here. The released MotionBERT checkpoint is fine-tuned at 243 frames and we evaluate it at 27, so it runs below its published accuracy. It reaches 44.03 mm on these clips where its paper reports 37.5 mm at the longer window. We hold the window identical rather than favourable because the backbone must be the only variable, and at 44.03 mm against 45.15 mm the two backbones are close enough in accuracy that no result below can be attributed to one being weaker.
+
+All three components replicate, as Table \ref{tab:backbone} shows. Canonicalization improves every one of the 180 pairs rather than 179, at 77.5 percent with an interval of $[+76.6, +78.5]$, and closes 94.5 percent of the oracle gap. Multi-scale gives 24.5 percent against 25.6 percent, and under the corrected long-axis definitions 54.9 percent against 55.1 percent, a difference of two tenths of a percentage point across a nineteen-fold change in model size. Fusion behaves as before: the median improves on an arbitrary view at 6.8 percent with an interval excluding zero, while the unweighted mean and the reliability-weighted mean do not.
+
+\begin{table}[h]
+\centering
+\caption{The same framework over two unrelated backbones, with no code changed.}
+\label{tab:backbone}
+{\fontsize{10}{12}\selectfont
+\begin{tabular}{lrr}
+\hline
+ & \textbf{MotionAGFormer-XS} & \textbf{MotionBERT} \\
+ & 2.24M, hybrid & 42.5M, transformer \\
+\hline
+Accuracy on these clips & 45.15 mm & 44.03 mm \\
+\hline
+Cross-view improvement & +74.1\% & \textbf{+77.5\%} \\
+95\% CI & $[+69.8, +77.2]$ & $[+76.6, +78.5]$ \\
+Pairs improved & 179 / 180 & \textbf{180 / 180} \\
+Oracle gap closed & 90.5\% & 94.5\% \\
+Frame validity & 100\% & 100\% \\
+\hline
+Multi-scale, as implemented & +25.6\% & +24.5\% \\
+Multi-scale, own long axis & +55.1\% & +54.9\% \\
+\hline
+Fusion, median & +8.4\% & +6.8\% \\
+Fusion, unweighted mean & $-3.4\%$, spans zero & $-10.2\%$, spans zero \\
+Reliability-weighted mean & $+3.1\%$, spans zero & $-1.8\%$, spans zero \\
+\hline
+\end{tabular}}
+\end{table}
+
+The per-action breakdown settles a question Section \ref{sec:h36mcv} could only argue. SittingDown, the single action on which canonicalization failed, carries a canonical distance of 274.1 mm under the first backbone and 87.5 mm under the second. Every other action moves by at most five millimetres between the two. If the failure were a property of the body frame it would survive a change of estimator, because the frame construction is byte-identical in both runs. It does not survive. That is direct evidence for the conclusion Section \ref{sec:h36mcv} reached from correlations alone: the failure is inherited from the estimator, and a better estimator removes it.
+
+We therefore state model independence as a measurement rather than an argument. The same code, unmodified, improves 359 of 360 camera pairs across two backbones that share no architecture.
+
 \section{Ablation with Abstention}
 
 Table \ref{tab:ablation} reports the three conditions on the development pair and Figure \ref{fig:coverage} traces error against coverage as the abstention threshold varies. Coverage is reported alongside error throughout, since an abstaining method could otherwise report an arbitrarily low error by answering arbitrarily rarely.
@@ -966,7 +1009,7 @@ The methodological contribution may prove as durable as the empirical one. We re
 
 The framework is intended for deployment-oriented canonicalization of a frozen estimator, not as a replacement for a learned canonicalization network. A method that trains on the deployment distribution has information this one does not and should be expected to use it; the comparison that matters is therefore not accuracy alone but accuracy against what the user must supply. We make no claim to the contrary and none of our experiments test one.
 
-Both datasets are laboratory capture with controlled lighting, a single subject in frame and a fixed camera rig, so neither exercises the uncontrolled conditions where viewpoint quality varies per frame. Four subjects in total appear across the two test splits. Only one lifting backbone was evaluated end to end, so the framework is model-independent by construction, since it consumes any 17 by 3 pose, but model-agnosticism is not an empirical claim. Near-aligned camera pairs gain little and may regress, which we observe on both datasets. Fusion by an unweighted mean is unsafe at four views, and we did not determine the number of views at which it becomes safe. Canonicalization degrades where the backbone itself degrades, as SittingDown shows, so the method inherits rather than repairs the failure modes of the estimator it wraps. The abstention threshold was fixed at implementation time rather than calibrated, and the framework offers no coverage guarantee of the kind conformal methods provide. The bone-length signal was discovered by exploratory analysis rather than pre-registered, which is the practice its failure to replicate argues against.
+Both datasets are laboratory capture with controlled lighting, a single subject in frame and a fixed camera rig, so neither exercises the uncontrolled conditions where viewpoint quality varies per frame. Four subjects in total appear across the two test splits. Two lifting backbones were evaluated end to end and both were transformer-based; a convolutional or diffusion estimator might behave differently, and the second backbone ran below its published accuracy because we held the temporal window fixed. Near-aligned camera pairs gain little and may regress, which we observe on both datasets. Fusion by an unweighted mean is unsafe at four views, and we did not determine the number of views at which it becomes safe. Canonicalization degrades where the backbone itself degrades, as SittingDown shows, so the method inherits rather than repairs the failure modes of the estimator it wraps. The abstention threshold was fixed at implementation time rather than calibrated, and the framework offers no coverage guarantee of the kind conformal methods provide. The bone-length signal was discovered by exploratory analysis rather than pre-registered, which is the practice its failure to replicate argues against.
 
 \section*{Future Work}
 
