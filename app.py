@@ -265,9 +265,19 @@ with gr.Blocks(title="View-Invariant 3D Pose — Training-Free Canonicalization"
                         value="Camera Coordinate System",
                         label="Representation",
                     )
+                    vid_bvh = gr.Checkbox(
+                        value=False,
+                        label="Also export BVH (motion capture)",
+                        info="Writes a .bvh file for Blender, Unity or "
+                             "MotionBuilder. BVH stores joint rotations relative "
+                             "to each parent and contains no camera, which is "
+                             "what the view-invariant frame produces.",
+                    )
                     vid_run_btn = gr.Button("Run Inference", variant="primary")
                 with gr.Column(scale=2):
                     vid_output = gr.Video(label="Output", interactive=False)
+                    vid_bvh_file = gr.File(label="Motion capture (.bvh)",
+                                           visible=False, interactive=False)
 
             vid_status = gr.Markdown("**Status:** Ready")
 
@@ -332,22 +342,38 @@ with gr.Blocks(title="View-Invariant 3D Pose — Training-Free Canonicalization"
         outputs=[viewer_3d, img_overlay, img_status, bone_metrics, avatar_view],
     )
 
-    def on_video_run(video, cs):
+    def on_video_run(video, cs, want_bvh):
         if video is None:
-            return None, "**Status:** Ready"
+            return None, "**Status:** Ready", gr.update(visible=False)
         try:
             mode = "canonical" if "View-Invariant" in cs else "motionagformer"
-            out_path, t = predict_video(video, mode=mode)
-            return out_path, f"**Status:** Completed\n**Inference time:** {t:.2f}s"
+            if want_bvh:
+                out_path, t, bvh_path = predict_video(video, mode=mode, export_bvh=True)
+                note = ("\n\n**BVH exported.** Import into Blender with "
+                        "*File → Import → Motion Capture (.bvh)*. Bone lengths are "
+                        "fixed to the sequence median, and rotation about a bone's "
+                        "own axis is not recoverable from joint positions, so "
+                        "twist is zero.")
+                if mode != "canonical":
+                    note += (" Exported from the camera frame, so the body will "
+                             "import arbitrarily oriented; the view-invariant "
+                             "representation is the one BVH expects.")
+                bvh_update = gr.update(value=bvh_path, visible=bvh_path is not None)
+            else:
+                out_path, t = predict_video(video, mode=mode)
+                note, bvh_update = "", gr.update(visible=False)
+            return (out_path,
+                    f"**Status:** Completed\n**Inference time:** {t:.2f}s" + note,
+                    bvh_update)
         except Exception as e:
             import traceback
             traceback.print_exc()
-            return None, f"**Status:** Error — {e}"
+            return None, f"**Status:** Error — {e}", gr.update(visible=False)
 
     vid_run_btn.click(
         fn=on_video_run,
-        inputs=[vid_input, vid_coord],
-        outputs=[vid_output, vid_status],
+        inputs=[vid_input, vid_coord, vid_bvh],
+        outputs=[vid_output, vid_status, vid_bvh_file],
     )
 
 

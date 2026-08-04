@@ -265,7 +265,7 @@ def predict_image(image_rgb: np.ndarray, mode="motionagformer"):
     return original_rgb, overlay_2d_rgb, combined_rgb, inference_time
 
 
-def predict_video(video_path: str, mode="motionagformer"):
+def predict_video(video_path: str, mode="motionagformer", export_bvh=False):
     """
     Run 3D pose estimation on a video file.
 
@@ -273,9 +273,16 @@ def predict_video(video_path: str, mode="motionagformer"):
         video_path: path to the uploaded video file.
         mode:       "camera"    — camera-relative root pose (qualitative).
                     "canonical" — canonical body-frame pose (qualitative).
+        export_bvh: additionally write the pose sequence as a BVH motion-capture
+                    file and return its path. BVH stores joint rotations
+                    relative to each parent and carries no camera, so canonical
+                    mode is the one that maps onto it cleanly; camera mode is
+                    exported too but will import with the body arbitrarily
+                    oriented.
     Returns:
         output_path: path to the processed output video.
         inference_time: seconds (float).
+        bvh_path: only when export_bvh is True; None if the sequence was empty.
     """
     t0 = time.time()
 
@@ -357,4 +364,16 @@ def predict_video(video_path: str, mode="motionagformer"):
     save_video_demo(frames_out, out_path, fps=fps)
 
     inference_time = time.time() - t0
+
+    if export_bvh:
+        from presentation.bvh_export import write_bvh
+        bvh_path = None
+        if len(poses3d_render) > 0:
+            bvh_path = os.path.join(out_dir, f"{base}_{mode}.bvh")
+            # Root translation is meaningless in the canonical frame, where the
+            # body is re-anchored every frame, so it is pinned there.
+            write_bvh(bvh_path, np.asarray(poses3d_render), fps=fps, scale=100.0,
+                      root_motion=(mode != "canonical"))
+        return out_path, inference_time, bvh_path
+
     return out_path, inference_time
