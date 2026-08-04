@@ -382,6 +382,29 @@ def main():
                          load("h36m_motionbert/accuracy.json")["mpjpe_action_balanced_mm"],
                          "h36m_motionbert/accuracy.json", tol=0.05, unit="mm"))
 
+    # ---------- multi-landmark frame: pre-registered, criterion FAILED --------
+    for tag, label, base in (("", "XS", 75.3), ("_motionbert", "MB", 60.1)):
+        ml = load("multilandmark/results%s.json" % tag)["summary"]
+        src = "multilandmark/results%s.json" % tag
+        results.append(check("multilandmark %s: baseline (mm)" % label, base,
+                             ml["baseline_both_mm"], src, tol=0.1, unit="mm"))
+        # The part that replicates: a longer lateral axis helps on both.
+        results.append(check("  %s shoulder-axis CI lower > 0" % label,
+                             1.58 if tag == "" else 1.72,
+                             ml["variants"]["shoulder_only"]["paired_gain_ci95_mm"][0],
+                             src, tol=0.15, unit="mm"))
+        # The part that does not: combining redundant axes.
+        results.append(check("  %s weighted spans zero (0=spans)" % label, 0.0,
+                             float(ml["variants"]["weighted"]["beats_baseline"]),
+                             src, tol=0))
+    ml_mb = load("multilandmark/results_motionbert.json")["summary"]
+    results.append(check("  pre-registered criterion FAILS on MotionBERT", 0.0,
+                         float(ml_mb["prereg"]["1_weighted_or_svd_beats_baseline"]),
+                         "multilandmark/results_motionbert.json", tol=0))
+    results.append(check("  shoulder beats hip, both backbones", 1.0,
+                         float(ml_mb["prereg"]["2_shoulder_beats_hip"]),
+                         "multilandmark/results_motionbert.json", tol=0))
+
     # ---------- cost of the added framework ("lightweight", quantified) -------
     cb = load("cost/cost_benchmark.json")
     src = "cost/cost_benchmark.json"

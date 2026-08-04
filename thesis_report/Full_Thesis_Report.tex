@@ -958,6 +958,40 @@ The per-action breakdown settles a question Section \ref{sec:h36mcv} could only 
 
 We therefore state model independence as a measurement rather than an argument. The same code, unmodified, improves 359 of 360 camera pairs across two backbones that share no architecture.
 
+\section{Testing the Axis-Length Principle on the Global Frame}
+\label{sec:multilandmark}
+
+Section \ref{sec:h36mms} established that a frame's cross-view consistency is governed by the length of the axis it is built from, and Section \ref{sec:backbone2} showed that result reproduces to two tenths of a percentage point on an unrelated backbone. Both were obtained on per-limb frames. The global frame was never revisited, and it uses the shorter of the two lateral vectors available: the hip axis measures 271.6 mm against 295.2 mm for the shoulder axis, over 2672 poses. The principle therefore makes a prediction about our own method that we had not tested.
+
+We pre-registered that prediction before running anything, in the manner of Section \ref{sec:relfails}, and committed it separately so that version history shows the criterion preceding the number. The pass condition was that a multi-landmark estimate beat the two-vector baseline with a cluster bootstrap interval excluding zero on \emph{both} backbones. Five variants were compared on identical frames, with a shared validity mask so the comparison is paired.
+
+Two lateral estimates can be combined only because they point the same way. The hip vector runs from the right hip to the left and the shoulder vector from the right shoulder to the left, and their cosine is $+0.969$ with the same sign on every one of the 2672 poses measured. Weighting is derived rather than tuned: if per-joint noise is fixed and angular error scales as the inverse of segment length, variance scales as the inverse square, so inverse-variance weighting gives a weight equal to the squared length and introduces no free parameter.
+
+\begin{table}[h]
+\centering
+\caption{Global frame from redundant landmarks. Paired gain is against the two-vector baseline on identical frames.}
+\label{tab:multilandmark}
+{\fontsize{10}{12}\selectfont
+\begin{tabular}{lrrrr}
+\hline
+ & \multicolumn{2}{c}{\textbf{MotionAGFormer-XS}} & \multicolumn{2}{c}{\textbf{MotionBERT}} \\
+\textbf{Lateral axis from} & \textbf{mm} & \textbf{gain 95\% CI} & \textbf{mm} & \textbf{gain 95\% CI} \\
+\hline
+Hips (the current frame) & 75.3 & --- & 60.1 & --- \\
+Hips alone & 74.9 & $[-4.8, +5.6]$ & 59.7 & $[+0.3, +0.5]$ \\
+\textbf{Shoulders alone} & \textbf{71.4} & $\mathbf{[+1.6, +7.8]}$ & \textbf{57.5} & $\mathbf{[+1.7, +3.6]}$ \\
+Both, length-weighted & 72.0 & $[-1.8, +8.3]$ & 61.5 & $[-12.0, +4.3]$ \\
+Spine chain by SVD & 72.7 & $[+0.4, +6.1]$ & 68.9 & $[-25.1, +2.2]$ \\
+\hline
+\end{tabular}}
+\end{table}
+
+The pre-registered criterion fails, and the shape of the failure is more useful than a pass would have been. Table \ref{tab:multilandmark} separates two things that we had treated as one. Replacing the hip axis with the longer shoulder axis improves the global frame on both backbones, by 5.2 and 4.4 percent, with intervals excluding zero in each case. That is the axis-length principle operating exactly as stated, now confirmed at the global scale on two estimators. Combining the two lateral axes, however, does not help. The weighted estimate is indistinguishable from the baseline on the first backbone and worse on the second, and the spine-chain estimate is worse still, losing 8.8 mm on MotionBERT.
+
+We take the natural reading, which the pre-registration named in advance as the expected failure mode. Redundancy pays only when the redundant estimates carry independent errors. Here they do not: the hip and shoulder positions are produced by one network from one image, so their errors are correlated through the shared prediction, and averaging them reduces nothing while diluting the longer and better-conditioned of the two. The spine-chain variant fails hardest because it is the most redundant, drawing a single direction from five joints that the estimator places with correlated error.
+
+The practical consequence is small and concrete. The best available global frame among those tested is not a multi-landmark estimate but the existing construction with one vector exchanged for a longer one, a change of two joint indices. We report it as a measured improvement rather than adopting it in the results above, which were computed with the original definition throughout, and we note that the corresponding change to the segment frames in Section \ref{sec:h36mms} was validated on Human3.6M only. Re-running both datasets under the corrected definitions is the cheapest outstanding item in this report.
+
 \section{Ablation with Abstention}
 
 Table \ref{tab:ablation} reports the three conditions on the development pair and Figure \ref{fig:coverage} traces error against coverage as the abstention threshold varies. Coverage is reported alongside error throughout, since an abstaining method could otherwise report an arbitrarily low error by answering arbitrarily rarely.
