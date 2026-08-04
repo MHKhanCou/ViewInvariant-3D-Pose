@@ -224,6 +224,15 @@ def main():
                          cv["mean_oracle_distance_mm"], src, tol=0.1, unit="mm"))
     results.append(check("  oracle gap closed %", 90.5,
                          cv["mean_oracle_gap_closed_pct"], src, unit="%"))
+    results.append(check("  improvement CI lower bound %", 69.8,
+                         cv["bootstrap"]["improvement_pct"]["ci95"][0], src,
+                         tol=0.3, unit="%"))
+    results.append(check("  improvement CI upper bound %", 77.2,
+                         cv["bootstrap"]["improvement_pct"]["ci95"][1], src,
+                         tol=0.3, unit="%"))
+    results.append(check("  bootstrap clusters (groups, not pairs)", 30.0,
+                         float(cv["bootstrap"]["improvement_pct"]["n_clusters"]),
+                         src, tol=0))
     results.append(check("  canonicalization validity %", 100.0,
                          cv["mean_validity_pct"], src, unit="%"))
     results.append(check("  SittingDown canonical distance (mm)", 274.1,
@@ -247,6 +256,23 @@ def main():
     results.append(check("  frames where mean fusion helps %", 67.9,
                          fz["per_frame_improvement_pct"]["naive_mean"]["frames_improved_pct"],
                          src, unit="%"))
+    # The median's interval must exclude zero and the mean's must not; those two
+    # facts are what the report's fusion claim rests on.
+    rb = fz["bootstrap_aggregate_ratio_pct"]
+    results.append(check("  median fusion CI lower bound > 0", 2.1,
+                         rb["naive_median"]["ci95"][0], src, tol=0.4, unit="%"))
+    results.append(check("  mean fusion CI lower bound < 0", -21.5,
+                         rb["naive_mean"]["ci95"][0], src, tol=1.5, unit="%"))
+    results.append(check("  mean fusion CI upper bound > 0 (spans zero)", 10.5,
+                         rb["naive_mean"]["ci95"][1], src, tol=1.5, unit="%"))
+    results.append(check("  reliability-weighted CI spans zero (lower)", -8.4,
+                         rb["reliability_weighted_mean"]["ci95"][0], src,
+                         tol=1.5, unit="%"))
+
+    msb = load("h36m_multiscale/h36m_multiscale.json")["summary"]["bootstrap"]
+    results.append(check("  multi-scale CI lower bound %", 23.6,
+                         msb["multiscale_vs_global_pct"]["ci95"][0],
+                         "h36m_multiscale/h36m_multiscale.json", tol=0.3, unit="%"))
 
     # ---------- H36M multi-scale, and the bilateral asymmetry it exposed ------
     msc = load("h36m_multiscale/h36m_multiscale.json")["summary"]

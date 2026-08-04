@@ -1,6 +1,45 @@
 {
   "summary": {
     "n_pairs": 180,
+    "bootstrap": {
+      "improvement_pct": {
+        "mean": 74.05025670260979,
+        "ci95": [
+          69.78292339097621,
+          77.23734523742203
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "canonical_distance_mm": {
+        "mean": 75.31521846225431,
+        "ci95": [
+          59.92069195743866,
+          96.87869078525144
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "raw_distance_mm": {
+        "mean": 320.37109879652746,
+        "ci95": [
+          300.42630818056307,
+          341.7183190528577
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "oracle_gap_closed_pct": {
+        "mean": 90.53248449447375,
+        "ci95": [
+          85.2847650828552,
+          94.23511276588948
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "unit": "subject-action group (6 pairs each)"
+    },
     "by_action": {
       "Directions": {
         "n": 12,
@@ -152,7 +191,8 @@
       "held_out_subject_improvement_pct": 13.4,
       "n_pairs": 29,
       "note": "MPI-INF-3DHP reserved one development pair for tuning. Human3.6M was never used for tuning, so all pairs here are held out."
-    }
+    },
+    "prediction_cache": "preds.npz"
   },
   "per_pair": [
     {

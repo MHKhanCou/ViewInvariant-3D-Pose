@@ -1,0 +1,13 @@
+{
+  "backbone": "MotionBERT / DSTformer",
+  "parameters_millions": 42.5,
+  "checkpoint": "motionbert_ft_h36m.bin",
+  "mpjpe_action_balanced_mm": 36.70341388713922,
+  "published_mpjpe_at_243_frames_mm": 37.5,
+  "window_frames": 27,
+  "caveat": "The released checkpoint is fine-tuned at 243 frames and is evaluated here at 27, so it operates below its published accuracy. The window is held identical to the first backbone so that the backbone is the only variable.",
+  "per_action_mpjpe_mm": {
+    "Directions": 36.70341388713922
+  },
+  "comparison_motionagformer_xs_mm": 45.149
+}

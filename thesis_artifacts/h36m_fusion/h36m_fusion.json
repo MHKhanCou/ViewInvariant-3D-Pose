@@ -1,6 +1,58 @@
 {
   "summary": {
     "n_frames": 2819,
+    "bootstrap_improvement_pct": {
+      "naive_median": {
+        "mean": 4.683603633863748,
+        "ci95": [
+          -1.239670308722827,
+          9.75466505766962
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "naive_mean": {
+        "mean": -7.363763097686848,
+        "ci95": [
+          -25.855006355973885,
+          7.1974961820798775
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "unit": "subject-action group (video)"
+    },
+    "bootstrap_aggregate_ratio_pct": {
+      "naive_median": {
+        "mean": 8.378168655010043,
+        "ci95": [
+          2.072673297069469,
+          13.67638890658802
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "naive_mean": {
+        "mean": -3.42295345418977,
+        "ci95": [
+          -21.493293024159364,
+          10.472056760430746
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "reliability_weighted_mean": {
+        "mean": 3.1217880518242924,
+        "ci95": [
+          -8.402764415791532,
+          12.250145500596803
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "unit": "subject-action group (video)",
+      "note": "CI on the headline figure, 1 - mean(fused)/mean(single view)."
+    },
     "mean_views_flipped_of_4": 0.10358283079106066,
     "mean_views_flipped_anatomical": 0.39056402979780064,
     "per_frame_improvement_pct": {
@@ -236,6 +288,7 @@
         8.2
       ],
       "note": "MPI-INF-3DHP used up to 8 cameras; Human3.6M has 4, so a smaller gain is expected from averaging alone."
-    }
+    },
+    "prediction_cache": "preds.npz"
   }
 }

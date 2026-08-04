@@ -36,7 +36,8 @@ sys.path.insert(0, REPO_ROOT)
 
 from evaluation.fusion import median_fuse, resolve_reflections, weighted_mean_fuse
 from evaluation.gt_eval import similarity_align_error
-from evaluation.h36m_crossview import ACTION_NAMES, canonicalize_stream
+from evaluation.h36m_crossview import (ACTION_NAMES, canonicalize_stream,
+                                       cluster_bootstrap)
 from evaluation.h36m_replication import OUT_DIR as PRED_DIR
 from evaluation.h36m_replication import aggregate_by_video, h36m_conf_to_coco, parse_video
 from evaluation.reliability import compute_reliability_score
@@ -209,8 +210,47 @@ def summarise(rows):
         }
 
     best = max(STRATEGIES, key=lambda k: improvement[k])
+
+    # Per-frame improvement of each strategy, bootstrapped over videos. Frames
+    # within a video share a subject and a motion, so the video is the unit.
+    for r in rows:
+        for k in ("naive_median", "naive_mean"):
+            r["_imp_" + k] = (1 - r[k] / max(r["single_view_mean"], 1e-8)) * 100
+    boot = {k: cluster_bootstrap(rows, "_imp_" + k) for k in ("naive_median", "naive_mean")}
+
+    # The headline figure is a ratio of aggregate means, not the mean of
+    # per-frame ratios, and the two are not the same quantity. Bootstrap the one
+    # actually quoted so the interval answers the question the number raises.
+    groups = {}
+    for r in rows:
+        groups.setdefault((r["subject"], r["action"]), []).append(r)
+    gkeys = list(groups)
+    rng = np.random.default_rng(12345)
+    ratio_boot = {}
+    for k in ("naive_median", "naive_mean", "reliability_weighted_mean"):
+        draws = np.empty(10000)
+        for i in range(10000):
+            pick = rng.integers(0, len(gkeys), size=len(gkeys))
+            sel = [r for j in pick for r in groups[gkeys[j]]]
+            base = np.mean([r["single_view_mean"] for r in sel])
+            draws[i] = (1 - np.mean([r[k] for r in sel]) / max(base, 1e-8)) * 100
+        ratio_boot[k] = {
+            "mean": improvement[k],
+            "ci95": [float(np.percentile(draws, 2.5)), float(np.percentile(draws, 97.5))],
+            "n_clusters": len(gkeys), "draws": 10000,
+        }
+    for r in rows:
+        for k in ("naive_median", "naive_mean"):
+            r.pop("_imp_" + k, None)
+
     return {
         "n_frames": len(rows),
+        "bootstrap_improvement_pct": {**boot,
+                                      "unit": "subject-action group (video)"},
+        "bootstrap_aggregate_ratio_pct": {**ratio_boot,
+                                          "unit": "subject-action group (video)",
+                                          "note": "CI on the headline figure, "
+                                                  "1 - mean(fused)/mean(single view)."},
         "mean_views_flipped_of_4": float(np.mean([r["n_flipped"] for r in rows])),
         "mean_views_flipped_anatomical": float(
             np.mean([r["n_flipped_anatomical"] for r in rows])),
@@ -248,10 +288,13 @@ def summarise(rows):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--stride", type=int, default=EVAL_STRIDE)
+    ap.add_argument("--preds", default=None,
+                    help="prediction cache to analyse; defaults to MotionAGFormer-XS")
+    ap.add_argument("--tag", default=None, help="suffix for the output filename")
     args = ap.parse_args()
 
     meta = np.load(os.path.join(PRED_DIR, "meta.npz"), allow_pickle=True)
-    pred_path = os.path.join(PRED_DIR, "preds.npz")
+    pred_path = args.preds or os.path.join(PRED_DIR, "preds.npz")
     if not os.path.exists(pred_path):
         print("ERROR: run evaluation.h36m_replication --stage infer first.")
         return
@@ -273,6 +316,19 @@ def main():
     for k in STRATEGIES:
         print("  %-28s  %6.1f mm   %+5.1f%%"
               % (k, o[k], s["improvement_vs_single_view_pct"][k]))
+    bb = s["bootstrap_improvement_pct"]
+    print("\n  cluster bootstrap over %d videos (per-frame improvement):"
+          % bb["naive_median"]["n_clusters"])
+    for k in ("naive_median", "naive_mean"):
+        print("    %-13s %+.1f%%  95%% CI [%+.1f%%, %+.1f%%]"
+              % (k, bb[k]["mean"], *bb[k]["ci95"]))
+    rb = s["bootstrap_aggregate_ratio_pct"]
+    print("\n  CI on the headline ratio-of-means figure:")
+    for k in ("naive_median", "naive_mean", "reliability_weighted_mean"):
+        lo, hi = rb[k]["ci95"]
+        flag = "" if (lo > 0 or hi < 0) else "   <-- includes zero"
+        print("    %-26s %+.1f%%  95%% CI [%+.1f%%, %+.1f%%]%s"
+              % (k, rb[k]["mean"], lo, hi, flag))
     print("\n  best strategy: %s" % s["best_strategy"])
     print("  reliability weighting buys %+.1f%% over a plain mean"
           % s["weighting_gain_over_plain_mean_pct"])
@@ -284,9 +340,11 @@ def main():
                  v["plain_mean"]["improvement_pct"]))
 
     os.makedirs(OUT_DIR, exist_ok=True)
-    with open(os.path.join(OUT_DIR, "h36m_fusion.json"), "w") as fh:
+    name = "h36m_fusion%s.json" % ("_" + args.tag if args.tag else "")
+    s["prediction_cache"] = os.path.basename(pred_path)
+    with open(os.path.join(OUT_DIR, name), "w") as fh:
         json.dump({"summary": s}, fh, indent=2)
-    print("\nSaved: %s" % os.path.join(OUT_DIR, "h36m_fusion.json"))
+    print("\nSaved: %s" % os.path.join(OUT_DIR, name))
 
 
 if __name__ == "__main__":

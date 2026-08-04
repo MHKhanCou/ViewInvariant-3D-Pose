@@ -1,6 +1,27 @@
 {
   "summary": {
     "n_pairs": 180,
+    "bootstrap": {
+      "multiscale_vs_global_pct": {
+        "mean": 25.58320769634253,
+        "ci95": [
+          23.58530996511551,
+          27.609317644395507
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "combined_multiscale_mm": {
+        "mean": 46.160955178751706,
+        "ci95": [
+          44.2609203506739,
+          48.124647195007796
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "unit": "subject-action group (6 pairs each)"
+    },
     "n_pairs_improved": 179,
     "all_pairs_improved": false,
     "mean_multiscale_vs_global_pct": 25.58320769634253,
@@ -130,7 +151,8 @@
         "right_leg": 30.65545699711671
       },
       "note": "Both legs use hip-to-knee as primary axis and knee-to-ankle as secondary. The shipped table uses root-to-hip for the left leg only. canonical/multiscale.py is unmodified."
-    }
+    },
+    "prediction_cache": "preds.npz"
   },
   "per_pair": [
     {

@@ -40,7 +40,7 @@ sys.path.insert(0, REPO_ROOT)
 from canonical.body_frame import canonicalize_single
 from canonical.multiscale import (LEVELS, SEGMENTS, _gram_schmidt_frame,
                                   multiscale_canonicalize)
-from evaluation.h36m_crossview import ACTION_NAMES, EVAL_STRIDE
+from evaluation.h36m_crossview import ACTION_NAMES, EVAL_STRIDE, cluster_bootstrap
 from evaluation.h36m_replication import OUT_DIR as PRED_DIR
 from evaluation.h36m_replication import aggregate_by_video, parse_video
 
@@ -187,6 +187,12 @@ def summarise(results, fallback_rate):
 
     return {
         "n_pairs": len(results),
+        "bootstrap": {
+            "multiscale_vs_global_pct": cluster_bootstrap(
+                results, "multiscale_vs_global_pct"),
+            "combined_multiscale_mm": cluster_bootstrap(results, "combined_multiscale"),
+            "unit": "subject-action group (6 pairs each)",
+        },
         "n_pairs_improved": int((d > 0).sum()),
         "all_pairs_improved": bool((d > 0).all()),
         "mean_multiscale_vs_global_pct": float(d.mean()),
@@ -211,10 +217,13 @@ def summarise(results, fallback_rate):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--stride", type=int, default=EVAL_STRIDE)
+    ap.add_argument("--preds", default=None,
+                    help="prediction cache to analyse; defaults to MotionAGFormer-XS")
+    ap.add_argument("--tag", default=None, help="suffix for the output filename")
     args = ap.parse_args()
 
     meta = np.load(os.path.join(PRED_DIR, "meta.npz"), allow_pickle=True)
-    pred_path = os.path.join(PRED_DIR, "preds.npz")
+    pred_path = args.preds or os.path.join(PRED_DIR, "preds.npz")
     if not os.path.exists(pred_path):
         print("ERROR: run evaluation.h36m_replication --stage infer first.")
         return
@@ -248,6 +257,9 @@ def main():
              s["worst_pair_pct"], s["best_pair_pct"]))
     print("  pairs improved: %d / %d   (MPI-INF-3DHP: 29 of 29)"
           % (s["n_pairs_improved"], s["n_pairs"]))
+    b = s["bootstrap"]["multiscale_vs_global_pct"]
+    print("  cluster bootstrap over %d groups: %+.1f%%  95%% CI [%+.1f%%, %+.1f%%]"
+          % (b["n_clusters"], b["mean"], *b["ci95"]))
     print("\n  per level (cross-view distance of that level's joints):")
     for lv in LEVELS:
         print("    %-11s %7.1f mm" % (lv, s["per_level_distance_mm"][lv]))
@@ -274,9 +286,11 @@ def main():
               % (a, v["n"], v["mean_pct"], v["pairs_improved"], v["n"]))
 
     os.makedirs(OUT_DIR, exist_ok=True)
-    with open(os.path.join(OUT_DIR, "h36m_multiscale.json"), "w") as fh:
+    name = "h36m_multiscale%s.json" % ("_" + args.tag if args.tag else "")
+    s["prediction_cache"] = os.path.basename(pred_path)
+    with open(os.path.join(OUT_DIR, name), "w") as fh:
         json.dump({"summary": s, "per_pair": results}, fh, indent=2)
-    print("\nSaved: %s" % os.path.join(OUT_DIR, "h36m_multiscale.json"))
+    print("\nSaved: %s" % os.path.join(OUT_DIR, name))
 
 
 if __name__ == "__main__":

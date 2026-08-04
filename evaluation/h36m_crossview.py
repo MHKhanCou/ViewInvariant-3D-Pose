@@ -133,6 +133,39 @@ def evaluate(videos, stride=EVAL_STRIDE):
     return results
 
 
+SEED = 12345
+BOOTSTRAP_DRAWS = 10000
+
+
+def cluster_bootstrap(results, field, draws=BOOTSTRAP_DRAWS, seed=SEED):
+    """
+    Percentile confidence interval for the mean of `field`, resampling whole
+    subject-action groups.
+
+    The six pairs of a group are formed from the same four camera streams of the
+    same motion, so they are far from independent. Resampling pairs individually
+    would treat 180 dependent observations as 180 independent ones and return an
+    interval that is too narrow. The group is the unit that varies.
+    """
+    groups = {}
+    for r in results:
+        groups.setdefault((r["subject"], r["action"]), []).append(r[field])
+    keys = list(groups)
+    vals = [np.array(groups[k], dtype=float) for k in keys]
+
+    rng = np.random.default_rng(seed)
+    means = np.empty(draws)
+    for i in range(draws):
+        pick = rng.integers(0, len(vals), size=len(vals))
+        means[i] = np.concatenate([vals[j] for j in pick]).mean()
+    return {
+        "mean": float(np.concatenate(vals).mean()),
+        "ci95": [float(np.percentile(means, 2.5)), float(np.percentile(means, 97.5))],
+        "n_clusters": len(keys),
+        "draws": draws,
+    }
+
+
 def summarise(results):
     imp = np.array([r["improvement_pct"] for r in results])
     by_subject = {}
@@ -159,6 +192,13 @@ def summarise(results):
 
     return {
         "n_pairs": len(results),
+        "bootstrap": {
+            "improvement_pct": cluster_bootstrap(results, "improvement_pct"),
+            "canonical_distance_mm": cluster_bootstrap(results, "canonical_cross_view_distance"),
+            "raw_distance_mm": cluster_bootstrap(results, "raw_cross_view_distance"),
+            "oracle_gap_closed_pct": cluster_bootstrap(results, "oracle_gap_closed_pct"),
+            "unit": "subject-action group (6 pairs each)",
+        },
         "by_action": by_action,
         "n_pairs_improved": int((imp > 0).sum()),
         "all_pairs_improved": bool((imp > 0).all()),
@@ -191,10 +231,17 @@ def summarise(results):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--stride", type=int, default=EVAL_STRIDE)
+    ap.add_argument("--preds", default=None,
+                    help="prediction cache to analyse; defaults to the "
+                         "MotionAGFormer-XS one. Pointing this at a different "
+                         "backbone's cache is the ONLY adaptation the framework "
+                         "requires to run on that backbone.")
+    ap.add_argument("--tag", default=None,
+                    help="suffix for the output filename, e.g. motionbert")
     args = ap.parse_args()
 
     meta = np.load(os.path.join(PRED_DIR, "meta.npz"), allow_pickle=True)
-    pred_path = os.path.join(PRED_DIR, "preds.npz")
+    pred_path = args.preds or os.path.join(PRED_DIR, "preds.npz")
     if not os.path.exists(pred_path):
         print("ERROR: %s missing. Run evaluation.h36m_replication --stage infer first."
               % pred_path)
@@ -215,6 +262,15 @@ def main():
     print("\n  improvement  mean %+.1f%%  median %+.1f%%  worst %+.1f%%  best %+.1f%%"
           % (summary["mean_improvement_pct"], summary["median_improvement_pct"],
              summary["worst_pair_pct"], summary["best_pair_pct"]))
+    b = summary["bootstrap"]
+    print("  cluster bootstrap over %d subject-action groups, %d draws:"
+          % (b["improvement_pct"]["n_clusters"], b["improvement_pct"]["draws"]))
+    print("    improvement      %+.1f%%  95%% CI [%+.1f%%, %+.1f%%]"
+          % (b["improvement_pct"]["mean"], *b["improvement_pct"]["ci95"]))
+    print("    canonical dist   %6.1f mm  95%% CI [%.1f, %.1f]"
+          % (b["canonical_distance_mm"]["mean"], *b["canonical_distance_mm"]["ci95"]))
+    print("    oracle gap closed %+.1f%%  95%% CI [%+.1f%%, %+.1f%%]"
+          % (b["oracle_gap_closed_pct"]["mean"], *b["oracle_gap_closed_pct"]["ci95"]))
     print("  pairs improved: %d / %d" % (summary["n_pairs_improved"], summary["n_pairs"]))
     print("  oracle gap closed: %.1f%%   canonicalization validity: %.1f%%"
           % (summary["mean_oracle_gap_closed_pct"], summary["mean_validity_pct"]))
@@ -235,9 +291,11 @@ def main():
                  v["pairs_improved"], v["n"]))
 
     os.makedirs(OUT_DIR, exist_ok=True)
-    with open(os.path.join(OUT_DIR, "h36m_crossview.json"), "w") as fh:
+    name = "h36m_crossview%s.json" % ("_" + args.tag if args.tag else "")
+    summary["prediction_cache"] = os.path.basename(pred_path)
+    with open(os.path.join(OUT_DIR, name), "w") as fh:
         json.dump({"summary": summary, "per_pair": results}, fh, indent=2)
-    print("\nSaved: %s" % os.path.join(OUT_DIR, "h36m_crossview.json"))
+    print("\nSaved: %s" % os.path.join(OUT_DIR, name))
 
 
 if __name__ == "__main__":
