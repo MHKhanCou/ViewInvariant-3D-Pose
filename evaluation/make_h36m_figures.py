@@ -187,7 +187,7 @@ def fig_bone_retraction(bc, hr):
 def fig_multiscale(ms):
     """Per-level distances, and the bilateral asymmetry the fix removes."""
     s = ms["summary"]
-    v = s["symmetric_leg_variant"]
+    v = s["long_axis_variant"]
     levels = ["torso", "left_arm", "right_arm", "left_leg", "right_leg"]
     pretty = ["Torso", "Left arm", "Right arm", "Left leg", "Right leg"]
     shipped = [s["per_level_distance_mm"][k] for k in levels]
@@ -196,7 +196,8 @@ def fig_multiscale(ms):
     x = np.arange(len(levels))
     fig, ax = plt.subplots(figsize=(7.6, 4.2))
     ax.bar(x - 0.19, shipped, 0.36, label="As implemented", color=ORANGE, zorder=3)
-    ax.bar(x + 0.19, fixed, 0.36, label="Both legs defined alike", color=BLUE, zorder=3)
+    ax.bar(x + 0.19, fixed, 0.36, label="Every frame from its own long axis",
+           color=BLUE, zorder=3)
     ax.axhline(s["per_level_distance_mm"]["global"], color=INK2, ls="--", lw=1.2, zorder=4)
     ax.text(len(levels) - 0.5, s["per_level_distance_mm"]["global"] + 1.4,
             "global frame only (%.1f mm)" % s["per_level_distance_mm"]["global"],
@@ -205,20 +206,23 @@ def fig_multiscale(ms):
     for xi, (a, b) in enumerate(zip(shipped, fixed)):
         ax.text(xi - 0.19, a + 1.2, "%.1f" % a, ha="center", fontsize=8, color=INK)
         ax.text(xi + 0.19, b + 1.2, "%.1f" % b, ha="center", fontsize=8, color=INK)
-    ax.annotate("", xy=(3.19, 33), xytext=(2.81, 66),
-                arrowprops=dict(arrowstyle="->", color=MAGENTA, lw=1.6))
-    ax.text(3.42, 50, "the left leg used a\nshorter primary axis",
-            fontsize=8.5, color=MAGENTA, va="center")
+    ax.annotate("", xy=(0.81, 30), xytext=(0.81, 55),
+                arrowprops=dict(arrowstyle="->", color=MAGENTA, lw=1.5))
+    ax.annotate("", xy=(3.19, 32), xytext=(2.86, 66),
+                arrowprops=dict(arrowstyle="->", color=MAGENTA, lw=1.5))
+    ax.text(1.30, 46, "both arms and the left leg\nused a short primary axis",
+            fontsize=8.5, color=MAGENTA, va="center",
+            bbox=dict(facecolor=SURFACE, edgecolor="none", pad=1.6), zorder=6)
     ax.set_xticks(x)
     ax.set_xticklabels(pretty, fontsize=9.5)
     ax.set_ylabel("Cross-view distance of the level's joints (mm)")
     ax.set_ylim(0, 80)
     ax.legend(frameon=False, fontsize=9, loc="upper left")
-    ax.set_title("A bilateral asymmetry exposed by reporting levels separately",
+    ax.set_title("Frames built from short axes were the limiting factor",
                  fontsize=11, loc="left", pad=22)
     ax.text(0, 1.012,
-            "Human3.6M, 180 held-out pairs. Only the left leg changes; combined "
-            "improvement rises from %+.1f%% to %+.1f%%."
+            "Human3.6M, 180 held-out pairs. Applying one rule to all five levels "
+            "lifts the gain from %+.1f%% to %+.1f%%."
             % (s["mean_multiscale_vs_global_pct"], v["mean_multiscale_vs_global_pct"]),
             transform=ax.transAxes, fontsize=8.5, color=INK2, va="bottom")
     _finish(fig, "fig_h36m_multiscale.png", "h36m_multiscale/h36m_multiscale.json")

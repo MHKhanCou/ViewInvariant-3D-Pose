@@ -299,6 +299,25 @@ def main():
                          sym["mean_multiscale_vs_global_pct"], src, unit="%"))
     results.append(check("  symmetric pairs improved", 180.0,
                          float(sym["n_pairs_improved"]), src, tol=0))
+    la = msc["long_axis_variant"]
+    results.append(check("  left arm, long-axis definition (mm)", 26.8,
+                         la["per_level_distance_mm"]["left_arm"], src, tol=0.1, unit="mm"))
+    results.append(check("  right arm, long-axis definition (mm)", 26.3,
+                         la["per_level_distance_mm"]["right_arm"], src, tol=0.1, unit="mm"))
+    results.append(check("  long-axis combined distance (mm)", 28.2,
+                         la["mean_multiscale_distance_mm"], src, tol=0.1, unit="mm"))
+    results.append(check("  long-axis improvement %", 55.1,
+                         la["mean_multiscale_vs_global_pct"], src, unit="%"))
+    results.append(check("  long-axis CI lower bound %", 53.6,
+                         la["bootstrap"]["ci95"][0], src, tol=0.3, unit="%"))
+    results.append(check("  long-axis pairs improved", 180.0,
+                         float(la["n_pairs_improved"]), src, tol=0))
+    # Applying one rule to five anatomically different segments should give five
+    # similar numbers. That convergence was not optimized for and is the check.
+    lv = [la["per_level_distance_mm"][k] for k in
+          ("torso", "left_arm", "right_arm", "left_leg", "right_leg")]
+    results.append(check("  corrected level spread (max-min, mm)", 4.4,
+                         float(max(lv) - min(lv)), src, tol=0.3, unit="mm"))
     # The fix must be surgical: arms and torso are untouched by construction.
     for lv in ("torso", "left_arm", "right_arm", "right_leg"):
         results.append(check("  %s unchanged by the fix" % lv,

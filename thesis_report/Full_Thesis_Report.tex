@@ -203,7 +203,7 @@ The main objectives of this project are:
 
 \item A cross-dataset replication of the central claim on Human3.6M, where canonicalization improves 179 of 180 held-out camera pairs and closes 90.5 percent of the gap to a per-frame Procrustes oracle.
 
-\item A multi-scale extension constructing one body frame per limb, improving cross-view consistency on all twenty-nine MPI-INF-3DHP pairs and on 179 of the 180 held-out Human3.6M pairs, together with a bilateral asymmetry in our own segment definitions that reporting the levels separately exposed, whose correction raises the improvement from 25.6 to 37.2 percent and improves all 180.
+\item A multi-scale extension constructing one body frame per limb, improving cross-view consistency on all twenty-nine MPI-INF-3DHP pairs and on 179 of the 180 held-out Human3.6M pairs, together with the finding that the length of the axis a frame is built from governs its cross-view consistency. Rebuilding every segment frame from that segment's own long axis raises the improvement from 25.6 to 55.1 percent and improves all 180 pairs.
 
 \item Calibration-free multi-view fusion in the shared frame, together with the finding that the estimator must be robust when views are few, since at four views a median reliably improves on an arbitrary single view while an unweighted mean does not.
 
@@ -744,26 +744,35 @@ The per-level breakdown revealed a defect in our own implementation that the MPI
 
 Inspecting the segment definitions explains it. Both arms take the thorax-to-shoulder vector as primary axis and the shoulder-to-elbow vector as secondary. The legs were defined inconsistently with each other: the right leg takes hip-to-knee as primary and knee-to-ankle as secondary, while the left leg takes root-to-hip as primary and hip-to-knee as secondary. The root-to-hip vector is roughly half a hip width, whereas hip-to-knee is a full thigh. Section 3.2 argues that frame sensitivity to joint error scales inversely with the length of the defining vector, so the left leg was predicted to be the noisier of the two before the cause was found, and for exactly this reason.
 
-We tested the correction rather than assuming it. Defining both legs identically, with hip-to-knee as primary and knee-to-ankle as secondary, gives the result in Table \ref{tab:msfix}. The left leg falls from 69.4 mm to 29.3 mm, which brings it into agreement with the right leg at 30.7 mm. Every other level is unchanged to the reported precision, which is the signature of a correct diagnosis rather than a general perturbation. The combined distance falls from 46.2 mm to 39.1 mm, the improvement over the global frame rises from 25.6 percent to 37.2 percent, and all 180 pairs now improve rather than 179.
+We tested the correction rather than assuming it. Defining both legs identically, with hip-to-knee as primary and knee-to-ankle as secondary, gives the middle column of Table \ref{tab:msfix}. The left leg falls from 69.4 mm to 29.3 mm, which brings it into agreement with the right leg at 30.7 mm. Every other level is unchanged to the reported precision, which is the signature of a correct diagnosis rather than a general perturbation. The combined distance falls from 46.2 mm to 39.1 mm, the improvement over the global frame rises from 25.6 percent to 37.2 percent, and all 180 pairs now improve rather than 179.
+
+\subsection{The Same Defect in Both Arms}
+
+Applying the diagnosis consistently exposes a second instance of it. Both arms take the thorax-to-shoulder vector as primary axis, which is about half a shoulder width, where the corrected legs take a full thigh. The bilateral comparison could not reveal this, because both arms share the defect and therefore agree with each other at 57.1 mm and 57.6 mm. Agreement between two measurements is not evidence that either is correct, and here it actively concealed the problem: the arms looked healthy precisely because they were equally affected.
+
+Rebuilding both arms from their own long segments, shoulder-to-elbow as primary and elbow-to-wrist as secondary, produces the largest single improvement in this chapter. The left arm falls from 57.1 mm to 26.8 mm and the right from 57.6 mm to 26.3 mm. The combined multi-scale distance falls to 28.2 mm, the improvement over the global frame reaches 55.1 percent with a cluster bootstrap interval of $[+53.6, +56.5]$ percent, and all 180 pairs improve with no segment falling back to the global frame.
+
+The corrected levels support the diagnosis independently of the improvement they produce. All five now lie between 26.3 mm and 30.7 mm, where before they ranged from 28.6 mm to 69.4 mm. A construction applied consistently to five anatomically different segments should give five similar numbers, and it now does. That convergence was not optimized for, since each segment was redefined by the same rule rather than tuned, and it is the strongest evidence that axis length, not anatomy, was driving the spread.
 
 \begin{table}[h]
 \centering
-\caption{Effect of defining both legs with the same axes. Only the left leg changes.}
+\caption{Building every segment frame from that segment's own long axis. Bold entries changed from the column to their left.}
 \label{tab:msfix}
-\begin{tabular}{lrr}
+\begin{tabular}{lrrr}
 \hline
-\textbf{Level} & \textbf{As implemented} & \textbf{Symmetric legs} \\
+\textbf{Level} & \textbf{As implemented} & \textbf{Legs alike} & \textbf{Arms also} \\
 \hline
-Global frame & 62.7 mm & 62.7 mm \\
-Torso & 28.6 mm & 28.6 mm \\
-Left arm & 57.1 mm & 57.1 mm \\
-Right arm & 57.6 mm & 57.6 mm \\
-Left leg & 69.4 mm & \textbf{29.3 mm} \\
-Right leg & 30.7 mm & 30.7 mm \\
+Global frame & 62.7 mm & 62.7 mm & 62.7 mm \\
+Torso & 28.6 mm & 28.6 mm & 28.6 mm \\
+Left arm & 57.1 mm & 57.1 mm & \textbf{26.8 mm} \\
+Right arm & 57.6 mm & 57.6 mm & \textbf{26.3 mm} \\
+Left leg & 69.4 mm & \textbf{29.3 mm} & 29.3 mm \\
+Right leg & 30.7 mm & 30.7 mm & 30.7 mm \\
 \hline
-Combined multi-scale & 46.2 mm & \textbf{39.1 mm} \\
-Improvement over global & +25.6\% & \textbf{+37.2\%} \\
-Pairs improved & 179 / 180 & \textbf{180 / 180} \\
+Combined multi-scale & 46.2 mm & \textbf{39.1 mm} & \textbf{28.2 mm} \\
+Improvement over global & +25.6\% & \textbf{+37.2\%} & \textbf{+55.1\%} \\
+95\% CI & $[+23.6, +27.6]$ & --- & $\mathbf{[+53.6, +56.5]}$ \\
+Pairs improved & 179 / 180 & \textbf{180 / 180} & \textbf{180 / 180} \\
 \hline
 \end{tabular}
 \end{table}
@@ -771,7 +780,7 @@ Pairs improved & 179 / 180 & \textbf{180 / 180} \\
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.97\textwidth]{images/fig_h36m_multiscale.png}
-\caption{Per-level cross-view distance on Human3.6M. The arms agree with each other under both definitions, as bilateral symmetry requires. The left leg does not agree with the right until the two are defined alike, and no other level moves.}
+\caption{Per-level cross-view distance on Human3.6M. Three of the five frames were built from an axis roughly half a shoulder or hip width long; rebuilding them from the segment's own long axis halves their cross-view distance and brings all five levels into a 4.4 mm band.}
 \label{fig:h36mms}
 \end{figure}
 
@@ -814,7 +823,7 @@ Canonicalization degrades cross-view retrieval, with recall at rank one falling 
 % ========================== CHAPTER 5 ================================
 \chapter{CONCLUSION AND FUTURE WORK}
 
-In this project we developed a framework that makes the predictions of a frozen monocular 3D pose estimator comparable across viewpoints without training, labels, or camera calibration. Canonicalization reduces cross-view joint distance by 32.4 percent across twenty-seven held-out camera pairs of MPI-INF-3DHP and by 74.1 percent, with a cluster bootstrap interval of $[+69.8, +77.2]$ percent, across 180 held-out pairs of Human3.6M, where it improves 179 of 180 pairs and closes 90.5 percent of the gap to a per-frame Procrustes oracle. The multi-scale extension improves every pair tested on the first dataset and 179 of 180 on the second, and reporting its levels separately exposed a bilateral asymmetry in our own segment definitions whose correction improves all 180. The shared frame enables calibration-free multi-view fusion, which on Human3.6M requires a median rather than a mean, because at four views only the median improves reliably on an arbitrary single camera.
+In this project we developed a framework that makes the predictions of a frozen monocular 3D pose estimator comparable across viewpoints without training, labels, or camera calibration. Canonicalization reduces cross-view joint distance by 32.4 percent across twenty-seven held-out camera pairs of MPI-INF-3DHP and by 74.1 percent, with a cluster bootstrap interval of $[+69.8, +77.2]$ percent, across 180 held-out pairs of Human3.6M, where it improves 179 of 180 pairs and closes 90.5 percent of the gap to a per-frame Procrustes oracle. The multi-scale extension improves every pair tested on the first dataset and 179 of 180 on the second, and reporting its levels separately showed that the length of the axis a frame is built from governs how consistent that frame is across views. Rebuilding each segment frame from its own long axis raises the gain from 25.6 to 55.1 percent and improves all 180 pairs. The shared frame enables calibration-free multi-view fusion, which on Human3.6M requires a median rather than a mean, because at four views only the median improves reliably on an arbitrary single camera.
 
 We regard the negative results as equally important. We falsified the analytic reliability score, one of the framework's original components, as a predictor of accuracy along five independent axes, and we identified the cause: within-frame geometric plausibility is invariant to the depth error that dominates monocular estimation. That diagnosis motivated a signal based on a physical invariant which the model cannot satisfy merely by being confidently wrong, and temporal bone-length inconsistency predicts error from a single camera at a Spearman coefficient of $+0.492$ on that dataset. We then replicated the experiment on Human3.6M, where the coefficient falls to $+0.098$ and every criterion fails, and we retract the general claim. What survives is narrower and, we would argue, more useful for being bounded: the signal detects domain shift severe enough to deform the predicted skeleton, and it does not rank the residual depth error of a backbone that is already accurate. The mechanism is the one that defeated the reliability score, extended along the time axis, since bone-length consistency is invariant to a temporally coherent depth error just as within-frame plausibility is invariant to a coherent one.
 
@@ -836,7 +845,11 @@ The results above determine what is worth doing next more sharply than a general
 
 \noindent \textbf{The view count at which mean fusion becomes safe.} Section \ref{sec:h36mfuse} shows that an unweighted mean over four views is worse than one arbitrary view while a median is better, and attributes the difference to breakdown point. Subsampling the eight cameras of MPI-INF-3DHP to every count between three and eight would locate the crossover empirically. This is a small experiment with a practical payoff, since a deployment must choose an estimator before it knows how many cameras it will have.
 
-\noindent \textbf{Predicting when the body frame is unreliable.} SittingDown fails because the hip axis is short and poorly estimated when a subject is seated, and the length of that axis is computable from the prediction itself without labels. Testing whether hip-axis length predicts canonicalization failure would turn an observed weakness into an abstention criterion, and unlike the reliability score of Section \ref{sec:relfails} it targets a failure mode we have already localized rather than a general notion of plausibility.
+\noindent \textbf{Predicting when the body frame is unreliable.} SittingDown fails because the hip axis is short and poorly estimated when a subject is seated, and the length of that axis is computable from the prediction itself without labels. Testing whether hip-axis length predicts canonicalization failure would turn an observed weakness into an abstention criterion, and unlike the reliability score of Section \ref{sec:relfails} it targets a failure mode we have already localized rather than a general notion of plausibility. Section \ref{sec:h36mms} supplies direct evidence that the relationship exists, since redefining segment frames to use longer axes reduced their cross-view distance by more than half.
+
+\noindent \textbf{A frame built from all joints rather than two vectors.} The global frame is determined by the torso and hip axes alone, so an error in either propagates undamped. Estimating the frame from all seventeen joints under a robust criterion, or regularizing it with a subject skeleton accumulated online, should degrade more gracefully. The multi-scale results make this concrete rather than speculative: frames built from longer, better-estimated axes are markedly more consistent across views, and the global frame currently uses one of the shortest axes available.
+
+\noindent \textbf{Re-running MPI-INF-3DHP with the corrected segment definitions.} The segment corrections of Section \ref{sec:h36mms} were validated on Human3.6M only, and the MPI-INF-3DHP multi-scale figures elsewhere in this report were produced with the original definitions. Repeating that evaluation would establish whether the same gain appears on the first dataset. This is the cheapest outstanding item and it would remove an inconsistency in the present report rather than add a new claim.
 
 \subsection*{Requiring Additional Data}
 
@@ -852,19 +865,9 @@ The results above determine what is worth doing next more sharply than a general
 
 \noindent \textbf{Downstream evaluation.} Every result here measures geometry. The motivating applications, gait analysis and sports science, are classification and measurement tasks, and cross-view agreement is a means rather than an end. Demonstrating that canonicalization improves a downstream task would establish the practical claim that this project only makes plausible.
 
-\subsection*{A Longer Research Programme}
+\noindent \textbf{Constraints that a coherent depth error does violate.} Bone-length inconsistency failed because a smoothly wrong depth estimate keeps bone lengths smooth, and the within-frame score of Section \ref{sec:relfails} failed for the same reason. Which constraints a wrong pose cannot satisfy is therefore the open question. Gravity is one candidate, since the vertical and the support surface are fixed in the world while a depth error tilts the reconstruction relative to both. Dynamics is another, since accelerations implied by a wrongly scaled depth trajectory need not be attainable. Both compute from a predicted skeleton without labels or training, so they keep the deployment profile of the present framework, and both can be tested by the procedure used in Section \ref{sec:h36m}. Whether either is novel would need a literature review broader than the one conducted here, since physical constraints of this kind are already used to correct reconstructions rather than to score them.
 
-The results above isolate one problem more sharply than they solve it, and it is the natural subject of a larger study. Canonicalization succeeds, and every quality signal we constructed to accompany it fails for a single reason: geometric plausibility, whether measured within a frame or across time, is invariant to a depth error that is itself coherent. The one signal that does work, cross-view disagreement, needs a second camera and therefore does not apply to the monocular case that motivated the project. On the present evidence, a model that is confidently and smoothly wrong in depth cannot be detected from its own output. Learned uncertainty does not close the gap either, since it degrades under exactly the distribution shift it is introduced to catch [9].
-
-Three directions follow. We state them as open questions rather than as claimed contributions, because establishing novelty would require a literature review broader than the one conducted here.
-
-\noindent \textbf{Which constraints does a coherent depth error actually violate?} Bone-length inconsistency failed because a smoothly wrong depth estimate keeps bone lengths smooth, and Section \ref{sec:relfails} shows within-frame plausibility fails for the same reason. The productive question is therefore not which constraints a correct pose satisfies, but which ones a plausibly wrong pose cannot. Gravity is one candidate, since the vertical and the support surface are fixed in the world while a depth error tilts the reconstruction relative to both, so a violated ground-contact or verticality condition may carry information that internal consistency cannot. Dynamics is a second, since the accelerations implied by a wrongly scaled depth trajectory need not be physically attainable. Both are computable from a predicted skeleton without labels or training, so they preserve the deployment profile that distinguishes this framework, and both are falsifiable in the same way the bone-length signal was.
-
-\noindent \textbf{Can a coverage guarantee be obtained without labels?} Conformal prediction supplies the guarantee this framework lacks, at the price of a labelled calibration set drawn from the deployment distribution, which is precisely what an unlabelled deployment does not have. Cross-view disagreement is label-free and ranks error at a Spearman coefficient of $+0.601$ on our data. Whether it can serve as a nonconformity score, calibrated on unlabelled multi-view recordings and then applied at single-view inference, is a well-posed question with a genuine obstacle: the exchangeability on which conformal validity rests is not obviously satisfied across viewpoints, and characterizing the conditions under which it holds would be the substance of the work rather than a preliminary to it.
-
-\noindent \textbf{Can the body frame stop inheriting the estimator's failures?} SittingDown fails because the frame is built from two vectors and one of them, the hip axis, is short and poorly estimated in a seated pose. A frame estimated from all seventeen joints under a robust criterion, or regularized by a subject-specific skeleton accumulated online, should degrade more gracefully. The weakness is localized precisely enough by Section \ref{sec:h36mcv} to make this a concrete design problem rather than a general aspiration, and the multi-scale result already shows that frames built from limb-local evidence recover much of what the global frame loses on exactly that action.
-
-These three share one objective: reliability estimates for frozen monocular predictors that remain valid under distribution shift. The contribution of the present project to that objective is largely negative, in that it eliminates a family of plausible signals and explains why they fail, and a study that took the problem further would sensibly begin from that elimination rather than repeat it.
+\noindent \textbf{A coverage guarantee without labels.} Conformal prediction supplies the guarantee this framework lacks but requires a labelled calibration set from the deployment distribution, which is what an unlabelled deployment does not have. Cross-view disagreement is label-free and ranks error at $+0.601$ on our data. Whether it can serve as a nonconformity score, calibrated on unlabelled multi-view recordings and applied at single-view inference, is well posed. The obstacle is that conformal validity rests on exchangeability, which is not obviously satisfied across viewpoints.
 
 % =========================== APPENDIX ================================
 \newpage

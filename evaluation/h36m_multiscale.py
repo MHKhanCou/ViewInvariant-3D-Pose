@@ -63,7 +63,19 @@ SEGMENTS_SYMMETRIC = dict(SEGMENTS)
 SEGMENTS_SYMMETRIC["left_leg"] = ([1, 2, 3], 1, (1, 2), (2, 3))   # match right_leg
 SEGMENTS_SYMMETRIC["right_leg"] = ([4, 5, 6], 4, (4, 5), (5, 6))  # unchanged
 
-SEGMENT_SETS = {"shipped": SEGMENTS, "symmetric": SEGMENTS_SYMMETRIC}
+# The same reasoning applies to the arms, which the bilateral check could not
+# reveal because BOTH arms share the defect and therefore agree with each other.
+# Both take thorax-to-shoulder as primary axis, which is about half a shoulder
+# width, where the right leg takes a full thigh. If axis length drives frame
+# noise, the arms should improve when built from the limb's own long segments,
+# shoulder-to-elbow and elbow-to-wrist. Agreement between two levels is not
+# evidence that either is right.
+SEGMENTS_LONGAXIS = dict(SEGMENTS_SYMMETRIC)
+SEGMENTS_LONGAXIS["left_arm"] = ([14, 15, 16], 14, (14, 15), (15, 16))
+SEGMENTS_LONGAXIS["right_arm"] = ([11, 12, 13], 11, (11, 12), (12, 13))
+
+SEGMENT_SETS = {"shipped": SEGMENTS, "symmetric": SEGMENTS_SYMMETRIC,
+                "long_axis": SEGMENTS_LONGAXIS}
 
 
 def canonicalize_with(pose, segments):
@@ -236,6 +248,20 @@ def main():
     sym_results, sym_fallback = evaluate(videos, stride=args.stride,
                                          segments=SEGMENTS_SYMMETRIC)
     sym = summarise(sym_results, sym_fallback)
+
+    la_results, la_fallback = evaluate(videos, stride=args.stride,
+                                       segments=SEGMENTS_LONGAXIS)
+    la = summarise(la_results, la_fallback)
+    s["long_axis_variant"] = {
+        "mean_multiscale_vs_global_pct": la["mean_multiscale_vs_global_pct"],
+        "mean_multiscale_distance_mm": la["mean_multiscale_distance_mm"],
+        "n_pairs_improved": la["n_pairs_improved"],
+        "per_level_distance_mm": la["per_level_distance_mm"],
+        "bootstrap": la["bootstrap"]["multiscale_vs_global_pct"],
+        "segment_fallback_rate_pct": la["segment_fallback_rate_pct"],
+        "note": "Symmetric legs, plus both arms rebuilt from shoulder-to-elbow "
+                "and elbow-to-wrist instead of thorax-to-shoulder.",
+    }
     s["symmetric_leg_variant"] = {
         "mean_multiscale_vs_global_pct": sym["mean_multiscale_vs_global_pct"],
         "mean_multiscale_distance_mm": sym["mean_multiscale_distance_mm"],
@@ -273,6 +299,15 @@ def main():
           % (v["mean_multiscale_distance_mm"], s["mean_multiscale_distance_mm"],
              v["mean_multiscale_vs_global_pct"], s["mean_multiscale_vs_global_pct"]))
     print("    pairs improved %d / %d" % (v["n_pairs_improved"], s["n_pairs"]))
+    w = s["long_axis_variant"]
+    print("\n  ALSO rebuilding both arms from their own long segments:")
+    for lv in ("left_arm", "right_arm", "left_leg", "right_leg", "torso"):
+        print("    %-11s %7.1f mm  (shipped %7.1f mm)"
+              % (lv, w["per_level_distance_mm"][lv], s["per_level_distance_mm"][lv]))
+    print("    combined  %7.1f mm   improvement %+.1f%%  95%% CI [%+.1f%%, %+.1f%%]"
+          % (w["mean_multiscale_distance_mm"], w["mean_multiscale_vs_global_pct"],
+             *w["bootstrap"]["ci95"]))
+    print("    pairs improved %d / %d" % (w["n_pairs_improved"], s["n_pairs"]))
     print("\n  segment fallback to global frame:")
     for seg, r in s["segment_fallback_rate_pct"].items():
         print("    %-11s %5.2f%%" % (seg, r))

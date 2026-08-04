@@ -138,6 +138,36 @@
       "pairs_improved": "29 of 29",
       "note": "On MPI-INF-3DHP one pair was the development pair. Here all 180 pairs are held out."
     },
+    "long_axis_variant": {
+      "mean_multiscale_vs_global_pct": 55.08706661743336,
+      "mean_multiscale_distance_mm": 28.235132019224206,
+      "n_pairs_improved": 180,
+      "per_level_distance_mm": {
+        "global": 62.71472687588727,
+        "torso": 28.616121128488885,
+        "left_arm": 26.82367246606386,
+        "right_arm": 26.284274721436173,
+        "left_leg": 29.326069081581053,
+        "right_leg": 30.65545699711671
+      },
+      "bootstrap": {
+        "mean": 55.08706661743336,
+        "ci95": [
+          53.55948262946104,
+          56.5335794229441
+        ],
+        "n_clusters": 30,
+        "draws": 10000
+      },
+      "segment_fallback_rate_pct": {
+        "torso": 0.0,
+        "left_arm": 0.0,
+        "right_arm": 0.0,
+        "left_leg": 0.0,
+        "right_leg": 0.0
+      },
+      "note": "Symmetric legs, plus both arms rebuilt from shoulder-to-elbow and elbow-to-wrist instead of thorax-to-shoulder."
+    },
     "symmetric_leg_variant": {
       "mean_multiscale_vs_global_pct": 37.24057746127697,
       "mean_multiscale_distance_mm": 39.095188684498034,
