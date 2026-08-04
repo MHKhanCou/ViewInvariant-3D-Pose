@@ -127,7 +127,7 @@ Certified that this project report ``A Lightweight, Training-Free, Reliability-A
  \begin{tabular}{cc}
         \underline{\hspace{6cm}} & \underline{\hspace{6cm}} \\
         \textbf{SIGNATURE} & \textbf{SIGNATURE} \\
-        \textbf{Dr. Mahmudul Hasan} & \textbf{Dr. Mahmudul Hasan} \\
+        \textbf{Dr. Md. Faisal Bin Abdul Aziz} & \textbf{Dr. Mahmudul Hasan} \\
         Chairman, Exam Committee & Supervisor \\
         Associate Professor & Associate Professor \\
         Department of Computer Science \& Engineering & Department of Computer Science \& Engineering \\
@@ -284,9 +284,9 @@ Two observations from this literature bear directly on the present work. First, 
 \vspace{0.5cm}
 
 \noindent \textbf{Author:} Khanal and Zhou (2026) \\
-\textbf{Method:} Analysis of learned out-of-distribution detection for pose \\
-\textbf{Focus (Solved Issues):} Examines whether learned confidence transfers to unseen shifts \\
-\textbf{Methodology:} Empirical evaluation across distribution shifts \\
+\textbf{Method:} Analysis of learned uncertainty under severe domain shift, in skeleton action recognition \\
+\textbf{Focus (Solved Issues):} Separates detecting that data has shifted from knowing which predictions to distrust \\
+\textbf{Methodology:} Empirical evaluation; energy-based scoring plus a lightweight gating mechanism \\
 \textbf{Gap/Limitations:} Reports that learned detectors fail on precisely the shifts they were not trained for, motivating signals with no training distribution
 
 \vspace{0.5cm}
@@ -299,7 +299,7 @@ Two observations from this literature bear directly on the present work. First, 
 
 \section{Quality and Uncertainty Estimation for Pose}
 
-A system that abstains on unreliable predictions needs a signal correlated with its own error, and three families of approach exist. Learned uncertainty attaches a variance head or an ensemble to the estimator and trains it to predict its own error. Khanal and Zhou [9] report the failure mode that motivates our requirement profile: learned out-of-distribution detection for human pose collapses to near-chance discrimination precisely under the distribution shift it was introduced to catch, because the uncertainty head is itself trained on the source distribution.
+A system that abstains on unreliable predictions needs a signal correlated with its own error, and three families of approach exist. Learned uncertainty attaches a variance head or an ensemble to the estimator and trains it to predict its own error. Khanal and Zhou [9] report the failure mode that motivates our requirement profile, in the adjacent setting of skeleton action recognition. Under severe domain shift, energy-based scoring detects that the input distribution has changed, at an area under the curve of 0.91 or better, while risk-coverage remains poor and the model stays confidently incorrect on individual predictions. Knowing that data is out of distribution is therefore not the same as knowing which predictions to distrust, and it is the second that an abstention mechanism needs.
 
 Conformal prediction offers a guarantee instead of an estimate. Yang and Pavone [8] construct keypoint sets with coverage guarantees for object pose, at the cost of a labelled calibration set drawn from the deployment distribution. The guarantee is genuine and the requirement is real, and it is the requirement that rules the approach out for the setting considered here.
 
@@ -898,13 +898,13 @@ Every table in this appendix is generated directly from the stored JSON artifact
 
 [5] M. Levy and A. Shrivastava, ``V-VIPE: Variational View-Invariant Pose Embedding,'' in \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)}, 2024.
 
-[6] ``CMANet: Canonical Space Learning for Multi-View 3D Human Pose Estimation,'' 2024.
+[6] ``Self-learning Canonical Space for Multi-view 3D Human Pose Estimation,'' 2024.
 
-[7] ``BLAPose: Bone Length Adjustment for 3D Human Pose Estimation,'' in \textit{Proceedings of the Asian Conference on Computer Vision (ACCV)}, 2024.
+[7] ``Enhancing 3D Human Pose Estimation with Bone Length Adjustment,'' in \textit{Proceedings of the Asian Conference on Computer Vision (ACCV)}, 2024.
 
 [8] H. Yang and M. Pavone, ``Object Pose Estimation with Statistical Guarantees: Conformal Keypoint Detection and Geometric Uncertainty Propagation,'' in \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, 2023.
 
-[9] S. Khanal and B. Zhou, ``On the Failure of Learned Out-of-Distribution Detection for Human Pose Estimation,'' 2026.
+[9] Khanal and Zhou, ``Severe Domain Shift: Uncertainty Failure in Skeleton Action Recognition,'' \textit{arXiv preprint}, 2026.
 
 [10] D. Mehta, H. Rhodin, D. Casas, P. Fua, O. Sotnychenko, W. Xu, and C. Theobalt, ``Monocular 3D Human Pose Estimation in the Wild Using Improved CNN Supervision,'' in \textit{Proceedings of the International Conference on 3D Vision (3DV)}, 2017.
 
