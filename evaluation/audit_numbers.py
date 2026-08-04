@@ -36,6 +36,29 @@ def check(label, claimed, actual, source, tol=TOL, unit=""):
     return ok
 
 
+_HIP_CACHE = {}
+
+
+def _hip_axis_mm(action):
+    """
+    Mean hip-axis length for one Human3.6M action, recomputed from predictions.
+
+    Kept in the audit because the report withdraws a stated mechanism on the
+    strength of these two numbers, and a withdrawn explanation deserves the same
+    protection against drift as a confirmed one.
+    """
+    if not _HIP_CACHE:
+        from evaluation.h36m_replication import (OUT_DIR, aggregate_by_video,
+                                                 parse_video)
+        meta = np.load(os.path.join(OUT_DIR, "meta.npz"), allow_pickle=True)
+        pn = np.load(os.path.join(OUT_DIR, "preds.npz"))
+        for vid, v in aggregate_by_video(meta, pn, int(pn["n_clips"])).items():
+            P = v["pred"][::20]
+            _HIP_CACHE.setdefault(parse_video(vid)[1], []).append(
+                np.linalg.norm(P[:, 1] - P[:, 4], axis=1))
+    return float(np.concatenate(_HIP_CACHE[action]).mean())
+
+
 def main():
     results = []
 
@@ -238,6 +261,12 @@ def main():
     results.append(check("  SittingDown canonical distance (mm)", 274.1,
                          cv["by_action"]["SittingDown"]["mean_canonical_distance_mm"],
                          src, tol=0.1, unit="mm"))
+    # The foreshortening explanation was withdrawn: the failing action has almost
+    # the longest hip axis of any, so length cannot be what distinguishes it.
+    results.append(check("  SittingDown hip axis is NOT short (mm)", 285.3,
+                         _hip_axis_mm("act_10"), "preds.npz", tol=0.3, unit="mm"))
+    results.append(check("  shortest hip axis is WalkDog, which works (mm)", 268.4,
+                         _hip_axis_mm("act_15"), "preds.npz", tol=0.3, unit="mm"))
 
     # ---------- H36M fusion: replicates only with a robust estimator ----------
     fz = load("h36m_fusion/h36m_fusion.json")["summary"]

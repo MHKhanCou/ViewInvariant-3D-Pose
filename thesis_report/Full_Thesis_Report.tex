@@ -406,7 +406,9 @@ The argument is exact for the idealized case in which both cameras yield the sam
 
 \subsection{Sensitivity and the Choice of Axes}
 
-The torso and hip axes are chosen because they are the longest and most reliably estimated directions available. Sensitivity of the frame to joint error scales inversely with the length of the defining vector, so a frame built from short segments would amplify noise. The hip axis is the shorter of the two and is consequently the weaker link, which is the mechanism behind the SittingDown behaviour reported in Section \ref{sec:h36mcv}: when a subject is seated, the pelvis is foreshortened in most views, and the hip axis becomes both short and poorly estimated.
+The torso and hip axes are chosen because they are the longest and most reliably estimated directions available. Sensitivity of the frame to joint error scales inversely with the length of the defining vector, so a frame built from short segments would amplify noise, and the hip axis, at roughly half the torso axis, is the weaker of the two. Section \ref{sec:h36mms} confirms this experimentally for the per-limb frames.
+
+We initially advanced the same argument to explain the SittingDown result of Section \ref{sec:h36mcv}, supposing that a seated pelvis is foreshortened and the hip axis correspondingly short. Measurement does not support that. Across the fifteen actions the hip axis of SittingDown is 285.3 mm, the second longest of any action, where WalkDog has the shortest at 268.4 mm and canonicalizes without difficulty. The angle between the hip and torso axes is 86.0 degrees for SittingDown, within the 83 to 88 degree range spanned by every other action, so the frame is not ill-conditioned either. We therefore withdraw the foreshortening explanation and give the supported one in Section \ref{sec:h36mcv}.
 
 A further subtlety concerns sign. The hip axis direction depends on which hip is labelled left, and a prediction in which the two are exchanged produces a frame rotated by $\pi$ about the torso axis. For video we therefore carry the previous frame's forward axis and flip the current frame when the two disagree in sign, which enforces temporal consistency without imposing any prior on the pose itself.
 
@@ -768,6 +770,15 @@ Canonicalization validity & 100.0\% & --- \\
 
 \begin{figure}[h]
 \centering
+\includegraphics[width=\textwidth]{images/fig_h36m_explainer.png}
+\caption{One instant of Human3.6M seen by four synchronized cameras, superimposed. Left: the four raw predictions, which disagree because each is expressed in the frame of its own camera. Right: the same four predictions after canonicalization, each computed independently and without knowledge of the others.}
+\label{fig:h36mexplain}
+\end{figure}
+
+Figure \ref{fig:h36mexplain} shows what the aggregate hides. Four cameras observing one instant produce four sets of coordinates that visibly disagree, and the same four predictions in a body-fixed frame very nearly coincide, at 235 mm and 51 mm respectively on that frame. No camera has any knowledge of the others at any point.
+
+\begin{figure}[h]
+\centering
 \includegraphics[width=\textwidth]{images/fig_h36m_distances.png}
 \caption{Cross-view distance on Human3.6M. Left: means over all 180 held-out pairs. Right: every pair individually, with the diagonal marking no change. Canonical distance collapses to a narrow band irrespective of how far apart the two raw predictions were, except on SittingDown.}
 \label{fig:h36mdist}
@@ -784,7 +795,18 @@ The result holds on both subjects. Subject S11 improves on all ninety of its pai
 \label{fig:h36macts}
 \end{figure}
 
-The single exception is informative rather than embarrassing. All twelve SittingDown pairs carry a mean canonical distance of 274.1 mm, far above every other action, and SittingDown contains the one pair in 180 that regresses. SittingDown is also the action on which the backbone itself is least accurate, at 66.4 mm against a mean of 45.1 mm across actions. The body frame is constructed from the predicted torso and hip axes, so a pose the backbone estimates badly yields a frame estimated badly, and the error compounds rather than cancels. The regressing pair additionally had an unusually small raw distance of 218.4 mm against roughly 550 mm for the other pairs of that action, which left little to gain and much to lose. That is the near-aligned camera pair behaviour reported on MPI-INF-3DHP in Section \ref{sec:crossview}, now observed on a second dataset.
+The single exception is informative rather than embarrassing. All twelve SittingDown pairs carry a mean canonical distance of 274.1 mm, far above every other action, and SittingDown contains the one pair in 180 that regresses. SittingDown is also the action on which the backbone itself is least accurate, at 66.4 mm against a mean of 45.1 mm across actions. The body frame is constructed from the predicted torso and hip axes, so a pose the backbone estimates badly yields a frame estimated badly, and the error compounds rather than cancels.
+
+We tested the competing explanation and rejected it. A seated subject might plausibly foreshorten the pelvis and leave the hip axis too short to define a stable frame, which is what we first supposed. Measured across the fifteen actions, the hip axis of SittingDown is 285.3 mm, the second longest of any action, while the shortest belongs to WalkDog at 268.4 mm, which canonicalizes at 79.3 percent without difficulty. The angle between the hip and torso axes is 86.0 degrees for SittingDown, inside the 83 to 88 degree band spanned by every action, so the frame is not ill-conditioned. Neither the length nor the conditioning of the axes distinguishes this action; only the accuracy of the pose they are built from does. Figure \ref{fig:h36msit} puts both candidate explanations on the same axes. Canonical distance is uncorrelated with hip-axis length across the fifteen actions, at $-0.03$, and correlates with the backbone's own accuracy at $+0.76$. That second association survives deleting SittingDown itself, at $+0.70$ over the remaining fourteen actions, so it describes a trend across actions rather than the influence of one outlier.
+
+The failure is therefore inherited from the estimator rather than produced by the frame. This is a sharper statement than the one we began with and a less comfortable one, since a better frame construction cannot repair it.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/fig_h36m_sittingdown.png}
+\caption{Two candidate explanations for the SittingDown result, tested against the fifteen actions. Axis length does not separate the failing action, which has almost the longest hip axis of any. Estimator accuracy does, and the association holds when the failing action is removed.}
+\label{fig:h36msit}
+\end{figure} The regressing pair additionally had an unusually small raw distance of 218.4 mm against roughly 550 mm for the other pairs of that action, which left little to gain and much to lose. That is the near-aligned camera pair behaviour reported on MPI-INF-3DHP in Section \ref{sec:crossview}, now observed on a second dataset.
 
 We draw one further observation from placing this section beside Section \ref{sec:h36m}. The bone-length signal failed on Human3.6M because the backbone is accurate there, and canonicalization succeeds on Human3.6M for the same reason. Both depend on the quality of the predicted skeleton, and they depend on it in opposite directions.
 
@@ -926,7 +948,7 @@ The results above determine what is worth doing next more sharply than a general
 
 \noindent \textbf{The view count at which mean fusion becomes safe.} Section \ref{sec:h36mfuse} shows that an unweighted mean over four views is worse than one arbitrary view while a median is better, and attributes the difference to breakdown point. Subsampling the eight cameras of MPI-INF-3DHP to every count between three and eight would locate the crossover empirically. This is a small experiment with a practical payoff, since a deployment must choose an estimator before it knows how many cameras it will have.
 
-\noindent \textbf{Predicting when the body frame is unreliable.} SittingDown fails because the hip axis is short and poorly estimated when a subject is seated, and the length of that axis is computable from the prediction itself without labels. Testing whether hip-axis length predicts canonicalization failure would turn an observed weakness into an abstention criterion, and unlike the reliability score of Section \ref{sec:relfails} it targets a failure mode we have already localized rather than a general notion of plausibility. Section \ref{sec:h36mms} supplies direct evidence that the relationship exists, since redefining segment frames to use longer axes reduced their cross-view distance by more than half.
+\noindent \textbf{Predicting when the body frame is unreliable.} Section \ref{sec:h36mms} shows that axis length governs the consistency of a frame across segment definitions, and Section \ref{sec:h36mcv} shows that axis length does \emph{not} explain which action fails, since the worst action has the second longest hip axis. Both are measurements of the same quantity pointing in different directions, and the reconciliation is that axis length matters when comparing constructions on the same data, while pose accuracy matters when comparing data under the same construction. A useful abstention rule would need the second, and the second is not computable from geometry alone. Establishing what does predict per-action failure, without labels, is the open problem this leaves.
 
 \noindent \textbf{A frame built from all joints rather than two vectors.} The global frame is determined by the torso and hip axes alone, so an error in either propagates undamped. Estimating the frame from all seventeen joints under a robust criterion, or regularizing it with a subject skeleton accumulated online, should degrade more gracefully. The multi-scale results make this concrete rather than speculative: frames built from longer, better-estimated axes are markedly more consistent across views, and the global frame currently uses one of the shortest axes available.
 
