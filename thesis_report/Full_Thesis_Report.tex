@@ -267,11 +267,11 @@ Two observations from this literature bear directly on the present work. First, 
 
 \vspace{0.5cm}
 
-\noindent \textbf{Author:} CMANet (2024) \\
-\textbf{Method:} Canonical space learning for multi-view pose \\
-\textbf{Focus (Solved Issues):} Aggregates several views in a canonical parameter space \\
-\textbf{Methodology:} Self-supervised training with a transformer aggregation layer \\
-\textbf{Gap/Limitations:} Requires multi-view input at inference time, not only at training time
+\noindent \textbf{Author:} Li et al. (2024) \\
+\textbf{Method:} CMANet, a cascaded multi-view aggregating network \\
+\textbf{Focus (Solved Issues):} Learns a canonical parameter space in which several views are aggregated, avoiding manual 3D annotation \\
+\textbf{Methodology:} Fully self-supervised two-stage training, supervised by confident outputs of an existing 2D detector \\
+\textbf{Gap/Limitations:} Requires training, and requires multi-view input at inference rather than only during training
 
 \vspace{0.5cm}
 
@@ -291,7 +291,7 @@ Two observations from this literature bear directly on the present work. First, 
 
 \vspace{0.5cm}
 
-\noindent \textbf{Author:} BLAPose (2024) and DDHPose (2024) \\
+\noindent \textbf{Author:} Hsu and Jang (2024), and DDHPose (2024) \\
 \textbf{Method:} Bone-length priors for 3D pose \\
 \textbf{Focus (Solved Issues):} Enforce anatomically consistent limb lengths \\
 \textbf{Methodology:} Recurrent bone-length prediction with post-hoc adjustment; disentangled bone length and direction within a diffusion process \\
@@ -309,7 +309,7 @@ Bone length has been used as a constraint rather than as a signal. BLAPose [7] p
 
 \section{Multi-View Fusion}
 
-Classical multi-view pose estimation triangulates 2D detections using known camera calibration, which yields excellent accuracy and requires the calibration. CMANet [6] learns a canonical space for multi-view 3D pose, and V-VIPE [5] learns a variational view-invariant embedding that supports retrieval across viewpoints; both require training.
+Classical multi-view pose estimation triangulates 2D detections using known camera calibration, which yields excellent accuracy and requires the calibration. CMANet [6] learns a canonical space for multi-view 3D pose without manual 3D annotation, supervising itself from the confident outputs of an existing 2D detector, and V-VIPE [5] learns a variational view-invariant embedding that supports retrieval across viewpoints. Both require training, and CMANet additionally requires several views at inference rather than only during training.
 
 The gap this project occupies is fusion when calibration is unavailable and training is not an option. If predictions from several cameras can be placed in a shared frame by construction, they can be combined by simple statistics without correspondence search or extrinsics. Section \ref{sec:h36mfuse} reports that this works, and that the statistic must be robust when the views are few.
 
@@ -1005,9 +1005,9 @@ Every table in this appendix is generated directly from the stored JSON artifact
 
 [5] M. Levy and A. Shrivastava, ``V-VIPE: Variational View-Invariant Pose Embedding,'' in \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)}, 2024.
 
-[6] ``Self-learning Canonical Space for Multi-view 3D Human Pose Estimation,'' 2024.
+[6] X. Li, M. Meng, Z. Wu, T. Chen, F. Yang, and D. Shen, ``Self-learning Canonical Space for Multi-view 3D Human Pose Estimation,'' \textit{arXiv preprint arXiv:2403.12440}, 2024.
 
-[7] ``Enhancing 3D Human Pose Estimation with Bone Length Adjustment,'' in \textit{Proceedings of the Asian Conference on Computer Vision (ACCV)}, 2024.
+[7] C.-H. Hsu and J.-S. R. Jang, ``BLAPose: Enhancing 3D Human Pose Estimation with Bone Length Adjustment,'' \textit{arXiv preprint arXiv:2410.20731}, 2024.
 
 [8] H. Yang and M. Pavone, ``Object Pose Estimation with Statistical Guarantees: Conformal Keypoint Detection and Geometric Uncertainty Propagation,'' in \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, 2023.
 
