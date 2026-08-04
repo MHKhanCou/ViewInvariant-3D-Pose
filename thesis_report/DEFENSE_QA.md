@@ -134,6 +134,44 @@ into evidence of rigour. Do not change an approved title unilaterally.
 
 ---
 
+### 6. "Your proposal said you would train a network with geometric losses. You didn't."
+
+Your supervisor wrote the proposal. Expect this, possibly first. Do not be
+defensive: the problem and the gap are unchanged, only the method inverted.
+
+> The problem statement and the research gap are exactly the ones in the
+> proposal: existing methods lack explicit geometric priors and view-invariant
+> constraints. What changed is the method. The proposal was to learn
+> view-invariance through a loss, with a view-invariance term and a bone-length
+> term added to the pose loss. I derived it instead.
+>
+> The reason is that the rotation cancels algebraically. If two cameras see one
+> pose, their predictions differ by an unknown rotation, and because the frame is
+> built from the joints themselves it rotates with them, so the unknown rotation
+> cancels exactly and never has to be estimated. Once that is true, training is
+> not required to obtain the invariance, and the survey showed the learned route
+> was already occupied by 3DPCNet, MoViD, V-VIPE and CanonPose. The
+> requirement profile — no training, no labels, no calibration — was the part
+> nobody had taken.
+
+**Then volunteer the honest accounting, because it is your strongest move:**
+
+> The proposal hypothesised that explicit geometric priors would deliver both
+> view-invariance and reliability. I tested that hypothesis in its cheapest
+> possible form, analytically and with zero training, and the verdict is split.
+> The view-invariance half holds: 74.1 percent across 180 held-out pairs on a
+> dataset I did not develop on. The geometric-priors-as-quality-signal half does
+> not: bone-length consistency scored +0.492 on the first dataset and +0.098 on
+> the second, and I retract it. So the proposal's question is answered, not
+> avoided, and half the answer is negative.
+
+**What was not done, if asked:** CMU Panoptic and CASIA Gait were not used, and
+no gait or sports application was evaluated. The proposal listed four datasets;
+two were used, both multi-camera, which is what the central claim requires. Say
+this plainly rather than let it be discovered.
+
+---
+
 ## THE RETRACTIONS — lead with them, do not wait to be asked
 
 Volunteering these is the single most effective thing you can do. It makes
