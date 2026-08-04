@@ -423,6 +423,28 @@ The unknown rotation cancels exactly, and it does so without ever being estimate
 
 The argument is exact for the idealized case in which both cameras yield the same pose up to rotation. In practice they do not, because each prediction carries its own error, and the frame is built from the erroneous joints rather than the true ones. The residual canonical distance we measure in Chapter 5 is precisely this term, which is why it does not fall to zero and why the per-frame Procrustes oracle, which aligns the two predictions optimally, is the appropriate floor rather than zero.
 
+\subsection{Why Axis Length Governs Frame Stability}
+\label{sec:axistheory}
+
+The choice of axes is not arbitrary and the reason can be derived rather than asserted. Suppose a direction is estimated from two predicted joints separated by a distance $L$, each carrying independent isotropic position noise of standard deviation $\sigma$. The segment vector is a difference of two such positions, so its noise has variance $2\sigma^2$ per component. Only the component perpendicular to the segment rotates it, and that component has two degrees of freedom, giving $\mathbb{E}\lVert \boldsymbol{\epsilon}_{\perp}\rVert^2 = 4\sigma^2$. For small angles the induced angular error is therefore
+
+\begin{equation}
+\theta_{\mathrm{rms}} \;\approx\; \frac{2\sigma}{L} .
+\label{eq:theta}
+\end{equation}
+
+Angular error is inversely proportional to the length of the segment the direction is read from. This is the statement Section \ref{sec:h36mms} arrives at empirically, and it also supplies the inverse-variance weight used in Section \ref{sec:multilandmark}: if variance scales as $L^{-2}$, the correct weight is $L^{2}$, which is derived rather than tuned.
+
+Propagating equation \eqref{eq:theta} to the quantity we actually measure, a frame in error by $\theta$ displaces a joint lying at radius $r$ from the frame's origin by approximately $r\theta$. Two views canonicalized independently carry independent frame errors, so their disagreement adds in quadrature, and writing $\bar{r}$ for the mean joint radius and $d_0$ for the part of the disagreement that does not originate in the frame at all,
+
+\begin{equation}
+d^{2} \;\approx\; \Big(c\,\frac{\bar{r}}{L}\Big)^{2} + d_0^{2},
+\qquad c = 2\sqrt{2}\,\sigma .
+\label{eq:law}
+\end{equation}
+
+Equation \eqref{eq:law} is falsifiable, and Section \ref{sec:multilandmark} tests it.
+
 \subsection{Sensitivity and the Choice of Axes}
 
 The torso and hip axes are chosen because they are the longest and most reliably estimated directions available. Sensitivity of the frame to joint error scales inversely with the length of the defining vector, so a frame built from short segments would amplify noise, and the hip axis, at roughly half the torso axis, is the weaker of the two. Section \ref{sec:h36mms} confirms this experimentally for the per-limb frames.
@@ -989,6 +1011,16 @@ Spine chain by SVD & 72.7 & $[+0.4, +6.1]$ & 68.9 & $[-25.1, +2.2]$ \\
 The pre-registered criterion fails, and the shape of the failure is more useful than a pass would have been. Table \ref{tab:multilandmark} separates two things that we had treated as one. Replacing the hip axis with the longer shoulder axis improves the global frame on both backbones, by 5.2 and 4.4 percent, with intervals excluding zero in each case. That is the axis-length principle operating exactly as stated, now confirmed at the global scale on two estimators. Combining the two lateral axes, however, does not help. The weighted estimate is indistinguishable from the baseline on the first backbone and worse on the second, and the spine-chain estimate is worse still, losing 8.8 mm on MotionBERT.
 
 We take the natural reading, which the pre-registration named in advance as the expected failure mode. Redundancy pays only when the redundant estimates carry independent errors. Here they do not: the hip and shoulder positions are produced by one network from one image, so their errors are correlated through the shared prediction, and averaging them reduces nothing while diluting the longer and better-conditioned of the two. The spine-chain variant fails hardest because it is the most redundant, drawing a single direction from five joints that the estimator places with correlated error.
+
+\subsection{Testing the Predicted Law}
+
+Section \ref{sec:axistheory} derives $d^{2} \approx (c\,\bar{r}/L)^{2} + d_0^{2}$ from noise propagation, which is a stronger statement than the ordering we have been asserting, and testable. We fit it by least squares to the eight limb-frame definitions of Section \ref{sec:h36mms}, which apply one construction to anatomically different segments and so span a genuine range of $\bar{r}/L$, and we repeat the fit independently on both backbones. Two parameters are fitted to eight points.
+
+The verdict is mixed and we state both halves. The monotone prediction holds strongly and reproduces: the rank correlation between $\bar{r}/L$ and measured cross-view distance is $+0.904$ on the first backbone and $+0.880$ on the second. More tellingly, the fitted constants agree across two independently trained networks of different architecture and nineteen-fold different size, at $c = 21.3$ and $21.5$ mm, implying a per-joint noise of $\sigma = 7.5$ and $7.6$ mm. Two unrelated estimators returning the same physical constant to within one percent is not something an accidental correlation produces, and it is the strongest evidence we have that the mechanism in equation \eqref{eq:theta} is the operative one.
+
+The functional form, however, is too simple. The fit explains 70 percent of the variance and predicts held-out definitions poorly, with a leave-one-out mean absolute error of 16 mm against observations spanning 26 to 69 mm, and it systematically over-predicts the best-conditioned frames. At least three of its assumptions are visibly wrong: per-joint noise is not uniform, since wrists and ankles are far less reliable than hips and shoulders; the two views' errors are not fully independent, since both come from one detector with shared biases; and the small-angle approximation weakens exactly where the frame is worst.
+
+We therefore claim the mechanism and not the equation. Axis length governs frame stability, the direction and the constant are reproducible across backbones, and the specific inverse law is a first-order account that should not be quoted as a predictive model.
 
 The practical consequence is small and concrete. The best available global frame among those tested is not a multi-landmark estimate but the existing construction with one vector exchanged for a longer one, a change of two joint indices. We report it as a measured improvement rather than adopting it in the results above, which were computed with the original definition throughout, and we note that the corresponding change to the segment frames in Section \ref{sec:h36mms} was validated on Human3.6M only. Re-running both datasets under the corrected definitions is the cheapest outstanding item in this report.
 
