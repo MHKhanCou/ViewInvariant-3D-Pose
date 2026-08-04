@@ -1,0 +1,178 @@
+{
+ "n_frame_pairs": 42198,
+ "n_camera_pairs": 180,
+ "joints": [
+  {
+   "name": "root",
+   "radius_mm": 0.0,
+   "canonical_rms_mm": 0.0,
+   "oracle_rms_mm": 38.953313517458064,
+   "frame_induced_mm": 0.0
+  },
+  {
+   "name": "r_hip",
+   "radius_mm": 137.9336656408697,
+   "canonical_rms_mm": 54.47410369145902,
+   "oracle_rms_mm": 48.927708329472885,
+   "frame_induced_mm": 23.94801308279789
+  },
+  {
+   "name": "r_knee",
+   "radius_mm": 475.2143237083776,
+   "canonical_rms_mm": 186.30212134579077,
+   "oracle_rms_mm": 68.39738047403017,
+   "frame_induced_mm": 173.29246597077585
+  },
+  {
+   "name": "r_foot",
+   "radius_mm": 812.232004788396,
+   "canonical_rms_mm": 244.64201515605777,
+   "oracle_rms_mm": 95.38592373014431,
+   "frame_induced_mm": 225.28036118082704
+  },
+  {
+   "name": "l_hip",
+   "radius_mm": 137.59692123416355,
+   "canonical_rms_mm": 54.25192679871592,
+   "oracle_rms_mm": 50.15437386832315,
+   "frame_induced_mm": 20.68357665515553
+  },
+  {
+   "name": "l_knee",
+   "radius_mm": 489.9183809926863,
+   "canonical_rms_mm": 192.29442768544502,
+   "oracle_rms_mm": 68.41272122994512,
+   "frame_induced_mm": 179.71323405021303
+  },
+  {
+   "name": "l_foot",
+   "radius_mm": 818.5112380904801,
+   "canonical_rms_mm": 237.57537433971973,
+   "oracle_rms_mm": 97.18833447252975,
+   "frame_induced_mm": 216.78672961026385
+  },
+  {
+   "name": "spine",
+   "radius_mm": 257.51444676641495,
+   "canonical_rms_mm": 35.04752167430558,
+   "oracle_rms_mm": 36.35131076498596,
+   "frame_induced_mm": 0.0
+  },
+  {
+   "name": "thorax",
+   "radius_mm": 523.3639395838694,
+   "canonical_rms_mm": 22.132138843189544,
+   "oracle_rms_mm": 32.76605630789269,
+   "frame_induced_mm": 0.0
+  },
+  {
+   "name": "neck",
+   "radius_mm": 584.9697116792083,
+   "canonical_rms_mm": 65.75142702342411,
+   "oracle_rms_mm": 47.05776911907166,
+   "frame_induced_mm": 45.92185232710907
+  },
+  {
+   "name": "head",
+   "radius_mm": 694.2667488370724,
+   "canonical_rms_mm": 73.96269879504608,
+   "oracle_rms_mm": 58.18504304850123,
+   "frame_induced_mm": 45.66159851002557
+  },
+  {
+   "name": "l_shoulder",
+   "radius_mm": 495.93434453116697,
+   "canonical_rms_mm": 73.4884129883734,
+   "oracle_rms_mm": 45.33390532097788,
+   "frame_induced_mm": 57.83929349411473
+  },
+  {
+   "name": "l_elbow",
+   "radius_mm": 406.65276581868125,
+   "canonical_rms_mm": 158.79329138780807,
+   "oracle_rms_mm": 75.125013342451,
+   "frame_induced_mm": 139.89832650918265
+  },
+  {
+   "name": "l_wrist",
+   "radius_mm": 414.8580896803819,
+   "canonical_rms_mm": 194.03012070490908,
+   "oracle_rms_mm": 105.83290082295873,
+   "frame_induced_mm": 162.62559713698016
+  },
+  {
+   "name": "r_shoulder",
+   "radius_mm": 488.38398980205545,
+   "canonical_rms_mm": 74.5352710113768,
+   "oracle_rms_mm": 45.13031896710763,
+   "frame_induced_mm": 59.31914475670156
+  },
+  {
+   "name": "r_elbow",
+   "radius_mm": 402.62679408671175,
+   "canonical_rms_mm": 161.49208903384405,
+   "oracle_rms_mm": 77.2025356758696,
+   "frame_induced_mm": 141.84309396558965
+  },
+  {
+   "name": "r_wrist",
+   "radius_mm": 438.55921586032906,
+   "canonical_rms_mm": 204.93351916449248,
+   "oracle_rms_mm": 114.4897908224056,
+   "frame_induced_mm": 169.970100531197
+  }
+ ],
+ "slope_frame_induced": 0.21780808319413927,
+ "slope_ci95": [
+  0.10343231420011918,
+  0.3251564728169869
+ ],
+ "r2": 0.33860078861791465,
+ "predicted_band": [
+  0.03797524243737946,
+  0.07338992520402333
+ ],
+ "slope_canonical": 0.25731733135579127,
+ "slope_oracle": 0.12730329507252167,
+ "control_ratio_canonical_over_oracle": 2.021293566747064,
+ "p1_linear_r2_at_least_0p80": false,
+ "p2_slope_in_predicted_band": false,
+ "p3_oracle_slope_materially_smaller": true,
+ "post_hoc": {
+  "note": "NOT pre-registered. Explains the failure of the radius model.",
+  "mean_radius_torso_rigid_mm": 565.8886987123758,
+  "mean_radius_articulated_mm": 532.3216016282555,
+  "canonical_torso_rigid_mm": 71.9344524545551,
+  "canonical_articulated_mm": 197.50786985225838,
+  "matched_radius_pairs": [
+   {
+    "rigid": "l_shoulder",
+    "articulated": "l_knee",
+    "radius_rigid_mm": 495.93434453116697,
+    "radius_articulated_mm": 489.9183809926863,
+    "radius_gap_pct": 1.2130564468504135,
+    "canonical_rigid_mm": 73.4884129883734,
+    "canonical_articulated_mm": 192.29442768544502,
+    "ratio": 2.6166632243897814
+   },
+   {
+    "rigid": "r_shoulder",
+    "articulated": "r_knee",
+    "radius_rigid_mm": 488.38398980205545,
+    "radius_articulated_mm": 475.2143237083776,
+    "radius_gap_pct": 2.6965802255343343,
+    "canonical_rigid_mm": 74.5352710113768,
+    "canonical_articulated_mm": 186.30212134579077,
+    "ratio": 2.499516253417181
+   }
+  ],
+  "pinned_joints_canonical_mm": {
+   "root": 0.0,
+   "r_hip": 54.47410369145902,
+   "l_hip": 54.25192679871592,
+   "spine": 35.04752167430558,
+   "thorax": 22.132138843189544
+  }
+ },
+ "prediction_cache": "preds.npz"
+}

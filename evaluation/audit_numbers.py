@@ -438,6 +438,45 @@ def main():
                          float(cd_xs["p2_tail_is_real"]),
                          "conditioning/conditioning.json", tol=0))
 
+    # ---------- radial law: pre-registered, all criteria FAILED ---------------
+    # The pre-registered radius model fails on both backbones. What replicates
+    # is the post-hoc mechanism: at matched radius, joints rigid with the torso
+    # disagree far less than joints beyond a hinge.
+    for tag, label, slope, r2 in (("", "XS", 0.2178, 0.339),
+                                  ("_motionbert", "MB", 0.1046, 0.337)):
+        rd = load("radial/radial%s.json" % tag)
+        src = "radial/radial%s.json" % tag
+        results.append(check("radial %s: fitted slope" % label, slope,
+                             rd["slope_frame_induced"], src, tol=0.001))
+        results.append(check("  %s R2 below 0.80 threshold" % label, r2,
+                             rd["r2"], src, tol=0.005))
+        results.append(check("  %s P1 linearity FAILS" % label, 0.0,
+                             float(rd["p1_linear_r2_at_least_0p80"]), src, tol=0))
+        results.append(check("  %s P2 slope outside band FAILS" % label, 0.0,
+                             float(rd["p2_slope_in_predicted_band"]), src, tol=0))
+        ph = rd["post_hoc"]
+        # The falsifying comparison: larger radius, smaller disagreement.
+        results.append(check("  %s torso-rigid radius > articulated" % label, 1.0,
+                             float(ph["mean_radius_torso_rigid_mm"]
+                                   > ph["mean_radius_articulated_mm"]), src, tol=0))
+        results.append(check("  %s torso-rigid canonical (mm)" % label,
+                             71.9 if tag == "" else 51.1,
+                             ph["canonical_torso_rigid_mm"], src, tol=0.1, unit="mm"))
+        results.append(check("  %s articulated canonical (mm)" % label,
+                             197.5 if tag == "" else 123.5,
+                             ph["canonical_articulated_mm"], src, tol=0.1, unit="mm"))
+        m = ph["matched_radius_pairs"][0]
+        results.append(check("  %s matched pair radius gap %%" % label,
+                             1.2 if tag == "" else 0.9,
+                             m["radius_gap_pct"], src, tol=0.1, unit="%"))
+        results.append(check("  %s matched pair distance ratio" % label,
+                             2.62 if tag == "" else 2.06,
+                             m["ratio"], src, tol=0.01))
+    rd_mb = load("radial/radial_motionbert.json")
+    results.append(check("  P3 control FAILS on MotionBERT (voids it)", 0.0,
+                         float(rd_mb["p3_oracle_slope_materially_smaller"]),
+                         "radial/radial_motionbert.json", tol=0))
+
     # ---------- cost of the added framework ("lightweight", quantified) -------
     cb = load("cost/cost_benchmark.json")
     src = "cost/cost_benchmark.json"

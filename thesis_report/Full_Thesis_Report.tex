@@ -217,6 +217,8 @@ The main objectives of this project are:
 \item A cross-dataset replication that retracts our own bone-length error predictor and bounds the condition under which it holds.
 
 \item A pre-registered abstention experiment which fails, and, in failing, establishes the narrower claim that the falsified reliability score does gate canonicalization quality, cutting mean cross-view distance by 22 percent at thirty percent abstention and surviving a confound control on both backbones.
+
+\item A three-level delimitation of the axis-length principle, pre-registered at each level, establishing that it governs the choice of frame construction but neither which frame within a construction to trust nor which joint within a frame will disagree, the latter because joint-level disagreement is dominated by articulation rather than by frame geometry.
 \end{itemize}
 
 \section{Report Organization}
@@ -1071,6 +1073,53 @@ We state the resulting position precisely, because it is narrow. The analytic re
 Three caveats belong with it. The score contains axis conditioning among its six components, yet conditioning alone fails this test while the score passes, which means the discriminating work is being done by the other components rather than by the geometry the theory identifies. The triage result is a comparator within this pre-registration rather than its subject, so it is exploratory in the same sense as the bone-length signal, and it is stated as such wherever it appears. And triage is not calibration.
 
 The last point deserves a comparison, since the natural alternative is conformal prediction, which does supply a guarantee. CHAMP [17] conformalizes multi-hypothesis 3D pose estimation and CUPS [18] conformalizes pose and shape with a learned uncertainty function that remains valid when exchangeability is violated, both producing prediction sets with a stated coverage level. Neither is a substitute here, for two reasons. Both require a labelled calibration set drawn from the deployment distribution, which is precisely the requirement this framework exists to avoid, and both target the error of the pose rather than the fitness of the frame, which is the quantity measured above. A conformal treatment of frame fitness would be a genuine extension and is listed in Section \ref{sec:future}.
+
+\section{The Third Level: Where the Axis-Length Principle Stops}
+\label{sec:radial}
+
+Section \ref{sec:multilandmark} tested the axis-length law between frame constructions and confirmed its mechanism. Section \ref{sec:conditioning} tested it between frames of one construction and it failed. One level remains, and it is the one the derivation speaks to most directly: across the joints of a single canonicalized pose. We pre-registered it before running, in the same manner as the preceding two.
+
+The prediction is straightforward. If the estimated frame carries a small rotation error with rotation vector $\Theta$, a joint at position $\mathbf{p}_j$ is displaced by $\Theta \times \mathbf{p}_j$, whose magnitude is proportional to that joint's radius $r_j$ from the root. Averaging over isotropic orientations and taking two views with independent frame errors, the frame-induced part of the cross-view distance is $\sqrt{4/3}\,\|\Theta\|\,r_j$, which is linear in $r_j$. That part is separable, because a per-frame Procrustes rotation removes exactly the rigid misalignment, so $d_{\text{frame}}(j) \approx \sqrt{d_{\text{can}}(j)^2 - d_{\text{orc}}(j)^2}$.
+
+What makes the test sharp is that every constant on the right-hand side was measured in a different experiment. Taking $\sigma = 7.5$ mm from the limb-frame fit of Section \ref{sec:multilandmark}, $L_{\text{hip}} = 275.8$ mm and $L_{\text{torso}} = 456.1$ mm from independent measurements, the predicted slope lies in $[0.038, 0.073]$ with nothing fitted to the data being tested. We also recorded before running that Procrustes absorbs some genuine shape disagreement, so the measured slope is biased upward, which means a slope below the band would be stronger evidence than one above it.
+
+\textbf{The test fails, on both backbones.} The fitted slope is 0.218 and 0.105 against a predicted band of $[0.038, 0.073]$, and the coefficient of determination is 0.339 and 0.337 against a pre-registered threshold of 0.80. On the second backbone the confound control fails as well, at a ratio of 1.30 against the required 2.0, which we recorded in advance as voiding the decomposition on that backbone. Excluding the joints the frame is built from, which are constrained by the construction and cannot test a prediction about it, does not rescue the fit; the coefficient falls to $-0.070$, worse than predicting the mean.
+
+\subsection{Why It Fails}
+
+The reason is visible in the per-joint table and we report it as post-hoc, because we did not anticipate it. Table \ref{tab:radial} gives the comparison that settles it.
+
+\begin{table}[h]
+\centering
+\caption{Cross-view root-mean-square distance per joint group. Post-hoc analysis, not pre-registered.}
+\label{tab:radial}
+{\fontsize{10}{12}\selectfont
+\begin{tabular}{lrrrr}
+\hline
+& \multicolumn{2}{c}{\textbf{MotionAGFormer-XS}} & \multicolumn{2}{c}{\textbf{MotionBERT}} \\
+\textbf{Joint group} & \textbf{radius} & \textbf{distance} & \textbf{radius} & \textbf{distance} \\
+\hline
+Rigid with torso (neck, head, shoulders) & 566 & \textbf{71.9} & 562 & \textbf{51.1} \\
+Beyond a hinge (knees, feet, elbows, wrists) & 532 & 197.5 & 531 & 123.5 \\
+\hline
+\multicolumn{5}{l}{\textit{Matched-radius pairs}} \\
+Left shoulder & 496 & \textbf{73.5} & 494 & \textbf{46.7} \\
+Left knee & 490 & 192.3 & 490 & 96.3 \\
+Right shoulder & 488 & \textbf{74.5} & 485 & \textbf{49.4} \\
+Right knee & 475 & 186.3 & 474 & 92.3 \\
+\hline
+\end{tabular}}
+\end{table}
+
+The joints rigidly attached to the torso sit at a \emph{larger} mean radius than the articulated ones and disagree across views by substantially \emph{less}, which contradicts the radius model in the wrong direction for it to be a matter of degree. The matched pairs make the point without any grouping choice: the left shoulder and the left knee differ in radius by 1.2 percent and in cross-view distance by a factor of 2.6, and the right pair differs by 2.7 percent in radius and a factor of 2.5 in distance. Both comparisons replicate on the second backbone at factors of 2.1 and 1.9.
+
+The governing variable at this level is therefore not Euclidean distance from the root but position in the kinematic chain relative to the segment the frame is built from. A joint that moves rigidly with the torso inherits the frame's error and nothing else. A joint beyond a hinge carries, in addition, the estimator's error in the joint angle, and on an in-domain backbone that term dominates. This is the same conclusion Section \ref{sec:conditioning} reached from the other direction, where the incumbent reliability score triaged frames successfully while a purely geometric index did not.
+
+\subsection{What This Bounds}
+
+Three pre-registered tests at three levels now delimit the principle, and the boundary is sharp. Axis length governs \emph{which frame construction to choose}, where it is confirmed on two backbones with rank correlations of $+0.904$ and $+0.880$ and a physical constant agreeing to one percent across them. It does not govern \emph{which frame within a construction to trust}, because within one construction the axis is an anatomical near-constant. And it does not govern \emph{which joint within a frame will disagree}, because joint-level disagreement is dominated by articulation rather than by frame rotation.
+
+We regard the bound as more useful than a third confirmation would have been. It says precisely where a designer should apply the principle, which is at the point of choosing what to build the frame from, and it warns against the two extensions that would otherwise look natural. It also explains an artifact of the method that would otherwise be flattering and misleading: canonicalization appears to work almost perfectly at the thorax and the hips, at 22.1 and 54.4 mm, because those joints define the frame and the construction pins them. Any per-joint evaluation of a canonicalization method that averages over all joints without separating the defining ones will overstate its performance, and we report our own per-joint figures with that separation made explicit.
 
 \section{Ablation with Abstention}
 
