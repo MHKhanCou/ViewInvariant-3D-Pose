@@ -537,6 +537,54 @@ The appendix tables are generated from the artifacts by a script rather than typ
 % ========================== CHAPTER 5 ================================
 \chapter{EXPERIMENTAL RESULTS AND OBSERVATIONS}
 
+\section{Summary of Findings}
+
+This chapter reports both confirmations and failures, and the failures are numerous enough that the reader deserves the outcome before the argument. Table \ref{tab:summary} states every claim tested and its verdict. Three components hold on both datasets, one was refined by testing, and two were withdrawn.
+
+\begin{table}[h]
+\centering
+\caption{Every claim tested in this chapter, and its verdict on each dataset.}
+\label{tab:summary}
+{\fontsize{10}{12}\selectfont
+\begin{tabular}{p{4.6cm}p{3.1cm}p{3.1cm}l}
+\hline
+\textbf{Claim} & \textbf{MPI-INF-3DHP} & \textbf{Human3.6M} & \textbf{Verdict} \\
+\hline
+Canonicalization improves cross-view comparability
+ & $+32.4\%$, 27 held-out pairs
+ & $+74.1\%$, 180 held-out pairs, 179 improve
+ & Holds \\
+\hline
+Multi-scale per-limb frames improve on the global frame
+ & 29 of 29 pairs
+ & $+25.6\%$, and $+55.1\%$ once every frame uses its own long axis
+ & Holds \\
+\hline
+The shared frame enables calibration-free fusion
+ & Improves in all four conditions
+ & Median $+8.4\%$; an unweighted mean is not reliably better than one view
+ & Holds, refined \\
+\hline
+The reliability score predicts accuracy
+ & Fails on five independent tests
+ & Fails again; weighting by it is indistinguishable from using one camera
+ & Withdrawn \\
+\hline
+Bone-length inconsistency predicts error
+ & $\rho = +0.492$
+ & $\rho = +0.098$, all five criteria fail
+ & Withdrawn \\
+\hline
+Canonicalization aids cross-view retrieval
+ & Recall falls
+ & Not tested
+ & Withdrawn \\
+\hline
+\end{tabular}}
+\end{table}
+
+The positive results concern comparability rather than accuracy, which is the property this project set out to provide, and the distinction is maintained throughout. The one exception is fusion, which combines several views into a single estimate and therefore does reduce error against ground truth.
+
 \section{Experimental Setup}
 
 We evaluate the framework on the MPI-INF-3DHP dataset [10]. Eight synchronized cameras of subject S1 sequence 1 give twenty-eight camera pairs, and a pair from subject S2 provides a held-out subject. We extracted frames from the dataset's own video files, and verified frame indices against the annotation file by projecting the 2D ground truth onto the extracted images. To test conditions under which viewpoint quality varies within a sequence, we selected a dynamic window containing 138 degrees of net body rotation using a ground-truth motion scan. The frozen lifting network is MotionAGFormer-XS, whose Human3.6M reproduction matches the published figures at 45.149 mm against 45.1 mm.
@@ -824,6 +872,10 @@ Canonicalization degrades cross-view retrieval, with recall at rank one falling 
 \chapter{CONCLUSION AND FUTURE WORK}
 
 In this project we developed a framework that makes the predictions of a frozen monocular 3D pose estimator comparable across viewpoints without training, labels, or camera calibration. Canonicalization reduces cross-view joint distance by 32.4 percent across twenty-seven held-out camera pairs of MPI-INF-3DHP and by 74.1 percent, with a cluster bootstrap interval of $[+69.8, +77.2]$ percent, across 180 held-out pairs of Human3.6M, where it improves 179 of 180 pairs and closes 90.5 percent of the gap to a per-frame Procrustes oracle. The multi-scale extension improves every pair tested on the first dataset and 179 of 180 on the second, and reporting its levels separately showed that the length of the axis a frame is built from governs how consistent that frame is across views. Rebuilding each segment frame from its own long axis raises the gain from 25.6 to 55.1 percent and improves all 180 pairs. The shared frame enables calibration-free multi-view fusion, which on Human3.6M requires a median rather than a mean, because at four views only the median improves reliably on an arbitrary single camera.
+
+It is worth stating plainly what kind of contribution this is. The work is a deployment-oriented geometric framework, not a new learning algorithm. Body-frame normalization is not itself novel, and Section 2.3 says so: 3DPCNet addresses the same problem and reports a hand-built baseline of this kind performing worse than its learned alternative. What we claim is the combination and its evidence. The framework adds zero trained parameters, consumes no labels and requires no calibration, so applying it to a new estimator, camera or domain costs nothing but the arithmetic; and it is evaluated over 209 camera pairs across two datasets, the second of which took no part in its design. Whether that trade is worth making depends on whether a practitioner can afford to train, which is a deployment question rather than an accuracy one.
+
+One finding is genuinely a design result rather than an evaluation. The consistency of a body frame across viewpoints is governed by the length of the axis it is built from, which we predicted from the construction, discovered through a bilateral asymmetry we had not gone looking for, confirmed by correcting it, and then generalized to a second case that the same reasoning identified. It raises the multi-scale improvement from 25.6 to 55.1 percent and costs no parameters. We regard it as the most transferable thing in this report, since any method that builds a frame from anatomical landmarks faces the same choice.
 
 We regard the negative results as equally important. We falsified the analytic reliability score, one of the framework's original components, as a predictor of accuracy along five independent axes, and we identified the cause: within-frame geometric plausibility is invariant to the depth error that dominates monocular estimation. That diagnosis motivated a signal based on a physical invariant which the model cannot satisfy merely by being confidently wrong, and temporal bone-length inconsistency predicts error from a single camera at a Spearman coefficient of $+0.492$ on that dataset. We then replicated the experiment on Human3.6M, where the coefficient falls to $+0.098$ and every criterion fails, and we retract the general claim. What survives is narrower and, we would argue, more useful for being bounded: the signal detects domain shift severe enough to deform the predicted skeleton, and it does not rank the residual depth error of a backbone that is already accurate. The mechanism is the one that defeated the reliability score, extended along the time axis, since bone-length consistency is invariant to a temporally coherent depth error just as within-frame plausibility is invariant to a coherent one.
 
