@@ -1,0 +1,53 @@
+{
+  "note": "MotionBERT inference running concurrently on the same 4-core CPU; absolute latencies are inflated, the ratio is the robust figure",
+  "platform": "Windows AMD64, Python 3.11.9",
+  "trainable_parameters_added": 0,
+  "components": {
+    "canonicalize_single": {
+      "median_us": 268.69995053857565,
+      "p25_us": 201.90002396702766,
+      "p75_us": 294.6999156847596,
+      "n_calls": 20000
+    },
+    "multiscale_canonicalize": {
+      "median_us": 1468.1000029668212,
+      "p25_us": 1256.8000238388777,
+      "p75_us": 1689.799944870174,
+      "n_calls": 5000
+    },
+    "reliability_score": {
+      "median_us": 474.1500015370548,
+      "p25_us": 432.10003059357405,
+      "p75_us": 544.9000746011734,
+      "n_calls": 5000
+    },
+    "median_fuse_4_views": {
+      "median_us": 214.90000654011965,
+      "p25_us": 197.3999897018075,
+      "p75_us": 244.80000138282776,
+      "n_calls": 2000
+    }
+  },
+  "backbone": {
+    "median_us_per_clip": 306726.5500430949,
+    "median_us_per_frame": 11360.2425941887,
+    "parameters": 2240000,
+    "n_calls": 30
+  },
+  "canonicalization_overhead_pct_of_backbone": 2.3652659554649684,
+  "peak_extra_memory_bytes": 7560,
+  "flops": {
+    "canonicalization_per_frame": 402,
+    "breakdown": {
+      "root_centre": 51,
+      "axis_vectors": 6,
+      "normalise": 27,
+      "cross_products": 18,
+      "projection": 255,
+      "orthonormality_check": 45
+    },
+    "backbone_per_frame_approx": 76160000.0,
+    "ratio_pct": 0.0005278361344537815,
+    "backbone_note": "two FLOPs per parameter per token, the standard approximation for a transformer forward pass"
+  }
+}

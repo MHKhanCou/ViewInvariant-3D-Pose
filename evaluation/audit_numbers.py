@@ -324,6 +324,18 @@ def main():
                              msc["per_level_distance_mm"][lv],
                              sym["per_level_distance_mm"][lv], src, tol=1e-9, unit="mm"))
 
+    # ---------- cost of the added framework ("lightweight", quantified) -------
+    cb = load("cost/cost_benchmark.json")
+    src = "cost/cost_benchmark.json"
+    results.append(check("trainable parameters added", 0.0,
+                         float(cb["trainable_parameters_added"]), src, tol=0))
+    results.append(check("  canonicalization FLOPs per frame", 402.0,
+                         float(cb["flops"]["canonicalization_per_frame"]), src, tol=0))
+    results.append(check("  FLOP overhead vs backbone %", 0.00053,
+                         cb["flops"]["ratio_pct"], src, tol=0.0001, unit="%"))
+    results.append(check("  peak extra memory (bytes)", 7560.0,
+                         float(cb["peak_extra_memory_bytes"]), src, tol=2048))
+
     # ---------- TTA dispersion (pre-registered, FAILED) ----------
     tta = load("tta/tta_results.json")
     tp = tta["pooled"]

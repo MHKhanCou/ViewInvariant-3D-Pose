@@ -410,6 +410,35 @@ The torso and hip axes are chosen because they are the longest and most reliably
 
 A further subtlety concerns sign. The hip axis direction depends on which hip is labelled left, and a prediction in which the two are exchanged produces a frame rotated by $\pi$ about the torso axis. For video we therefore carry the previous frame's forward axis and flip the current frame when the two disagree in sign, which enforces temporal consistency without imposing any prior on the pose itself.
 
+\subsection{Computational Cost}
+
+The title of this report claims the framework is lightweight, so we measure it rather than assert it. Table \ref{tab:cost} reports the cost of every component we add, against the frozen backbone it wraps.
+
+\begin{table}[h]
+\centering
+\caption{Cost of the added framework, measured on real cached poses.}
+\label{tab:cost}
+{\fontsize{10}{12}\selectfont
+\begin{tabular}{lrr}
+\hline
+\textbf{Component} & \textbf{Latency} & \textbf{Trainable parameters} \\
+\hline
+Canonicalization & 269 $\mu$s & 0 \\
+Multi-scale, five frames & 1468 $\mu$s & 0 \\
+Reliability score & 474 $\mu$s & 0 \\
+Median fusion, four views & 215 $\mu$s & 0 \\
+\hline
+Frozen backbone, per frame & 11360 $\mu$s & 2\,240\,000 \\
+\hline
+\end{tabular}}
+\end{table}
+
+Two figures describe the overhead and they differ by four orders of magnitude, which is worth explaining rather than hiding. Counted in arithmetic, canonicalization is 402 floating-point operations per frame: a root subtraction, two differences, three normalizations, two cross products, a seventeen by three matrix product and an orthonormality check. Against roughly $7.6 \times 10^{7}$ operations for the backbone, estimated at two operations per parameter per token, that is 0.0005 percent. Measured in wall time it is 2.4 percent.
+
+The gap is implementation, not algorithm. Our geometry is plain Python and NumPy over seventeen joints, where interpreter overhead dominates the arithmetic completely, while the backbone executes as compiled and vectorized tensor kernels. A batched or compiled implementation would approach the arithmetic ratio. We report the measured figure as the honest cost of the current code and the arithmetic figure as the cost of the method, and note that even the pessimistic figure leaves the framework at a fortieth of the estimator it wraps. Peak additional memory is 7560 bytes per call, which is the pose and a handful of three by three matrices.
+
+Absolute latencies were measured while a second inference job occupied the same four-core machine and are therefore inflated; the ratio is the quantity to carry forward, and the arithmetic count is independent of load altogether.
+
 \subsection{Degeneracy Handling}
 
 Three configurations are detected and reported as invalid rather than silently returned: a torso axis shorter than five percent of the median bone length, a hip axis nearly parallel to the torso axis, so that the cross product is ill-conditioned, and a resulting matrix failing an orthonormality check. Invalid frames are excluded from every aggregate rather than replaced by a fallback, so that a reported mean is never diluted by frames on which the method declined to operate. On Human3.6M the construction is valid on every frame evaluated.
