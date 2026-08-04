@@ -177,6 +177,108 @@ def main():
                              ca["bone_deviation_plus_pruned"]["s2_heldout_rho"],
                              src, tol=0.005))
 
+    # ---------- H36M replication of the bone signal (FAILED, claim retracted) ----------
+    # These entries exist to keep a retracted claim retracted. If a future re-run
+    # moves these numbers, the retraction in Section 4.9 of the report has to move
+    # with them.
+    hr = load("h36m_replication/h36m_replication.json")
+    hp = hr["pooled"]
+    src = "h36m_replication/h36m_replication.json"
+    results.append(check("H36M replication verdict is FAIL (0=fail)", 0.0,
+                         float(bool(hr["verdict_pass"])), src, tol=0))
+    results.append(check("  pipeline check: MPJPE == repo official 45.149mm", 45.149,
+                         hr["sanity_check"]["mpjpe_action_balanced_mm"], src,
+                         tol=0.005, unit="mm"))
+    results.append(check("  rho(bone deviation, error) collapses", 0.098,
+                         hp["spearman_bone_deviation_vs_error"], src, tol=0.005))
+    results.append(check("  partial | detector confidence vanishes", 0.014,
+                         hp["partial_given_detector_confidence"], src, tol=0.005))
+    results.append(check("  bootstrap CI upper bound < 0", -0.063,
+                         hp["bootstrap_ci_delta_abs_rho"][1], src, tol=0.01))
+    results.append(check("  incumbent score DOES replicate", -0.212,
+                         hp["spearman_reliability_vs_error"], src, tol=0.005))
+    results.append(check("  strata of 8 with positive sign (mixed)", 7.0,
+                         float(sum(1 for v in hr["per_stratum_subject_camera"].values()
+                                   if v > 0)), src, tol=0))
+    results.append(check("  hardest third rho (no difficulty rescue)", 0.156,
+                         hr["difficulty_analysis"]["mean_rho_hardest_third"], src, tol=0.005))
+    results.append(check("  H36M median bone deviation", 0.034,
+                         hr["signal_magnitude"]["bone_deviation_median"], src, tol=0.001))
+    results.append(check("  H36M median aligned error", 32.6,
+                         hr["signal_magnitude"]["error_median_mm"], src, tol=0.1, unit="mm"))
+
+    # ---------- H36M cross-view: replication of the CENTRAL claim ----------
+    cv = load("h36m_crossview/h36m_crossview.json")["summary"]
+    src = "h36m_crossview/h36m_crossview.json"
+    results.append(check("H36M cross-view pairs (all held out)", 180.0,
+                         float(cv["n_pairs"]), src, tol=0))
+    results.append(check("  mean improvement %", 74.1,
+                         cv["mean_improvement_pct"], src, unit="%"))
+    results.append(check("  pairs improved", 179.0,
+                         float(cv["n_pairs_improved"]), src, tol=0))
+    results.append(check("  raw cross-view distance (mm)", 320.4,
+                         cv["mean_raw_distance_mm"], src, tol=0.1, unit="mm"))
+    results.append(check("  canonical cross-view distance (mm)", 75.3,
+                         cv["mean_canonical_distance_mm"], src, tol=0.1, unit="mm"))
+    results.append(check("  Procrustes oracle (mm)", 51.3,
+                         cv["mean_oracle_distance_mm"], src, tol=0.1, unit="mm"))
+    results.append(check("  oracle gap closed %", 90.5,
+                         cv["mean_oracle_gap_closed_pct"], src, unit="%"))
+    results.append(check("  canonicalization validity %", 100.0,
+                         cv["mean_validity_pct"], src, unit="%"))
+    results.append(check("  SittingDown canonical distance (mm)", 274.1,
+                         cv["by_action"]["SittingDown"]["mean_canonical_distance_mm"],
+                         src, tol=0.1, unit="mm"))
+
+    # ---------- H36M fusion: replicates only with a robust estimator ----------
+    fz = load("h36m_fusion/h36m_fusion.json")["summary"]
+    src = "h36m_fusion/h36m_fusion.json"
+    results.append(check("H36M fusion: single-view baseline (mm)", 37.8,
+                         fz["overall_mm"]["single_view_mean"], src, tol=0.1, unit="mm"))
+    results.append(check("  median fusion (mm)", 34.6,
+                         fz["overall_mm"]["naive_median"], src, tol=0.1, unit="mm"))
+    results.append(check("  median fusion improvement %", 8.4,
+                         fz["improvement_vs_single_view_pct"]["naive_median"], src, unit="%"))
+    results.append(check("  MEAN fusion is worse than one view %", -3.4,
+                         fz["improvement_vs_single_view_pct"]["naive_mean"], src, unit="%"))
+    results.append(check("  reliability-weighted mean (mm)", 36.6,
+                         fz["overall_mm"]["reliability_weighted_mean"], src,
+                         tol=0.1, unit="mm"))
+    results.append(check("  frames where mean fusion helps %", 67.9,
+                         fz["per_frame_improvement_pct"]["naive_mean"]["frames_improved_pct"],
+                         src, unit="%"))
+
+    # ---------- H36M multi-scale, and the bilateral asymmetry it exposed ------
+    msc = load("h36m_multiscale/h36m_multiscale.json")["summary"]
+    src = "h36m_multiscale/h36m_multiscale.json"
+    results.append(check("H36M multi-scale pairs", 180.0, float(msc["n_pairs"]), src, tol=0))
+    results.append(check("  global frame distance (mm)", 62.7,
+                         msc["mean_global_distance_mm"], src, tol=0.1, unit="mm"))
+    results.append(check("  multi-scale distance (mm)", 46.2,
+                         msc["mean_multiscale_distance_mm"], src, tol=0.1, unit="mm"))
+    results.append(check("  improvement over global %", 25.6,
+                         msc["mean_multiscale_vs_global_pct"], src, unit="%"))
+    results.append(check("  pairs improved", 179.0,
+                         float(msc["n_pairs_improved"]), src, tol=0))
+    results.append(check("  left leg, as implemented (mm)", 69.4,
+                         msc["per_level_distance_mm"]["left_leg"], src, tol=0.1, unit="mm"))
+    results.append(check("  right leg (mm)", 30.7,
+                         msc["per_level_distance_mm"]["right_leg"], src, tol=0.1, unit="mm"))
+    sym = msc["symmetric_leg_variant"]
+    results.append(check("  left leg, symmetric definition (mm)", 29.3,
+                         sym["per_level_distance_mm"]["left_leg"], src, tol=0.1, unit="mm"))
+    results.append(check("  symmetric combined distance (mm)", 39.1,
+                         sym["mean_multiscale_distance_mm"], src, tol=0.1, unit="mm"))
+    results.append(check("  symmetric improvement %", 37.2,
+                         sym["mean_multiscale_vs_global_pct"], src, unit="%"))
+    results.append(check("  symmetric pairs improved", 180.0,
+                         float(sym["n_pairs_improved"]), src, tol=0))
+    # The fix must be surgical: arms and torso are untouched by construction.
+    for lv in ("torso", "left_arm", "right_arm", "right_leg"):
+        results.append(check("  %s unchanged by the fix" % lv,
+                             msc["per_level_distance_mm"][lv],
+                             sym["per_level_distance_mm"][lv], src, tol=1e-9, unit="mm"))
+
     # ---------- TTA dispersion (pre-registered, FAILED) ----------
     tta = load("tta/tta_results.json")
     tp = tta["pooled"]

@@ -66,6 +66,21 @@ desktop.ini
 *.bak
 *.orig
 
+# LaTeX build products (the .tex, .pdf and images ARE tracked)
+thesis_report/*.aux
+thesis_report/*.out
+thesis_report/*.toc
+thesis_report/*.lof
+thesis_report/*.lot
+thesis_report/*.synctex.gz
+thesis_report/*.fls
+thesis_report/*.fdb_latexmk
+# The report PDF and its figures are the deliverable, so override the global
+# image and PDF rules for this directory only.
+!thesis_report/Full_Thesis_Report.pdf
+!thesis_report/images/*.png
+!thesis_report/images/*.jpg
+
 # Bulky/diagnostic artifacts (not defense evidence)
 thesis_artifacts/rotation_analysis/
 thesis_artifacts/rotation_test/

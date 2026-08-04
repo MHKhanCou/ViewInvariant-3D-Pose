@@ -1,0 +1,371 @@
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{lrrrr}
+\caption{Cross-view canonicalization on Human3.6M, by action.}\label{tab:appcvaction}\\
+\hline
+\textbf{Action} & \textbf{Pairs} & \textbf{Canonical (mm)} & \textbf{Improvement} & \textbf{Improved} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{Action} & \textbf{Pairs} & \textbf{Canonical (mm)} & \textbf{Improvement} & \textbf{Improved} \\
+\hline
+\endhead
+\hline
+\endfoot
+Purchases & 12 & 61.9 & +81.4 & 12/12 \\
+Sitting & 12 & 68.0 & +79.9 & 12/12 \\
+Eating & 12 & 57.3 & +79.6 & 12/12 \\
+WalkDog & 12 & 62.5 & +79.3 & 12/12 \\
+Walking & 12 & 45.3 & +78.0 & 12/12 \\
+Smoking & 12 & 59.6 & +77.6 & 12/12 \\
+Phoning & 12 & 59.6 & +77.5 & 12/12 \\
+WalkTogether & 12 & 53.2 & +77.1 & 12/12 \\
+Waiting & 12 & 58.2 & +75.7 & 12/12 \\
+Greeting & 12 & 61.4 & +75.0 & 12/12 \\
+Discussion & 12 & 64.7 & +74.6 & 12/12 \\
+Photo & 12 & 79.6 & +73.7 & 12/12 \\
+Posing & 12 & 60.6 & +73.3 & 12/12 \\
+Directions & 12 & 63.7 & +71.9 & 12/12 \\
+SittingDown & 12 & 274.1 & +36.1 & 11/12 \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{llrrrrrr}
+\caption{All 180 held-out Human3.6M camera pairs. Distances in millimetres.}\label{tab:apppairs}\\
+\hline
+\textbf{Subj} & \textbf{Action} & \textbf{Pair} & \textbf{N} & \textbf{Raw} & \textbf{Canon.} & \textbf{Oracle} & \textbf{Impr.} \\
+\hline
+\endfirsthead
+\multicolumn{8}{l}{\textit{(continued)}}\\
+\hline
+\textbf{Subj} & \textbf{Action} & \textbf{Pair} & \textbf{N} & \textbf{Raw} & \textbf{Canon.} & \textbf{Oracle} & \textbf{Impr.} \\
+\hline
+\endhead
+\hline
+\endfoot
+S11 & Directions & 01--02 & 154 & 341.1 & 76.6 & 56.1 & +77.5 \\
+S11 & Directions & 01--03 & 154 & 128.7 & 61.3 & 50.6 & +52.3 \\
+S11 & Directions & 01--04 & 154 & 373.5 & 74.0 & 57.8 & +80.2 \\
+S11 & Directions & 02--03 & 154 & 364.2 & 61.0 & 49.8 & +83.3 \\
+S11 & Directions & 02--04 & 154 & 156.3 & 54.5 & 40.7 & +65.1 \\
+S11 & Directions & 03--04 & 154 & 345.2 & 66.6 & 55.3 & +80.7 \\
+S11 & Discussion & 01--02 & 219 & 331.4 & 72.3 & 51.6 & +78.2 \\
+S11 & Discussion & 01--03 & 219 & 134.7 & 62.6 & 47.5 & +53.5 \\
+S11 & Discussion & 01--04 & 219 & 357.3 & 73.4 & 52.5 & +79.5 \\
+S11 & Discussion & 02--03 & 219 & 347.5 & 55.6 & 45.7 & +84.0 \\
+S11 & Discussion & 02--04 & 219 & 152.3 & 59.3 & 44.7 & +61.0 \\
+S11 & Discussion & 03--04 & 219 & 319.4 & 66.2 & 52.6 & +79.3 \\
+S11 & Eating & 01--02 & 219 & 449.9 & 74.6 & 62.1 & +83.4 \\
+S11 & Eating & 01--03 & 219 & 171.0 & 67.6 & 54.8 & +60.5 \\
+S11 & Eating & 01--04 & 219 & 498.2 & 70.9 & 63.9 & +85.8 \\
+S11 & Eating & 02--03 & 219 & 458.5 & 52.6 & 46.6 & +88.5 \\
+S11 & Eating & 02--04 & 219 & 193.3 & 60.2 & 52.0 & +68.9 \\
+S11 & Eating & 03--04 & 219 & 445.0 & 60.6 & 55.4 & +86.4 \\
+S11 & Greeting & 01--02 & 179 & 369.4 & 62.8 & 49.4 & +83.0 \\
+S11 & Greeting & 01--03 & 179 & 152.0 & 53.6 & 44.6 & +64.7 \\
+S11 & Greeting & 01--04 & 179 & 400.5 & 65.5 & 50.0 & +83.6 \\
+S11 & Greeting & 02--03 & 179 & 391.6 & 59.2 & 48.4 & +84.9 \\
+S11 & Greeting & 02--04 & 179 & 166.8 & 47.4 & 38.5 & +71.6 \\
+S11 & Greeting & 03--04 & 179 & 362.6 & 63.7 & 51.7 & +82.4 \\
+S11 & Phoning & 01--02 & 349 & 377.6 & 59.1 & 53.7 & +84.3 \\
+S11 & Phoning & 01--03 & 349 & 148.7 & 64.2 & 55.6 & +56.8 \\
+S11 & Phoning & 01--04 & 349 & 395.5 & 62.0 & 56.6 & +84.3 \\
+S11 & Phoning & 02--03 & 349 & 406.8 & 56.4 & 50.7 & +86.1 \\
+S11 & Phoning & 02--04 & 349 & 152.5 & 46.3 & 40.0 & +69.6 \\
+S11 & Phoning & 03--04 & 349 & 374.6 & 59.0 & 53.4 & +84.2 \\
+S11 & Posing & 01--02 & 141 & 343.4 & 65.5 & 51.6 & +80.9 \\
+S11 & Posing & 01--03 & 141 & 130.8 & 62.1 & 46.3 & +52.6 \\
+S11 & Posing & 01--04 & 141 & 375.2 & 62.4 & 48.5 & +83.4 \\
+S11 & Posing & 02--03 & 141 & 357.9 & 50.9 & 44.8 & +85.8 \\
+S11 & Posing & 02--04 & 141 & 149.6 & 56.7 & 41.9 & +62.1 \\
+S11 & Posing & 03--04 & 141 & 338.0 & 61.6 & 47.2 & +81.8 \\
+S11 & Purchases & 01--02 & 103 & 512.0 & 70.5 & 50.3 & +86.2 \\
+S11 & Purchases & 01--03 & 103 & 200.7 & 58.9 & 43.5 & +70.7 \\
+S11 & Purchases & 01--04 & 103 & 538.0 & 80.5 & 52.1 & +85.0 \\
+S11 & Purchases & 02--03 & 103 & 546.8 & 61.2 & 44.9 & +88.8 \\
+S11 & Purchases & 02--04 & 103 & 216.9 & 50.5 & 33.7 & +76.7 \\
+S11 & Purchases & 03--04 & 103 & 496.8 & 67.8 & 49.6 & +86.4 \\
+S11 & Sitting & 01--02 & 216 & 512.0 & 60.4 & 50.1 & +88.2 \\
+S11 & Sitting & 01--03 & 216 & 191.4 & 62.5 & 48.5 & +67.3 \\
+S11 & Sitting & 01--04 & 216 & 537.2 & 66.0 & 55.9 & +87.7 \\
+S11 & Sitting & 02--03 & 216 & 542.3 & 55.8 & 46.6 & +89.7 \\
+S11 & Sitting & 02--04 & 216 & 203.9 & 49.0 & 40.6 & +76.0 \\
+S11 & Sitting & 03--04 & 216 & 498.6 & 59.6 & 51.8 & +88.0 \\
+S11 & SittingDown & 01--02 & 200 & 527.8 & 413.6 & 79.0 & +21.6 \\
+S11 & SittingDown & 01--03 & 200 & 241.1 & 76.1 & 70.8 & +68.4 \\
+S11 & SittingDown & 01--04 & 200 & 552.4 & 410.4 & 73.3 & +25.7 \\
+S11 & SittingDown & 02--03 & 200 & 565.4 & 404.7 & 62.6 & +28.4 \\
+S11 & SittingDown & 02--04 & 200 & 205.6 & 57.6 & 53.8 & +72.0 \\
+S11 & SittingDown & 03--04 & 200 & 511.6 & 403.0 & 69.8 & +21.2 \\
+S11 & Smoking & 01--02 & 241 & 374.9 & 59.3 & 51.7 & +84.2 \\
+S11 & Smoking & 01--03 & 241 & 154.2 & 60.4 & 52.9 & +60.8 \\
+S11 & Smoking & 01--04 & 241 & 403.8 & 64.1 & 53.5 & +84.1 \\
+S11 & Smoking & 02--03 & 241 & 399.6 & 58.9 & 51.6 & +85.3 \\
+S11 & Smoking & 02--04 & 241 & 164.0 & 52.0 & 41.4 & +68.3 \\
+S11 & Smoking & 03--04 & 241 & 373.0 & 62.7 & 55.8 & +83.2 \\
+S11 & Photo & 01--02 & 198 & 423.1 & 90.9 & 75.8 & +78.5 \\
+S11 & Photo & 01--03 & 198 & 178.1 & 79.0 & 65.3 & +55.6 \\
+S11 & Photo & 01--04 & 198 & 454.2 & 94.0 & 77.4 & +79.3 \\
+S11 & Photo & 02--03 & 198 & 445.6 & 78.3 & 61.4 & +82.4 \\
+S11 & Photo & 02--04 & 198 & 195.5 & 72.7 & 56.2 & +62.8 \\
+S11 & Photo & 03--04 & 198 & 408.8 & 85.1 & 70.4 & +79.2 \\
+S11 & Waiting & 01--02 & 225 & 328.9 & 60.8 & 46.3 & +81.5 \\
+S11 & Waiting & 01--03 & 225 & 126.8 & 52.8 & 43.4 & +58.4 \\
+S11 & Waiting & 01--04 & 225 & 355.4 & 59.1 & 44.9 & +83.4 \\
+S11 & Waiting & 02--03 & 225 & 345.2 & 53.9 & 44.0 & +84.4 \\
+S11 & Waiting & 02--04 & 225 & 142.1 & 51.0 & 36.7 & +64.1 \\
+S11 & Waiting & 03--04 & 225 & 324.8 & 59.6 & 45.8 & +81.6 \\
+S11 & Walking & 01--02 & 162 & 297.0 & 43.1 & 36.2 & +85.5 \\
+S11 & Walking & 01--03 & 162 & 126.3 & 41.2 & 34.2 & +67.4 \\
+S11 & Walking & 01--04 & 162 & 318.6 & 49.7 & 42.7 & +84.4 \\
+S11 & Walking & 02--03 & 162 & 315.0 & 44.7 & 39.2 & +85.8 \\
+S11 & Walking & 02--04 & 162 & 121.1 & 36.1 & 31.2 & +70.2 \\
+S11 & Walking & 03--04 & 162 & 292.7 & 44.8 & 38.9 & +84.7 \\
+S11 & WalkDog & 01--02 & 144 & 467.1 & 74.7 & 48.6 & +84.0 \\
+S11 & WalkDog & 01--03 & 144 & 206.8 & 58.0 & 46.4 & +71.9 \\
+S11 & WalkDog & 01--04 & 144 & 502.4 & 66.9 & 48.1 & +86.7 \\
+S11 & WalkDog & 02--03 & 144 & 497.5 & 71.8 & 50.7 & +85.6 \\
+S11 & WalkDog & 02--04 & 144 & 211.5 & 59.7 & 45.0 & +71.8 \\
+S11 & WalkDog & 03--04 & 144 & 448.9 & 68.1 & 53.7 & +84.8 \\
+S11 & WalkTogether & 01--02 & 135 & 335.6 & 53.1 & 45.6 & +84.2 \\
+S11 & WalkTogether & 01--03 & 135 & 142.7 & 49.5 & 43.2 & +65.3 \\
+S11 & WalkTogether & 01--04 & 135 & 359.5 & 57.5 & 50.4 & +84.0 \\
+S11 & WalkTogether & 02--03 & 135 & 357.1 & 54.1 & 48.5 & +84.8 \\
+S11 & WalkTogether & 02--04 & 135 & 140.2 & 43.7 & 38.3 & +68.8 \\
+S11 & WalkTogether & 03--04 & 135 & 330.6 & 54.6 & 48.9 & +83.5 \\
+S9 & Directions & 01--02 & 268 & 289.1 & 67.4 & 52.6 & +76.7 \\
+S9 & Directions & 01--03 & 268 & 119.4 & 63.4 & 47.3 & +46.9 \\
+S9 & Directions & 01--04 & 268 & 310.4 & 60.4 & 55.0 & +80.5 \\
+S9 & Directions & 02--03 & 268 & 313.1 & 57.5 & 51.9 & +81.6 \\
+S9 & Directions & 02--04 & 268 & 134.4 & 51.3 & 37.9 & +61.8 \\
+S9 & Directions & 03--04 & 268 & 292.7 & 70.1 & 57.7 & +76.0 \\
+S9 & Discussion & 01--02 & 530 & 394.6 & 61.6 & 49.8 & +84.4 \\
+S9 & Discussion & 01--03 & 530 & 166.5 & 64.1 & 48.7 & +61.5 \\
+S9 & Discussion & 01--04 & 530 & 422.4 & 65.7 & 56.9 & +84.4 \\
+S9 & Discussion & 02--03 & 530 & 416.3 & 64.4 & 54.3 & +84.5 \\
+S9 & Discussion & 02--04 & 530 & 157.2 & 55.7 & 45.2 & +64.6 \\
+S9 & Discussion & 03--04 & 530 & 388.8 & 75.0 & 59.9 & +80.7 \\
+S9 & Eating & 01--02 & 268 & 380.3 & 50.5 & 39.3 & +86.7 \\
+S9 & Eating & 01--03 & 268 & 145.6 & 55.5 & 38.3 & +61.9 \\
+S9 & Eating & 01--04 & 268 & 398.9 & 52.0 & 43.8 & +87.0 \\
+S9 & Eating & 02--03 & 268 & 407.7 & 49.4 & 41.7 & +87.9 \\
+S9 & Eating & 02--04 & 268 & 156.9 & 44.0 & 34.9 & +71.9 \\
+S9 & Eating & 03--04 & 268 & 376.0 & 50.0 & 41.7 & +86.7 \\
+S9 & Greeting & 01--02 & 270 & 323.2 & 66.8 & 50.5 & +79.3 \\
+S9 & Greeting & 01--03 & 270 & 130.8 & 69.3 & 47.0 & +47.0 \\
+S9 & Greeting & 01--04 & 270 & 347.7 & 61.5 & 53.0 & +82.3 \\
+S9 & Greeting & 02--03 & 270 & 343.3 & 61.1 & 54.0 & +82.2 \\
+S9 & Greeting & 02--04 & 270 & 139.7 & 54.1 & 41.8 & +61.3 \\
+S9 & Greeting & 03--04 & 270 & 322.4 & 72.6 & 58.6 & +77.5 \\
+S9 & Phoning & 01--02 & 330 & 363.7 & 69.1 & 59.2 & +81.0 \\
+S9 & Phoning & 01--03 & 330 & 166.1 & 66.6 & 55.2 & +59.9 \\
+S9 & Phoning & 01--04 & 330 & 398.2 & 66.8 & 58.5 & +83.2 \\
+S9 & Phoning & 02--03 & 330 & 395.2 & 57.8 & 50.5 & +85.4 \\
+S9 & Phoning & 02--04 & 330 & 167.6 & 49.1 & 43.1 & +70.7 \\
+S9 & Phoning & 03--04 & 330 & 364.9 & 59.0 & 50.1 & +83.8 \\
+S9 & Posing & 01--02 & 195 & 317.5 & 69.7 & 48.6 & +78.0 \\
+S9 & Posing & 01--03 & 195 & 125.0 & 62.8 & 43.0 & +49.8 \\
+S9 & Posing & 01--04 & 195 & 346.1 & 56.4 & 48.7 & +83.7 \\
+S9 & Posing & 02--03 & 195 & 337.1 & 54.7 & 47.7 & +83.8 \\
+S9 & Posing & 02--04 & 195 & 144.8 & 60.5 & 43.9 & +58.2 \\
+S9 & Posing & 03--04 & 195 & 318.8 & 64.0 & 48.3 & +79.9 \\
+S9 & Purchases & 01--02 & 152 & 420.8 & 60.6 & 46.1 & +85.6 \\
+S9 & Purchases & 01--03 & 152 & 179.2 & 55.6 & 40.0 & +68.9 \\
+S9 & Purchases & 01--04 & 152 & 443.5 & 56.9 & 47.9 & +87.2 \\
+S9 & Purchases & 02--03 & 152 & 455.8 & 57.0 & 45.0 & +87.5 \\
+S9 & Purchases & 02--04 & 152 & 186.4 & 55.0 & 39.9 & +70.5 \\
+S9 & Purchases & 03--04 & 152 & 407.9 & 67.9 & 50.9 & +83.4 \\
+S9 & Sitting & 01--02 & 295 & 466.2 & 85.5 & 75.6 & +81.7 \\
+S9 & Sitting & 01--03 & 295 & 203.7 & 85.8 & 81.2 & +57.9 \\
+S9 & Sitting & 01--04 & 295 & 501.5 & 73.9 & 65.2 & +85.3 \\
+S9 & Sitting & 02--03 & 295 & 501.3 & 76.7 & 69.5 & +84.7 \\
+S9 & Sitting & 02--04 & 295 & 200.5 & 63.3 & 53.5 & +68.4 \\
+S9 & Sitting & 03--04 & 295 & 466.9 & 77.8 & 71.2 & +83.3 \\
+S9 & SittingDown & 01--02 & 292 & 553.2 & 422.2 & 87.4 & +23.7 \\
+S9 & SittingDown & 01--03 & 292 & 218.4 & 411.4 & 81.1 & -88.4 \\
+S9 & SittingDown & 01--04 & 292 & 572.4 & 413.4 & 89.9 & +27.8 \\
+S9 & SittingDown & 02--03 & 292 & 596.2 & 96.1 & 90.4 & +83.9 \\
+S9 & SittingDown & 02--04 & 292 & 242.0 & 80.2 & 65.4 & +66.9 \\
+S9 & SittingDown & 03--04 & 292 & 541.1 & 100.0 & 90.2 & +81.5 \\
+S9 & Smoking & 01--02 & 432 & 367.5 & 60.7 & 50.7 & +83.5 \\
+S9 & Smoking & 01--03 & 432 & 153.4 & 59.1 & 48.6 & +61.5 \\
+S9 & Smoking & 01--04 & 432 & 397.7 & 59.9 & 50.9 & +84.9 \\
+S9 & Smoking & 02--03 & 432 & 390.4 & 60.3 & 53.2 & +84.5 \\
+S9 & Smoking & 02--04 & 432 & 165.9 & 52.0 & 43.4 & +68.6 \\
+S9 & Smoking & 03--04 & 432 & 362.8 & 65.6 & 55.1 & +81.9 \\
+S9 & Photo & 01--02 & 233 & 435.3 & 79.8 & 58.8 & +81.7 \\
+S9 & Photo & 01--03 & 233 & 173.2 & 78.6 & 54.6 & +54.6 \\
+S9 & Photo & 01--04 & 233 & 473.0 & 72.6 & 61.5 & +84.6 \\
+S9 & Photo & 02--03 & 233 & 456.1 & 66.8 & 56.1 & +85.4 \\
+S9 & Photo & 02--04 & 233 & 174.9 & 68.9 & 49.3 & +60.6 \\
+S9 & Photo & 03--04 & 233 & 436.1 & 88.0 & 65.8 & +79.8 \\
+S9 & Waiting & 01--02 & 330 & 337.6 & 65.0 & 50.9 & +80.7 \\
+S9 & Waiting & 01--03 & 330 & 151.9 & 56.3 & 42.4 & +62.9 \\
+S9 & Waiting & 01--04 & 330 & 363.6 & 60.7 & 55.4 & +83.3 \\
+S9 & Waiting & 02--03 & 330 & 366.8 & 57.6 & 50.9 & +84.3 \\
+S9 & Waiting & 02--04 & 330 & 152.7 & 55.0 & 45.0 & +64.0 \\
+S9 & Waiting & 03--04 & 330 & 337.7 & 66.6 & 56.0 & +80.3 \\
+S9 & Walking & 01--02 & 160 & 286.1 & 49.4 & 37.9 & +82.7 \\
+S9 & Walking & 01--03 & 160 & 120.1 & 46.1 & 34.1 & +61.7 \\
+S9 & Walking & 01--04 & 160 & 309.0 & 46.4 & 41.6 & +85.0 \\
+S9 & Walking & 02--03 & 160 & 304.0 & 44.7 & 40.3 & +85.3 \\
+S9 & Walking & 02--04 & 160 & 121.0 & 46.6 & 34.7 & +61.5 \\
+S9 & Walking & 03--04 & 160 & 285.8 & 51.1 & 39.7 & +82.1 \\
+S9 & WalkDog & 01--02 & 222 & 372.0 & 61.0 & 49.7 & +83.6 \\
+S9 & WalkDog & 01--03 & 222 & 157.1 & 54.8 & 42.3 & +65.1 \\
+S9 & WalkDog & 01--04 & 222 & 400.2 & 55.9 & 49.0 & +86.0 \\
+S9 & WalkDog & 02--03 & 222 & 397.7 & 61.0 & 52.2 & +84.7 \\
+S9 & WalkDog & 02--04 & 222 & 158.3 & 56.1 & 44.1 & +64.5 \\
+S9 & WalkDog & 03--04 & 222 & 369.4 & 62.6 & 49.5 & +83.0 \\
+S9 & WalkTogether & 01--02 & 171 & 316.1 & 57.7 & 43.8 & +81.7 \\
+S9 & WalkTogether & 01--03 & 171 & 133.2 & 54.1 & 39.1 & +59.4 \\
+S9 & WalkTogether & 01--04 & 171 & 340.3 & 54.2 & 48.9 & +84.1 \\
+S9 & WalkTogether & 02--03 & 171 & 337.6 & 51.1 & 45.8 & +84.9 \\
+S9 & WalkTogether & 02--04 & 171 & 137.6 & 51.0 & 38.3 & +62.9 \\
+S9 & WalkTogether & 03--04 & 171 & 315.4 & 57.8 & 45.2 & +81.7 \\
+\end{longtable}
+}
+\end{center}
+\noindent The single regressing pair is S9 SittingDown 01--03. Its raw distance of 218.4 mm is unusually small for that action, where the other pairs range above 500 mm, so little was available to gain. See Section \ref{sec:h36mcv}.
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{lrrrr}
+\caption{Calibration-free fusion on Human3.6M by action, median over four views.}\label{tab:appfusion}\\
+\hline
+\textbf{Action} & \textbf{Frames} & \textbf{Single view (mm)} & \textbf{Fused (mm)} & \textbf{Improvement} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{Action} & \textbf{Frames} & \textbf{Single view (mm)} & \textbf{Fused (mm)} & \textbf{Improvement} \\
+\hline
+\endhead
+\hline
+\endfoot
+Sitting & 205 & 45.7 & 37.3 & +18.4 \\
+SittingDown & 197 & 57.2 & 46.7 & +18.2 \\
+Smoking & 270 & 38.2 & 32.8 & +14.0 \\
+Waiting & 222 & 35.2 & 32.1 & +8.8 \\
+Posing & 135 & 34.4 & 31.5 & +8.5 \\
+Photo & 172 & 42.6 & 39.3 & +7.8 \\
+Phoning & 272 & 37.6 & 34.8 & +7.7 \\
+Purchases & 103 & 33.9 & 32.8 & +3.3 \\
+Eating & 195 & 33.8 & 33.0 & +2.5 \\
+Directions & 169 & 34.7 & 36.3 & -4.6 \\
+WalkDog & 147 & 35.9 & 38.1 & -6.3 \\
+Walking & 129 & 25.2 & 27.3 & -8.2 \\
+WalkTogether & 123 & 29.2 & 32.1 & -10.0 \\
+Greeting & 180 & 33.5 & 42.2 & -26.0 \\
+Discussion & 300 & 38.3 & 51.2 & -33.6 \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{lrr}
+\caption{Fusion strategies on Human3.6M, all four views, 2819 frames.}\label{tab:appfusionstrat}\\
+\hline
+\textbf{Strategy} & \textbf{Error (mm)} & \textbf{vs single view} \\
+\hline
+\endfirsthead
+\multicolumn{3}{l}{\textit{(continued)}}\\
+\hline
+\textbf{Strategy} & \textbf{Error (mm)} & \textbf{vs single view} \\
+\hline
+\endhead
+\hline
+\endfoot
+Median, no reflection handling & 34.6 & +8.4 \\
+Median, sign-flip reflection handling & 35.1 & +7.1 \\
+Reliability-weighted mean & 36.6 & +3.1 \\
+Median, anatomical mirror handling & 37.3 & +1.2 \\
+Mean, no reflection handling & 39.1 & -3.4 \\
+Mean, sign-flip reflection handling & 39.5 & -4.4 \\
+Mean, anatomical mirror handling & 41.1 & -8.6 \\
+\hline \\
+Single arbitrary view (baseline) & 37.8 & --- \\
+Worst view & 50.8 & --- \\
+Oracle best view (requires ground truth) & 27.4 & --- \\
+\end{longtable}
+}
+\end{center}
+\noindent Every strategy above the line is training-free and label-free. The best of them uses no reliability score at all.
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{lrrr}
+\caption{Multi-scale per-limb canonicalization on Human3.6M, by action. Improvement is measured against the global frame.}\label{tab:appms}\\
+\hline
+\textbf{Action} & \textbf{Pairs} & \textbf{vs global frame} & \textbf{Improved} \\
+\hline
+\endfirsthead
+\multicolumn{4}{l}{\textit{(continued)}}\\
+\hline
+\textbf{Action} & \textbf{Pairs} & \textbf{vs global frame} & \textbf{Improved} \\
+\hline
+\endhead
+\hline
+\endfoot
+Photo & 12 & +33.1 & 12/12 \\
+SittingDown & 12 & +32.9 & 12/12 \\
+Purchases & 12 & +31.8 & 12/12 \\
+Sitting & 12 & +26.5 & 12/12 \\
+WalkDog & 12 & +26.5 & 12/12 \\
+Eating & 12 & +26.4 & 12/12 \\
+Directions & 12 & +26.2 & 12/12 \\
+Discussion & 12 & +26.1 & 12/12 \\
+Posing & 12 & +25.0 & 12/12 \\
+Greeting & 12 & +24.5 & 12/12 \\
+Smoking & 12 & +22.6 & 12/12 \\
+Phoning & 12 & +21.9 & 12/12 \\
+Waiting & 12 & +21.4 & 11/12 \\
+WalkTogether & 12 & +20.8 & 12/12 \\
+Walking & 12 & +17.8 & 12/12 \\
+\end{longtable}
+}
+\end{center}
+\noindent The gain is largest on SittingDown, the action on which the global frame performs worst, because a limb frame does not inherit the error in the torso and hip axes. See Section \ref{sec:h36mms}.
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{lrr}
+\caption{The bone-length signal on both datasets. The claim is retracted.}\label{tab:appbone}\\
+\hline
+\textbf{Quantity} & \textbf{MPI-INF-3DHP} & \textbf{Human3.6M} \\
+\hline
+\endfirsthead
+\multicolumn{3}{l}{\textit{(continued)}}\\
+\hline
+\textbf{Quantity} & \textbf{MPI-INF-3DHP} & \textbf{Human3.6M} \\
+\hline
+\endhead
+\hline
+\endfoot
+Spearman $\rho$(bone deviation, error) & $+0.492$ & $+0.098$ \\
+Partial $\rho$ given detector confidence & $+0.481$ & $+0.014$ \\
+Causal reference window & $+0.473$ & $+0.171$ \\
+Incumbent reliability score & $-0.192$ & $-0.212$ \\
+Bootstrap CI on $|\rho|-|\rho_{\mathrm{rel}}|$ & $[+0.108, +0.515]$ & $[-0.163, -0.063]$ \\
+Frames evaluated & 2460 & 52900 \\
+Median aligned error (mm) & 202.1 & 32.6 \\
+Median bone deviation & 0.082 & 0.033 \\
+\end{longtable}
+}
+\end{center}
+\noindent All five pass criteria are met on MPI-INF-3DHP and none on Human3.6M. See Section \ref{sec:h36m}.

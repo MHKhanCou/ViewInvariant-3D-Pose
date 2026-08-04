@@ -1,0 +1,241 @@
+{
+  "summary": {
+    "n_frames": 2819,
+    "mean_views_flipped_of_4": 0.10358283079106066,
+    "mean_views_flipped_anatomical": 0.39056402979780064,
+    "per_frame_improvement_pct": {
+      "naive_mean": {
+        "mean": -7.363763097686848,
+        "median": 8.410603987180142,
+        "frames_improved_pct": 67.93189074139767
+      },
+      "naive_median": {
+        "mean": 4.683603633863748,
+        "median": 7.910045390577203,
+        "frames_improved_pct": 67.54168144732175
+      }
+    },
+    "overall_mm": {
+      "single_view_mean": 37.80395489339921,
+      "oracle_best_view": 27.395438065917094,
+      "worst_view": 50.81511524938155,
+      "naive_mean": 39.09796667324316,
+      "naive_median": 34.6366757941663,
+      "plain_mean": 39.46842003481613,
+      "median": 35.105937766607916,
+      "reliability_weighted_mean": 36.62379554642003,
+      "anatomical_mean": 41.05891889141499,
+      "anatomical_median": 37.34758798511762
+    },
+    "improvement_vs_single_view_pct": {
+      "naive_mean": -3.42295345418977,
+      "naive_median": 8.378168655010043,
+      "plain_mean": -4.402886275021833,
+      "median": 7.136864739150295,
+      "reliability_weighted_mean": 3.1217880518242924,
+      "anatomical_mean": -8.610115018902743,
+      "anatomical_median": 1.2071935583683358
+    },
+    "best_strategy": "naive_median",
+    "weighting_gain_over_plain_mean_pct": 7.524674326846126,
+    "actions_improved": 9,
+    "n_actions": 15,
+    "by_subject": {
+      "S11": {
+        "n_frames": 1159,
+        "single_view_mean_mm": 34.70923743997851,
+        "naive_mean": {
+          "mm": 33.1478343853948,
+          "improvement_pct": 4.498523072665561
+        },
+        "naive_median": {
+          "mm": 30.675966837724978,
+          "improvement_pct": 11.620164831417357
+        },
+        "plain_mean": {
+          "mm": 32.64796232574755,
+          "improvement_pct": 5.93869317294986
+        },
+        "median": {
+          "mm": 31.00046657138297,
+          "improvement_pct": 10.68525597835156
+        },
+        "reliability_weighted_mean": {
+          "mm": 32.720206900606726,
+          "improvement_pct": 5.730550960133729
+        },
+        "anatomical_mean": {
+          "mm": 34.90304842243304,
+          "improvement_pct": -0.5583844438809216
+        },
+        "anatomical_median": {
+          "mm": 32.84795119588162,
+          "improvement_pct": 5.362509756417289
+        }
+      },
+      "S9": {
+        "n_frames": 1660,
+        "single_view_mean_mm": 39.96466424792608,
+        "naive_mean": {
+          "mm": 43.25230602361439,
+          "improvement_pct": -8.22637156487287
+        },
+        "naive_median": {
+          "mm": 37.402014155922615,
+          "improvement_pct": 6.412289807079896
+        },
+        "plain_mean": {
+          "mm": 44.23041430277426,
+          "improvement_pct": -10.67380430968976
+        },
+        "median": {
+          "mm": 37.97234807700895,
+          "improvement_pct": 4.98519431705351
+        },
+        "reliability_weighted_mean": {
+          "mm": 39.349252920213765,
+          "improvement_pct": 1.5398886473674156
+        },
+        "anatomical_mean": {
+          "mm": 45.356903152589744,
+          "improvement_pct": -13.492516467077497
+        },
+        "anatomical_median": {
+          "mm": 40.489201863867315,
+          "improvement_pct": -1.3125034973075156
+        }
+      }
+    },
+    "by_action": {
+      "Directions": {
+        "n_frames": 169,
+        "single_view_mm": 34.69271615754732,
+        "fused_mm": 36.20057716446649,
+        "improvement_pct": -4.3463331036740716,
+        "anatomical_median_mm": 36.29015495381539,
+        "anatomical_median_improvement_pct": -4.604536551746885
+      },
+      "Discussion": {
+        "n_frames": 300,
+        "single_view_mm": 38.34271327831429,
+        "fused_mm": 76.05200806833442,
+        "improvement_pct": -98.34800817642602,
+        "anatomical_median_mm": 51.20689313046788,
+        "anatomical_median_improvement_pct": -33.55052043077311
+      },
+      "Eating": {
+        "n_frames": 195,
+        "single_view_mm": 33.827752511514625,
+        "fused_mm": 31.219350368640026,
+        "improvement_pct": 7.710834889154183,
+        "anatomical_median_mm": 32.96758971030994,
+        "anatomical_median_improvement_pct": 2.5427725383526334
+      },
+      "Greeting": {
+        "n_frames": 180,
+        "single_view_mm": 33.515112605253236,
+        "fused_mm": 35.28872498965077,
+        "improvement_pct": -5.291977995978847,
+        "anatomical_median_mm": 42.22144175833921,
+        "anatomical_median_improvement_pct": -25.97732329182545
+      },
+      "Phoning": {
+        "n_frames": 272,
+        "single_view_mm": 37.63921723340027,
+        "fused_mm": 32.407170808964885,
+        "improvement_pct": 13.900518685050045,
+        "anatomical_median_mm": 34.75265540618506,
+        "anatomical_median_improvement_pct": 7.669027252388572
+      },
+      "Posing": {
+        "n_frames": 135,
+        "single_view_mm": 34.39268531487993,
+        "fused_mm": 30.704795610208492,
+        "improvement_pct": 10.72288968106796,
+        "anatomical_median_mm": 31.479124578681695,
+        "anatomical_median_improvement_pct": 8.471454640785737
+      },
+      "Purchases": {
+        "n_frames": 103,
+        "single_view_mm": 33.93738026550897,
+        "fused_mm": 31.837830013301684,
+        "improvement_pct": 6.186541906833886,
+        "anatomical_median_mm": 32.80608465934601,
+        "anatomical_median_improvement_pct": 3.333479476943335
+      },
+      "Sitting": {
+        "n_frames": 205,
+        "single_view_mm": 45.7170170622959,
+        "fused_mm": 36.88985070491996,
+        "improvement_pct": 19.308272771488312,
+        "anatomical_median_mm": 37.30283956996092,
+        "anatomical_median_improvement_pct": 18.40491360332952
+      },
+      "SittingDown": {
+        "n_frames": 197,
+        "single_view_mm": 57.167097786737415,
+        "fused_mm": 46.96507697387134,
+        "improvement_pct": 17.84596596266762,
+        "anatomical_median_mm": 46.740135173047655,
+        "anatomical_median_improvement_pct": 18.23944719493663
+      },
+      "Smoking": {
+        "n_frames": 270,
+        "single_view_mm": 38.151748286455394,
+        "fused_mm": 33.27043203941058,
+        "improvement_pct": 12.794475918624615,
+        "anatomical_median_mm": 32.805464500134114,
+        "anatomical_median_improvement_pct": 14.01320785139305
+      },
+      "Photo": {
+        "n_frames": 172,
+        "single_view_mm": 42.58669948989571,
+        "fused_mm": 36.97642223910054,
+        "improvement_pct": 13.173778005797987,
+        "anatomical_median_mm": 39.27122947200268,
+        "anatomical_median_improvement_pct": 7.785224160608339
+      },
+      "Waiting": {
+        "n_frames": 222,
+        "single_view_mm": 35.23258474256677,
+        "fused_mm": 31.578553018629275,
+        "improvement_pct": 10.371171319493977,
+        "anatomical_median_mm": 32.13164371985046,
+        "anatomical_median_improvement_pct": 8.801344111917697
+      },
+      "Walking": {
+        "n_frames": 129,
+        "single_view_mm": 25.192318232696238,
+        "fused_mm": 26.63438947666587,
+        "improvement_pct": -5.724249871129428,
+        "anatomical_median_mm": 27.258187737731976,
+        "anatomical_median_improvement_pct": -8.20039460423503
+      },
+      "WalkDog": {
+        "n_frames": 147,
+        "single_view_mm": 35.872141841602335,
+        "fused_mm": 49.39342398029551,
+        "improvement_pct": -37.692988052952025,
+        "anatomical_median_mm": 38.145230985092766,
+        "anatomical_median_improvement_pct": -6.336641825089573
+      },
+      "WalkTogether": {
+        "n_frames": 123,
+        "single_view_mm": 29.215164409710937,
+        "fused_mm": 30.767713546231416,
+        "improvement_pct": -5.314189284536153,
+        "anatomical_median_mm": 32.145368953227454,
+        "anatomical_median_improvement_pct": -10.029738331859384
+      }
+    },
+    "mpi_reference": {
+      "improvement_pct_by_condition": [
+        23.7,
+        10.6,
+        10.2,
+        8.2
+      ],
+      "note": "MPI-INF-3DHP used up to 8 cameras; Human3.6M has 4, so a smaller gain is expected from averaging alone."
+    }
+  }
+}
