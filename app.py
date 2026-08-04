@@ -94,21 +94,37 @@ def on_image_run(image, coord_space, rotation_deg, show_avatar=False,
         t = result["inference_time"]
         kp_valid = int(np.sum(result["scores"] > 0.3))
 
-        # --- Live reliability verdict (same scoring as offline evaluation) ---
+        # --- Geometric plausibility gate ---
+        # This score is NOT an accuracy estimate and must not be presented as
+        # one. The report falsifies it as an error predictor along seven
+        # independent axes: it is invariant to the depth error that dominates
+        # monocular estimation, because a pose can be symmetric, correctly
+        # proportioned and well conditioned while being wrong in depth. What it
+        # does detect is corruption and degeneracy (rho = -0.813 under the
+        # controlled degradation sweep). The wording below is deliberately
+        # limited to that, so the demonstration cannot contradict the thesis.
         rel = result["reliability"]
         if result["hard_failure"]:
-            verdict = f"🔴 ABSTAIN — hard geometric failure: {result['failure_reason']}"
+            verdict = (f"🔴 **Degenerate geometry** — {result['failure_reason']}. "
+                       f"The body frame cannot be built reliably here.")
         elif result["abstain"]:
-            verdict = f"🟠 ABSTAIN — reliability {rel:.3f} below threshold 0.5"
+            verdict = (f"🟠 **Implausible geometry** — plausibility {rel:.3f}, "
+                       f"below the 0.5 gate. Likely a corrupted or degenerate skeleton.")
         else:
-            verdict = f"🟢 RELIABLE — score {rel:.3f}"
+            verdict = (f"🟢 **Geometry plausible** — plausibility {rel:.3f}. "
+                       f"This says the skeleton is well formed. It does *not* "
+                       f"estimate depth accuracy.")
         comps = result["reliability_components"]
         comp_line = " · ".join(
             f"{name.replace('_', ' ')} {val:.2f}" for name, val in comps.items())
 
-        status = (f"**Status:** Completed\n"
-                  f"**Reliability:** {verdict}\n"
-                  f"<sub>{comp_line}</sub>\n"
+        status = (f"**Status:** Completed\n\n"
+                  f"**Geometric plausibility:** {verdict}\n"
+                  f"<sub>{comp_line}</sub>\n\n"
+                  f"<sub>⚠️ Plausibility is a degeneracy gate, not a confidence "
+                  f"score. Section 5.7 of the report shows it does not rank "
+                  f"predictions by accuracy; a pose that is smoothly wrong in "
+                  f"depth still scores highly.</sub>\n\n"
                   f"**Inference time:** {t:.2f}s\n"
                   f"**Keypoints:** {kp_valid}/17 (conf={result['scores'].mean():.3f})\n"
                   f"**Coordinate space:** {space_label}")
@@ -140,13 +156,40 @@ def on_coord_change(coord_space, _state_image, _state_result):
     return gr.update()
 
 
-with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
-    gr.Markdown("# MotionAGFormer — Interactive 3D Pose Viewer")
+with gr.Blocks(title="View-Invariant 3D Pose — Training-Free Canonicalization") as demo:
+    gr.Markdown("# View-Invariant 3D Pose — Interactive Demonstration")
     gr.Markdown(
-        "Upload an RGB image or video to reconstruct 3D human pose. "
-        "Switch between **Camera** and **View-Invariant** coordinate systems "
-        "to see how the thesis contribution transforms the pose representation."
+        "A frozen monocular estimator predicts a skeleton in the coordinate "
+        "frame of whichever camera happened to record it, so the same motion "
+        "seen from two viewpoints yields two different sets of numbers. This "
+        "demonstration applies a body-fixed frame **after** prediction, adding "
+        "no trained parameters, no labels and no calibration.\n\n"
+        "Switch **Representation** below to see the transform. In the camera "
+        "frame the coordinates depend on where the camera stood; in the "
+        "view-invariant frame they do not."
     )
+    with gr.Accordion("What the measured results are, and what this demo can "
+                      "and cannot show", open=False):
+        gr.Markdown(
+            "**Measured on held-out data.** On 180 held-out camera pairs of "
+            "Human3.6M, a dataset that played no part in developing the method, "
+            "the body frame reduces cross-view joint distance from 320.4 mm to "
+            "75.3 mm, an improvement of 74.1 percent with a 95 percent interval "
+            "of [+69.8, +77.2]. It improves 179 of the 180 pairs and closes "
+            "90.5 percent of the gap to an oracle that aligns each pair "
+            "optimally using knowledge of both views.\n\n"
+            "**What this single-image demo cannot show.** The claim is about "
+            "*agreement between simultaneous views*, which needs two cameras. "
+            "With one image you can see that the representation changes and "
+            "that the skeleton is well formed, but not that two views agree. "
+            "Treat this as an illustration of the transform, not as evidence "
+            "for it; the evidence is in Chapter 5.\n\n"
+            "**What the plausibility score is not.** It gates degenerate and "
+            "corrupted skeletons. It does not estimate accuracy, and the "
+            "report falsifies it as an error predictor along seven independent "
+            "axes. A prediction that is smoothly wrong in depth scores highly, "
+            "which is precisely the failure mode it cannot see."
+        )
 
     with gr.Tabs():
         # ── Image Tab ──
@@ -165,7 +208,9 @@ with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
                         ],
                         value="Camera Coordinate System",
                         label="Representation",
-                        info="Switching changes the pose coordinates. Same renderer, same skeleton.",
+                        info="Same skeleton, same renderer, different coordinates. "
+                             "The camera frame depends on where the camera stood; "
+                             "the view-invariant frame does not.",
                     )
                     rotation_slider = gr.Slider(
                         minimum=-180, maximum=180, value=0, step=1,
@@ -175,8 +220,11 @@ with gr.Blocks(title="MotionAGFormer — View-Invariant 3D Pose") as demo:
                     equalize_limbs = gr.Checkbox(
                         value=True,
                         label="Equalize limb lengths (display only)",
-                        info="Averages left/right bone lengths for display. "
-                             "Raw predictions and reliability scoring are unaffected.",
+                        info="The estimator predicts left and right limbs at "
+                             "different lengths, by up to 23 percent on the "
+                             "forearm. This averages them for display only. "
+                             "Raw predictions and all scoring are unaffected, "
+                             "and no reported number uses this.",
                     )
                     show_avatar = gr.Checkbox(
                         value=False,
