@@ -124,15 +124,20 @@ Certified that this project report ``A Lightweight, Training-Free, Reliability-A
 \vspace{3cm}
 
 \begin{center}
+% The two department lines are the widest cells and together overran the text
+% block by 41pt at the default 12pt, leaving no gap between the columns. The
+% table sits outside the 14pt group above, so it was already at 12; 11 is what
+% actually brings it inside the margins.
+{\fontsize{11}{13}\selectfont
  \begin{tabular}{cc}
-        \underline{\hspace{6cm}} & \underline{\hspace{6cm}} \\
+        \underline{\hspace{5.6cm}} & \underline{\hspace{5.6cm}} \\
         \textbf{SIGNATURE} & \textbf{SIGNATURE} \\
         \textbf{Dr. Md. Faisal Bin Abdul Aziz} & \textbf{Dr. Mahmudul Hasan} \\
         Chairman, Exam Committee & Supervisor \\
         Associate Professor & Associate Professor \\
         Department of Computer Science \& Engineering & Department of Computer Science \& Engineering \\
         Comilla University, Cumilla & Comilla University, Cumilla \\
-    \end{tabular}
+    \end{tabular}}
 \end{center}
 
 % ============================ ABSTRACT ===============================
@@ -143,7 +148,7 @@ Certified that this project report ``A Lightweight, Training-Free, Reliability-A
 
 \doublespacing
 {\fontsize{12}{15}\selectfont
-Monocular 3D human pose estimators produce skeletons expressed in the coordinate frame of the observing camera, so the same motion recorded from two viewpoints yields two different sets of coordinates. This prevents direct comparison in applications such as gait analysis and sports science. However, existing remedies either retrain the estimator, require camera calibration, or learn a canonicalization network, and all of them assume access to training data. In this project, we present a framework that adds no trained parameters to a frozen, off-the-shelf estimator. We construct a body-fixed coordinate frame from anatomical axes by Gram-Schmidt orthonormalization and apply it after prediction to a frozen MotionAGFormer-XS model. We further compute a reliability score from six analytic geometric quantities in order to abstain on degenerate predictions, and we extend the construction to one frame per limb. We evaluate the framework on two datasets. On eight synchronized cameras of MPI-INF-3DHP, over twenty-nine camera pairs including a held-out subject and using true twenty-seven frame temporal windows, canonicalization reduces cross-view joint distance by 32.4 percent on twenty-seven held-out pairs and by 13.4 percent on a held-out subject, and the resulting distance correlates with true prediction error at a Spearman coefficient of 0.601 against 0.188 for the raw distance. On the four synchronized cameras of Human3.6M, where the method was not developed and all 180 camera pairs are therefore held out, canonicalization reduces cross-view joint distance by 74.1 percent, improves 179 of 180 pairs, and closes 90.5 percent of the gap to a per-frame Procrustes oracle. We also report five experiments in which the proposed reliability score fails, and we attribute the failures to a single cause: within-frame geometric plausibility is invariant to the depth error that dominates monocular estimation. Building on that diagnosis, we introduce a temporal bone-length inconsistency signal that predicts error from a single camera at a coefficient of 0.492 on this dataset using no labels and no learned parameters. We then test that signal on Human3.6M, where it falls to 0.098 and fails every criterion, and we retract the general claim in favour of the narrower one the evidence supports.
+Monocular 3D human pose estimators produce skeletons expressed in the coordinate frame of the observing camera, so the same motion recorded from two viewpoints yields two different sets of coordinates, which prevents direct comparison in applications such as gait analysis and sports science. However, existing remedies either retrain the estimator, require camera calibration, or learn a canonicalization network, and all assume access to training data. In this project we present a framework that adds no trained parameters to a frozen, off-the-shelf estimator. We construct a body-fixed coordinate frame from anatomical axes by Gram-Schmidt orthonormalization, apply it after prediction, and extend it to one frame per limb. We evaluate on two datasets. On MPI-INF-3DHP, canonicalization reduces cross-view joint distance by 32.4 percent over twenty-seven held-out camera pairs, and the resulting distance tracks true prediction error at a Spearman coefficient of 0.601 against 0.188 for the raw distance. On Human3.6M, which played no part in developing the method so that all 180 camera pairs are held out, it reduces cross-view distance by 74.1 percent, improves 179 of the 180 pairs, and closes 90.5 percent of the gap to a per-frame Procrustes oracle that requires both views at once. We also report the failures. An analytic reliability score is falsified as a predictor of accuracy along seven independent axes, and a temporal bone-length signal that reaches a coefficient of 0.492 on the first dataset falls to 0.098 on the second, so we retract it. Both failures share one cause: geometric plausibility is invariant to the coherent depth error that dominates monocular estimation.
 }
 
 % ========================= ACKNOWLEDGEMENT ===========================
@@ -1004,7 +1009,7 @@ The results above determine what is worth doing next more sharply than a general
 \chapter*{APPENDIX A: COMPLETE RESULT TABLES}
 \addcontentsline{toc}{chapter}{APPENDIX A: COMPLETE RESULT TABLES}
 
-Every table in this appendix is generated directly from the stored JSON artifacts by \texttt{evaluation/make\_appendix\_tables.py} rather than typed by hand, so it cannot drift from the numbers verified by the automated audit described in Section \ref{sec:protocol}. The audit re-derives 65 headline claims from the same artifacts and fails if any of them moves.
+Every table in this appendix is generated directly from the stored JSON artifacts by a script rather than typed by hand, so it cannot drift from the numbers verified by the automated audit described in Section \ref{sec:protocol}. The audit re-derives every headline claim from the same artifacts and fails if any of them moves.
 
 \input{appendix_tables}
 
