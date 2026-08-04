@@ -36,6 +36,20 @@ def render_canonical_3d(pose3d, figsize=(9.6, 5.4), dpi=100):
     """
     pose3d = np.asarray(pose3d, dtype=np.float32)
 
+    # Display-only axis remap. The canonical frame carries the body vertical on
+    # +y, because it is built as thorax minus pelvis, but matplotlib draws its
+    # THIRD argument as the screen vertical. Plotting (x, y, z) directly
+    # therefore lays the skeleton on its side, which is what the video path did.
+    #
+    # (x, y, z) -> (x, -z, y) is a rotation of +90 degrees about x, with
+    # determinant +1. A bare swap to (x, z, y) would have determinant -1 and
+    # would mirror the body, silently exchanging left and right limbs.
+    #
+    # app.py applies the same remap on its image path before handing poses to
+    # the interactive viewer; this is the corresponding fix for every caller
+    # that renders through matplotlib, and it leaves scored coordinates alone.
+    pose3d = np.column_stack([pose3d[:, 0], -pose3d[:, 2], pose3d[:, 1]])
+
     fig = plt.figure(figsize=figsize, frameon=False, dpi=dpi)
     ax = fig.add_subplot(111, projection="3d")
     ax.view_init(elev=15, azim=70)
