@@ -334,10 +334,110 @@ def figure_two(groups):
     return r_hip, r_acc
 
 
+def figure_three():
+    """
+    The system diagram, drawn so the contribution boundary is the visual point.
+
+    Everything above the divider is trained by somebody else and used frozen.
+    Everything below it is this project and adds zero trained parameters. That
+    split is the claim the title makes, so the figure should make it obvious
+    before any caption is read.
+
+    Built from the code rather than from thesis_artifacts/architecture.md, which
+    is stale: it credits the body frame as "MoViD-inspired", when it is a
+    Gram-Schmidt construction from anatomical axes and owes nothing to MoViD.
+    """
+    from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+
+    # Tall canvas on purpose: FancyBboxPatch adds its `pad` outside the height
+    # given, so boxes occupy more vertical space than their nominal h. Stretching
+    # the figure shrinks text in data units and keeps the labels clear of them.
+    fig, ax = plt.subplots(figsize=(8.6, 10.2))
+    fig.patch.set_facecolor(SURFACE)
+    ax.set_facecolor(SURFACE)
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0.85, 12.05)
+    ax.axis("off")
+
+    GREY, FROZEN_FC = "#8a8a84", "#ececE6"
+
+    def box(x, y, w, h, text, fc, ec, fs=9.5, weight="normal", tc=INK):
+        ax.add_patch(FancyBboxPatch((x - w / 2, y - h / 2), w, h,
+                                    boxstyle="round,pad=0.10,rounding_size=0.14",
+                                    linewidth=1.4, facecolor=fc, edgecolor=ec,
+                                    zorder=3))
+        ax.text(x, y, text, ha="center", va="center", fontsize=fs,
+                color=tc, zorder=4, weight=weight, linespacing=1.35)
+
+    def arrow(x0, y0, x1, y1, colour=GREY):
+        ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>",
+                                     mutation_scale=13, linewidth=1.3,
+                                     color=colour, zorder=2,
+                                     shrinkA=1, shrinkB=1))
+
+    # --- frozen, trained by their authors -------------------------------
+    box(5.0, 11.55, 4.0, 0.60, "RGB image or video", FROZEN_FC, GREY)
+    arrow(5.0, 11.25, 5.0, 10.82)
+    box(5.0, 10.42, 5.8, 0.76,
+        "2D keypoint detector  (frozen)\n"
+        "YOLOv8-pose, or Stacked Hourglass on Human3.6M",
+        FROZEN_FC, GREY, fs=9)
+    arrow(5.0, 10.04, 5.0, 9.61)
+    box(5.0, 9.21, 5.8, 0.76,
+        "Lifting network  (frozen)\n"
+        "MotionAGFormer-XS, 2.24M parameters, 27-frame window",
+        FROZEN_FC, GREY, fs=9)
+    arrow(5.0, 8.83, 5.0, 8.44)
+    box(5.0, 8.10, 4.6, 0.60, "3D pose in the camera's frame", FROZEN_FC, GREY)
+
+    # --- the boundary ----------------------------------------------------
+    ax.text(0.35, 7.56, "trained by their authors, used frozen and unmodified",
+            fontsize=8.5, color=GREY, va="center")
+    ax.plot([0.3, 9.7], [7.30, 7.30], ls=(0, (5, 4)), lw=1.5, color=MAGENTA, zorder=1)
+    ax.text(0.35, 7.03, "THIS WORK  —  adds 0 trained parameters, "
+                        "no labels, no calibration",
+            fontsize=9, color=MAGENTA, va="center", weight="bold")
+    arrow(5.0, 7.78, 5.0, 6.75, BLUE)
+
+    # --- the contribution -------------------------------------------------
+    box(5.0, 6.44, 5.8, 0.78,
+        "Body-frame canonicalization\n"
+        "Gram-Schmidt frame from torso and hip axes, 402 FLOPs",
+        "#dfe9f7", BLUE, fs=9)
+    arrow(5.0, 6.05, 5.0, 5.60, BLUE)
+
+    for cx, label in ((2.05, "Multi-scale\none frame per limb"),
+                      (5.00, "Degeneracy gate\nabstains on\nill-posed frames"),
+                      (7.95, "Multi-view fusion\nmedian over\nuncalibrated views")):
+        box(cx, 5.10, 2.75, 1.00, label, "#dfe9f7", BLUE, fs=8.8)
+        arrow(cx, 4.60, cx, 4.18, BLUE)
+
+    for cx, label in ((2.05, "Cross-view\ncomparison"),
+                      (5.00, "BVH export\nBlender, Unity"),
+                      (7.95, "Interactive\n3D viewer")):
+        box(cx, 3.76, 2.75, 0.84, label, SURFACE, BLUE, fs=8.8)
+
+    ax.text(5.0, 2.60,
+            "The unknown rotation between two cameras cancels exactly,\n"
+            "because the frame is built from the joints and rotates with them.",
+            ha="center", fontsize=9.5, color=INK, linespacing=1.5)
+    ax.text(5.0, 1.83,
+            r"$P^{(B)}R^{(B)} = (P^{(A)}Q)(Q^{\top}R^{(A)}) = P^{(A)}R^{(A)}$",
+            ha="center", fontsize=12.5, color=BLUE)
+    ax.text(5.0, 1.15,
+            "So no camera calibration is needed and nothing has to be estimated.",
+            ha="center", fontsize=9, color=INK2)
+
+    fig.text(0.5, 0.975, "Where the contribution sits in the pipeline",
+             ha="center", fontsize=13.5, color=INK)
+    _finish(fig, "fig_architecture.png", "canonical/body_frame.py and demo_live/")
+
+
 def main():
     print("Loading cached predictions...")
     groups = load_groups()
     print("Writing figures:")
+    figure_three()
     raw_d, can_d = figure_one(groups)
     r_hip, r_acc = figure_two(groups)
     print("\n  figure 1: raw %.1f mm -> canonical %.1f mm (%.1f%%)"

@@ -347,7 +347,14 @@ This chapter describes the components of the proposed framework and the evaluati
 
 \section{Scope of the Term Training-Free}
 
-The complete pipeline is not training-free. Both the 2D detector and the lifting network are trained by their authors on labeled data and are used here in frozen form. What is training-free is everything this project adds on top of them. Table \ref{tab:freefrom} states the accounting exactly.
+The complete pipeline is not training-free. Both the 2D detector and the lifting network are trained by their authors on labeled data and are used here in frozen form. What is training-free is everything this project adds on top of them. Figure \ref{fig:arch} shows where that boundary falls, and Table \ref{tab:freefrom} states the accounting exactly.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.86\textwidth]{images/fig_architecture.png}
+\caption{The pipeline, with the contribution boundary marked. Everything above the dashed line is trained by its authors and used frozen and unmodified. Everything below it is contributed by this project and adds no trained parameters, consumes no labels and requires no camera calibration.}
+\label{fig:arch}
+\end{figure}
 
 \begin{table}[h]
 \centering
