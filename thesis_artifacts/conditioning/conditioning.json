@@ -1,0 +1,58 @@
+{
+  "n_frames": 42198,
+  "mean_error_mm": 76.1605676768661,
+  "coverage_curves": {
+    "fractions_dropped": [
+      0.0,
+      0.05,
+      0.1,
+      0.2,
+      0.3
+    ],
+    "by_conditioning": [
+      76.1605676768661,
+      75.82062582634163,
+      75.91791486739521,
+      76.4726503210235,
+      77.8502316112025
+    ],
+    "by_reliability": [
+      76.1605676768661,
+      74.00303701016506,
+      70.73746338964489,
+      63.52939892623512,
+      59.53600178800252
+    ],
+    "random": [
+      76.16056767686594,
+      76.16352169050175,
+      76.17432991297686,
+      76.16495609648942,
+      76.16790187123752
+    ]
+  },
+  "gain_at_10pct_dropped_mm": 0.2564150455816474,
+  "gain_ci95_mm": [
+    -1.9245302164460478,
+    1.7332612809676706
+  ],
+  "p1_triage_beats_random": false,
+  "worst5pct_error_ratio": 1.0848020588239808,
+  "p2_tail_is_real": false,
+  "spearman_cond_vs_error": 0.13258493026288962,
+  "partial_given_bone_deviation": 0.08876733033584755,
+  "p3_survives_confound_control": true,
+  "reliability_as_triage": {
+    "spearman_vs_error": -0.3545952064901026,
+    "partial_given_bone_deviation": -0.3055853495909142,
+    "gain_at_10pct_dropped_mm": 5.436866523331972,
+    "gain_ci95_mm": [
+      1.5322241613594352,
+      9.271537546594386
+    ],
+    "beats_random": true,
+    "worst5pct_error_ratio": 1.5382186460120875,
+    "note": "The report falsifies this score against ground-truth POSE error. This is a different target - canonicalization quality - which reliability.py's own docstring names as its purpose. Same triage test and same confound control."
+  },
+  "prediction_cache": "preds.npz"
+}

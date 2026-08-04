@@ -405,6 +405,39 @@ def main():
                          float(ml_mb["prereg"]["2_shoulder_beats_hip"]),
                          "multilandmark/results_motionbert.json", tol=0))
 
+    # ---------- conditioning abstention: pre-registered, criterion FAILED -----
+    # Conditioning passes on MotionBERT and fails on MotionAGFormer, so it does
+    # not replicate and is reported as failed. The reliability score, measured
+    # on the same frames as a comparator, does replicate - see below.
+    for tag, label, base in (("", "XS", 76.16), ("_motionbert", "MB", 60.81)):
+        cd = load("conditioning/conditioning%s.json" % tag)
+        src = "conditioning/conditioning%s.json" % tag
+        results.append(check("conditioning %s: mean canonical dist (mm)" % label,
+                             base, cd["mean_error_mm"], src, tol=0.1, unit="mm"))
+        rel = cd["reliability_as_triage"]
+        results.append(check("  %s reliability triage gain (mm)" % label,
+                             5.44 if tag == "" else 2.74,
+                             rel["gain_at_10pct_dropped_mm"], src,
+                             tol=0.1, unit="mm"))
+        results.append(check("  %s reliability CI lower > 0" % label,
+                             1.53 if tag == "" else 1.55,
+                             rel["gain_ci95_mm"][0], src, tol=0.1, unit="mm"))
+        results.append(check("  %s reliability partial rho | bone dev" % label,
+                             -0.306 if tag == "" else -0.322,
+                             rel["partial_given_bone_deviation"], src, tol=0.01))
+        results.append(check("  %s reliability tail ratio" % label,
+                             1.54 if tag == "" else 1.49,
+                             rel["worst5pct_error_ratio"], src, tol=0.01))
+        results.append(check("  %s reliability beats random (1=yes)" % label, 1.0,
+                             float(rel["beats_random"]), src, tol=0))
+    cd_xs = load("conditioning/conditioning.json")
+    results.append(check("  conditioning FAILS to replicate on XS", 0.0,
+                         float(cd_xs["p1_triage_beats_random"]),
+                         "conditioning/conditioning.json", tol=0))
+    results.append(check("  conditioning tail not real on XS", 0.0,
+                         float(cd_xs["p2_tail_is_real"]),
+                         "conditioning/conditioning.json", tol=0))
+
     # ---------- cost of the added framework ("lightweight", quantified) -------
     cb = load("cost/cost_benchmark.json")
     src = "cost/cost_benchmark.json"

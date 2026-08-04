@@ -215,6 +215,8 @@ The main objectives of this project are:
 \item A systematic falsification of the proposed quality signal along five independent axes, and identification of its underlying cause.
 
 \item A cross-dataset replication that retracts our own bone-length error predictor and bounds the condition under which it holds.
+
+\item A pre-registered abstention experiment which fails, and, in failing, establishes the narrower claim that the falsified reliability score does gate canonicalization quality, cutting mean cross-view distance by 22 percent at thirty percent abstention and surviving a confound control on both backbones.
 \end{itemize}
 
 \section{Report Organization}
@@ -760,6 +762,8 @@ We attribute these results to a single cause. The score measures within-frame ge
 
 A constraint enforced by the world rather than by the model does carry that information. We find that temporal bone-length inconsistency predicts error at a Spearman coefficient of $+0.492$ over 2460 frames, with the same sign in all four strata. It is not a proxy for detector confidence, since the partial correlation controlling for confidence is $+0.481$; it is not an artifact of scale, since the scale-free formulation scores $+0.492$ against $+0.367$ for scale alone; and it is not transductive, since a causal reference window disjoint from the scored frames gives $+0.473$ and a skeleton estimated from a different camera gives $+0.440$. A cluster bootstrap over cameras places the improvement over the incumbent score in the interval $[+0.108, +0.515]$. Every figure in this paragraph describes MPI-INF-3DHP alone. Section \ref{sec:h36m} tests whether they survive on a second dataset, and reports that they do not.
 
+All five experiments share a target: ground-truth pose error. Section \ref{sec:conditioning} tests the score against the different target its own specification names, namely whether the body frame is fit to canonicalize with, and finds that against that target it works on both backbones. The falsifications below are therefore bounds on what the score predicts, not a verdict that it predicts nothing.
+
 The signal is nevertheless frame-level rather than joint-level. Assigning each joint the deviation of its adjacent bones yields chance-level ranking within a frame, so it supports triage of whole predictions but not spatial localization of error.
 
 Component analysis further shows that the incumbent score's weakness lies in its combination rule rather than in its parts. Four of the six components individually predict error roughly twice as well as their geometric mean. Selecting components on subject S1 and scoring on held-out subject S2 raises the held-out coefficient from $-0.162$ to $-0.357$, and combining the pruned composite with the bone-length signal reaches $+0.395$. This analysis uses ground-truth error for selection and is therefore reported as diagnosis rather than as a deployable method.
@@ -1023,6 +1027,47 @@ The functional form, however, is too simple. The fit explains 70 percent of the 
 We therefore claim the mechanism and not the equation. Axis length governs frame stability, the direction and the constant are reproducible across backbones, and the specific inverse law is a first-order account that should not be quoted as a predictive model.
 
 The practical consequence is small and concrete. The best available global frame among those tested is not a multi-landmark estimate but the existing construction with one vector exchanged for a longer one, a change of two joint indices. We report it as a measured improvement rather than adopting it in the results above, which were computed with the original definition throughout, and we note that the corresponding change to the segment frames in Section \ref{sec:h36mms} was validated on Human3.6M only. Re-running both datasets under the corrected definitions is the cheapest outstanding item in this report.
+
+\section{Abstention, and What the Reliability Score Is Actually For}
+\label{sec:conditioning}
+
+Section \ref{sec:axistheory} derives that frame error scales as $2\sigma/L$, which suggests a label-free abstention rule: a frame whose axes are poorly conditioned should be distrusted. We pre-registered that test and, in doing so, rejected the obvious version of it before running anything.
+
+The obvious version asks whether a conditioning index predicts canonicalization error continuously. Two measurements taken beforehand argue it should not. The derivation describes the distribution of angular error for a given axis length, not one frame's realization of it, and it discriminates between frame constructions because axis length spans 138 to 461 mm there. Within a single construction the lateral axis is essentially the subject's hip width: over 52900 frames its coefficient of variation is 5.5 percent and its first-to-ninety-ninth percentile ratio is 1.29, against 3.34 between constructions. Worse, the index is computed from the prediction, so a distorted pose both raises the index and canonicalizes badly, and a positive correlation would not separate the two. That is the confound which made the bone-length signal uninterpretable until a second dataset settled it.
+
+We therefore pre-registered the narrower question the theory supports: can conditioning identify a tail of frames on which canonicalization should be abstained from. The metric is a coverage-error curve against a random-ordering null, with a partial correlation given bone-ratio deviation as the confound control.
+
+\textbf{It fails.} On the first backbone, discarding the worst tenth of frames by conditioning gains $+0.26$ mm over discarding a random tenth, with an interval of $[-1.92, +1.73]$ that spans zero, and the worst five percent are only 1.08 times the pooled mean. On the second backbone the same test passes. A criterion that works on one estimator and not the other has not been demonstrated, and we report it as failed.
+
+\subsection{The Score We Falsified Passes This Test}
+
+The same experiment measured the analytic reliability score on identical frames, and the result is the more interesting one. Table \ref{tab:triage} reports it.
+
+\begin{table}[h]
+\centering
+\caption{Triage of canonicalization quality. Mean canonical cross-view distance after discarding the worst frames by each criterion.}
+\label{tab:triage}
+{\fontsize{10}{12}\selectfont
+\begin{tabular}{lrrrrrr}
+\hline
+& \multicolumn{3}{c}{\textbf{MotionAGFormer-XS}} & \multicolumn{3}{c}{\textbf{MotionBERT}} \\
+\textbf{Dropped} & \textbf{cond.} & \textbf{reliab.} & \textbf{random} & \textbf{cond.} & \textbf{reliab.} & \textbf{random} \\
+\hline
+0\%  & 76.2 & 76.2 & 76.2 & 60.8 & 60.8 & 60.8 \\
+10\% & 75.9 & \textbf{70.7} & 76.2 & 58.9 & \textbf{58.1} & 60.8 \\
+20\% & 76.5 & \textbf{63.5} & 76.2 & 58.0 & \textbf{56.2} & 60.8 \\
+30\% & 77.9 & \textbf{59.5} & 76.2 & 57.6 & \textbf{54.7} & 60.8 \\
+\hline
+\end{tabular}}
+\end{table}
+
+Ordering by reliability lowers the mean monotonically on both backbones, reaching a 22 percent reduction at thirty percent discarded on the first. The gain over random at ten percent discarded is $+5.44$ mm with an interval of $[+1.53, +9.27]$, and $+2.74$ mm with $[+1.55, +3.81]$ on the second; both exclude zero. The worst five percent of frames by reliability carry 1.54 and 1.49 times the pooled error. The relationship survives the confound control, with partial correlations of $-0.306$ and $-0.322$ given bone-ratio deviation, so it is not merely detecting distorted skeletons.
+
+This does not retract anything in Section \ref{sec:relfails}. The score still does not predict ground-truth pose accuracy, and the five falsifications stand. What it shows is that those falsifications tested the score against the wrong target for part of its purpose. Its own specification is to estimate whether the body-frame axes are reliable enough to canonicalize with, and against that target, measured on two backbones, it works.
+
+We state the resulting position precisely, because it is narrow. The analytic reliability score is not a confidence estimate for the pose. It is a usable gate on the canonicalization step, and a deployment that must choose which frames to trust for cross-view comparison has a label-free, training-free criterion available with no second view and no calibration. That is a smaller claim than the one this project began with, and unlike that claim it is supported on both datasets and both estimators.
+
+Two caveats belong with it. The score contains axis conditioning among its six components, yet conditioning alone fails this test while the score passes, which means the discriminating work is being done by the other components rather than by the geometry the theory identifies. And triage is not calibration: nothing here supplies a coverage guarantee of the kind Section \ref{sec:relfails} notes conformal methods provide.
 
 \section{Ablation with Abstention}
 
