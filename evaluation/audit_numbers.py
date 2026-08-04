@@ -1,9 +1,9 @@
-"""
+﻿"""
 Number audit: every headline claim re-derived from its artifact.
 
 Each CLAIM below states a number that appears in FINAL_REPORT.md, the defense
 deck, or DEFENSE_QA.md, together with the artifact it must come from. Running
-this recomputes each one and fails loudly on drift — so a number can never
+this recomputes each one and fails loudly on drift â€” so a number can never
 silently rot after a re-run.
 
 Run:  ./venv/Scripts/python.exe -m evaluation.audit_numbers
@@ -286,12 +286,12 @@ def main():
                          msc["mean_multiscale_vs_global_pct"], src, unit="%"))
     results.append(check("  pairs improved", 179.0,
                          float(msc["n_pairs_improved"]), src, tol=0))
-    results.append(check("  left leg, as implemented (mm)", 69.4,
+    results.append(check("  right leg (anat.), as implemented (mm)", 69.4,
                          msc["per_level_distance_mm"]["left_leg"], src, tol=0.1, unit="mm"))
-    results.append(check("  right leg (mm)", 30.7,
+    results.append(check("  left leg (anat.) (mm)", 30.7,
                          msc["per_level_distance_mm"]["right_leg"], src, tol=0.1, unit="mm"))
     sym = msc["symmetric_leg_variant"]
-    results.append(check("  left leg, symmetric definition (mm)", 29.3,
+    results.append(check("  right leg (anat.), symmetric defn (mm)", 29.3,
                          sym["per_level_distance_mm"]["left_leg"], src, tol=0.1, unit="mm"))
     results.append(check("  symmetric combined distance (mm)", 39.1,
                          sym["mean_multiscale_distance_mm"], src, tol=0.1, unit="mm"))
@@ -300,9 +300,9 @@ def main():
     results.append(check("  symmetric pairs improved", 180.0,
                          float(sym["n_pairs_improved"]), src, tol=0))
     la = msc["long_axis_variant"]
-    results.append(check("  left arm, long-axis definition (mm)", 26.8,
+    results.append(check("  right arm (anat.), long-axis defn (mm)", 26.8,
                          la["per_level_distance_mm"]["left_arm"], src, tol=0.1, unit="mm"))
-    results.append(check("  right arm, long-axis definition (mm)", 26.3,
+    results.append(check("  left arm (anat.), long-axis defn (mm)", 26.3,
                          la["per_level_distance_mm"]["right_arm"], src, tol=0.1, unit="mm"))
     results.append(check("  long-axis combined distance (mm)", 28.2,
                          la["mean_multiscale_distance_mm"], src, tol=0.1, unit="mm"))
@@ -347,10 +347,11 @@ def main():
     n_ok = sum(results)
     print(f"\n{n_ok}/{len(results)} claims verified against artifacts")
     if n_ok != len(results):
-        print("DRIFT DETECTED — update the claim or investigate the artifact.")
+        print("DRIFT DETECTED â€” update the claim or investigate the artifact.")
         sys.exit(1)
     print("All headline numbers trace to their source files.")
 
 
 if __name__ == "__main__":
     main()
+

@@ -4,13 +4,18 @@ Body-frame canonicalization for 3D human poses.
 Constructs a body-fixed orthonormal coordinate system from the predicted
 root-relative 3D joints and re-expresses all joints in that frame.
 
-H36M-17 joint layout:
+H36M-17 joint layout. The left/right assignment below follows the COCO-to-H36M
+mapping in demo/lib/preprocess.py:5-6, which is authoritative for this repository.
+Earlier versions of this docstring had the sides inverted; the arithmetic was
+never affected, since every use is either side-symmetric or pairs the two sides
+consistently, but the labels were wrong.
+
     0  root/pelvis
-    1  left hip       2  left knee       3  left foot
-    4  right hip      5  right knee      6  right foot
+    1  right hip      2  right knee      3  right foot
+    4  left hip       5  left knee       6  left foot
     7  center torso   8  upper torso     9  neck
-    10 head           11 right shoulder  12 right elbow   13 right hand
-    14 left shoulder  15 left elbow      16 left hand
+    10 head           11 left shoulder   12 left elbow    13 left hand
+    14 right shoulder 15 right elbow     16 right hand
 """
 
 import numpy as np
@@ -19,12 +24,12 @@ _EPS = 1e-8
 
 # H36M-17 bone connections for bone-length computation.
 BONE_CONNECTIONS = [
-    (0, 1), (1, 2), (2, 3),       # left leg
-    (0, 4), (4, 5), (5, 6),       # right leg
+    (0, 1), (1, 2), (2, 3),       # right leg
+    (0, 4), (4, 5), (5, 6),       # left leg
     (0, 7), (7, 8),                # spine
     (8, 9), (9, 10),               # neck/head
-    (8, 11), (11, 12), (12, 13),  # right arm
-    (8, 14), (14, 15), (15, 16),  # left arm
+    (8, 11), (11, 12), (12, 13),  # left arm
+    (8, 14), (14, 15), (15, 16),  # right arm
 ]
 
 

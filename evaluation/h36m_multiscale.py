@@ -49,6 +49,26 @@ OUT_DIR = os.path.join(REPO_ROOT, "thesis_artifacts", "h36m_multiscale")
 TRUNK = [0, 7, 8, 9, 10]
 LIMBS = ["left_arm", "right_arm", "left_leg", "right_leg"]
 
+# The segment keys in canonical/multiscale.py are mirrored relative to anatomy.
+# The authoritative joint mapping is the COCO-to-H36M order in
+# demo/lib/preprocess.py:5-6, which pairs h36m[11] with COCO left shoulder and
+# h36m[14] with COCO right shoulder, and h36m[4] with COCO left hip and h36m[1]
+# with COCO right hip. So SEGMENTS["left_arm"] = [14,15,16] is the anatomical
+# RIGHT arm, and so on for the other three limbs.
+#
+# The keys are NOT renamed here: they are load-bearing for the audited
+# MPI-INF-3DHP results and for SEGMENTS_SYMMETRIC and SEGMENTS_LONGAXIS below.
+# Everything shown to a reader goes through this mapping instead. The geometry
+# is unaffected either way; only the labels were wrong.
+SEGMENT_DISPLAY = {
+    "torso": "Torso",
+    "left_arm": "Right arm",    # joints 14,15,16
+    "right_arm": "Left arm",    # joints 11,12,13
+    "left_leg": "Right leg",    # joints 1,2,3
+    "right_leg": "Left leg",    # joints 4,5,6
+    "global": "Global frame",
+}
+
 # The shipped definitions in canonical/multiscale.py are not bilaterally
 # symmetric. Both arms take the thorax-to-shoulder vector as primary axis and
 # the shoulder-to-elbow vector as secondary. The legs disagree with each other:

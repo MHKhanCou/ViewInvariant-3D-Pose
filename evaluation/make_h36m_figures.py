@@ -188,8 +188,13 @@ def fig_multiscale(ms):
     """Per-level distances, and the bilateral asymmetry the fix removes."""
     s = ms["summary"]
     v = s["long_axis_variant"]
+    # Bar order is unchanged so the callout arrows below still point at the bars
+    # they describe; only the LABELS are corrected. The internal segment keys are
+    # mirrored relative to anatomy, so "left_leg" is the anatomical right leg.
+    # See SEGMENT_DISPLAY in evaluation/h36m_multiscale.py.
+    from evaluation.h36m_multiscale import SEGMENT_DISPLAY
     levels = ["torso", "left_arm", "right_arm", "left_leg", "right_leg"]
-    pretty = ["Torso", "Left arm", "Right arm", "Left leg", "Right leg"]
+    pretty = [SEGMENT_DISPLAY[k] for k in levels]
     shipped = [s["per_level_distance_mm"][k] for k in levels]
     fixed = [v["per_level_distance_mm"][k] for k in levels]
 
@@ -210,7 +215,7 @@ def fig_multiscale(ms):
                 arrowprops=dict(arrowstyle="->", color=MAGENTA, lw=1.5))
     ax.annotate("", xy=(3.19, 32), xytext=(2.86, 66),
                 arrowprops=dict(arrowstyle="->", color=MAGENTA, lw=1.5))
-    ax.text(1.30, 46, "both arms and the left leg\nused a short primary axis",
+    ax.text(1.30, 46, "both arms and the right leg\nused a short primary axis",
             fontsize=8.5, color=MAGENTA, va="center",
             bbox=dict(facecolor=SURFACE, edgecolor="none", pad=1.6), zorder=6)
     ax.set_xticks(x)

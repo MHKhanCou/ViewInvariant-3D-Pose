@@ -788,17 +788,17 @@ The extension replicates. Multi-scale reduces the combined cross-view distance f
 
 \subsection{A Bilateral Asymmetry, and What Caused It}
 
-The per-level breakdown revealed a defect in our own implementation that the MPI-INF-3DHP evaluation had not exposed. The two arms agree closely, at 57.1 mm and 57.6 mm, which is what bilateral symmetry predicts for a subject performing symmetric everyday actions. The two legs do not: the left leg scores 69.4 mm against 30.7 mm for the right, a factor of 2.3.
+The per-level breakdown revealed a defect in our own implementation that the MPI-INF-3DHP evaluation had not exposed. The two arms agree closely, at 57.1 mm and 57.6 mm, which is what bilateral symmetry predicts for a subject performing symmetric everyday actions. The two legs do not: the right leg scores 69.4 mm against 30.7 mm for the left, a factor of 2.3. We note that the segment keys in our implementation are mirrored with respect to anatomy, so the key named \texttt{left\_leg} holds the joints of the anatomical right leg. Anatomical names are used throughout this section and in Table \ref{tab:msfix}; the mirroring affects labels only and no geometry or number depends on it.
 
-Inspecting the segment definitions explains it. Both arms take the thorax-to-shoulder vector as primary axis and the shoulder-to-elbow vector as secondary. The legs were defined inconsistently with each other: the right leg takes hip-to-knee as primary and knee-to-ankle as secondary, while the left leg takes root-to-hip as primary and hip-to-knee as secondary. The root-to-hip vector is roughly half a hip width, whereas hip-to-knee is a full thigh. Section 3.2 argues that frame sensitivity to joint error scales inversely with the length of the defining vector, so the left leg was predicted to be the noisier of the two before the cause was found, and for exactly this reason.
+Inspecting the segment definitions explains it. Both arms take the thorax-to-shoulder vector as primary axis and the shoulder-to-elbow vector as secondary. The legs were defined inconsistently with each other: the left leg takes hip-to-knee as primary and knee-to-ankle as secondary, while the right leg takes root-to-hip as primary and hip-to-knee as secondary. The root-to-hip vector is roughly half a hip width, whereas hip-to-knee is a full thigh. Section 3.2 argues that frame sensitivity to joint error scales inversely with the length of the defining vector, so the right leg was predicted to be the noisier of the two before the cause was found, and for exactly this reason.
 
-We tested the correction rather than assuming it. Defining both legs identically, with hip-to-knee as primary and knee-to-ankle as secondary, gives the middle column of Table \ref{tab:msfix}. The left leg falls from 69.4 mm to 29.3 mm, which brings it into agreement with the right leg at 30.7 mm. Every other level is unchanged to the reported precision, which is the signature of a correct diagnosis rather than a general perturbation. The combined distance falls from 46.2 mm to 39.1 mm, the improvement over the global frame rises from 25.6 percent to 37.2 percent, and all 180 pairs now improve rather than 179.
+We tested the correction rather than assuming it. Defining both legs identically, with hip-to-knee as primary and knee-to-ankle as secondary, gives the middle column of Table \ref{tab:msfix}. The right leg falls from 69.4 mm to 29.3 mm, which brings it into agreement with the left leg at 30.7 mm. Every other level is unchanged to the reported precision, which is the signature of a correct diagnosis rather than a general perturbation. The combined distance falls from 46.2 mm to 39.1 mm, the improvement over the global frame rises from 25.6 percent to 37.2 percent, and all 180 pairs now improve rather than 179.
 
 \subsection{The Same Defect in Both Arms}
 
 Applying the diagnosis consistently exposes a second instance of it. Both arms take the thorax-to-shoulder vector as primary axis, which is about half a shoulder width, where the corrected legs take a full thigh. The bilateral comparison could not reveal this, because both arms share the defect and therefore agree with each other at 57.1 mm and 57.6 mm. Agreement between two measurements is not evidence that either is correct, and here it actively concealed the problem: the arms looked healthy precisely because they were equally affected.
 
-Rebuilding both arms from their own long segments, shoulder-to-elbow as primary and elbow-to-wrist as secondary, produces the largest single improvement in this chapter. The left arm falls from 57.1 mm to 26.8 mm and the right from 57.6 mm to 26.3 mm. The combined multi-scale distance falls to 28.2 mm, the improvement over the global frame reaches 55.1 percent with a cluster bootstrap interval of $[+53.6, +56.5]$ percent, and all 180 pairs improve with no segment falling back to the global frame.
+Rebuilding both arms from their own long segments, shoulder-to-elbow as primary and elbow-to-wrist as secondary, produces the largest single improvement in this chapter. The right arm falls from 57.1 mm to 26.8 mm and the left from 57.6 mm to 26.3 mm. The combined multi-scale distance falls to 28.2 mm, the improvement over the global frame reaches 55.1 percent with a cluster bootstrap interval of $[+53.6, +56.5]$ percent, and all 180 pairs improve with no segment falling back to the global frame.
 
 The corrected levels support the diagnosis independently of the improvement they produce. All five now lie between 26.3 mm and 30.7 mm, where before they ranged from 28.6 mm to 69.4 mm. A construction applied consistently to five anatomically different segments should give five similar numbers, and it now does. That convergence was not optimized for, since each segment was redefined by the same rule rather than tuned, and it is the strongest evidence that axis length, not anatomy, was driving the spread.
 
@@ -812,10 +812,10 @@ The corrected levels support the diagnosis independently of the improvement they
 \hline
 Global frame & 62.7 mm & 62.7 mm & 62.7 mm \\
 Torso & 28.6 mm & 28.6 mm & 28.6 mm \\
-Left arm & 57.1 mm & 57.1 mm & \textbf{26.8 mm} \\
-Right arm & 57.6 mm & 57.6 mm & \textbf{26.3 mm} \\
-Left leg & 69.4 mm & \textbf{29.3 mm} & 29.3 mm \\
-Right leg & 30.7 mm & 30.7 mm & 30.7 mm \\
+Right arm & 57.1 mm & 57.1 mm & \textbf{26.8 mm} \\
+Left arm & 57.6 mm & 57.6 mm & \textbf{26.3 mm} \\
+Right leg & 69.4 mm & \textbf{29.3 mm} & 29.3 mm \\
+Left leg & 30.7 mm & 30.7 mm & 30.7 mm \\
 \hline
 Combined multi-scale & 46.2 mm & \textbf{39.1 mm} & \textbf{28.2 mm} \\
 Improvement over global & +25.6\% & \textbf{+37.2\%} & \textbf{+55.1\%} \\

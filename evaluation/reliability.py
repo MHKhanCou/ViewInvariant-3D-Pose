@@ -1,4 +1,4 @@
-"""
+﻿"""
 Reliability score for geometric canonical body-frame normalization.
 
 Estimates whether the body frame axes (torso, hip) are sufficiently
@@ -6,8 +6,8 @@ reliable for canonicalization. When reliability is low, canonicalization
 is likely to produce incorrect results.
 
 The score has two layers:
-1. Hard geometric gates — explicit rejection for degenerate configurations.
-2. Continuous reliability score — geometric mean of normalized components
+1. Hard geometric gates â€” explicit rejection for degenerate configurations.
+2. Continuous reliability score â€” geometric mean of normalized components
    for ranking and coverage-error analysis.
 
 This is a deterministic, training-free, post-processing metric.
@@ -23,8 +23,8 @@ BONE_CONNECTIONS = [
     (0, 4), (4, 5), (5, 6),   # Root -> L_Hip -> L_Knee -> L_Ankle
     (0, 7), (7, 8),            # Root -> Spine -> Thorax
     (8, 9), (9, 10),           # Thorax -> Neck -> Head
-    (8, 11), (11, 12), (12, 13),  # Thorax -> R_Shoulder -> R_Elbow -> R_Wrist
-    (8, 14), (14, 15), (15, 16),  # Thorax -> L_Shoulder -> L_Elbow -> L_Wrist
+    (8, 11), (11, 12), (12, 13),  # Thorax -> L_Shoulder -> L_Elbow -> L_Wrist
+    (8, 14), (14, 15), (15, 16),  # Thorax -> R_Shoulder -> R_Elbow -> R_Wrist
 ]
 
 # Bilateral bone pairs: (right_bone, left_bone) as parent->child.
@@ -125,7 +125,7 @@ def compute_reliability_score(pose3d, scores_2d=None, prev_rotation=None):
             abnormal_count += 1
     components['abnormal_bone_ratio'] = float(1.0 - abnormal_count / len(bone_lengths))
 
-    # 5. Detector confidence — COCO-17 key joints
+    # 5. Detector confidence â€” COCO-17 key joints
     if scores_2d is not None and len(scores_2d) >= 17:
         # Use minimum confidence among structural joints (COCO-17 indices)
         key_scores = scores_2d[COCO_KEY_JOINTS]
@@ -133,7 +133,7 @@ def compute_reliability_score(pose3d, scores_2d=None, prev_rotation=None):
     else:
         components['detector_confidence'] = 0.8
 
-    # 6. Temporal stability (video only) — uses canonicalize_single() for proper SO(3)
+    # 6. Temporal stability (video only) â€” uses canonicalize_single() for proper SO(3)
     if prev_rotation is not None:
         try:
             pose_f32 = pose3d.astype(np.float32)
@@ -220,3 +220,4 @@ def should_abstain(reliability, hard_failure=False):
     if hard_failure:
         return True
     return reliability < 0.5
+

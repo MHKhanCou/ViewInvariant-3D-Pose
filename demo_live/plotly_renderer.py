@@ -14,8 +14,8 @@ H36M_SKELETON = [
     [0, 4], [4, 5], [5, 6],       # Left leg
     [0, 7], [7, 8],                # Spine + thorax
     [8, 9], [9, 10],               # Neck + head
-    [8, 11], [11, 12], [12, 13],  # Right arm
-    [8, 14], [14, 15], [15, 16],  # Left arm
+    [8, 11], [11, 12], [12, 13],  # Left arm
+    [8, 14], [14, 15], [15, 16],  # Right arm
 ]
 
 # Left/right color assignment per bone.
