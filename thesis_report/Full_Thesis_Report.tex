@@ -564,7 +564,16 @@ The framework is implemented in Python on PyTorch as a post-processing layer, an
 
 Three engineering decisions carry scientific weight. First, the lifting path used by the evaluation is the same code as the demonstration application, extracted into a shared module so that reported numbers and demonstrated behaviour cannot diverge. Second, predictions are cached per camera, so an analysis can be re-run without re-running inference, which is what made the Human3.6M experiments of the next chapter affordable. Third, every headline number is recomputed from its artifact by an automated audit, described in Section \ref{sec:protocol}, which fails if any number drifts.
 
-An interactive demonstration built with Gradio accepts an uploaded image or video, runs detection and lifting, and displays the raw and canonical skeletons side by side together with the reliability score and its six components. It exists to make the failure modes visible rather than to add a result, and it was the route by which several were noticed.
+An interactive demonstration built with Gradio accepts an uploaded image or video, runs detection and lifting, and displays the raw and canonical skeletons side by side together with the reliability score and its six components. It also exports a canonicalized sequence as a BVH motion-capture file, which animation software imports directly; that format stores joint rotations relative to each parent and contains no camera, so it is the natural consumer of a body-fixed frame. The demonstration exists to make failure modes visible rather than to add a result, and it was the route by which several were noticed, including a rendering fault that drew canonical skeletons on their side in the video path.
+
+Figure \ref{fig:qual} shows the system on frames of that demonstration footage, which belongs to neither evaluation dataset. The third row is included because it fails: a subject bent sharply forward foreshortens the torso, and the reconstruction is visibly poorer. A qualitative figure showing only successes would misrepresent a method whose weakest measured action is a seated one.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/fig_qualitative.png}
+\caption{The pipeline on uncontrolled footage. Left: input with detected 2D keypoints. Middle: the 3D prediction in the camera's frame. Right: the same prediction in the body-fixed frame, which is what a downstream task consumes.}
+\label{fig:qual}
+\end{figure}
 
 \section{Reproducibility Infrastructure}
 
