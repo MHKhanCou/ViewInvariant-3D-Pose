@@ -3,7 +3,7 @@
 Defense: 9 August 2026. Read this the night before and the morning of.
 
 Every number here is verified by `python -m evaluation.audit_numbers`
-(101 claims). If a question asks for a figure not in this document, say you will
+(131 claims). If a question asks for a figure not in this document, say you will
 check it rather than guess — you have never once quoted a number you could not
 trace, and that is worth more than one recalled digit.
 
@@ -100,22 +100,56 @@ Two things wrong with the premise. Say both.
 
 Do not be defensive. This is your best evidence of rigour.
 
-> I falsified it as a predictor of accuracy, along seven independent axes, and I
-> report every one. It is retained as what it demonstrably is: a gate on
-> degenerate and corrupted geometry, where it works — the correlation with
-> induced corruption is −0.813, and it abstains on 100 percent of joint-dropout
-> cases.
+> I falsified it as a predictor of accuracy, along five independent axes, and I
+> report every one. Then I tested it against the target its own specification
+> names — whether the body frame is fit to canonicalize with — and against that
+> target it works, on both backbones. Discarding the worst thirty percent of
+> frames by reliability lowers mean cross-view distance from 76.2 to 59.5 mm,
+> where discarding a random thirty percent changes nothing.
 >
-> The distinction the report draws is between detecting that a skeleton is
-> malformed, which it does, and predicting that a well-formed skeleton is wrong
-> in depth, which it cannot. A pose can be symmetric, correctly proportioned and
-> well conditioned while being wrong, and that is precisely the failure mode a
-> single-frame geometric score cannot see.
+> So the distinction is between predicting that a pose is wrong in depth, which
+> it cannot do, and predicting that a frame is unfit to build, which it can. A
+> pose can be symmetric, correctly proportioned and well conditioned while being
+> wrong in depth — that is the failure mode a single-frame geometric score
+> cannot see. It is not the failure mode that breaks canonicalization.
+
+**If they push on whether this is post-hoc rescue, concede the shape of it and
+give the controls.** This is the honest answer and it is strong enough:
+
+> It is exploratory, and I say so in the report. It was a comparator in a
+> pre-registration whose actual subject — a geometric conditioning index —
+> failed. What makes me willing to state it is that it replicates on two
+> backbones with intervals excluding zero, +5.44 mm [+1.53, +9.27] and
+> +2.74 mm [+1.55, +3.81], and survives a partial correlation controlling for
+> bone-ratio deviation at −0.306 and −0.322, so it is not just detecting
+> distorted skeletons. My bone-length signal had less than that and it still
+> died on the second dataset, so I state this one as exploratory and no more.
 
 **Before the defense, email your supervisor**: say the reliability component was
-falsified as an accuracy predictor and retained as a degeneracy gate, and ask
-whether he wants the title adjusted. Raising it yourself converts a weakness
-into evidence of rigour. Do not change an approved title unilaterally.
+falsified as an accuracy predictor and then supported as a gate on
+canonicalization quality, and ask whether he wants the title adjusted. Raising
+it yourself converts a weakness into evidence of rigour. Do not change an
+approved title unilaterally.
+
+---
+
+### 4b. "Isn't your headline metric just measuring that two wrong answers agree?"
+
+**This is the sharpest question available and it is not fully answerable.** Do
+not bluff. Give the three defences and then concede the gap.
+
+> Three things guard against it. The Procrustes oracle is the floor — it aligns
+> the two predictions optimally with full knowledge of both, so no rotation-based
+> method can beat it, and canonicalization closes 90.5 percent of the gap to it.
+> The multi-scale distance keeps its correlation with ground-truth error, +0.610
+> against +0.601 for the global frame, so collapsing agreement is not what
+> produced the gain. And the rotation-cancellation result is exact, so the
+> mechanism is not statistical.
+>
+> What I cannot claim is that reducing this metric improves a downstream task.
+> My retrieval experiment is negative and used a superseded protocol. That is
+> the clearest gap in the work and it is written as such in the future work
+> section.
 
 ---
 
@@ -231,7 +265,7 @@ coherent.
 | Backbone reproduction | 45.149 mm vs 45.149 published |
 | Added trainable parameters | **0** |
 | Canonicalization cost | 402 FLOPs/frame, 0.0005% of backbone |
-| Audit / tests | 101 claims, 97 tests |
+| Audit / tests | 131 claims, 67 tests |
 
 **Two datasets: 209 camera pairs total. Four subjects.**
 
