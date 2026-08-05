@@ -545,6 +545,28 @@ def main():
                          float(("%.1f percent" % _nc) in _abs),
                          "Full_Thesis_Report.tex", tol=0))
 
+    # ---------- template baseline: pre-registered, and OUR METHOD LOSES ------
+    # Outcome 1 of the three fixed in thesis_artifacts/template/PREREGISTRATION.md.
+    for tag, label, anat, tmpl, diff in (("", "XS", 93.35, 57.47, -35.88),
+                                         ("_motionbert", "MB", 74.79, 55.91, -18.89)):
+        tb = load("template/template%s.json" % tag)["non_constructor"]
+        src = "template/template%s.json" % tag
+        results.append(check("template %s: anatomical (mm)" % label, anat,
+                             tb["mean_anatomical_mm"], src, tol=0.05, unit="mm"))
+        results.append(check("  %s template baseline (mm)" % label, tmpl,
+                             tb["mean_template_mm"], src, tol=0.05, unit="mm"))
+        results.append(check("  %s paired difference (mm)" % label, diff,
+                             tb["paired_difference"]["mean"], src,
+                             tol=0.05, unit="mm"))
+        results.append(check("  %s CI upper < 0, baseline wins" % label, 1.0,
+                             float(tb["paired_difference"]["ci95"][1] < 0),
+                             src, tol=0))
+        results.append(check("  %s pairs where ours is better" % label, 0.0,
+                             float(tb["pairs_where_anatomical_better"]),
+                             src, tol=0))
+        results.append(check("  %s verdict is template_better (1=yes)" % label, 1.0,
+                             float(tb["verdict"] == "template_better"), src, tol=0))
+
     # ---------- circularity control: how much is removed by construction -----
     # The per-limb frames in the long-axis definitions are built from exactly the
     # joints they are scored on. These claims pin the headroom above the

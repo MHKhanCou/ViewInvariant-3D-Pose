@@ -1,0 +1,38 @@
+{
+ "non_constructor": {
+  "n_pairs": 180,
+  "mean_anatomical_mm": 74.79384133516388,
+  "mean_template_mm": 55.90723245675714,
+  "pairs_where_anatomical_better": 0,
+  "paired_difference": {
+   "mean": -18.88660887840673,
+   "ci95": [
+    -20.920918579843946,
+    -16.87829557230799
+   ],
+   "n_clusters": 30,
+   "draws": 10000
+  },
+  "verdict": "template_better"
+ },
+ "all_17_joints": {
+  "n_pairs": 180,
+  "mean_anatomical_mm": 60.09302487522748,
+  "mean_template_mm": 51.26592256521522,
+  "pairs_where_anatomical_better": 5,
+  "paired_difference": {
+   "mean": -8.82710231001224,
+   "ci95": [
+    -10.222525546128484,
+    -7.395354196029965
+   ],
+   "n_clusters": 30,
+   "draws": 10000
+  },
+  "verdict": "template_better"
+ },
+ "template_frames": 2460,
+ "template_streams": 26,
+ "template_source": "MPI-INF-3DHP cached canonical poses",
+ "prediction_cache": "preds_motionbert.npz"
+}
