@@ -666,7 +666,7 @@ Figure \ref{fig:qual} shows the system on frames of that demonstration footage, 
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{images/fig_qualitative.png}
-\caption{The pipeline on uncontrolled footage. Left: input with detected 2D keypoints. Middle: the 3D prediction in the camera's frame. Right: the same prediction in the body-fixed frame, which is what a downstream task consumes.}
+\caption{The pipeline on uncontrolled footage. Left: input with detected 2D keypoints. Middle: the 3D prediction in the camera's frame. Right: the same prediction in the body-fixed frame, which is what a downstream task consumes. The right column often looks better formed than the middle one, and it is important not to read that as an improvement: the two columns contain identical joint coordinates related by a rotation, so any apparent gain is the effect of viewing a foreshortened pose from a standard angle rather than a change in the prediction. The third row is included because the reconstruction there is genuinely poor, and canonicalization neither repairs nor conceals it.}
 \label{fig:qual}
 \end{figure}
 
