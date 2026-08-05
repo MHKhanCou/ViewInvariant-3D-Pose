@@ -1,8 +1,8 @@
-# View-Invariant 3D Human Pose Estimation
+# Training-Free Body-Frame Canonicalization for Cross-View Comparability
 
 **Undergraduate thesis — Computer Science, Comilla University**
 
-Making the output of a *frozen* monocular 3D pose estimator comparable across camera viewpoints, with **no training, no labels, no camera calibration, and zero added parameters.**
+Making the output of a *frozen* monocular 3D pose estimator comparable across camera viewpoints, with **no training, no labels, no camera calibration, and zero added parameters.** The estimator is untouched; only the coordinate frame its predictions are expressed in changes.
 
 ![teaser](thesis_report/images/fig_teaser.png)
 
@@ -155,9 +155,10 @@ The baseline reproduces the published MotionAGFormer-XS figure to three decimals
 ## Citation
 
 ```bibtex
-@thesis{khan2026viewinvariant,
-  title  = {Reliability-Aware View-Invariant 3D Human Pose Estimation
-            from a Frozen Monocular Estimator},
+@thesis{khan2026canonicalization,
+  title  = {A Lightweight, Training-Free, Reliability-Aware Geometric
+            Canonicalization Framework for Cross-View Comparability of
+            Frozen Monocular 3D Pose Predictions},
   author = {Mehedi Hasan Khan},
   school = {Comilla University},
   type   = {Undergraduate thesis},

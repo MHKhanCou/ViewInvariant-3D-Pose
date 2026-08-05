@@ -200,9 +200,15 @@ give the controls.** This is the honest answer and it is strong enough:
 
 **Before the defense, email your supervisor**: say the reliability component was
 falsified as an accuracy predictor and then supported as a gate on
-canonicalization quality, and ask whether he wants the title adjusted. Raising
-it yourself converts a weakness into evidence of rigour. Do not change an
-approved title unilaterally.
+canonicalization quality, and ask him to confirm the title. Raising it yourself
+converts a weakness into evidence of rigour.
+
+**If asked whether the title overclaims, it does not, and you should know why it
+is worded as it is.** It says *canonicalization framework*, not pose estimation,
+because the estimator is frozen and only the coordinate frame changes. It says
+*cross-view comparability*, not view-invariant estimation, because what improves
+is agreement between two camera-relative predictions and not their accuracy.
+Those two choices pre-empt the most common objection to work of this kind.
 
 ---
 

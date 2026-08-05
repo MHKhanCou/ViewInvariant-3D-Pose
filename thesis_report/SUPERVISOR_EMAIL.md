@@ -44,16 +44,35 @@ was physical. I bootstrapped it and the confidence interval turned out wider tha
 the estimate, so the agreement carries no weight. That argument is withdrawn in
 the text rather than quietly removed.
 
-**On the title.** I would suggest keeping *"Reliability-Aware View-Invariant 3D
-Human Pose Estimation from a Frozen Monocular Estimator"* as approved. The
-reliability component is falsified as an accuracy predictor — five independent
-ways — but a later pre-registered experiment showed it does gate canonicalization
-quality on both backbones, which is the function its own specification names. So
-"Reliability-Aware" is defensible, for that narrower claim, and the report is
-careful to state which claim it is. That said, if you would prefer a title that
-foregrounds the boundary result instead, I am glad to change it — please let me
-know either way, as I would rather not alter an approved title on my own
-judgement.
+**3. A result demoted.** The per-limb multi-scale extension previously reported a
+55.1 percent improvement. Checking it, I found that each limb frame is built from
+exactly the three joints it is then scored on, which removes the orientation
+being measured by construction rather than by the method working. A control
+against a per-segment Procrustes floor confirms it: those levels sit within 13 to
+23 percent of the best any rotation could do, where the global frame sits at 46
+percent above its floor. I have demoted that figure to an exploratory measurement
+and rewritten the surrounding claims. The main cross-view result, 74.1 percent
+over 180 held-out pairs, is unaffected — its frame uses four constructor joints
+out of seventeen scored, so thirteen are held out.
+
+**On the title.** The report currently reads *"A Lightweight, Training-Free,
+Reliability-Aware Geometric Canonicalization Framework for Cross-View
+Comparability of Frozen Monocular 3D Pose Predictions."* I would like your
+confirmation on it rather than assuming it stands, since I do not believe it has
+been formally approved.
+
+I think it is accurate as written, and deliberately so: it says *canonicalization
+framework* rather than pose estimation, because the estimator is untouched and
+only the coordinate frame changes; and *cross-view comparability* rather than
+view-invariant estimation, because what improves is agreement between two
+camera-relative predictions, not their accuracy. On "Reliability-Aware": the
+component is falsified as an accuracy predictor five independent ways, but a
+later experiment showed it does gate canonicalization quality on both backbones,
+which is the function its own specification names. So the word is defensible for
+that narrower claim and the report states which claim it is.
+
+If you would prefer something shorter, or one that foregrounds the boundary
+result, I am glad to change it — please let me know.
 
 The report is 87 pages. Every reported number is recomputed from stored result
 files by an automated audit (167 claims), and the pre-registrations for each
