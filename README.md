@@ -59,7 +59,7 @@ Four pre-registrations were committed to version history **before** the experime
 ## Reproducing the claims
 
 ```bash
-python -m evaluation.audit_numbers      # 180 claims checked against thesis_artifacts/
+python -m evaluation.audit_numbers      # 192 claims checked against thesis_artifacts/
 python -m unittest discover -s tests -q # 72 tests, no model or dataset required
 python -m presentation.render --teaser  # regenerate every figure from the artifacts
 ```
@@ -75,7 +75,7 @@ Regenerating the predictions themselves requires the Human3.6M preprocessing and
 ```
 canonical/        body-frame construction, multi-scale and multi-landmark variants
 evaluation/       one module per experiment, each writing a JSON artifact
-  audit_numbers.py        recomputes all 167 reported claims
+  audit_numbers.py        checks all 192 reported claims against artifacts
   h36m_crossview.py       the central cross-view result
   axis_length_law.py      the quantitative fit and its bootstrap
   conditioning_abstention.py  pre-registered abstention test (failed)

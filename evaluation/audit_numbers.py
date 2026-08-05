@@ -14,6 +14,7 @@ import os
 import sys
 
 import numpy as np
+from scipy.stats import spearmanr
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, REPO_ROOT)
@@ -457,6 +458,51 @@ def main():
                              ratio_of_means, rm, src, tol=0.05, unit="%"))
         results.append(check("  %s per-pair is the conservative one (1=yes)" % label,
                              1.0, float(s["mean_improvement_pct"] < rm), src, tol=0))
+
+    # ---------- fusion heterogeneity: the aggregate hides a bimodal outcome --
+    # The headline +8.4% is a ratio of aggregate means. The mean of per-frame
+    # improvements is +4.7% with an interval spanning zero, and six of fifteen
+    # actions get worse. Section 5.11.1 reports both; these pin them.
+    fs = load("h36m_fusion/h36m_fusion.json")["summary"]
+    src = "h36m_fusion/h36m_fusion.json"
+    results.append(check("fusion: pooled ratio-of-means %", 8.38,
+                         fs["improvement_vs_single_view_pct"]["naive_median"],
+                         src, tol=0.05, unit="%"))
+    results.append(check("  per-frame mean improvement %", 4.68,
+                         fs["bootstrap_improvement_pct"]["naive_median"]["mean"],
+                         src, tol=0.05, unit="%"))
+    results.append(check("  per-frame CI lower bound (negative)", -1.24,
+                         fs["bootstrap_improvement_pct"]["naive_median"]["ci95"][0],
+                         src, tol=0.05, unit="%"))
+    results.append(check("  the two conventions disagree on sign of CI (1=yes)", 1.0,
+                         float(fs["bootstrap_improvement_pct"]["naive_median"]["ci95"][0] < 0
+                               and fs["bootstrap_aggregate_ratio_pct"]["naive_median"]["ci95"][0] > 0),
+                         src, tol=0))
+    results.append(check("  actions improved of 15", 9.0,
+                         float(fs["actions_improved"]), src, tol=0))
+    ba = fs["by_action"]
+    imp = {k: v["improvement_pct"] for k, v in ba.items()}
+    results.append(check("  Discussion improvement %", -98.3, imp["Discussion"],
+                         src, tol=0.1, unit="%"))
+    results.append(check("  Discussion fused (mm)", 76.1,
+                         ba["Discussion"]["fused_mm"], src, tol=0.1, unit="mm"))
+    results.append(check("  Discussion anatomical variant (mm)", 51.2,
+                         ba["Discussion"]["anatomical_median_mm"], src,
+                         tol=0.1, unit="mm"))
+    vals = np.array(list(imp.values()))
+    wts = np.array([ba[k]["n_frames"] for k in imp])
+    results.append(check("  mean over actions (negative) %", -2.98,
+                         float(vals.mean()), src, tol=0.05, unit="%"))
+    results.append(check("  frame-weighted over actions %", -5.41,
+                         float(np.average(vals, weights=wts)), src,
+                         tol=0.05, unit="%"))
+    results.append(check("  mean excluding Discussion %", 3.83,
+                         float(np.mean([v for k, v in imp.items()
+                                        if k != "Discussion"])),
+                         src, tol=0.05, unit="%"))
+    results.append(check("  rho(single-view error, gain)", 0.586,
+                         float(spearmanr([ba[k]["single_view_mm"] for k in imp],
+                                         list(imp.values()))[0]), src, tol=0.005))
 
     # ---------- circularity control: how much is removed by construction -----
     # The per-limb frames in the long-axis definitions are built from exactly the

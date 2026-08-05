@@ -1,4 +1,4 @@
-﻿% =====================================================================
+% =====================================================================
 %  Full_Thesis_Report.tex
 %  Preamble and structure matched to the departmental example report.
 %  Compile on Overleaf with pdfLaTeX. Run TWICE so the ToC resolves.
@@ -232,9 +232,9 @@ The geometry this project builds on is not ours. The frame construction is the T
 
 \item \textbf{[Negative result]} \textbf{A retraction of our own error predictor.} A temporal bone-length signal reaching $\rho = +0.492$ on the first dataset falls to $+0.098$ on the second and fails every criterion; we retract the general claim and state the narrower condition under which it holds.
 
-\item \textbf{[Engineering]} \textbf{Calibration-free multi-view fusion in the shared frame}, with the finding that the estimator must be robust when views are few, since at four views a median reliably improves on an arbitrary single view while an unweighted mean does not.
+\item \textbf{[Engineering]} \textbf{Calibration-free multi-view fusion in the shared frame}, with two qualifications that matter more than the headline. The estimator must be robust when views are few, since at four views a median improves the aggregate by 8.4 percent while an unweighted mean does not. But the gain is not uniform: nine of fifteen actions improve and six worsen, one of them catastrophically, and the mean across actions is negative. Fusion helps where the single view is already poor and can harm where it is already good.
 
-\item \textbf{[Systems]} \textbf{A framework and an evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added to a frozen estimator, 402 floating-point operations per frame, no labels and no camera parameters at any stage; 180 numerical claims checked against stored artifacts by an automated audit; 72 tests; and four pre-registrations committed to version history before the experiments they govern, two of which the results then contradicted.
+\item \textbf{[Systems]} \textbf{A framework and an evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added to a frozen estimator, 402 floating-point operations per frame, no labels and no camera parameters at any stage; 192 numerical claims checked against stored artifacts by an automated audit; 72 tests; and four pre-registrations committed to version history before the experiments they govern, two of which the results then contradicted.
 \end{itemize}
 
 \section{Report Organization}
@@ -672,7 +672,7 @@ Figure \ref{fig:qual} shows the system on frames of that demonstration footage, 
 
 \section{Reproducibility Infrastructure}
 
-The reporting practice adopted here is a response to the fact that several early claims in this project did not survive scrutiny. Three mechanisms are used. The automated audit re-derives 180 headline claims from stored artifacts and fails on any drift, so a number cannot silently rot after a re-run; it is an artifact-consistency check rather than a re-execution of the experiments, and it verifies that what the report says matches what the runs produced, not that the runs were repeated. A unit test suite of 72 tests covers the geometric core, the corruption operators, the fusion arithmetic and the aggregation logic of the Human3.6M experiments, using stub models so that it runs without weights or data. Finally, the pass criterion for each of four experiments --- test-time augmentation, the multi-landmark frame, conditioning-based abstention and the joint-level radial test --- was written down and committed to version control before that experiment was run, so a failure cannot be attributed to a criterion chosen afterwards. Two of the four did fail.
+The reporting practice adopted here is a response to the fact that several early claims in this project did not survive scrutiny. Three mechanisms are used. The automated audit re-derives 192 headline claims from stored artifacts and fails on any drift, so a number cannot silently rot after a re-run; it is an artifact-consistency check rather than a re-execution of the experiments, and it verifies that what the report says matches what the runs produced, not that the runs were repeated. A unit test suite of 72 tests covers the geometric core, the corruption operators, the fusion arithmetic and the aggregation logic of the Human3.6M experiments, using stub models so that it runs without weights or data. Finally, the pass criterion for each of four experiments --- test-time augmentation, the multi-landmark frame, conditioning-based abstention and the joint-level radial test --- was written down and committed to version control before that experiment was run, so a failure cannot be attributed to a criterion chosen afterwards. Two of the four did fail.
 
 The appendix tables are generated from the artifacts by a script rather than typed, which closes the last gap between what the artifacts contain and what the report claims.
 
@@ -706,8 +706,8 @@ Multi-scale per-limb frames improve on the global frame
 \hline
 The shared frame enables calibration-free fusion
  & Improves in all four conditions
- & Median $+8.4\%$; an unweighted mean is not reliably better than one view
- & Holds, refined \\
+ & Median $+8.4\%$ pooled, but $+4.7\%$ per frame with an interval spanning zero, and 6 of 15 actions worsen (\S\ref{sec:fusionaction})
+ & Holds, heavily qualified \\
 \hline
 The reliability score predicts accuracy
  & Fails on five independent tests
@@ -943,9 +943,50 @@ We apply the same treatment to multi-view fusion, using the four synchronized ca
 
 Fusion replicates, but only with a robust estimator, and the qualification is the finding. A coordinate-wise median across the four canonical views reduces error from 37.8 mm to 34.6 mm, an improvement of 8.4 percent with a cluster bootstrap interval of $[+2.1, +13.7]$ percent over the thirty videos. The mean across the same four views gives 39.1 mm, a point estimate of $-3.4$ percent whose interval is $[-21.5, +10.5]$ percent. The oracle that selects the best view using ground truth reaches 27.4 mm.
 
-Those intervals discipline the claim in two directions and we state both. The median's advantage is real, since its interval excludes zero. The mean's apparent harm is not established, since its interval does not: the point estimate is negative but the evidence does not distinguish it from no effect, and it would be an overreach to report that an unweighted mean damages accuracy. What the data support is the weaker and more useful statement that the median is reliably beneficial while the mean is not reliably anything.
+Those intervals discipline the claim in two directions. The mean's apparent harm is not established, since its interval does not exclude zero: the point estimate is negative but the evidence does not distinguish it from no effect, and it would be an overreach to report that an unweighted mean damages accuracy.
+
+\textbf{The median's advantage is weaker than that interval alone suggests, and the qualification is important enough to state before anything else.} The figure of 8.4 percent is the ratio of aggregate means, and its interval excludes zero. Averaging the per-frame improvements instead gives 4.7 percent with an interval of $[-1.2, +9.8]$, which does not. The two conventions are the pair distinguished in Section \ref{sec:h36mcv}, and here, unlike there, they disagree about significance. We report both because reporting only the first would select the convention that favours the claim, having selected the conservative one elsewhere. The defensible statement is therefore that median fusion improves the aggregate and is not established as improving a typical frame.
 
 The instability of the mean is itself informative. Per frame, it improves on the single-view baseline in 67.9 percent of cases, so the typical frame does benefit. Its aggregate is dragged down, and its interval widened, by a minority of catastrophic frames that averaging propagates and a median discards. On MPI-INF-3DHP up to eight views were fused, where one bad view contributes an eighth of the average; with four views it contributes a quarter. We therefore refine rather than retract the fusion claim: canonicalization enables calibration-free fusion, and the estimator must be robust when the number of views is small.
+
+\subsection{Fusion Is Bimodal by Action, and the Aggregate Conceals It}
+\label{sec:fusionaction}
+
+The aggregate figure averages over an outcome that is not unimodal, and a reader who stopped at 8.4 percent would take away the wrong picture. Broken down by action, median fusion improves nine of the fifteen and harms six. Table \ref{tab:fusionaction} gives the extremes.
+
+\begin{table}[h]
+\centering
+\caption{Median fusion by action, the six worst and four best of fifteen. The final column is the same fusion with anatomical reflection handling, included because it bears on the diagnosis below.}
+\label{tab:fusionaction}
+{\fontsize{10}{12}\selectfont
+\begin{tabular}{lrrrr}
+\hline
+\textbf{Action} & \textbf{Single view} & \textbf{Fused} & \textbf{Change} & \textbf{Anatomical} \\
+\hline
+Discussion & 38.3 & \textbf{76.1} & $\mathbf{-98.3\%}$ & 51.2 \\
+WalkDog & 35.9 & 49.4 & $-37.7\%$ & 38.1 \\
+Walking & 25.2 & 26.6 & $-5.7\%$ & 27.3 \\
+WalkTogether & 29.2 & 30.8 & $-5.3\%$ & 32.1 \\
+Greeting & 33.5 & 35.3 & $-5.3\%$ & 42.2 \\
+Directions & 34.7 & 36.2 & $-4.3\%$ & 36.3 \\
+\hline
+Phoning & 37.6 & 32.4 & $+13.9\%$ & 34.8 \\
+Photo & 42.6 & 37.0 & $+13.2\%$ & 39.3 \\
+SittingDown & 57.2 & 47.0 & $+17.8\%$ & 46.7 \\
+Sitting & 45.7 & 36.9 & $+19.3\%$ & 37.3 \\
+\hline
+\end{tabular}}
+\end{table}
+
+Three things follow.
+
+\textbf{The mean over actions is negative.} It is $-3.0$ percent unweighted and $-5.4$ percent weighted by frame count, against a median action of $+7.7$ percent and a pooled figure of $+8.4$ percent. The sign of the conclusion depends on the unit of aggregation, which is a stronger version of the caution already given above. Almost all of that reversal is one action: excluding Discussion, the mean over the remaining fourteen is $+3.8$ percent.
+
+\textbf{Discussion is not a mild regression but a failure.} Fusing four views doubles its error, from 38.3 mm to 76.1 mm. A method that can double the error on one of fifteen actions is not one we would deploy without a per-frame check, and the abstention mechanism of Section \ref{sec:conditioning} is the obvious place for that check to live.
+
+\textbf{The pattern is not random.} Every one of the six failures involves either locomotion or conversational gesture --- Discussion, Greeting, Directions, Walking, WalkTogether, WalkDog --- while the clear successes are stationary: Sitting, SittingDown, Phoning, Photo. The rank correlation between an action's single-view error and its fusion gain is $+0.586$, so fusion helps most where the single view is already worst and can hurt where it is already good. That is a useful operating rule and an uncomfortable one, because the actions a deployment is likeliest to encounter are locomotion.
+
+We can partly diagnose the two severe cases and not the four mild ones. Repeating the fusion with anatomical reflection handling recovers much of the damage on Discussion, from 76.1 to 51.2 mm, and on WalkDog, from 49.4 to 38.1 mm, while leaving Walking, WalkTogether, Greeting and Directions no better or slightly worse. That is consistent with the severe failures arising from left-right mirror ambiguity, which gesture-heavy and two-person actions would be expected to provoke and which the naive variant resolves against the highest-weight view, and with the mild regressions having some other cause we have not identified. We state this as a diagnosis of the extremes only, since the reflection variant is one comparison and not a controlled test.
 
 One consequence deserves emphasis, because it bears on the reliability score. The plain median uses no reliability score, no weights and no learned parameters, and at 34.6 mm it outperforms the reliability-weighted mean at 36.6 mm. The weighted mean's own interval, $[-8.4, +12.3]$ percent, includes zero, so weighting by the reliability score does not demonstrably improve on using one arbitrary camera. The sixth independent result concerning that score is that discarding it entirely is better than using it. Figure \ref{fig:h36mfuse} shows the ordering.
 
