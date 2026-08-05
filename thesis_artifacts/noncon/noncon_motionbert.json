@@ -1,0 +1,60 @@
+{
+ "all_17_joints": {
+  "n_pairs": 180,
+  "n_pairs_improved": 180,
+  "mean_raw_distance_mm": 316.67552386828686,
+  "mean_canonical_distance_mm": 60.09302487522748,
+  "mean_oracle_distance_mm": 49.5527823375825,
+  "mean_improvement_pct": 77.54837105897175,
+  "mean_oracle_gap_closed_pct": 94.54838070116732,
+  "bootstrap_improvement_pct": {
+   "mean": 77.54837105897175,
+   "ci95": [
+    76.60071071542268,
+    78.52889725760365
+   ],
+   "n_clusters": 30,
+   "draws": 10000
+  }
+ },
+ "non_constructor": {
+  "n_pairs": 180,
+  "n_pairs_improved": 180,
+  "mean_raw_distance_mm": 367.9811771930319,
+  "mean_canonical_distance_mm": 74.79384133516388,
+  "mean_oracle_distance_mm": 54.792846701412785,
+  "mean_improvement_pct": 75.84169914313176,
+  "mean_oracle_gap_closed_pct": 91.3815471573029,
+  "bootstrap_improvement_pct": {
+   "mean": 75.84169914313176,
+   "ci95": [
+    74.81007095647766,
+    76.91302446262263
+   ],
+   "n_clusters": 30,
+   "draws": 10000
+  }
+ },
+ "constructor_joints": [
+  0,
+  1,
+  4,
+  8
+ ],
+ "retained_joints": [
+  2,
+  3,
+  5,
+  6,
+  7,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16
+ ],
+ "prediction_cache": "preds_motionbert.npz"
+}

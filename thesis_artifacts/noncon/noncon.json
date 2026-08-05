@@ -1,0 +1,60 @@
+{
+ "all_17_joints": {
+  "n_pairs": 180,
+  "n_pairs_improved": 179,
+  "mean_raw_distance_mm": 320.37109879652746,
+  "mean_canonical_distance_mm": 75.31521846225431,
+  "mean_oracle_distance_mm": 51.2614594172882,
+  "mean_improvement_pct": 74.05025670260979,
+  "mean_oracle_gap_closed_pct": 90.53248449447375,
+  "bootstrap_improvement_pct": {
+   "mean": 74.05025670260979,
+   "ci95": [
+    69.78292339097621,
+    77.23734523742203
+   ],
+   "n_clusters": 30,
+   "draws": 10000
+  }
+ },
+ "non_constructor": {
+  "n_pairs": 180,
+  "n_pairs_improved": 179,
+  "mean_raw_distance_mm": 372.69763946436257,
+  "mean_canonical_distance_mm": 93.35026396195683,
+  "mean_oracle_distance_mm": 56.16112666240815,
+  "mean_improvement_pct": 72.21745843238031,
+  "mean_oracle_gap_closed_pct": 87.01870688963645,
+  "bootstrap_improvement_pct": {
+   "mean": 72.21745843238031,
+   "ci95": [
+    67.86275218011303,
+    75.51309787361212
+   ],
+   "n_clusters": 30,
+   "draws": 10000
+  }
+ },
+ "constructor_joints": [
+  0,
+  1,
+  4,
+  8
+ ],
+ "retained_joints": [
+  2,
+  3,
+  5,
+  6,
+  7,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16
+ ],
+ "prediction_cache": "preds.npz"
+}

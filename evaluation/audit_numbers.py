@@ -512,6 +512,39 @@ def main():
                          float(spearmanr([ba[k]["single_view_mm"] for k in imp],
                                          list(imp.values()))[0]), src, tol=0.005))
 
+    # ---------- non-constructor headline -------------------------------------
+    # Section 5.16.2 shows the frame pins the joints it is built from, so the
+    # seventeen-joint headline was contaminated. These pin the recomputation over
+    # the thirteen joints the construction does not touch. No claim here asserts
+    # which of the two figures is larger: that is the result, not a criterion.
+    for tag, label, allj, non in (("", "XS", 74.05, 72.22),
+                                  ("_motionbert", "MB", 77.55, 75.84)):
+        nc = load("noncon/noncon%s.json" % tag)
+        src = "noncon/noncon%s.json" % tag
+        results.append(check("noncon %s: all-17 improvement %%" % label, allj,
+                             nc["all_17_joints"]["mean_improvement_pct"],
+                             src, tol=0.05, unit="%"))
+        results.append(check("  %s non-constructor improvement %%" % label, non,
+                             nc["non_constructor"]["mean_improvement_pct"],
+                             src, tol=0.05, unit="%"))
+        results.append(check("  %s non-constructor CI lower > 0" % label, 1.0,
+                             float(nc["non_constructor"]
+                                   ["bootstrap_improvement_pct"]["ci95"][0] > 0),
+                             src, tol=0))
+        results.append(check("  %s retained joint count" % label, 13.0,
+                             float(len(nc["retained_joints"])), src, tol=0))
+        results.append(check("  %s constructor set is {0,1,4,8}" % label, 1.0,
+                             float(sorted(nc["constructor_joints"]) == [0, 1, 4, 8]),
+                             src, tol=0))
+    # The abstract must quote the artifact, not a remembered number. This is the
+    # drift that let the seventeen-joint figure survive its own refutation.
+    _abs = open(os.path.join(REPO_ROOT, "thesis_report",
+                             "Full_Thesis_Report.tex"), encoding="utf-8").read()
+    _nc = load("noncon/noncon.json")["non_constructor"]["mean_improvement_pct"]
+    results.append(check("  abstract quotes the non-constructor figure", 1.0,
+                         float(("%.1f percent" % _nc) in _abs),
+                         "Full_Thesis_Report.tex", tol=0))
+
     # ---------- circularity control: how much is removed by construction -----
     # The per-limb frames in the long-axis definitions are built from exactly the
     # joints they are scored on. These claims pin the headroom above the
