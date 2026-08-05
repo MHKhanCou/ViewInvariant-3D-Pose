@@ -45,6 +45,7 @@ import os
 import sys
 
 import numpy as np
+from scipy.stats import pearsonr, spearmanr
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, REPO_ROOT)
@@ -151,11 +152,90 @@ def leave_one_out(points):
     return errs
 
 
+def bootstrap_c(points, draws=5000, seed=12345):
+    """
+    Interval on the fitted constant, by resampling the frame definitions.
+
+    Added after the fact, and it should have been here from the start. An
+    earlier version of this report observed that c came out at 21.3 and 21.5 on
+    two independently trained backbones and described the one-percent agreement
+    as evidence the constant is physical. That inference needs an interval on c
+    and there was none. With one, the agreement turns out to carry no weight:
+    the interval is wider than the estimate, so two draws landing one percent
+    apart is unremarkable. The claim was withdrawn rather than defended.
+
+    The resampling unit is the frame definition, because that is the unit the
+    fit has eight of. It is a small sample and the interval says so.
+    """
+    rng = np.random.default_rng(seed)
+    cs, d0s = [], []
+    for _ in range(draws):
+        idx = rng.integers(0, len(points), size=len(points))
+        sample = [points[i] for i in idx]
+        # A resample can draw too few distinct axis lengths to determine a slope.
+        if len({round(p["r_over_L"], 6) for p in sample}) < 2:
+            continue
+        try:
+            g = fit(sample)
+        except np.linalg.LinAlgError:
+            continue
+        cs.append(g["c_mm2"])
+        d0s.append(g["d0_mm"])
+    cs = np.array(cs)
+    d0s = np.array(d0s)
+    return {
+        "draws_used": int(len(cs)),
+        "c_ci95": [float(np.percentile(cs, 2.5)), float(np.percentile(cs, 97.5))],
+        "c_ci_width": float(np.percentile(cs, 97.5) - np.percentile(cs, 2.5)),
+        "d0_ci95": [float(np.percentile(d0s, 2.5)),
+                    float(np.percentile(d0s, 97.5))],
+    }
+
+
+def analyse(points):
+    """
+    Everything the report quotes about one set of frame definitions.
+
+    The report restricts its quantitative claim to the eight limb levels,
+    because comparing a limb frame scored on three joints against a global frame
+    scored on seventeen mixes two different lever arms. That restriction used to
+    live in a throwaway script, which meant the report's central numbers were
+    produced by code that was neither committed nor audited. They are produced
+    here now.
+    """
+    f = fit(points)
+    loo = leave_one_out(points)
+    r = np.array([p["r_over_L"] for p in points])
+    d = np.array([p["d"] for p in points])
+    return {
+        "n_points": len(points),
+        "labels": [p["label"] for p in points],
+        "c_mm": f["c_mm2"],
+        "d0_mm": f["d0_mm"],
+        "r2": f["r2"],
+        "rmse_mm": f["rmse_mm"],
+        "loo_mae_mm": float(np.mean([abs(e["error_mm"]) for e in loo])),
+        # c has units of mm because the fit is on the dimensionless r/L, so
+        # sigma = c / (2*sqrt(2)) with no further scaling. An earlier version
+        # divided by r_bar as well, a leftover from fitting against 1/L, which
+        # drove the stored sigma to essentially zero while the report quoted a
+        # value computed elsewhere.
+        "implied_sigma_mm": float(f["c_mm2"] / (2 * np.sqrt(2))),
+        "spearman_r_over_L_vs_d": float(spearmanr(r, d)[0]),
+        "pearson_r_over_L_vs_d": float(pearsonr(r, d)[0]),
+        "bootstrap": bootstrap_c(points),
+        "leave_one_out": loo,
+    }
+
+
 def run(pred_file, ms_file, ml_file, name):
     pts = collect(pred_file, ms_file, ml_file)
     f = fit(pts)
     loo = leave_one_out(pts)
     mae = float(np.mean([abs(e["error_mm"]) for e in loo]))
+    boot = bootstrap_c(pts)
+    limbs = [p for p in pts if any(k in p["label"] for k in ("arm", "leg"))]
+    by_subset = {"all_levels": analyse(pts), "limb_levels": analyse(limbs)}
 
     print("=" * 78)
     print("AXIS-LENGTH LAW  d^2 = (c/L)^2 + d0^2   [%s]" % name)
@@ -164,7 +244,9 @@ def run(pred_file, ms_file, ml_file, name):
     print("  %-26s %9s %9s %9s" % ("frame definition", "axis mm", "obs mm", "fit mm"))
     for p, pr in zip(pts, f["predicted"]):
         print("  %-26s %9.1f %9.1f %9.1f" % (p["label"], p["L"], p["d"], pr))
-    print("\n  c  = %.0f mm^2      (= 2*sqrt(2)*sigma*r_bar)" % f["c_mm2"])
+    print("\n  c  = %.1f    95%% CI [%.1f, %.1f]  (width %.1f, wider than the "
+          "estimate)" % (f["c_mm2"], boot["c_ci95"][0], boot["c_ci95"][1],
+                        boot["c_ci_width"]))
     print("  d0 = %.1f mm        irreducible, independent of the frame" % f["d0_mm"])
     print("  R^2 = %.3f   RMSE = %.2f mm" % (f["r2"], f["rmse_mm"]))
     print("  leave-one-out mean absolute error = %.2f mm" % mae)
@@ -178,13 +260,26 @@ def run(pred_file, ms_file, ml_file, name):
     r_bar = float(np.mean(np.linalg.norm(P - P[:, 0:1, :], axis=-1)))
     sigma = f["c_mm2"] / (2 * np.sqrt(2) * r_bar)
     print("\n  mean joint radius r_bar = %.1f mm" % r_bar)
-    print("  implied per-joint noise sigma = %.1f mm" % sigma)
-    print("  (a sanity check, not a fit: this should be the order of the "
-          "backbone's own error)")
+
+    for key, sub in by_subset.items():
+        b = sub["bootstrap"]
+        print("\n  --- %s (%d points) ---" % (key, sub["n_points"]))
+        print("    c        %.1f mm    95%% CI [%.1f, %.1f]  width %.1f"
+              % (sub["c_mm"], b["c_ci95"][0], b["c_ci95"][1], b["c_ci_width"]))
+        print("    sigma    %.1f mm    95%% CI [%.1f, %.1f]"
+              % (sub["implied_sigma_mm"], b["c_ci95"][0] / (2 * np.sqrt(2)),
+                 b["c_ci95"][1] / (2 * np.sqrt(2))))
+        print("    R^2      %.3f    RMSE %.2f mm    LOO MAE %.2f mm"
+              % (sub["r2"], sub["rmse_mm"], sub["loo_mae_mm"]))
+        print("    rank rho %+.3f    Pearson %+.3f"
+              % (sub["spearman_r_over_L_vs_d"], sub["pearson_r_over_L_vs_d"]))
+    print("\n  The interval on c spans roughly a factor of two on every subset,")
+    print("  so agreement of c or sigma between backbones is NOT evidence of a")
+    print("  physical constant. The rank correlation is the supported claim.")
 
     out = {"points": pts, "fit": f, "leave_one_out": loo,
            "loo_mae_mm": mae, "r_bar_mm": r_bar, "implied_sigma_mm": sigma,
-           "cache": pred_file}
+           "bootstrap": boot, "by_subset": by_subset, "cache": pred_file}
     os.makedirs(OUT_DIR, exist_ok=True)
     p = os.path.join(OUT_DIR, "axis_law%s.json" % name)
     with open(p, "w") as fh:

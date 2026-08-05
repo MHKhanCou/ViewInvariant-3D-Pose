@@ -196,5 +196,213 @@
   "loo_mae_mm": 14.111206873486623,
   "r_bar_mm": 444.78945432823355,
   "implied_sigma_mm": 0.01777856701389374,
+  "bootstrap": {
+    "draws_used": 5000,
+    "c_ci95": [
+      19.61194339931454,
+      41.117174766378994
+    ],
+    "c_ci_width": 21.505231367064454,
+    "d0_ci95": [
+      0.0,
+      39.84974921681123
+    ]
+  },
+  "by_subset": {
+    "all_levels": {
+      "n_points": 12,
+      "labels": [
+        "torso shipped",
+        "left_arm shipped",
+        "right_arm shipped",
+        "left_leg shipped",
+        "right_leg shipped",
+        "torso long-axis",
+        "left_arm long-axis",
+        "right_arm long-axis",
+        "left_leg long-axis",
+        "right_leg long-axis",
+        "global, hip_only",
+        "global, shoulder_only"
+      ],
+      "c_mm": 22.36640725627981,
+      "d0_mm": 31.55698699702762,
+      "r2": 0.6410374617773963,
+      "rmse_mm": 9.651246628031574,
+      "loo_mae_mm": 14.111206873486623,
+      "implied_sigma_mm": 7.9077191208477275,
+      "spearman_r_over_L_vs_d": 0.9507042253521125,
+      "pearson_r_over_L_vs_d": 0.8731939895524958,
+      "bootstrap": {
+        "draws_used": 5000,
+        "c_ci95": [
+          19.61194339931454,
+          41.117174766378994
+        ],
+        "c_ci_width": 21.505231367064454,
+        "d0_ci95": [
+          0.0,
+          39.84974921681123
+        ]
+      },
+      "leave_one_out": [
+        {
+          "label": "torso shipped",
+          "observed": 26.135000305369047,
+          "predicted": 35.20047734938718,
+          "error_mm": 9.065477044018131
+        },
+        {
+          "label": "left_arm shipped",
+          "observed": 56.62205782483359,
+          "predicted": 43.953456898488746,
+          "error_mm": -12.668600926344844
+        },
+        {
+          "label": "right_arm shipped",
+          "observed": 56.0431652876581,
+          "predicted": 44.45618316219848,
+          "error_mm": -11.58698212545962
+        },
+        {
+          "label": "left_leg shipped",
+          "observed": 68.24219649019172,
+          "predicted": 118.72593203908245,
+          "error_mm": 50.483735548890735
+        },
+        {
+          "label": "right_leg shipped",
+          "observed": 29.790880552646385,
+          "predicted": 38.40228052756303,
+          "error_mm": 8.611399974916644
+        },
+        {
+          "label": "torso long-axis",
+          "observed": 26.135000305369047,
+          "predicted": 35.20047734938719,
+          "error_mm": 9.065477044018145
+        },
+        {
+          "label": "left_arm long-axis",
+          "observed": 26.904131599493663,
+          "predicted": 37.19892898067524,
+          "error_mm": 10.294797381181578
+        },
+        {
+          "label": "right_arm long-axis",
+          "observed": 26.183984256622555,
+          "predicted": 37.34139692657189,
+          "error_mm": 11.157412669949334
+        },
+        {
+          "label": "left_leg long-axis",
+          "observed": 27.91963900369472,
+          "predicted": 38.66602415208587,
+          "error_mm": 10.746385148391148
+        },
+        {
+          "label": "right_leg long-axis",
+          "observed": 29.790880552646385,
+          "predicted": 38.402280527563036,
+          "error_mm": 8.611399974916651
+        },
+        {
+          "label": "global, hip_only",
+          "observed": 59.66404073041376,
+          "predicted": 46.04212592962521,
+          "error_mm": -13.621914800788552
+        },
+        {
+          "label": "global, shoulder_only",
+          "observed": 57.45008618068239,
+          "predicted": 44.02918633771828,
+          "error_mm": -13.420899842964111
+        }
+      ]
+    },
+    "limb_levels": {
+      "n_points": 8,
+      "labels": [
+        "left_arm shipped",
+        "right_arm shipped",
+        "left_leg shipped",
+        "right_leg shipped",
+        "left_arm long-axis",
+        "right_arm long-axis",
+        "left_leg long-axis",
+        "right_leg long-axis"
+      ],
+      "c_mm": 21.50509977085976,
+      "d0_mm": 29.65585118918844,
+      "r2": 0.7037057665529137,
+      "rmse_mm": 8.708817762560255,
+      "loo_mae_mm": 16.094686553687303,
+      "implied_sigma_mm": 7.603200939034103,
+      "spearman_r_over_L_vs_d": 0.8795180722891566,
+      "pearson_r_over_L_vs_d": 0.885452274187191,
+      "bootstrap": {
+        "draws_used": 5000,
+        "c_ci95": [
+          19.172448923015818,
+          42.70540249194601
+        ],
+        "c_ci_width": 23.532953568930193,
+        "d0_ci95": [
+          0.0,
+          39.886399139163544
+        ]
+      },
+      "leave_one_out": [
+        {
+          "label": "left_arm shipped",
+          "observed": 56.62205782483359,
+          "predicted": 40.60921666573484,
+          "error_mm": -16.01284115909875
+        },
+        {
+          "label": "right_arm shipped",
+          "observed": 56.0431652876581,
+          "predicted": 41.18781593336979,
+          "error_mm": -14.855349354288307
+        },
+        {
+          "label": "left_leg shipped",
+          "observed": 68.24219649019172,
+          "predicted": 125.43452187192564,
+          "error_mm": 57.19232538173392
+        },
+        {
+          "label": "right_leg shipped",
+          "observed": 29.790880552646385,
+          "predicted": 36.56856791269345,
+          "error_mm": 6.777687360047068
+        },
+        {
+          "label": "left_arm long-axis",
+          "observed": 26.904131599493663,
+          "predicted": 35.50730091279904,
+          "error_mm": 8.603169313305376
+        },
+        {
+          "label": "right_arm long-axis",
+          "observed": 26.183984256622555,
+          "predicted": 35.695357041395084,
+          "error_mm": 9.51137278477253
+        },
+        {
+          "label": "left_leg long-axis",
+          "observed": 27.91963900369472,
+          "predicted": 36.94669871990012,
+          "error_mm": 9.0270597162054
+        },
+        {
+          "label": "right_leg long-axis",
+          "observed": 29.790880552646385,
+          "predicted": 36.568567912693446,
+          "error_mm": 6.777687360047061
+        }
+      ]
+    }
+  },
   "cache": "E:\\thesis\\MotionAGFormer\\thesis_artifacts\\h36m_motionbert\\preds_motionbert.npz"
 }

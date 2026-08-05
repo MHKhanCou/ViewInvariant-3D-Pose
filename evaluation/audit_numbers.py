@@ -438,6 +438,35 @@ def main():
                          float(cd_xs["p2_tail_is_real"]),
                          "conditioning/conditioning.json", tol=0))
 
+    # ---------- axis-length law: quantitative fit and its interval -----------
+    # These were quoted in the report for two days from a scratch script that was
+    # never committed, so nothing verified them. They are produced by
+    # evaluation/axis_length_law.py now. The interval on c is the reason the
+    # report no longer claims the constant is physical.
+    for tag, label, c, sig, r2, rho in (("", "XS", 21.3, 7.5, 0.700, 0.904),
+                                        ("_motionbert", "MB", 21.5, 7.6, 0.704, 0.880)):
+        lv = load("axis_law/axis_law%s.json" % tag)["by_subset"]["limb_levels"]
+        src = "axis_law/axis_law%s.json" % tag
+        results.append(check("axis law %s: c (mm)" % label, c, lv["c_mm"],
+                             src, tol=0.05, unit="mm"))
+        results.append(check("  %s implied sigma (mm)" % label, sig,
+                             lv["implied_sigma_mm"], src, tol=0.05, unit="mm"))
+        results.append(check("  %s R2 (form NOT claimed)" % label, r2, lv["r2"],
+                             src, tol=0.005))
+        results.append(check("  %s rank rho (the supported claim)" % label, rho,
+                             lv["spearman_r_over_L_vs_d"], src, tol=0.005))
+        # The interval is wider than the estimate; this is what withdrew the
+        # "constants agree to one percent" claim.
+        results.append(check("  %s CI on c is wider than c (1=yes)" % label, 1.0,
+                             float(lv["bootstrap"]["c_ci_width"] > lv["c_mm"]),
+                             src, tol=0))
+    xs_ci = load("axis_law/axis_law.json")["by_subset"]["limb_levels"]["bootstrap"]
+    mb_ci = load("axis_law/axis_law_motionbert.json")["by_subset"]["limb_levels"]["bootstrap"]
+    results.append(check("  the two CIs on c overlap almost entirely (1=yes)", 1.0,
+                         float(xs_ci["c_ci95"][0] < mb_ci["c_ci95"][1]
+                               and mb_ci["c_ci95"][0] < xs_ci["c_ci95"][1]),
+                         "axis_law/*.json", tol=0))
+
     # ---------- radial law: pre-registered, all criteria FAILED ---------------
     # The pre-registered radius model fails on both backbones. What replicates
     # is the post-hoc mechanism: at matched radius, joints rigid with the torso
