@@ -1,0 +1,142 @@
+{
+ "n_actions": 15,
+ "n_actions_anatomical_better": 0,
+ "by_action": [
+  {
+   "action": "act_12",
+   "name": "Photo",
+   "n_pairs": 12,
+   "anatomical_mm": 95.86214709181881,
+   "template_mm": 66.12841152398057,
+   "difference_mm": -29.733735567838238,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_15",
+   "name": "WalkDog",
+   "n_pairs": 12,
+   "anatomical_mm": 78.35328509067226,
+   "template_mm": 53.25073024143317,
+   "difference_mm": -25.10255484923909,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_08",
+   "name": "Purchases",
+   "n_pairs": 12,
+   "anatomical_mm": 70.30531713255867,
+   "template_mm": 46.842877707357445,
+   "difference_mm": -23.462439425201225,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_07",
+   "name": "Posing",
+   "n_pairs": 12,
+   "anatomical_mm": 70.03202372285487,
+   "template_mm": 47.34273760942556,
+   "difference_mm": -22.68928611342931,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_02",
+   "name": "Directions",
+   "n_pairs": 12,
+   "anatomical_mm": 71.72597575418577,
+   "template_mm": 50.79227840562782,
+   "difference_mm": -20.93369734855795,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_05",
+   "name": "Greeting",
+   "n_pairs": 12,
+   "anatomical_mm": 71.05894375061885,
+   "template_mm": 50.35561222538892,
+   "difference_mm": -20.703331525229935,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_03",
+   "name": "Discussion",
+   "n_pairs": 12,
+   "anatomical_mm": 71.91898172952027,
+   "template_mm": 52.688447601298385,
+   "difference_mm": -19.230534128221883,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_13",
+   "name": "Waiting",
+   "n_pairs": 12,
+   "anatomical_mm": 66.91286463383989,
+   "template_mm": 48.20847145188992,
+   "difference_mm": -18.704393181949968,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_04",
+   "name": "Eating",
+   "n_pairs": 12,
+   "anatomical_mm": 70.18614444818313,
+   "template_mm": 52.76389913061601,
+   "difference_mm": -17.422245317567118,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_10",
+   "name": "SittingDown",
+   "n_pairs": 12,
+   "anatomical_mm": 110.25796670254259,
+   "template_mm": 93.02496120661498,
+   "difference_mm": -17.233005495927614,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_06",
+   "name": "Phoning",
+   "n_pairs": 12,
+   "anatomical_mm": 72.63586062136712,
+   "template_mm": 57.71587353020305,
+   "difference_mm": -14.919987091164067,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_16",
+   "name": "WalkTogether",
+   "n_pairs": 12,
+   "anatomical_mm": 64.48484174257698,
+   "template_mm": 50.11491328986326,
+   "difference_mm": -14.369928452713715,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_11",
+   "name": "Smoking",
+   "n_pairs": 12,
+   "anatomical_mm": 71.4467368057808,
+   "template_mm": 57.38960164931408,
+   "difference_mm": -14.057135156466721,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_09",
+   "name": "Sitting",
+   "n_pairs": 12,
+   "anatomical_mm": 83.20964525503088,
+   "template_mm": 69.22004875726775,
+   "difference_mm": -13.98959649776313,
+   "anatomical_better": false
+  },
+  {
+   "action": "act_14",
+   "name": "Walking",
+   "n_pairs": 12,
+   "anatomical_mm": 53.516885545907236,
+   "template_mm": 42.76962252107632,
+   "difference_mm": -10.747263024830914,
+   "anatomical_better": false
+  }
+ ],
+ "prediction_cache": "preds_motionbert.npz"
+}

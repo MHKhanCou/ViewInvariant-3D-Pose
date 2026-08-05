@@ -567,6 +567,22 @@ def main():
         results.append(check("  %s verdict is template_better (1=yes)" % label, 1.0,
                              float(tb["verdict"] == "template_better"), src, tol=0))
 
+    # ---------- per-action: the baseline has no failure mode we can find -----
+    for tag, label, sd_anat, sd_tmpl in (("", "XS", 335.0, 89.1),
+                                         ("_motionbert", "MB", 110.3, 93.0)):
+        ac = load("template_action/action%s.json" % tag)
+        src = "template_action/action%s.json" % tag
+        results.append(check("per-action %s: actions where ours wins" % label,
+                             0.0, float(ac["n_actions_anatomical_better"]),
+                             src, tol=0))
+        results.append(check("  %s actions covered" % label, 15.0,
+                             float(ac["n_actions"]), src, tol=0))
+        sd = [d for d in ac["by_action"] if d["name"] == "SittingDown"][0]
+        results.append(check("  %s SittingDown, ours (mm)" % label, sd_anat,
+                             sd["anatomical_mm"], src, tol=0.1, unit="mm"))
+        results.append(check("  %s SittingDown, template (mm)" % label, sd_tmpl,
+                             sd["template_mm"], src, tol=0.1, unit="mm"))
+
     # ---------- translation ablation: how much of the gap is centring? -------
     for tag, label, share, root_gap in (("", "XS", -3.20, -15.36),
                                         ("_motionbert", "MB", -2.49, -3.16)):
