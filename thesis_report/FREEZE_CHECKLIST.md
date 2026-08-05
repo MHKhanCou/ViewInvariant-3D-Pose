@@ -5,17 +5,19 @@ thing to look at; nothing here is "check it looks right".
 
 ## 1. Numbers
 
-- [ ] `python -m evaluation.audit_numbers` → **167/167**, exit 0.
+- [ ] `python -m evaluation.audit_numbers` → **248/248**, exit 0.
       Fails loudly if any reported figure drifts from its JSON artifact.
-- [ ] `python -m unittest discover -s tests -q` → **72 tests, OK**.
+- [ ] `python -m unittest discover -s tests -q` → **76 tests, OK**.
 - [ ] Spot-check by hand that the two averaging conventions still disagree the way
-      §5.10 says: per-pair 74.1 % against ratio-of-means 76.5 %. If someone
-      "fixes" one of them the disclosure becomes false.
+      §5.10 says: per-pair against ratio-of-aggregate-means, 76.2 vs 76.5. If
+      someone "fixes" one of them the disclosure becomes false.
+- [ ] The headline is the **non-constructor** figure, 72.2 % over 180 pairs with
+      179 improving, with the seventeen-joint 74.1 % given alongside and the
+      reason stated. If the abstract quotes 74.1 alone, it has regressed.
 
 ## 2. Figures
 
-- [ ] `python -m presentation.render --twoview --teaser` regenerates all seven
-      generated figures without error.
+- [ ] `python -m presentation.render --twoview --teaser` regenerates the eight figures it owns without error.
 - [ ] **Open each PNG and look at it.** Past failures this catches: skeletons
       rendered upside down (raw poses are y-down), the hip axis clipped out of
       frame by equal aspect, a null result made to look dramatic by a 2 mm y-axis,
@@ -27,17 +29,20 @@ thing to look at; nothing here is "check it looks right".
 
 ## 3. The report compiles clean
 
-- [ ] `pdflatex` **twice**, then grep the log for `undefined`, `LaTeX Error`,
+- [ ] `pdflatex` **three times** (the contents lists need the extra pass), then grep the log for `undefined`, `LaTeX Error`,
       `Warning: Reference`. All must be empty.
-- [ ] **Abstract ends on page iii.** It has spilled onto page iv five times during
+- [ ] **Abstract ends on page iii.** It has spilled onto page iv seven times during
       editing. Check `p4` starts with `ACKNOWLEDGEMENT`.
-- [ ] Page count recorded: **87**.
+- [ ] **List of Figures and List of Tables are one page each**, and the contents
+      lists are inside the `spacing{1.0}` block. If either spills, the block was
+      dropped.
+- [ ] Page count recorded: **90**.
 - [ ] Table of contents regenerated after the last edit.
 
 ## 4. Citations
 
-- [ ] All 24 references cited at least once; no orphans.
-      `[n]` appearing in text for every n in 1..24.
+- [ ] All 28 references cited at least once; no orphans.
+      `[n]` appearing in text for every n in 1..28.
 - [ ] README citations match the thesis bibliography exactly. This was wrong
       before: the README had VideoPose3D under the wrong title and author,
       MotionBERT under the wrong year, and P-STMO under a wrong name.
@@ -66,13 +71,24 @@ the last round of edits:
 - [ ] The thorax/hip pinning artifact disclosed (§5.19) — our own figures overstate
       per-joint performance without it.
 - [ ] The retrieval result marked as superseded protocol, not a measurement.
+- [ ] **The template baseline loss is stated in all five places**: abstract,
+      contributions list, §5.10, Limitations, and the opening of the conclusion.
+      Kabsch alignment to one fixed skeleton beats the anatomical frame on all
+      180 pairs under both backbones and on all fifteen actions. This is the
+      single most damaging result in the report and the one most likely to be
+      softened by accident during editing.
 - [ ] §5.16's note that criterion (c) was tightened post hoc, and why it cannot
       flip the verdict.
 
 ## 7. Pre-registrations
 
-- [ ] Four `PREREGISTRATION.md` files under `thesis_artifacts/`: tta,
-      multilandmark, conditioning, radial.
+- [ ] **Nine** `PREREGISTRATION.md` files under `thesis_artifacts/`: tta,
+      multilandmark, conditioning, radial, noncon, template, template_ablation,
+      translation_ablation, template_action.
+- [ ] Five of the nine failed their own criteria and a sixth returned a
+      competing method as better. If the report ever says "two of four", it has
+      drifted — this count is outside the automated audit and has gone stale
+      three times.
 - [ ] `git log --follow` on each shows the pre-registration commit **precedes**
       the commit containing its result. This is the whole point; verify it.
 
@@ -105,5 +121,9 @@ the last round of edits:
       Aziz, Associate Professor), university logo present.
 - [ ] Supervisor emailed about the TRIAD and biomechanics positioning **before**
       he receives the PDF (`SUPERVISOR_EMAIL.md`).
-- [ ] University AI-use policy checked and any required disclosure included.
+- [ ] University AI-use policy checked and any required disclosure included;
+      `SIMILARITY_CHECK.md` §6 has a draft to use **only if policy requires it**.
+- [ ] Turnitin draft box used if the department has one, and the expected-match
+      list in `SIMILARITY_CHECK.md` §3 sent to the supervisor in advance —
+      especially any earlier proposal already sitting in the archive.
 - [ ] `DEFENSE_QA.md` read once end to end.

@@ -1,84 +1,101 @@
 # Draft email to supervisor — send before he reads the report
 
-Send this **before** the report, not with it. The two items below change how the
-work is positioned, and he should not meet them for the first time in the PDF.
+Send this **before** the report, not with it. Item 1 is a result that goes
+against the project, and he must not meet it for the first time in the PDF or at
+the defence.
 
 ---
 
-**Subject:** Thesis report — two positioning changes from the final literature review
+**Subject:** Thesis report — a result against our own method, and three positioning changes
 
 Dear Sir,
 
-The thesis report is attached. Before you read it I want to flag two changes I
-made during the final literature review, because both affect how the
-contribution is framed and I did not want them to come as a surprise.
+The thesis report is attached. Before you read it I want to flag four things,
+because one of them is a finding that works against the method and the others
+change how the contribution is framed. None of them should come as a surprise in
+the PDF.
 
-**1. Our frame construction is a known algorithm.** The Gram-Schmidt body frame
-we build from the torso and hip axes is the TRIAD algorithm, published by Black
-in 1964 for determining spacecraft attitude from two direction measurements. The
-accompanying rule — that the more accurately known direction should be the
-primary axis — is due to Shuster and Oh (1981). Our axis-length finding, that a
-frame should be built from the longest available segment, is that rule applied to
-anatomy.
+**1. A simpler baseline beats our method, and the report says so in the
+abstract.** I ran the comparison a reader would ask for and had not been run:
+aligning each predicted pose to a single fixed reference skeleton by the Kabsch
+algorithm. It is training-free, label-free, calibration-free and single-view, so
+it meets every requirement our framework claims as its profile. It beats our
+anatomical frame on **all 180 held-out pairs of Human3.6M, under both
+backbones**, and on **all fifteen actions**. The criterion and all three possible
+readings were written down and committed before the experiment ran, so this is
+the outcome the pre-registration committed me to reporting.
 
-**2. The error propagation is also established, in biomechanics.** Our relation
+I have not hidden it or softened it. It is in the abstract, the contributions
+list, Section 5.10, the Limitations section, and the opening of the conclusion.
+
+What I would say if asked to defend the work in spite of it: the baseline wins on
+the metric, but it **cannot run the experiment this thesis is about**. Kabsch
+alignment has no anatomical axis, so there is no axis to hold fixed and vary, and
+therefore no way to ask what governs whether a body frame is consistent across
+viewpoints. The contribution is that boundary, and the instrument that makes it
+askable — not the number. I would rather present it that way than argue the
+baseline away.
+
+**2. Our frame construction is a known algorithm.** The Gram-Schmidt body frame
+built from the torso and hip axes is the TRIAD algorithm, published by Black in
+1964 for spacecraft attitude determination. The accompanying rule — that the more
+accurately known direction should be primary — is Shuster and Oh (1981). Our
+axis-length finding is that rule applied to anatomy.
+
+**3. The error propagation is also established, in biomechanics.** The relation
 that a direction read from two joints a distance L apart is uncertain by about
 2σ/L restates results developed by Della Croce, Cappozzo and colleagues (1999,
-2005) for anatomical landmark misplacement in motion capture. An earlier draft
-presented it as our derivation. It is not, and the report now says so explicitly.
+2005) for anatomical landmark misplacement. An earlier draft presented it as our
+derivation. It is not, and the report now says so explicitly.
 
-I have rewritten the positioning accordingly. The thesis no longer claims to have
-invented the frame or discovered the principle. What it claims is:
+The thesis therefore no longer claims to have invented the frame or discovered
+the principle. It claims the **transfer** of that reasoning to joints inferred by
+a frozen network rather than markers placed by an examiner, and principally the
+**experimental boundary**: axis length governs the choice *between* frame
+constructions, and governs neither which frame to trust within a construction nor
+which joint will disagree, because articulation dominates there.
 
-- the **transfer** of that reasoning to joints inferred by a frozen network
-  rather than markers placed by an examiner, and
-- principally, the **experimental boundary** — three pre-registered tests
-  establishing that axis length governs the choice *between* frame
-  constructions, and governs neither which frame to trust within a construction
-  nor which joint will disagree. Two of the three tests failed, and the failures
-  are the result.
+**4. Two results corrected downward, and one headline changed.**
 
-I also withdrew a second claim. The report previously argued that a fitted
-constant agreeing to within one percent across two backbones showed the mechanism
-was physical. I bootstrapped it and the confidence interval turned out wider than
-the estimate, so the agreement carries no weight. That argument is withdrawn in
-the text rather than quietly removed.
+- The per-limb multi-scale extension previously reported 55.1 percent. Each limb
+  frame is built from exactly the three joints it is then scored on, which
+  removes the orientation being measured by construction rather than by the
+  method working. A per-segment Procrustes control confirms it. Demoted to an
+  exploratory measurement.
+- The report previously argued that a fitted constant agreeing to within one
+  percent across two backbones showed the mechanism was physical. The bootstrap
+  interval is wider than the estimate, so it carries no weight. Withdrawn in the
+  text rather than quietly removed.
+- The headline cross-view figure now **excludes the four joints the frame is
+  built from**, since the construction pins them and any seventeen-joint average
+  flatters us. It is 72.2 percent over 180 held-out pairs with 179 improving; the
+  seventeen-joint figure, 74.1 percent, is given alongside with the reason.
 
-**3. A result demoted.** The per-limb multi-scale extension previously reported a
-55.1 percent improvement. Checking it, I found that each limb frame is built from
-exactly the three joints it is then scored on, which removes the orientation
-being measured by construction rather than by the method working. A control
-against a per-segment Procrustes floor confirms it: those levels sit within 13 to
-23 percent of the best any rotation could do, where the global frame sits at 46
-percent above its floor. I have demoted that figure to an exploratory measurement
-and rewritten the surrounding claims. The main cross-view result, 74.1 percent
-over 180 held-out pairs, is unaffected — its frame uses four constructor joints
-out of seventeen scored, so thirteen are held out.
+I also found and fixed an error in two of my own figures while preparing the
+final version: they were plotting all 85 records in a results file rather than
+the 29 the section reports on, which made the plotted mean disagree with the
+figure quoted in the text. The text was correct throughout; the figures were not.
+Both are regenerated and the generator now asserts the record count.
 
-**On the title.** The report currently reads *"A Lightweight, Training-Free,
+**On the title.** The report reads *"A Lightweight, Training-Free,
 Reliability-Aware Geometric Canonicalization Framework for Cross-View
 Comparability of Frozen Monocular 3D Pose Predictions."* I would like your
-confirmation on it rather than assuming it stands, since I do not believe it has
-been formally approved.
+confirmation rather than assuming it stands, as I do not believe it was formally
+approved. It says *canonicalization framework* rather than pose estimation
+because the estimator is untouched, and *cross-view comparability* rather than
+view-invariant estimation because what improves is agreement between two
+camera-relative predictions, not their accuracy. If you would prefer something
+shorter, or one that foregrounds the boundary result, I am glad to change it.
 
-I think it is accurate as written, and deliberately so: it says *canonicalization
-framework* rather than pose estimation, because the estimator is untouched and
-only the coordinate frame changes; and *cross-view comparability* rather than
-view-invariant estimation, because what improves is agreement between two
-camera-relative predictions, not their accuracy. On "Reliability-Aware": the
-component is falsified as an accuracy predictor five independent ways, but a
-later experiment showed it does gate canonicalization quality on both backbones,
-which is the function its own specification names. So the word is defensible for
-that narrower claim and the report states which claim it is.
+The report is 90 pages. Nine experiments were pre-registered with their criteria
+committed to version history before each run; **five failed their own criteria
+and a sixth returned a competing method as the better one**. Every reported
+number is recomputed from stored result files by an automated audit of 248
+claims, alongside 76 unit tests, and both pass.
 
-If you would prefer something shorter, or one that foregrounds the boundary
-result, I am glad to change it — please let me know.
-
-The report is 87 pages. Every reported number is recomputed from stored result
-files by an automated audit (167 claims), and the pre-registrations for each
-experiment are in the version history with timestamps preceding the results.
-
-Thank you for your guidance throughout.
+Thank you for your guidance throughout — particularly the instruction to justify
+every claim against evidence, which is what produced the negative results above
+rather than a report that only reported what worked.
 
 Best regards,
 Mehedi Hasan Khan
@@ -98,3 +115,17 @@ Give this, in one breath:
 > attached to the torso are further from the root than the knees and yet agree
 > two and a half times better across views, which contradicts the rigid-body
 > prediction in the wrong direction for it to be a matter of degree.
+
+## If he asks "then why keep the method at all, if Kabsch wins?"
+
+> Because Kabsch cannot run the experiment. It has no anatomical axis, so there
+> is no variable to hold fixed and vary, and the question of what governs frame
+> consistency cannot be posed inside it. The anatomical frame is the instrument
+> that makes the boundary measurable. The report says plainly that as a way of
+> reducing cross-view distance, the simpler method is better on this data.
+
+## If he asks "why report something that damages your own result?"
+
+> Because the criterion was pre-registered and committed before the run. If I
+> only reported the pre-registrations that came out well, none of the others
+> would mean anything either.
