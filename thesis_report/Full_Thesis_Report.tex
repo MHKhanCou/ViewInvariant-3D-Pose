@@ -23,7 +23,10 @@
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{tocloft}
-\usepackage[hidelinks]{hyperref}
+% hypertexnames=false: the front matter uses roman numerals and the body arabic,
+% so both produce a page named "i" and hyperref warns about the duplicate
+% destination, which silently breaks bookmarks to those pages.
+\usepackage[hidelinks,hypertexnames=false]{hyperref}
 \usepackage[english]{babel}
 \usepackage{ragged2e}
 \usepackage{parskip}
@@ -336,7 +339,7 @@ Two observations from this literature bear directly on the present work. First, 
 
 \vspace{0.5cm}
 
-\noindent \textbf{Author:} Hsu and Jang (2024), and DDHPose (2024) \\
+\noindent \textbf{Author:} Hsu and Jang (2024) [7], and Cai et al., DDHPose (2024) [28] \\
 \textbf{Method:} Bone-length priors for 3D pose \\
 \textbf{Focus (Solved Issues):} Enforce anatomically consistent limb lengths \\
 \textbf{Methodology:} Recurrent bone-length prediction with post-hoc adjustment; disentangled bone length and direction within a diffusion process \\
@@ -383,7 +386,7 @@ The third is the boundary of Section \ref{sec:radial}, and here we claim the mea
 
 \section{Positioning of This Work}
 
-Table \ref{tab:requirements} summarizes what each approach requires at deployment. No prior method operates on a frozen estimator with no training, no labels, and no camera parameters simultaneously. That requirement profile, rather than any individual mechanism, is the position this project occupies. 3DPCNet addresses the same problem and reports a hand-built anatomical baseline of the same family performing considerably worse than its learned module. Closer still, Wei et al. [25] transform predicted poses into consistent views before refining them, and do so first at the global body level and then at the level of local body parts, which is the same two-level decomposition this report arrives at in Sections \ref{sec:frame} and \ref{sec:h36mms}, from the same anatomical landmarks. We note it explicitly because a reader who found it independently would reasonably ask why it was absent. What differs is not the geometry but everything around it: their transformation feeds a trained correction network and a trained discriminator, so it is unavailable to a practitioner who cannot train, and the consistent views are an intermediate step rather than a quantity they evaluate. Our contribution is not the construction but the requirement profile that keeps it usable on a frozen estimator, and the experimental boundary of Chapter 5. The construction is therefore treated as an instrument rather than as a result. What it makes possible is the experimental question of Section \ref{sec:objectives}, since a frame with no trained parameters and no calibration allows every variable except the frame's own construction to be held fixed, and Chapter 5 uses that to establish where the geometry inherited in Section \ref{sec:triad} applies and where it stops.
+Table \ref{tab:requirements} summarizes what each approach requires at deployment. No prior method operates on a frozen estimator with no training, no labels, and no camera parameters simultaneously. That requirement profile, rather than any individual mechanism, is the position this project occupies.
 
 \begin{table}[H]
 \centering
@@ -856,7 +859,7 @@ A second observation was not anticipated. The reliability score replicates where
 
 Two explanations are available for the failure, and they can be separated. The first is that the original correlation was spurious. The second is that Human3.6M presents little for the signal to read, because the backbone is accurate in-domain. We test the second explanation by comparing the coefficient of each video against the mean error of that video, a between-video comparison that avoids the range restriction which a within-video split on error would introduce. The relationship is weak at $+0.152$ over 228 videos. The hardest third of videos gives a mean coefficient of $+0.156$ at 45.5 mm, against $+0.136$ at 28.3 mm for the easiest third. Difficulty within Human3.6M therefore does not recover the signal.
 
-The two datasets nevertheless occupy different regimes, and the separation is large. The median similarity-aligned error is 202.1 mm on MPI-INF-3DHP against 32.6 mm on Human3.6M, and the median bone deviation is 0.082 against 0.034. We therefore read the signal as an indicator of gross skeletal deformation rather than of pose error in general. A backbone driven far outside its training distribution returns skeletons whose bone lengths visibly fluctuate, and the signal tracks that fluctuation. A backbone operating in-domain returns skeletons that are nearly rigid and still wrong in depth, and the signal has nothing left to measure.
+The two datasets nevertheless occupy different regimes, and the separation is large. The median similarity-aligned error is 202.1 mm on MPI-INF-3DHP against 32.6 mm on Human3.6M, and the median bone deviation is 0.082 against 0.033. We therefore read the signal as an indicator of gross skeletal deformation rather than of pose error in general. A backbone driven far outside its training distribution returns skeletons whose bone lengths visibly fluctuate, and the signal tracks that fluctuation. A backbone operating in-domain returns skeletons that are nearly rigid and still wrong in depth, and the signal has nothing left to measure.
 
 \begin{figure}[htbp]
 \centering
@@ -1123,7 +1126,7 @@ Two lateral estimates can be combined only because they point the same way. The 
 
 \begin{table}[htbp]
 \centering
-\caption[Global frame from redundant landmarks]{Global frame from redundant landmarks. Paired gain is against the two-vector baseline on identical frames.}
+\caption[Global frame from redundant landmarks]{Global frame from redundant landmarks. Paired gain is against the two-vector baseline on identical frames. The first two rows differ in their \emph{vertical} axis, not their lateral one, and the labels alone do not convey it: ``Hips (the current frame)'' is the shipped construction, whose vertical axis is the single root-to-thorax vector, while the remaining rows including ``Hips alone'' build the vertical axis as an inverse-variance weighted combination of the four links $(0,7)$, $(7,8)$, $(8,9)$ and $(0,8)$. Both use the same hip lateral axis. The 0.4 mm between them is therefore the effect of the multi-link vertical estimate, measured with the lateral axis held fixed, and it is the only place in this table where the vertical axis varies.}
 \label{tab:multilandmark}
 {\fontsize{10}{12}\selectfont
 \begin{tabular}{lrrrr}
@@ -1157,7 +1160,7 @@ We test this by comparing each level against a Procrustes oracle computed on the
 
 \begin{table}[htbp]
 \centering
-\caption[Headroom above the per-segment Procrustes floor]{Headroom above the per-segment Procrustes floor. A ratio near one means the frame has already removed everything a rotation could, so the measurement cannot demonstrate anything further.}
+\caption[Headroom above the per-segment Procrustes floor]{Headroom above the per-segment Procrustes floor. A ratio near one means the frame has already removed everything a rotation could, so the measurement cannot demonstrate anything further. The global frame appears here at 76.2 mm and elsewhere at 75.3 mm, and the difference is the averaging convention of Section \ref{sec:h36mcv} rather than a different quantity: 75.3 mm is the mean over the 180 camera pairs of each pair's own mean, while 76.2 mm pools all 42198 individual frame-pairs, which weights the longer sequences more heavily. Every figure in this table and in Sections \ref{sec:conditioning} and \ref{sec:radial} uses the pooled convention, because those analyses operate on individual frames rather than on pairs.}
 \label{tab:circularity}
 {\fontsize{10}{12}\selectfont
 \begin{tabular}{llrrrr}
@@ -1541,6 +1544,8 @@ Every table in this appendix is generated directly from the stored JSON artifact
 [26] J. J. Sun, J. Zhao, L.-C. Chen, F. Schroff, H. Adam, and T. Liu, ``View-Invariant Probabilistic Embedding for Human Pose,'' in \textit{Proceedings of the European Conference on Computer Vision (ECCV)}, 2020, pp. 53--70.
 
 [27] H.-S. Fang, Y. Xu, W. Wang, X. Liu, and S.-C. Zhu, ``Learning Pose Grammar to Encode Human Body Configuration for 3D Pose Estimation,'' in \textit{Proceedings of the AAAI Conference on Artificial Intelligence}, 2018.
+
+[28] Q. Cai, X. Hu, S. Hou, L. Yao, and Y. Huang, ``Disentangled Diffusion-Based 3D Human Pose Estimation with Hierarchical Spatial and Temporal Denoiser,'' in \textit{Proceedings of the AAAI Conference on Artificial Intelligence}, 2024.
 }
 
 \end{document}

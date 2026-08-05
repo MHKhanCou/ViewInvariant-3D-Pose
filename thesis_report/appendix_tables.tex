@@ -1,4 +1,4 @@
-\begin{center}
+
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{lrrrr}
 \caption{Cross-view canonicalization on Human3.6M, by action.}\label{tab:appcvaction}\\
@@ -30,11 +30,9 @@ Directions & 12 & 63.7 & +71.9 & 12/12 \\
 SittingDown & 12 & 274.1 & +36.1 & 11/12 \\
 \end{longtable}
 }
-\end{center}
 
 \vspace{0.6cm}
 
-\begin{center}
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{llrrrrrr}
 \caption{All 180 held-out Human3.6M camera pairs. Distances in millimetres.}\label{tab:apppairs}\\
@@ -231,12 +229,11 @@ S9 & WalkTogether & 02--04 & 171 & 137.6 & 51.0 & 38.3 & +62.9 \\
 S9 & WalkTogether & 03--04 & 171 & 315.4 & 57.8 & 45.2 & +81.7 \\
 \end{longtable}
 }
-\end{center}
+
 \noindent The single regressing pair is S9 SittingDown 01--03. Its raw distance of 218.4 mm is unusually small for that action, where the other pairs range above 500 mm, so little was available to gain. See Section \ref{sec:h36mcv}.
 
 \vspace{0.6cm}
 
-\begin{center}
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{lrrrr}
 \caption{Calibration-free fusion on Human3.6M by action, median over four views.}\label{tab:appfusion}\\
@@ -268,11 +265,9 @@ Greeting & 180 & 33.5 & 42.2 & -26.0 \\
 Discussion & 300 & 38.3 & 51.2 & -33.6 \\
 \end{longtable}
 }
-\end{center}
 
 \vspace{0.6cm}
 
-\begin{center}
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{lrr}
 \caption{Fusion strategies on Human3.6M, all four views, 2819 frames.}\label{tab:appfusionstrat}\\
@@ -300,12 +295,11 @@ Worst view & 50.8 & --- \\
 Oracle best view (requires ground truth) & 27.4 & --- \\
 \end{longtable}
 }
-\end{center}
+
 \noindent Every strategy above the line is training-free and label-free. The best of them uses no reliability score at all.
 
 \vspace{0.6cm}
 
-\begin{center}
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{lrrr}
 \caption{Multi-scale per-limb canonicalization on Human3.6M, by action. Improvement is measured against the global frame.}\label{tab:appms}\\
@@ -337,12 +331,11 @@ WalkTogether & 12 & +20.8 & 12/12 \\
 Walking & 12 & +17.8 & 12/12 \\
 \end{longtable}
 }
-\end{center}
+
 \noindent The gain is largest on SittingDown, the action on which the global frame performs worst, because a limb frame does not inherit the error in the torso and hip axes. See Section \ref{sec:h36mms}.
 
 \vspace{0.6cm}
 
-\begin{center}
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{lrr}
 \caption{The bone-length signal on both datasets. The claim is retracted.}\label{tab:appbone}\\
@@ -367,5 +360,5 @@ Median aligned error (mm) & 202.1 & 32.6 \\
 Median bone deviation & 0.082 & 0.033 \\
 \end{longtable}
 }
-\end{center}
+
 \noindent All five pass criteria are met on MPI-INF-3DHP and none on Human3.6M. See Section \ref{sec:h36m}.

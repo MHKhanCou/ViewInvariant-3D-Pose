@@ -459,6 +459,14 @@ def main():
         results.append(check("  %s per-pair is the conservative one (1=yes)" % label,
                              1.0, float(s["mean_improvement_pct"] < rm), src, tol=0))
 
+    # The median bone deviation is quoted in two places, Section 5.9 and the
+    # appendix, and they had drifted to 0.034 and 0.033. The artifact says
+    # 0.0335, so the appendix was right. Pinned here so it cannot drift again.
+    results.append(check("H36M median bone deviation", 0.0335,
+                         load("h36m_replication/h36m_replication.json")
+                         ["signal_magnitude"]["bone_deviation_median"],
+                         "h36m_replication/h36m_replication.json", tol=0.0005))
+
     # ---------- fusion heterogeneity: the aggregate hides a bimodal outcome --
     # The headline +8.4% is a ratio of aggregate means. The mean of per-frame
     # improvements is +4.7% with an interval spanning zero, and six of fifteen
