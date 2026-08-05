@@ -457,8 +457,31 @@ def fig_teaser(out="fig_teaser.png", preds=None, dpi=300):
             s.set_color("#cccccc")
             s.set_linewidth(0.9)
 
-    draw_pose(axes[0], A, color="#1f77b4", lw=2.6, plane="top")
-    draw_pose(axes[0], B, color="#d62728", lw=2.6, plane="top", alpha=0.9)
+    def facing(ax, pose, colour):
+        """Hip axis seen from above, as a bold arrow.
+
+        A skeleton drawn from above is an unreadable tangle at page size, and
+        the quantity the panel exists to show - how far the two views disagree
+        in azimuth - is carried entirely by this one direction. The skeleton is
+        kept faint behind it for context.
+        """
+        P = np.asarray(pose, float)
+        v = P[1] - P[4]
+        v = np.array([v[0], v[2]])
+        n = np.linalg.norm(v)
+        if n < 1e-9:
+            return
+        v = v / n * 260.0
+        c = P[:, [0, 2]].mean(axis=0)
+        ax.annotate("", xy=(c[0] + v[0], c[1] + v[1]),
+                    xytext=(c[0] - v[0], c[1] - v[1]),
+                    arrowprops=dict(arrowstyle="-|>", color=colour, lw=3.4,
+                                    mutation_scale=22))
+
+    draw_pose(axes[0], A, color="#1f77b4", lw=1.4, plane="top", alpha=0.30)
+    draw_pose(axes[0], B, color="#d62728", lw=1.4, plane="top", alpha=0.30)
+    facing(axes[0], A, "#1f77b4")
+    facing(axes[0], B, "#d62728")
     axes[0].set_title("RAW\ntwo cameras, one instant", fontsize=11.5, pad=10)
 
     # Centre panel: the construction itself, drawn on one pose from the front.
@@ -468,15 +491,17 @@ def fig_teaser(out="fig_teaser.png", preds=None, dpi=300):
     draw_pose(axes[1], A, color="#b8b8b8", lw=2.0, flip_y=True, plane="front")
     draw_frame_axes(axes[1], A, scale=330.0, flip_y=True)
     axes[1].set_xlim(A[0, 0] - 430, A[0, 0] + 430)
-    axes[1].text(A[0, 0] + 40, -A[0, 1] + 330, "torso\n(primary)", fontsize=9.5,
-                 color="#2ca02c", ha="left", va="center")
-    axes[1].text(A[0, 0] + 350, -A[0, 1] + 25, "hip\n(secondary)", fontsize=9.5,
-                 color="#ff7f0e", ha="center", va="bottom")
+    axes[1].text(A[0, 0] + 55, -A[0, 1] + 340, "torso\n(primary)", fontsize=14,
+                 color="#2ca02c", ha="left", va="center", weight="bold")
+    axes[1].text(A[0, 0] + 360, -A[0, 1] + 35, "hip\n(secondary)", fontsize=14,
+                 color="#ff7f0e", ha="center", va="bottom", weight="bold")
     axes[1].set_title("TRIAD BODY FRAME\nbuilt from the prediction itself",
                       fontsize=11.5, pad=10)
 
-    draw_pose(axes[2], cA, color="#1f77b4", lw=2.6, plane="top")
-    draw_pose(axes[2], cB, color="#d62728", lw=2.6, plane="top", alpha=0.9)
+    draw_pose(axes[2], cA, color="#1f77b4", lw=1.4, plane="top", alpha=0.30)
+    draw_pose(axes[2], cB, color="#d62728", lw=1.4, plane="top", alpha=0.30)
+    facing(axes[2], cA, "#1f77b4")
+    facing(axes[2], cB, "#d62728")
     axes[2].set_title("CANONICAL\nsame two cameras", fontsize=11.5, pad=10)
 
     for ax in (axes[0], axes[2]):

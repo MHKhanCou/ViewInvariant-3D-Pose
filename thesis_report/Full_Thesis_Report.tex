@@ -48,6 +48,13 @@
 \pagenumbering{roman}
 
 
+% Several paragraphs carry unbreakable material - bracketed confidence
+% intervals such as $[+23.6, +27.6]$ - which TeX cannot hyphenate, so it
+% overflows the margin rather than stretching. This lets it stretch interword
+% space as a last resort instead, which removes the overfull boxes without
+% altering a word of text.
+\emergencystretch=3em
+
 % Default float limits give a five-row table a page to itself. These
 % let floats share a page with text; they change layout only.
 \renewcommand{\topfraction}{0.85}
@@ -729,7 +736,10 @@ This chapter reports both confirmations and failures, and the failures are numer
 \caption{Every claim tested in this chapter, and its verdict on each dataset.}
 \label{tab:summary}
 {\fontsize{10}{12}\selectfont
-\begin{tabular}{p{4.6cm}p{3.1cm}p{3.1cm}l}
+% Ragged right in the fixed-width columns: justifying prose inside a 3.1cm
+% column produces badly loose lines, which is where every underfull box in this
+% document came from.
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{3.1cm}l}
 \hline
 \textbf{Claim} & \textbf{MPI-INF-3DHP} & \textbf{Human3.6M} & \textbf{Verdict} \\
 \hline
