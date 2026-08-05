@@ -234,7 +234,7 @@ The geometry this project builds on is not ours. The frame construction is the T
 
 \item \textbf{[Engineering]} \textbf{Calibration-free multi-view fusion in the shared frame}, with the finding that the estimator must be robust when views are few, since at four views a median reliably improves on an arbitrary single view while an unweighted mean does not.
 
-\item \textbf{[Systems]} \textbf{A framework and an evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added to a frozen estimator, 402 floating-point operations per frame, no labels and no camera parameters at any stage; 167 numerical claims recomputed from stored artifacts by an automated audit; 72 tests; and four pre-registrations committed to version history before the experiments they govern, two of which the results then contradicted.
+\item \textbf{[Systems]} \textbf{A framework and an evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added to a frozen estimator, 402 floating-point operations per frame, no labels and no camera parameters at any stage; 180 numerical claims checked against stored artifacts by an automated audit; 72 tests; and four pre-registrations committed to version history before the experiments they govern, two of which the results then contradicted.
 \end{itemize}
 
 \section{Report Organization}
@@ -363,7 +363,7 @@ The third is the boundary of Section \ref{sec:radial}, and here we claim the mea
 
 \section{Positioning of This Work}
 
-Table \ref{tab:requirements} summarizes what each approach requires at deployment. No prior method operates on a frozen estimator with no training, no labels, and no camera parameters simultaneously. That requirement profile, rather than any individual mechanism, is the position this project occupies. In particular, geometric canonicalization is not claimed here as novel: 3DPCNet addresses the same problem and reports a hand-built anatomical baseline of the same family performing considerably worse than its learned module. The construction is therefore treated as a substrate that enables the reliability and fusion contributions.
+Table \ref{tab:requirements} summarizes what each approach requires at deployment. No prior method operates on a frozen estimator with no training, no labels, and no camera parameters simultaneously. That requirement profile, rather than any individual mechanism, is the position this project occupies. In particular, geometric canonicalization is not claimed here as novel: 3DPCNet addresses the same problem and reports a hand-built anatomical baseline of the same family performing considerably worse than its learned module. The construction is therefore treated as an instrument rather than as a result. What it makes possible is the experimental question of Section \ref{sec:objectives}, since a frame with no trained parameters and no calibration allows every variable except the frame's own construction to be held fixed, and Chapter 5 uses that to establish where the geometry inherited in Section \ref{sec:triad} applies and where it stops.
 
 \begin{table}[h]
 \centering
@@ -664,7 +664,7 @@ Figure \ref{fig:qual} shows the system on frames of that demonstration footage, 
 
 \section{Reproducibility Infrastructure}
 
-The reporting practice adopted here is a response to the fact that several early claims in this project did not survive scrutiny. Three mechanisms are used. The automated audit re-derives sixty-five headline claims from stored artifacts and fails on any drift, so a number cannot silently rot after a re-run. A unit test suite of ninety tests covers the geometric core, the corruption operators, the fusion arithmetic and the aggregation logic of the Human3.6M experiments, using stub models so that it runs without weights or data. Finally, the pass criterion for the test-time augmentation experiment was written down and committed to version control before that experiment was run, so its failure cannot be attributed to a criterion chosen afterwards.
+The reporting practice adopted here is a response to the fact that several early claims in this project did not survive scrutiny. Three mechanisms are used. The automated audit re-derives 180 headline claims from stored artifacts and fails on any drift, so a number cannot silently rot after a re-run; it is an artifact-consistency check rather than a re-execution of the experiments, and it verifies that what the report says matches what the runs produced, not that the runs were repeated. A unit test suite of 72 tests covers the geometric core, the corruption operators, the fusion arithmetic and the aggregation logic of the Human3.6M experiments, using stub models so that it runs without weights or data. Finally, the pass criterion for each of four experiments --- test-time augmentation, the multi-landmark frame, conditioning-based abstention and the joint-level radial test --- was written down and committed to version control before that experiment was run, so a failure cannot be attributed to a criterion chosen afterwards. Two of the four did fail.
 
 The appendix tables are generated from the artifacts by a script rather than typed, which closes the last gap between what the artifacts contain and what the report claims.
 
@@ -693,8 +693,8 @@ Canonicalization improves cross-view comparability
 \hline
 Multi-scale per-limb frames improve on the global frame
  & 29 of 29 pairs
- & $+25.6\%$, and $+55.1\%$ once every frame uses its own long axis
- & Holds \\
+ & $+25.6\%$; the $+55.1\%$ long-axis variant is largely mechanical (\S\ref{sec:circularity})
+ & Demoted \\
 \hline
 The shared frame enables calibration-free fusion
  & Improves in all four conditions
@@ -1337,7 +1337,7 @@ We do not propose a new architecture, a new loss, or a new training procedure, a
 
 \section{Conclusion}
 
-In this project we developed a framework that makes the predictions of a frozen monocular 3D pose estimator comparable across viewpoints without training, labels, or camera calibration. Canonicalization reduces cross-view joint distance by 32.4 percent across twenty-seven held-out camera pairs of MPI-INF-3DHP and by 74.1 percent, with a cluster bootstrap interval of $[+69.8, +77.2]$ percent, across 180 held-out pairs of Human3.6M, where it improves 179 of 180 pairs and closes 90.5 percent of the gap to a per-frame Procrustes oracle. The multi-scale extension improves every pair tested on the first dataset and 179 of 180 on the second, and reporting its levels separately showed that the length of the axis a frame is built from governs how consistent that frame is across views. Rebuilding each segment frame from its own long axis raises the gain from 25.6 to 55.1 percent and improves all 180 pairs. The shared frame enables calibration-free multi-view fusion, which on Human3.6M requires a median rather than a mean, because at four views only the median improves reliably on an arbitrary single camera.
+In this project we developed a framework that makes the predictions of a frozen monocular 3D pose estimator comparable across viewpoints without training, labels, or camera calibration. Canonicalization reduces cross-view joint distance by 32.4 percent across twenty-seven held-out camera pairs of MPI-INF-3DHP and by 74.1 percent, with a cluster bootstrap interval of $[+69.8, +77.2]$ percent, across 180 held-out pairs of Human3.6M, where it improves 179 of 180 pairs and closes 90.5 percent of the gap to a per-frame Procrustes oracle. The multi-scale extension improves every pair tested on the first dataset and 179 of 180 on the second. Rebuilding each segment frame from its own long axis raises the reported gain from 25.6 to 55.1 percent, but Section \ref{sec:circularity} shows that variant builds each limb frame from exactly the joints it is scored on, leaving those levels within 13 to 23 percent of their own Procrustes floor, so we report it as an exploratory measurement rather than as evidence and it is not counted among the results above. The shared frame enables calibration-free multi-view fusion, which on Human3.6M requires a median rather than a mean, because at four views only the median improves reliably on an arbitrary single camera.
 
 It is worth stating plainly what kind of contribution this is. The work is a deployment-oriented geometric framework, not a new learning algorithm. Body-frame normalization is not itself novel, and Section 2.3 says so: 3DPCNet addresses the same problem and reports a hand-built baseline of this kind performing worse than its learned alternative. What we claim is the combination and its evidence. The framework adds zero trained parameters, consumes no labels and requires no calibration, so applying it to a new estimator, camera or domain costs nothing but the arithmetic; and it is evaluated over 209 camera pairs across two datasets, the second of which took no part in its design. Whether that trade is worth making depends on whether a practitioner can afford to train, which is a deployment question rather than an accuracy one.
 
