@@ -39,6 +39,12 @@
 {\normalfont\fontsize{16}{19}\bfseries\centering}
 {\chaptertitlename\ \thechapter}{20pt}{\fontsize{16}{19}\bfseries\uppercase}
 
+% titlesec's default leaves 50pt above the chapter number on top of the 1in
+% margin, so every chapter opened 80pt down the page. Two chapters ended with
+% two and five orphaned lines on a page of their own; reclaiming this much per
+% chapter absorbs them without touching a word.
+\titlespacing*{\chapter}{0pt}{10pt}{25pt}
+
 \titleformat{\section}
 {\normalfont\fontsize{14}{17}\bfseries}{\thesection}{1em}{}
 
@@ -58,9 +64,21 @@
 % Default float limits give a five-row table a page to itself. These
 % let floats share a page with text; they change layout only.
 \renewcommand{\topfraction}{0.85}
-\renewcommand{\bottomfraction}{0.70}
+\renewcommand{\bottomfraction}{0.75}
 \renewcommand{\textfraction}{0.12}
-\renewcommand{\floatpagefraction}{0.75}
+% 0.90 rather than 0.75: a float page must be nine tenths full to be allowed,
+% so a figure that cannot fill one goes back onto a text page instead of
+% stranding four orphaned lines beside itself.
+\renewcommand{\floatpagefraction}{0.90}
+
+% The front-matter lists spilled onto second pages carrying two entries and one
+% entry. Two separate glues were responsible. \cftbefore*skip is tocloft's own
+% inter-entry skip; \cftparskip is what tocloft sets \parskip to inside a list,
+% and left unset it inherits the parskip package's paragraph gap, which is the
+% larger of the two. Setting only the first has no visible effect.
+\setlength{\cftbeforefigskip}{0pt}
+\setlength{\cftbeforetabskip}{0pt}
+\setlength{\cftparskip}{0pt}
 \setcounter{topnumber}{3}
 \setcounter{bottomnumber}{2}
 \setcounter{totalnumber}{5}
@@ -183,6 +201,12 @@ Monocular 3D pose estimators express skeletons in the observing camera's frame, 
 I would like to express my deepest gratitude to my project supervisor, \textbf{Dr. Mahmudul Hasan}, for his invaluable guidance, continuous support, and patience throughout this project. His critical feedback shaped this work substantially: an early evaluation was found to rest on an invalid protocol, and the requirement to justify every claim against evidence led directly to the corrected methodology and the audited reporting practice adopted here. I am also thankful to the Department of Computer Science and Engineering, Comilla University, for providing the necessary resources and infrastructure. My sincere thanks to the examination committee for their valuable suggestions and feedback. Special thanks to my family and friends for their constant support and motivation during this project work.
 }
 
+% The front-matter lists are set single-spaced. At \onehalfspacing each entry
+% occupies 23.9pt against 558pt of usable column, so 24 figure entries and 22
+% table entries each spilled a second page carrying two entries and one entry.
+% The glue between entries was already zero -- it was the leading, not the
+% spacing, and single-spaced contents lists are the usual convention anyway.
+\begin{spacing}{1.0}
 \newpage
 \tableofcontents
 
@@ -191,6 +215,7 @@ I would like to express my deepest gratitude to my project supervisor, \textbf{D
 
 \newpage
 \listoftables
+\end{spacing}
 
 \newpage
 \pagenumbering{arabic}
@@ -261,7 +286,7 @@ The geometry this project builds on is not ours. The frame construction is the T
 
 \section{Report Organization}
 
-Chapter 2 reviews related work and positions this project against it. Chapter 3 describes the methodology. Chapter 4 describes the two datasets, the joint conventions that connect them, and the implemented system. Chapter 5 presents the experimental protocol and results, including the negative results and one retraction. Chapter 6 concludes and identifies future work. Appendix A contains the complete result tables, generated directly from the stored artifacts.
+\looseness=-1 Chapter 2 reviews related work and positions this project against it. Chapter 3 describes the methodology. Chapter 4 describes the two datasets, the joint conventions that connect them, and the implemented system. Chapter 5 presents the experimental protocol and results, including the negative results and one retraction. Chapter 6 concludes and identifies future work. Appendix A contains the complete result tables, generated directly from the stored artifacts.
 
 % ========================== CHAPTER 2 ================================
 \chapter{LITERATURE REVIEW}
@@ -286,9 +311,13 @@ Two observations from this literature bear directly on the present work. First, 
 
 \section{Canonicalization and View-Invariant Representations}
 
+% The eight-entry comparison list is set tighter than body prose: at
+% \onehalfspacing with 0.5cm between entries it ran to two pages of
+% mostly leading. Content is untouched.
+\begin{spacing}{1.0}
 \noindent \textbf{Comparison of Proposed System vs Existing Systems}
 
-\vspace{0.5cm}
+\vspace{0.18cm}
 
 \noindent \textbf{Author:} Ekanayake et al. (2025) \\
 \textbf{Method:} 3DPCNet, estimator-agnostic canonicalization of 3D pose \\
@@ -296,7 +325,7 @@ Two observations from this literature bear directly on the present work. First, 
 \textbf{Methodology:} Graph convolution and transformer hybrid encoder, self-supervised on synthetically rotated poses \\
 \textbf{Gap/Limitations:} Requires training; provides no reliability estimate and no multi-view capability
 
-\vspace{0.5cm}
+\vspace{0.18cm}
 
 \noindent \textbf{Author:} Wei, Lan, Zeng and Chen (2019) \\
 \textbf{Method:} View-invariant hierarchical correction (VI-HC) \\
@@ -304,7 +333,7 @@ Two observations from this literature bear directly on the present work. First, 
 \textbf{Methodology:} A learned refinement network operating under the transformed views, with an adversarial discriminator enforcing plausible body configurations \\
 \textbf{Gap/Limitations:} The transformation exists to serve a trained refinement network and a trained discriminator, so nothing in the pipeline is available to a practitioner who cannot train; the consistent views are a means to refinement rather than an output to be evaluated
 
-\vspace{0.5cm}
+\vspace{0.18cm}
 
 \noindent \textbf{Author:} Liu et al. (2026) \\
 \textbf{Method:} MoViD, motion-view disentanglement \\
@@ -312,7 +341,7 @@ Two observations from this literature bear directly on the present work. First, 
 \textbf{Methodology:} Gram-Schmidt removal of learned view-basis directions, trained end to end \\
 \textbf{Gap/Limitations:} Requires ground-truth SMPL supervision and large-scale multi-dataset training
 
-\vspace{0.5cm}
+\vspace{0.18cm}
 
 \noindent \textbf{Author:} Levy and Shrivastava (2024) \\
 \textbf{Method:} V-VIPE, variational view-invariant pose embedding \\
@@ -320,7 +349,7 @@ Two observations from this literature bear directly on the present work. First, 
 \textbf{Methodology:} Variational autoencoder trained with 3D ground truth; hips and spine aligned analytically by the Kabsch algorithm as preprocessing \\
 \textbf{Gap/Limitations:} Requires 3D ground-truth supervision; the anatomical alignment is treated as preprocessing rather than as a contribution
 
-\vspace{0.5cm}
+\vspace{0.18cm}
 
 \noindent \textbf{Author:} Li et al. (2024) \\
 \textbf{Method:} CMANet, a cascaded multi-view aggregating network \\
@@ -328,7 +357,7 @@ Two observations from this literature bear directly on the present work. First, 
 \textbf{Methodology:} Fully self-supervised two-stage training, supervised by confident outputs of an existing 2D detector \\
 \textbf{Gap/Limitations:} Requires training, and requires multi-view input at inference rather than only during training
 
-\vspace{0.5cm}
+\vspace{0.18cm}
 
 \noindent \textbf{Author:} Yang and Pavone (2023) \\
 \textbf{Method:} Conformal keypoint detection \\
@@ -336,7 +365,7 @@ Two observations from this literature bear directly on the present work. First, 
 \textbf{Methodology:} Inductive conformal prediction over detector heatmaps \\
 \textbf{Gap/Limitations:} Requires a held-out labeled calibration set and a user-specified miscoverage level
 
-\vspace{0.5cm}
+\vspace{0.18cm}
 
 \noindent \textbf{Author:} Khanal and Zhou (2026) \\
 \textbf{Method:} Analysis of learned uncertainty under severe domain shift, in skeleton action recognition \\
@@ -344,13 +373,14 @@ Two observations from this literature bear directly on the present work. First, 
 \textbf{Methodology:} Empirical evaluation; energy-based scoring plus a lightweight gating mechanism \\
 \textbf{Gap/Limitations:} Reports that learned detectors fail on precisely the shifts they were not trained for, motivating signals with no training distribution
 
-\vspace{0.5cm}
+\vspace{0.18cm}
 
 \noindent \textbf{Author:} Hsu and Jang (2024) [7], and Cai et al., DDHPose (2024) [28] \\
 \textbf{Method:} Bone-length priors for 3D pose \\
 \textbf{Focus (Solved Issues):} Enforce anatomically consistent limb lengths \\
 \textbf{Methodology:} Recurrent bone-length prediction with post-hoc adjustment; disentangled bone length and direction within a diffusion process \\
 \textbf{Gap/Limitations:} Bone length is embedded in a learned objective rather than measured analytically at test time
+\end{spacing}
 
 \section{Quality and Uncertainty Estimation for Pose}
 
@@ -629,7 +659,7 @@ The per-frame Procrustes oracle aligns one prediction onto the other with the op
 
 Frames within a camera stream are not independent, since neighbouring windows overlap and neighbouring frames of a fifty hertz recording are near-duplicates. Treating them as independent would produce confidence intervals that are far too narrow. Where a quantity is reported with an interval, the interval comes from a cluster bootstrap of ten thousand draws that resamples whole camera streams on MPI-INF-3DHP and whole subject and action groups on Human3.6M, so the unit of resampling matches the unit of dependence. On Human3.6M this means thirty clusters rather than 180 camera pairs or 52900 frames, which is the honest count of how many independent observations the dataset actually supplies.
 
-Reporting intervals changed two conclusions and we flag both rather than presenting only the outcome. The cross-view and multi-scale improvements are comfortably bounded away from zero. The fusion result is not uniformly so: the median's interval excludes zero while the unweighted mean's does not, which means the mean's apparent harm is a point estimate rather than a demonstrated effect. Section \ref{sec:h36mfuse} states the weaker claim that the interval supports. On Human3.6M we additionally subsample frames to five hertz before computing correlations, so that adjacent samples are not near-copies of one another. Reference skeletons are still estimated from every frame, since that estimate consumes no degrees of freedom from the comparison.
+\looseness=-1 Reporting intervals changed two conclusions and we flag both rather than presenting only the outcome. The cross-view and multi-scale improvements are comfortably bounded away from zero. The fusion result is not uniformly so: the median's interval excludes zero while the unweighted mean's does not, which means the mean's apparent harm is a point estimate rather than a demonstrated effect. Section \ref{sec:h36mfuse} states the weaker claim that the interval supports. On Human3.6M we additionally subsample frames to five hertz before computing correlations, so that adjacent samples are not near-copies of one another. Reference skeletons are still estimated from every frame, since that estimate consumes no degrees of freedom from the comparison.
 
 % ========================== CHAPTER 4 ================================
 \chapter{DATASETS AND SYSTEM IMPLEMENTATION}
@@ -735,11 +765,13 @@ This chapter reports both confirmations and failures, and the failures are numer
 \centering
 \caption{Every claim tested in this chapter, and its verdict on each dataset.}
 \label{tab:summary}
-{\fontsize{10}{12}\selectfont
-% Ragged right in the fixed-width columns: justifying prose inside a 3.1cm
+{\fontsize{9}{11}\selectfont
+\setlength{\tabcolsep}{4pt}
+% Ragged right in the fixed-width columns: justifying prose inside a narrow
 % column produces badly loose lines, which is where every underfull box in this
-% document came from.
-\begin{tabular}{>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{3.1cm}l}
+% document came from. Interior rules are omitted deliberately: with seven of
+% them the table ran two rows taller for no gain in legibility.
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{3.4cm}>{\raggedright\arraybackslash}p{3.4cm}>{\raggedright\arraybackslash}p{2.1cm}}
 \hline
 \textbf{Claim} & \textbf{MPI-INF-3DHP} & \textbf{Human3.6M} & \textbf{Verdict} \\
 \hline
@@ -747,27 +779,22 @@ Canonicalization improves cross-view comparability
  & $+32.4\%$, 27 held-out pairs
  & $+72.2\%$ off the frame's own joints ($+74.1\%$ over all 17), 180 pairs, 179 improve
  & Holds \\
-\hline
 Multi-scale per-limb frames improve on the global frame
  & 29 of 29 pairs
  & $+25.6\%$; the $+55.1\%$ long-axis variant is largely mechanical (\S\ref{sec:circularity})
  & Demoted \\
-\hline
 The shared frame enables calibration-free fusion
  & Improves in all four conditions
  & Median $+8.4\%$ pooled, but $+4.7\%$ per frame with an interval spanning zero, and 6 of 15 actions worsen (\S\ref{sec:fusionaction})
  & Holds, heavily qualified \\
-\hline
 The reliability score predicts accuracy
  & Fails on five independent tests
  & Fails again; weighting by it is indistinguishable from using one camera
  & Withdrawn \\
-\hline
 Bone-length inconsistency predicts error
  & $\rho = +0.492$
  & $\rho = +0.098$, all five criteria fail
  & Withdrawn \\
-\hline
 Canonicalization aids cross-view retrieval
  & Recall falls
  & Not tested
@@ -808,19 +835,17 @@ Table \ref{tab:crossview} summarizes the result and Figure \ref{fig:pairs} shows
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.60\textwidth]{images/fig_29pairs.png}
+\includegraphics[width=0.95\textwidth]{images/fig_29pairs.png}
 \caption{Improvement across all twenty-nine camera pairs}
 \label{fig:pairs}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.60\textwidth]{images/fig_oracle.png}
+\includegraphics[width=0.95\textwidth]{images/fig_oracle.png}
 \caption{Raw, canonical and Procrustes oracle distances per pair}
 \label{fig:oracle}
 \end{figure}
-
-\newpage
 
 \section{Ground-Truth Anchoring}
 
@@ -843,12 +868,10 @@ Per-limb frames improve every one of the twenty-nine pairs, by 37.1 percent on t
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.58\textwidth]{images/fig_multiscale.png}
+\includegraphics[width=0.95\textwidth]{images/fig_multiscale.png}
 \caption{Additional improvement of multi-scale over global canonicalization}
 \label{fig:multiscale}
 \end{figure}
-
-\newpage
 
 \section{Multi-View Fusion and a Negative Result on Selection}
 

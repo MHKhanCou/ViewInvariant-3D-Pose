@@ -45,6 +45,28 @@ def _load(rel):
         return json.load(f)
 
 
+def _static29():
+    """The 29 camera pairs these figures are captioned for.
+
+    results_multicam.json holds 85 records across two conditions: the 29
+    static pairs the cross-view section reports on, and 56 dynamic-window
+    records used by the fusion and selection experiments. Plotting all 85
+    against a per-pair label silently merges duplicates -- matplotlib treats
+    the label as a category, so the dynamic record overwrites the static bar
+    while both still draw a value annotation. That is what produced the
+    phantom diagonal of labels disagreeing with the bars.
+
+    Filtering to the static condition yields 29 records with 29 distinct
+    labels, 27 held-out S1 pairs averaging +32.4%, one development pair and
+    one held-out S2 pair -- exactly the set Section 5.3 describes.
+    """
+    rs = [r for r in _load("cross_view_eval/results_multicam.json")
+          if r["condition"] == "static"]
+    labels = {"%s cam%s-%s" % (r["subject"], r["cam_a"], r["cam_b"]) for r in rs}
+    assert len(rs) == 29 and len(labels) == 29, (len(rs), len(labels))
+    return rs
+
+
 def _save(fig, name, source):
     fig.text(0.99, 0.01, f"source: {source}", ha="right", va="bottom",
              fontsize=7, color=INK2)
@@ -56,14 +78,14 @@ def _save(fig, name, source):
 
 def fig_pairs():
     """29-pair improvement, sorted; dev pair and held-out subject highlighted."""
-    rs = _load("cross_view_eval/results_multicam.json")
+    rs = _static29()
     rows = sorted(rs, key=lambda r: r["improvement_pct"])
     labels = [f"{r['subject']} cam{r['cam_a']}-{r['cam_b']}" for r in rows]
     vals = [r["improvement_pct"] for r in rows]
     colors = [ORANGE if r["is_dev_pair"]
               else AQUA if r["subject"] == "S2" else BLUE for r in rows]
 
-    fig, ax = plt.subplots(figsize=(7, 8))
+    fig, ax = plt.subplots(figsize=(11, 6.4))
     bars = ax.barh(labels, vals, color=colors, height=0.62)
     ax.axvline(0, color=INK2, linewidth=0.8)
     held = [r["improvement_pct"] for r in rs
@@ -89,15 +111,14 @@ def fig_pairs():
 
 def fig_oracle():
     """Dumbbell: raw / canonical / Procrustes oracle per pair, sorted by raw."""
-    rs = sorted(_load("cross_view_eval/results_multicam.json"),
-                key=lambda r: r["raw_cross_view_distance"])
+    rs = sorted(_static29(), key=lambda r: r["raw_cross_view_distance"])
     labels = [f"{r['subject']} cam{r['cam_a']}-{r['cam_b']}" for r in rs]
     y = np.arange(len(rs))
     raw = [r["raw_cross_view_distance"] for r in rs]
     can = [r["canonical_cross_view_distance"] for r in rs]
     orc = [r["oracle_cross_view_distance"] for r in rs]
 
-    fig, ax = plt.subplots(figsize=(7, 8))
+    fig, ax = plt.subplots(figsize=(11, 6.4))
     for i in range(len(rs)):
         ax.plot([orc[i], raw[i]], [y[i], y[i]], color=GRID,
                 linewidth=1.4, zorder=1)
@@ -187,7 +208,7 @@ def fig_multiscale():
     colors = [ORANGE if r["is_dev_pair"]
               else AQUA if r["pair"].startswith("S2") else BLUE for r in rows]
 
-    fig, ax = plt.subplots(figsize=(7, 8))
+    fig, ax = plt.subplots(figsize=(11, 6.4))
     bars = ax.barh(labels, vals, color=colors, height=0.62)
     for bar, v in zip(bars, vals):
         ax.text(v + 0.5, bar.get_y() + bar.get_height() / 2, f"+{v:.0f}%",
