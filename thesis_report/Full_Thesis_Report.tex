@@ -16,6 +16,7 @@
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{booktabs}
+\usepackage{float}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -42,6 +43,17 @@
 {\normalfont\fontsize{12}{15}\bfseries}{\thesubsection}{1em}{}
 
 \pagenumbering{roman}
+
+
+% Default float limits give a five-row table a page to itself. These
+% let floats share a page with text; they change layout only.
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.70}
+\renewcommand{\textfraction}{0.12}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
 
 \begin{document}
 
@@ -371,9 +383,9 @@ The third is the boundary of Section \ref{sec:radial}, and here we claim the mea
 
 \section{Positioning of This Work}
 
-Table \ref{tab:requirements} summarizes what each approach requires at deployment. No prior method operates on a frozen estimator with no training, no labels, and no camera parameters simultaneously. That requirement profile, rather than any individual mechanism, is the position this project occupies. In particular, geometric canonicalization is not claimed here as novel, and the specific construction is more thoroughly trodden than a single comparison would suggest. 3DPCNet addresses the same problem and reports a hand-built anatomical baseline of the same family performing considerably worse than its learned module. Closer still, Wei et al. [25] transform predicted poses into consistent views before refining them, and do so first at the global body level and then at the level of local body parts, which is the same two-level decomposition this report arrives at in Sections \ref{sec:frame} and \ref{sec:h36mms}, from the same anatomical landmarks. We note it explicitly because a reader who found it independently would reasonably ask why it was absent. What differs is not the geometry but everything around it: their transformation feeds a trained correction network and a trained discriminator, so it is unavailable to a practitioner who cannot train, and the consistent views are an intermediate step rather than a quantity they evaluate. Our contribution is not the construction but the requirement profile that keeps it usable on a frozen estimator, and the experimental boundary of Chapter 5. The construction is therefore treated as an instrument rather than as a result. What it makes possible is the experimental question of Section \ref{sec:objectives}, since a frame with no trained parameters and no calibration allows every variable except the frame's own construction to be held fixed, and Chapter 5 uses that to establish where the geometry inherited in Section \ref{sec:triad} applies and where it stops.
+Table \ref{tab:requirements} summarizes what each approach requires at deployment. No prior method operates on a frozen estimator with no training, no labels, and no camera parameters simultaneously. That requirement profile, rather than any individual mechanism, is the position this project occupies. 3DPCNet addresses the same problem and reports a hand-built anatomical baseline of the same family performing considerably worse than its learned module. Closer still, Wei et al. [25] transform predicted poses into consistent views before refining them, and do so first at the global body level and then at the level of local body parts, which is the same two-level decomposition this report arrives at in Sections \ref{sec:frame} and \ref{sec:h36mms}, from the same anatomical landmarks. We note it explicitly because a reader who found it independently would reasonably ask why it was absent. What differs is not the geometry but everything around it: their transformation feeds a trained correction network and a trained discriminator, so it is unavailable to a practitioner who cannot train, and the consistent views are an intermediate step rather than a quantity they evaluate. Our contribution is not the construction but the requirement profile that keeps it usable on a frozen estimator, and the experimental boundary of Chapter 5. The construction is therefore treated as an instrument rather than as a result. What it makes possible is the experimental question of Section \ref{sec:objectives}, since a frame with no trained parameters and no calibration allows every variable except the frame's own construction to be held fixed, and Chapter 5 uses that to establish where the geometry inherited in Section \ref{sec:triad} applies and where it stops.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Requirements of related approaches at deployment time}
 \label{tab:requirements}
@@ -395,6 +407,10 @@ Conformal [8] & None & Labeled calibration set & No & No \\
 \hline
 \end{tabular}
 \end{table}
+
+Two entries in that table deserve comment, because the profile is what the contribution rests on rather than any row of it. Geometric canonicalization is not claimed here as novel, and the specific construction is more thoroughly trodden than a single comparison would suggest. 3DPCNet addresses the same problem and reports a hand-built anatomical baseline of the same family performing considerably worse than its learned module. Closer still, Wei et al. [25] transform predicted poses into consistent views before refining them, and do so first at the global body level and then at the level of local body parts, which is the same two-level decomposition this report arrives at in Sections \ref{sec:frame} and \ref{sec:h36mms}, from the same anatomical landmarks. We note it explicitly because a reader who found it independently would reasonably ask why it was absent. What differs is not the geometry but everything around it: their transformation feeds a trained correction network and a trained discriminator, so it is unavailable to a practitioner who cannot train, and the consistent views are an intermediate step rather than a quantity they evaluate.
+
+Our contribution is therefore not the construction but the requirement profile that keeps it usable on a frozen estimator, and the experimental boundary of Chapter 5. The construction is treated as an instrument rather than as a result. What it makes possible is the experimental question of Section \ref{sec:objectives}, since a frame with no trained parameters and no calibration allows every variable except the frame's own construction to be held fixed, and Chapter 5 uses that to establish where the geometry inherited in Section \ref{sec:triad} applies and where it stops.
 
 % ========================== CHAPTER 3 ================================
 \chapter{METHODOLOGY}
@@ -906,7 +922,7 @@ Figure \ref{fig:h36mexplain} shows what the aggregate hides. Four cameras observ
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/fig_h36m_distances.png}
-\caption[Cross-view distance on Human3.6M. Left: means over all 180 held-out pairs]{Cross-view distance on Human3.6M. Left: means over all 180 held-out pairs. Right: every pair individually, with the diagonal marking no change. Canonical distance collapses to a narrow band irrespective of how far apart the two raw predictions were, except on SittingDown.}
+\caption[Cross-view distance on Human3.6M]{Cross-view distance on Human3.6M. Left: means over all 180 held-out pairs. Right: every pair individually, with the diagonal marking no change. Canonical distance collapses to a narrow band irrespective of how far apart the two raw predictions were, except on SittingDown.}
 \label{fig:h36mdist}
 \end{figure}
 
@@ -917,7 +933,7 @@ The result holds on both subjects. Subject S11 improves on all ninety of its pai
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.92\textwidth]{images/fig_h36m_actions.png}
-\caption[Per-action improvement on Human3.6M. Every action except SittingDown exceeds t]{Per-action improvement on Human3.6M. Every action except SittingDown exceeds the mean improvement obtained on MPI-INF-3DHP by more than a factor of two.}
+\caption[Per-action improvement on Human3.6M]{Per-action improvement on Human3.6M. Every action except SittingDown exceeds the mean improvement obtained on MPI-INF-3DHP by more than a factor of two.}
 \label{fig:h36macts}
 \end{figure}
 
@@ -993,7 +1009,7 @@ One consequence deserves emphasis, because it bears on the reliability score. Th
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{images/fig_h36m_fusion.png}
-\caption[Fusion strategies on Human3.6M. Bars below the dashed line beat an arbitrary s]{Fusion strategies on Human3.6M. Bars below the dashed line beat an arbitrary single view. Every strategy shown is training-free and label-free, and the best of them uses no reliability score.}
+\caption[Fusion strategies on Human3.6M]{Fusion strategies on Human3.6M. Bars below the dashed line beat an arbitrary single view. Every strategy shown is training-free and label-free, and the best of them uses no reliability score.}
 \label{fig:h36mfuse}
 \end{figure}
 
@@ -1046,7 +1062,7 @@ Pairs improved & 179 / 180 & \textbf{180 / 180} & \textbf{180 / 180} \\
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.97\textwidth]{images/fig_h36m_multiscale.png}
-\caption[Per-level cross-view distance on Human3.6M. Three of the five frames were buil]{Per-level cross-view distance on Human3.6M. Three of the five frames were built from an axis roughly half a shoulder or hip width long; rebuilding them from the segment's own long axis halves their cross-view distance and brings all five levels into a 4.4 mm band.}
+\caption[Per-level cross-view distance on Human3.6M]{Per-level cross-view distance on Human3.6M. Three of the five frames were built from an axis roughly half a shoulder or hip width long; rebuilding them from the segment's own long axis halves their cross-view distance and brings all five levels into a 4.4 mm band.}
 \label{fig:h36mms}
 \end{figure}
 
