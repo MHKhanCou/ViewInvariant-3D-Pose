@@ -177,10 +177,10 @@ I would like to express my deepest gratitude to my project supervisor, \textbf{D
 % ========================== CHAPTER 1 ================================
 \chapter{INTRODUCTION}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/fig_teaser.png}
-\caption{The problem and the operation, on one instant of Human3.6M seen by two synchronized cameras. Left and right are drawn from above, because two views of the same instant differ mainly in azimuth and a frontal projection conceals almost all of it; the frame in the centre is drawn from the front, where its construction is legible. The instant shown is the one whose improvement is the median for its sequence, not the most favourable. All three panels are real predictions and the distances are the measured ones.}
+\caption[The problem and the operation]{The problem and the operation, on one instant of Human3.6M seen by two synchronized cameras. Left and right are drawn from above, because two views of the same instant differ mainly in azimuth and a frontal projection conceals almost all of it; the frame in the centre is drawn from the front, where its construction is legible. The instant shown is the one whose improvement is the median for its sequence, not the most favourable. All three panels are real predictions and the distances are the measured ones.}
 \label{fig:teaser}
 \end{figure}
 
@@ -373,7 +373,7 @@ The third is the boundary of Section \ref{sec:radial}, and here we claim the mea
 
 Table \ref{tab:requirements} summarizes what each approach requires at deployment. No prior method operates on a frozen estimator with no training, no labels, and no camera parameters simultaneously. That requirement profile, rather than any individual mechanism, is the position this project occupies. In particular, geometric canonicalization is not claimed here as novel, and the specific construction is more thoroughly trodden than a single comparison would suggest. 3DPCNet addresses the same problem and reports a hand-built anatomical baseline of the same family performing considerably worse than its learned module. Closer still, Wei et al. [25] transform predicted poses into consistent views before refining them, and do so first at the global body level and then at the level of local body parts, which is the same two-level decomposition this report arrives at in Sections \ref{sec:frame} and \ref{sec:h36mms}, from the same anatomical landmarks. We note it explicitly because a reader who found it independently would reasonably ask why it was absent. What differs is not the geometry but everything around it: their transformation feeds a trained correction network and a trained discriminator, so it is unavailable to a practitioner who cannot train, and the consistent views are an intermediate step rather than a quantity they evaluate. Our contribution is not the construction but the requirement profile that keeps it usable on a frozen estimator, and the experimental boundary of Chapter 5. The construction is therefore treated as an instrument rather than as a result. What it makes possible is the experimental question of Section \ref{sec:objectives}, since a frame with no trained parameters and no calibration allows every variable except the frame's own construction to be held fixed, and Chapter 5 uses that to establish where the geometry inherited in Section \ref{sec:triad} applies and where it stops.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \caption{Requirements of related approaches at deployment time}
 \label{tab:requirements}
@@ -405,14 +405,14 @@ This chapter describes the components of the proposed framework and the evaluati
 
 The complete pipeline is not training-free. Both the 2D detector and the lifting network are trained by their authors on labeled data and are used here in frozen form. What is training-free is everything this project adds on top of them. Figure \ref{fig:arch} shows where that boundary falls, and Table \ref{tab:freefrom} states the accounting exactly.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=0.86\textwidth]{images/fig_architecture.png}
-\caption{The pipeline, with the contribution boundary marked. Everything above the dashed line is trained by its authors and used frozen and unmodified. Everything below it is contributed by this project and adds no trained parameters, consumes no labels and requires no camera calibration.}
+\includegraphics[width=0.62\textwidth]{images/fig_architecture.png}
+\caption[The pipeline, with the contribution boundary marked]{The pipeline, with the contribution boundary marked. Everything above the dashed line is trained by its authors and used frozen and unmodified. Everything below it is contributed by this project and adds no trained parameters, consumes no labels and requires no camera calibration.}
 \label{fig:arch}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \caption{What each element of the pipeline requires}
 \label{tab:freefrom}
@@ -458,19 +458,19 @@ P_{\text{can}} = P R .
 
 Here $\mathbf{y}$ is the torso vertical axis and $\mathbf{x}_{\text{raw}}$ the hip axis, and the cross products complete a right-handed orthonormal basis by Gram-Schmidt orthonormalization. The construction is closed form, costs $O(17)$ operations per frame, and has no free parameters. Figure \ref{fig:framecon} shows it on a real predicted pose.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/fig_pipeline.png}
-\caption{The deployment path. Nothing on it consumes a camera parameter, a label or a gradient step, which is the requirement profile that distinguishes this framework rather than any individual step within it.}
+\caption[The deployment path]{The deployment path. Nothing on it consumes a camera parameter, a label or a gradient step, which is the requirement profile that distinguishes this framework rather than any individual step within it.}
 \label{fig:pipeline}
 \end{figure}
 
 \textbf{This construction is TRIAD} [19], introduced for spacecraft attitude determination in 1964, with the torso axis as the primary observation and the hip axis as the secondary. We name it rather than presenting it as ours, and Section \ref{sec:triad} sets out what that inheritance implies. Two points matter immediately. The construction is asymmetric, in that $\mathbf{y}$ is reproduced exactly while $\mathbf{x}_{\text{raw}}$ influences only the rotation about it, so the choice of primary axis is a design decision with consequences rather than an ordering convention. And the established guidance is to make the more accurately known direction primary [20], which for a skeleton means the longer segment, for the reason equation \eqref{eq:theta} derives.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/fig_frame_construction.png}
-\caption{Constructing the body frame. Left: the two anatomical vectors the construction starts from. Right: the orthonormal triad Gram-Schmidt produces. Both source vectors are differences of predicted joints, so both rotate with the body, and the frame rotates with it.}
+\caption[Constructing the body frame]{Constructing the body frame. Left: the two anatomical vectors the construction starts from. Right: the orthonormal triad Gram-Schmidt produces. Both source vectors are differences of predicted joints, so both rotate with the body, and the frame rotates with it.}
 \label{fig:framecon}
 \end{figure}
 
@@ -518,7 +518,7 @@ A further subtlety concerns sign. The hip axis direction depends on which hip is
 
 The title of this report claims the framework is lightweight, so we measure it rather than assert it. Table \ref{tab:cost} reports the cost of every component we add, against the frozen backbone it wraps.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \caption{Cost of the added framework, measured on real cached poses.}
 \label{tab:cost}
@@ -624,7 +624,7 @@ The test split contains 566920 frames. We use the preprocessing distributed with
 
 Two properties make Human3.6M the right second dataset for this project. The four cameras are synchronized, so cross-view pairing needs no interpolation, and every one of the thirty subject and action groups in the test split has all four cameras with identical frame counts. Equally important, the dataset played no part in developing the method, so every camera pair formed from it is held out in a stronger sense than the MPI-INF-3DHP pairs, which share a dataset with the development pair.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \caption{The two evaluation datasets.}
 \label{tab:datasets}
@@ -663,10 +663,10 @@ An interactive demonstration built with Gradio accepts an uploaded image or vide
 
 Figure \ref{fig:qual} shows the system on frames of that demonstration footage, which belongs to neither evaluation dataset. The third row is included because it fails: a subject bent sharply forward foreshortens the torso, and the reconstruction is visibly poorer. A qualitative figure showing only successes would misrepresent a method whose weakest measured action is a seated one.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{images/fig_qualitative.png}
-\caption{The pipeline on uncontrolled footage. Left: input with detected 2D keypoints. Middle: the 3D prediction in the camera's frame. Right: the same prediction in the body-fixed frame, which is what a downstream task consumes. The right column often looks better formed than the middle one, and it is important not to read that as an improvement: the two columns contain identical joint coordinates related by a rotation, so any apparent gain is the effect of viewing a foreshortened pose from a standard angle rather than a change in the prediction. The third row is included because the reconstruction there is genuinely poor, and canonicalization neither repairs nor conceals it.}
+\includegraphics[width=0.82\textwidth]{images/fig_qualitative.png}
+\caption[The pipeline on uncontrolled footage]{The pipeline on uncontrolled footage. Left: input with detected 2D keypoints. Middle: the 3D prediction in the camera's frame. Right: the same prediction in the body-fixed frame, which is what a downstream task consumes. The right column often looks better formed than the middle one, and it is important not to read that as an improvement: the two columns contain identical joint coordinates related by a rotation, so any apparent gain is the effect of viewing a foreshortened pose from a standard angle rather than a change in the prediction. The third row is included because the reconstruction there is genuinely poor, and canonicalization neither repairs nor conceals it.}
 \label{fig:qual}
 \end{figure}
 
@@ -685,7 +685,7 @@ This chapter reports both confirmations and failures, and the failures are numer
 
 \textbf{How to read this chapter.} It is organized by dataset, because the second dataset tests the first, and within each dataset by component. That ordering serves reproducibility but it defers the central question, so we state where the answer lives. Sections \ref{sec:crossview} to \ref{sec:h36mms} establish that canonicalization works and that per-limb frames work better, and the second of those turns up the anomaly that drives everything after it. Sections \ref{sec:multilandmark}, \ref{sec:conditioning} and \ref{sec:radial} are the three levels at which we test what governs frame consistency, and they are the answer to the question posed in Section \ref{sec:objectives}: the first confirms that axis length decides between frame constructions, and the other two establish that it decides nothing finer. A reader interested only in that argument may read those three sections and Section \ref{sec:radial}'s closing subsection, which states the boundary in full.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \caption{Every claim tested in this chapter, and its verdict on each dataset.}
 \label{tab:summary}
@@ -738,7 +738,7 @@ Ground-truth error is computed after a similarity alignment of rotation, transla
 \section{Cross-View Consistency}
 \label{sec:crossview}
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \caption{Cross-view joint distance improvement under canonicalization}
 \label{tab:crossview}
@@ -757,16 +757,16 @@ Held-out subject (S2) & 1 & +13.4\% \\
 
 Table \ref{tab:crossview} summarizes the result and Figure \ref{fig:pairs} shows it pair by pair. The mean improvement on held-out pairs exceeds that on the development pair, which indicates that the result is not an artifact of tuning. Two pairs regress slightly, and both are near-aligned camera configurations whose raw cross-view distance is already small, leaving little orientation variation to remove. Figure \ref{fig:oracle} places these distances against a per-pair Procrustes oracle, which requires both poses jointly and therefore bounds what any rotation-based method can achieve.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{images/fig_29pairs.png}
+\includegraphics[width=0.60\textwidth]{images/fig_29pairs.png}
 \caption{Improvement across all twenty-nine camera pairs}
 \label{fig:pairs}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{images/fig_oracle.png}
+\includegraphics[width=0.60\textwidth]{images/fig_oracle.png}
 \caption{Raw, canonical and Procrustes oracle distances per pair}
 \label{fig:oracle}
 \end{figure}
@@ -781,7 +781,7 @@ Cross-view consistency compares two predictions to each other and is in principl
 
 We applied five physically motivated corruptions at graduated severities over a sweep of 2240 records. Reliability tracks induced error at a Spearman coefficient of $-0.813$, joint dropout produces abstention in 100 percent of cases, and clean frames produce abstention in none. Identity-severity controls reproduced the clean baseline exactly. Figure \ref{fig:degradation} shows the relationship for each operator.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.72\textwidth]{images/fig_degradation.png}
 \caption{Reliability against induced error for five corruption operators}
@@ -792,9 +792,9 @@ We applied five physically motivated corruptions at graduated severities over a 
 
 Per-limb frames improve every one of the twenty-nine pairs, by 37.1 percent on the development pair and by 36.4 percent on average over held-out pairs. The improvement is not an artifact of reduced degrees of freedom, since the multi-scale distance retains its correlation with ground-truth error at $+0.610$ against $+0.601$ for the global frame. Figure \ref{fig:multiscale} shows the per-pair gain.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=0.7\textwidth]{images/fig_multiscale.png}
+\includegraphics[width=0.58\textwidth]{images/fig_multiscale.png}
 \caption{Additional improvement of multi-scale over global canonicalization}
 \label{fig:multiscale}
 \end{figure}
@@ -807,7 +807,7 @@ Fusion improves on an arbitrary single view in all four conditions, by 23.7 and 
 
 Selection, by contrast, does not survive scrutiny. We initially measured a 33.8 percent gain from selecting the most reliable view, but we find this to be an artifact: on static footage the score selects the same camera in every frame, and the gain arises from that constant choice combined with a large spread of per-view error. On dynamic sequences the selected view's true-error rank is 4.78 of 8 on subject S1 against a chance expectation of 4.5, and 3.67 on subject S2, straddling chance in opposite directions. We therefore withdraw the claim.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\textwidth]{images/fig_fusion.png}
 \caption{Error against number of available cameras for each strategy}
@@ -842,10 +842,10 @@ Two explanations are available for the failure, and they can be separated. The f
 
 The two datasets nevertheless occupy different regimes, and the separation is large. The median similarity-aligned error is 202.1 mm on MPI-INF-3DHP against 32.6 mm on Human3.6M, and the median bone deviation is 0.082 against 0.034. We therefore read the signal as an indicator of gross skeletal deformation rather than of pose error in general. A backbone driven far outside its training distribution returns skeletons whose bone lengths visibly fluctuate, and the signal tracks that fluctuation. A backbone operating in-domain returns skeletons that are nearly rigid and still wrong in depth, and the signal has nothing left to measure.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{images/fig_h36m_bone.png}
-\caption{The bone-length signal on both datasets. Every measure that passed on MPI-INF-3DHP falls below the threshold on Human3.6M, while the reliability score it was introduced to replace transfers unchanged.}
+\caption[The bone-length signal on both datasets]{The bone-length signal on both datasets. Every measure that passed on MPI-INF-3DHP falls below the threshold on Human3.6M, while the reliability score it was introduced to replace transfers unchanged.}
 \label{fig:h36mbone}
 \end{figure}
 
@@ -864,7 +864,7 @@ The central claim replicates, and it replicates more strongly than it did on the
 
 That comparison invites an obvious question, which we answer here rather than leave standing: if the oracle is better, why not simply use it. The oracle aligns two poses to each other, so it requires both of them at once, and what it returns is a relative alignment rather than a representation. It cannot canonicalize a single pose, because there is nothing to align that pose to; it cannot run before a comparison exists, so it cannot be used to index, store or stream; and with $N$ cameras it must be recomputed for each of the $N(N-1)/2$ pairs, whereas a body frame is computed once per pose and every pair is then comparable by construction. The oracle is included as a floor on what any rotation can achieve, not as a competing method. The relevant claim is that a construction which sees one pose at a time recovers most of what a construction that sees both can do.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \caption{Cross-view canonicalization on Human3.6M, 180 held-out camera pairs.}
 \label{tab:h36mcv}
@@ -887,26 +887,26 @@ Canonicalization validity & 100.0\% & --- \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/fig_h36m_explainer.png}
-\caption{One instant of Human3.6M seen by four synchronized cameras, superimposed. Left: the four raw predictions, which disagree because each is expressed in the frame of its own camera. Right: the same four predictions after canonicalization, each computed independently and without knowledge of the others.}
+\caption[One instant of Human3.6M seen by four synchronized cameras, superimposed]{One instant of Human3.6M seen by four synchronized cameras, superimposed. Left: the four raw predictions, which disagree because each is expressed in the frame of its own camera. Right: the same four predictions after canonicalization, each computed independently and without knowledge of the others.}
 \label{fig:h36mexplain}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=0.94\textwidth]{images/fig_twoview.png}
-\caption{One camera pair in detail, at the frame whose improvement is the median for its sequence rather than the most favourable. The lower row is the same data seen from above, and it is included because it is where the disagreement actually lives: two cameras of one instant differ mainly in azimuth, which a frontal projection almost entirely conceals. Both columns of a row are drawn to the same scale. The oracle floor and the reliability gate are shown because the method reaches neither perfection nor the floor, and a figure that omitted them would suggest otherwise.}
+\includegraphics[width=0.78\textwidth]{images/fig_twoview.png}
+\caption[One camera pair in detail]{One camera pair in detail, at the frame whose improvement is the median for its sequence rather than the most favourable. The lower row is the same data seen from above, and it is included because it is where the disagreement actually lives: two cameras of one instant differ mainly in azimuth, which a frontal projection almost entirely conceals. Both columns of a row are drawn to the same scale. The oracle floor and the reliability gate are shown because the method reaches neither perfection nor the floor, and a figure that omitted them would suggest otherwise.}
 \label{fig:twoview}
 \end{figure}
 
 Figure \ref{fig:h36mexplain} shows what the aggregate hides. Four cameras observing one instant produce four sets of coordinates that visibly disagree, and the same four predictions in a body-fixed frame very nearly coincide, at 235 mm and 51 mm respectively on that frame. No camera has any knowledge of the others at any point.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/fig_h36m_distances.png}
-\caption{Cross-view distance on Human3.6M. Left: means over all 180 held-out pairs. Right: every pair individually, with the diagonal marking no change. Canonical distance collapses to a narrow band irrespective of how far apart the two raw predictions were, except on SittingDown.}
+\caption[Cross-view distance on Human3.6M. Left: means over all 180 held-out pairs]{Cross-view distance on Human3.6M. Left: means over all 180 held-out pairs. Right: every pair individually, with the diagonal marking no change. Canonical distance collapses to a narrow band irrespective of how far apart the two raw predictions were, except on SittingDown.}
 \label{fig:h36mdist}
 \end{figure}
 
@@ -914,10 +914,10 @@ The right panel of Figure \ref{fig:h36mdist} shows why the mean is not carried b
 
 The result holds on both subjects. Subject S11 improves on all ninety of its pairs, from 21.2 percent to 89.7 percent, and subject S9 improves on eighty-nine of ninety. Fourteen of the fifteen actions improve on every one of their twelve pairs, with canonical distances between 45.3 mm and 79.6 mm, as Figure \ref{fig:h36macts} shows.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.92\textwidth]{images/fig_h36m_actions.png}
-\caption{Per-action improvement on Human3.6M. Every action except SittingDown exceeds the mean improvement obtained on MPI-INF-3DHP by more than a factor of two.}
+\caption[Per-action improvement on Human3.6M. Every action except SittingDown exceeds t]{Per-action improvement on Human3.6M. Every action except SittingDown exceeds the mean improvement obtained on MPI-INF-3DHP by more than a factor of two.}
 \label{fig:h36macts}
 \end{figure}
 
@@ -927,10 +927,10 @@ We tested the competing explanation and rejected it. A seated subject might plau
 
 The failure is therefore inherited from the estimator rather than produced by the frame. This is a sharper statement than the one we began with and a less comfortable one, since a better frame construction cannot repair it.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/fig_h36m_sittingdown.png}
-\caption{Two candidate explanations for the SittingDown result, tested against the fifteen actions. Axis length does not separate the failing action, which has almost the longest hip axis of any. Estimator accuracy does, and the association holds when the failing action is removed.}
+\caption[Two candidate explanations for the SittingDown result]{Two candidate explanations for the SittingDown result, tested against the fifteen actions. Axis length does not separate the failing action, which has almost the longest hip axis of any. Estimator accuracy does, and the association holds when the failing action is removed.}
 \label{fig:h36msit}
 \end{figure} The regressing pair additionally had an unusually small raw distance of 218.4 mm against roughly 550 mm for the other pairs of that action, which left little to gain and much to lose. That is the near-aligned camera pair behaviour reported on MPI-INF-3DHP in Section \ref{sec:crossview}, now observed on a second dataset.
 
@@ -954,9 +954,9 @@ The instability of the mean is itself informative. Per frame, it improves on the
 
 The aggregate figure averages over an outcome that is not unimodal, and a reader who stopped at 8.4 percent would take away the wrong picture. Broken down by action, median fusion improves nine of the fifteen and harms six. Table \ref{tab:fusionaction} gives the extremes.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Median fusion by action, the six worst and four best of fifteen. The final column is the same fusion with anatomical reflection handling, included because it bears on the diagnosis below.}
+\caption[Median fusion by action, the six worst and four best of fifteen]{Median fusion by action, the six worst and four best of fifteen. The final column is the same fusion with anatomical reflection handling, included because it bears on the diagnosis below.}
 \label{tab:fusionaction}
 {\fontsize{10}{12}\selectfont
 \begin{tabular}{lrrrr}
@@ -990,10 +990,10 @@ We can partly diagnose the two severe cases and not the four mild ones. Repeatin
 
 One consequence deserves emphasis, because it bears on the reliability score. The plain median uses no reliability score, no weights and no learned parameters, and at 34.6 mm it outperforms the reliability-weighted mean at 36.6 mm. The weighted mean's own interval, $[-8.4, +12.3]$ percent, includes zero, so weighting by the reliability score does not demonstrably improve on using one arbitrary camera. The sixth independent result concerning that score is that discarding it entirely is better than using it. Figure \ref{fig:h36mfuse} shows the ordering.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{images/fig_h36m_fusion.png}
-\caption{Fusion strategies on Human3.6M. Bars below the dashed line beat an arbitrary single view. Every strategy shown is training-free and label-free, and the best of them uses no reliability score.}
+\caption[Fusion strategies on Human3.6M. Bars below the dashed line beat an arbitrary s]{Fusion strategies on Human3.6M. Bars below the dashed line beat an arbitrary single view. Every strategy shown is training-free and label-free, and the best of them uses no reliability score.}
 \label{fig:h36mfuse}
 \end{figure}
 
@@ -1020,9 +1020,9 @@ Rebuilding both arms from their own long segments, shoulder-to-elbow as primary 
 
 The corrected levels support the diagnosis independently of the improvement they produce. All five now lie between 26.3 mm and 30.7 mm, where before they ranged from 28.6 mm to 69.4 mm. A construction applied consistently to five anatomically different segments should give five similar numbers, and it now does. That convergence was not optimized for, since each segment was redefined by the same rule rather than tuned, and it is the strongest evidence that axis length, not anatomy, was driving the spread.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Building every segment frame from that segment's own long axis. Bold entries changed from the column to their left.}
+\caption[Building every segment frame from that segment's own long axis]{Building every segment frame from that segment's own long axis. Bold entries changed from the column to their left.}
 \label{tab:msfix}
 \begin{tabular}{lrrr}
 \hline
@@ -1043,10 +1043,10 @@ Pairs improved & 179 / 180 & \textbf{180 / 180} & \textbf{180 / 180} \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.97\textwidth]{images/fig_h36m_multiscale.png}
-\caption{Per-level cross-view distance on Human3.6M. Three of the five frames were built from an axis roughly half a shoulder or hip width long; rebuilding them from the segment's own long axis halves their cross-view distance and brings all five levels into a 4.4 mm band.}
+\caption[Per-level cross-view distance on Human3.6M. Three of the five frames were buil]{Per-level cross-view distance on Human3.6M. Three of the five frames were built from an axis roughly half a shoulder or hip width long; rebuilding them from the segment's own long axis halves their cross-view distance and brings all five levels into a 4.4 mm band.}
 \label{fig:h36mms}
 \end{figure}
 
@@ -1064,7 +1064,7 @@ One caveat belongs here. The released MotionBERT checkpoint is fine-tuned at 243
 
 All three components replicate, as Table \ref{tab:backbone} shows. Canonicalization improves every one of the 180 pairs rather than 179, at 77.5 percent with an interval of $[+76.6, +78.5]$, and closes 94.5 percent of the oracle gap. Multi-scale gives 24.5 percent against 25.6 percent, and under the corrected long-axis definitions 54.9 percent against 55.1 percent, a difference of two tenths of a percentage point across a nineteen-fold change in model size. Fusion behaves as before: the median improves on an arbitrary view at 6.8 percent with an interval excluding zero, while the unweighted mean and the reliability-weighted mean do not.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \caption{The same framework over two unrelated backbones, with no code changed.}
 \label{tab:backbone}
@@ -1105,9 +1105,9 @@ We pre-registered that prediction before running anything, in the manner of Sect
 
 Two lateral estimates can be combined only because they point the same way. The hip vector runs from the right hip to the left and the shoulder vector from the right shoulder to the left, and their cosine is $+0.969$ with the same sign on every one of the 2672 poses measured. Weighting is derived rather than tuned: if per-joint noise is fixed and angular error scales as the inverse of segment length, variance scales as the inverse square, so inverse-variance weighting gives a weight equal to the squared length and introduces no free parameter.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Global frame from redundant landmarks. Paired gain is against the two-vector baseline on identical frames.}
+\caption[Global frame from redundant landmarks]{Global frame from redundant landmarks. Paired gain is against the two-vector baseline on identical frames.}
 \label{tab:multilandmark}
 {\fontsize{10}{12}\selectfont
 \begin{tabular}{lrrrr}
@@ -1139,9 +1139,9 @@ An external reviewer raised a concern about the per-limb frames late in the writ
 
 We test this by comparing each level against a Procrustes oracle computed on the same joints, which is the floor no rotation-based method can beat. Table \ref{tab:circularity} reports the ratio.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Headroom above the per-segment Procrustes floor. A ratio near one means the frame has already removed everything a rotation could, so the measurement cannot demonstrate anything further.}
+\caption[Headroom above the per-segment Procrustes floor]{Headroom above the per-segment Procrustes floor. A ratio near one means the frame has already removed everything a rotation could, so the measurement cannot demonstrate anything further.}
 \label{tab:circularity}
 {\fontsize{10}{12}\selectfont
 \begin{tabular}{llrrrr}
@@ -1197,10 +1197,10 @@ We therefore pre-registered the narrower question the theory supports: can condi
 
 \textbf{It fails.} On the first backbone, discarding the worst tenth of frames by conditioning gains $+0.26$ mm over discarding a random tenth, with an interval of $[-1.92, +1.73]$ that spans zero, and the worst five percent are only 1.08 times the pooled mean. On the second backbone the same test passes. A criterion that works on one estimator and not the other has not been demonstrated, and we report it as failed.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/fig_triage.png}
-\caption{Abstention curves on both backbones. The pre-registered criterion, geometric conditioning, is indistinguishable from the random null. The analytic reliability score, which Section \ref{sec:relfails} falsifies as an accuracy predictor, lowers the mean monotonically against this different target.}
+\caption[Abstention curves on both backbones]{Abstention curves on both backbones. The pre-registered criterion, geometric conditioning, is indistinguishable from the random null. The analytic reliability score, which Section \ref{sec:relfails} falsifies as an accuracy predictor, lowers the mean monotonically against this different target.}
 \label{fig:triage}
 \end{figure}
 
@@ -1208,9 +1208,9 @@ We therefore pre-registered the narrower question the theory supports: can condi
 
 The same experiment measured the analytic reliability score on identical frames, and the result is the more interesting one. Table \ref{tab:triage} reports it.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Triage of canonicalization quality. Mean canonical cross-view distance after discarding the worst frames by each criterion.}
+\caption[Triage of canonicalization quality]{Triage of canonicalization quality. Mean canonical cross-view distance after discarding the worst frames by each criterion.}
 \label{tab:triage}
 {\fontsize{10}{12}\selectfont
 \begin{tabular}{lrrrrrr}
@@ -1247,10 +1247,10 @@ What makes the test sharp is that every constant on the right-hand side was meas
 
 \textbf{The test fails, on both backbones.} The fitted slope is 0.218 and 0.105 against a predicted band of $[0.038, 0.073]$, and the coefficient of determination is 0.339 and 0.337 against a pre-registered threshold of 0.80. On the second backbone the confound control fails as well, at a ratio of 1.30 against the required 2.0, which we recorded in advance as voiding the decomposition on that backbone. Excluding the joints the frame is built from, which are constrained by the construction and cannot test a prediction about it, does not rescue the fit; the coefficient falls to $-0.070$, worse than predicting the mean.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/fig_three_levels.png}
-\caption{The three levels at which the axis-length principle was tested, each pre-registered before running. It decides between frame constructions and nothing finer. In the centre panel the reliability curve is drawn only to fix an honest vertical scale, since on a two-millimetre axis the conditioning curve would look dramatic while in fact tracking the random null.}
+\caption[The three levels at which the axis-length principle was tested]{The three levels at which the axis-length principle was tested, each pre-registered before running. It decides between frame constructions and nothing finer. In the centre panel the reliability curve is drawn only to fix an honest vertical scale, since on a two-millimetre axis the conditioning curve would look dramatic while in fact tracking the random null.}
 \label{fig:threelevels}
 \end{figure}
 
@@ -1258,9 +1258,9 @@ What makes the test sharp is that every constant on the right-hand side was meas
 
 The reason is visible in the per-joint table and we report it as post-hoc, because we did not anticipate it. Table \ref{tab:radial} gives the comparison that settles it.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{Cross-view root-mean-square distance per joint group. Post-hoc analysis, not pre-registered.}
+\caption[Cross-view root-mean-square distance per joint group]{Cross-view root-mean-square distance per joint group. Post-hoc analysis, not pre-registered.}
 \label{tab:radial}
 {\fontsize{10}{12}\selectfont
 \begin{tabular}{lrrrr}
@@ -1284,10 +1284,10 @@ The joints rigidly attached to the torso sit at a \emph{larger} mean radius than
 
 The governing variable at this level is therefore not Euclidean distance from the root but position in the kinematic chain relative to the segment the frame is built from. A joint that moves rigidly with the torso inherits the frame's error and nothing else. A joint beyond a hinge carries, in addition, the estimator's error in the joint angle, and on an in-domain backbone that term dominates. This is the same conclusion Section \ref{sec:conditioning} reached from the other direction, where the incumbent reliability score triaged frames successfully while a purely geometric index did not.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/fig_matched_radius.png}
-\caption{Joints matched on radius but differing in kinematic position. The radii differ by one to three percent while the cross-view distances differ by roughly a factor of two, on both backbones, which is what rules out radius as the governing variable at this level.}
+\caption[Joints matched on radius but differing in kinematic position]{Joints matched on radius but differing in kinematic position. The radii differ by one to three percent while the cross-view distances differ by roughly a factor of two, on both backbones, which is what rules out radius as the governing variable at this level.}
 \label{fig:matchedradius}
 \end{figure}
 
@@ -1301,7 +1301,7 @@ We regard the bound as more useful than a third confirmation would have been. It
 
 Table \ref{tab:ablation} reports the three conditions on the development pair and Figure \ref{fig:coverage} traces error against coverage as the abstention threshold varies. Coverage is reported alongside error throughout, since an abstaining method could otherwise report an arbitrarily low error by answering arbitrarily rarely.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \caption{Three conditions on the development pair}
 \label{tab:ablation}
@@ -1320,7 +1320,7 @@ Reliability-aware, threshold 0.8 & \textbf{0.0904} & 69\% \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.68\textwidth]{images/fig_coverage_error.png}
 \caption{Coverage against error as the abstention threshold varies}
