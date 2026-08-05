@@ -438,6 +438,26 @@ def main():
                          float(cd_xs["p2_tail_is_real"]),
                          "conditioning/conditioning.json", tol=0))
 
+    # ---------- averaging convention, stated so it cannot drift --------------
+    # Every improvement figure is the mean over pairs of each pair's own
+    # percentage, not the ratio of the aggregate means. A reader dividing the
+    # table entries gets a different (larger) number, so Section 5.10 says which
+    # is quoted. These claims pin both so the disclosure stays true.
+    for tag, label, per_pair, ratio_of_means in (("", "XS", 74.05, 76.49),
+                                                 ("_motionbert", "MB", 77.55, 81.02)):
+        cv = load("h36m_crossview/h36m_crossview%s.json" % tag)
+        s = cv.get("summary", cv)
+        src = "h36m_crossview/h36m_crossview%s.json" % tag
+        results.append(check("convention %s: per-pair mean improvement" % label,
+                             per_pair, s["mean_improvement_pct"], src,
+                             tol=0.05, unit="%"))
+        rm = 100.0 * (s["mean_raw_distance_mm"] - s["mean_canonical_distance_mm"]) \
+            / s["mean_raw_distance_mm"]
+        results.append(check("  %s ratio-of-means (disclosed, not quoted)" % label,
+                             ratio_of_means, rm, src, tol=0.05, unit="%"))
+        results.append(check("  %s per-pair is the conservative one (1=yes)" % label,
+                             1.0, float(s["mean_improvement_pct"] < rm), src, tol=0))
+
     # ---------- axis-length law: quantitative fit and its interval -----------
     # These were quoted in the report for two days from a scratch script that was
     # never committed, so nothing verified them. They are produced by
