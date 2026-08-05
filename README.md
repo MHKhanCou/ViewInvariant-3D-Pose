@@ -116,10 +116,20 @@ cd data/preprocess && python h36m.py --n-frames 27
 python app.py                                        # Gradio demo
 python demo_live/infer_image.py --input image.jpg    # CLI, image
 python demo_live/infer_video.py --input video.mp4    # CLI, video
+
 python train.py --eval-only --checkpoint checkpoint \
     --checkpoint-file motionagformer-xs-h36m.pth.tr \
     --config configs/h36m/MotionAGFormer-xsmall.yaml # baseline: 45.149 mm MPJPE
 ```
+
+The demo's **Coordinate System** toggle offers exactly two options, and the difference between them is the subject of this thesis:
+
+| Option | What it shows |
+|---|---|
+| `Camera Coordinate System` | the frozen estimator's raw output, in the observing camera's frame |
+| `View-Invariant Coordinate System` | the same prediction after body-frame canonicalization |
+
+On CPU, a single image takes about 0.7 s once the models are warm. **Video is far slower — roughly 8 minutes for a 30-second clip** — so render demonstration videos in advance rather than live.
 
 The baseline reproduces the published MotionAGFormer-XS figure to three decimals (45.149 mm against 45.1 mm reported), which is what makes the failed replications in this project interpretable — a negative result is only informative if the apparatus is not what failed.
 
