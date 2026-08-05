@@ -16,7 +16,6 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, REPO_ROOT)
 
 from demo_live.lifter import N_FRAMES
-from demo_live.pose_detector import _unrotate_kpts
 from evaluation.lifting import lift_from_coco_window
 from evaluation.tta_consistency import (
     disp_axis_split, disp_procrustes, disp_scale, parse_key,
@@ -67,7 +66,18 @@ class TestBehaviourPreservation(unittest.TestCase):
         np.testing.assert_allclose(recon, mean, atol=1e-6)
 
     def test_unrotate_round_trip(self):
-        """_unrotate_kpts must invert the cv2 rotation it documents."""
+        """_unrotate_kpts must invert the cv2 rotation it documents.
+
+        Imported here rather than at module scope: demo_live.pose_detector pulls
+        in Ultralytics, which writes a settings file on first import and fails on
+        a machine without a writable user profile. This file promises to run
+        anywhere with no weights and no dataset, and a module-level import broke
+        that promise for the whole file rather than for this one test.
+        """
+        try:
+            from demo_live.pose_detector import _unrotate_kpts
+        except Exception as exc:            # pragma: no cover - environment only
+            self.skipTest("detector unavailable in this environment: %s" % exc)
         W, H = 640, 480
         pts = np.array([[0.0, 0.0], [100.0, 50.0], [W - 1.0, H - 1.0]],
                        dtype=np.float32)

@@ -458,6 +458,39 @@ def main():
         results.append(check("  %s per-pair is the conservative one (1=yes)" % label,
                              1.0, float(s["mean_improvement_pct"] < rm), src, tol=0))
 
+    # ---------- circularity control: how much is removed by construction -----
+    # The per-limb frames in the long-axis definitions are built from exactly the
+    # joints they are scored on. These claims pin the headroom above the
+    # per-segment Procrustes floor, which is what demoted the 55.1% figure from a
+    # result to an exploratory measurement.
+    ctrl = {(r["set"], r["display"]): r
+            for r in load("multiscale_control/control.json")["rows"]}
+    src = "multiscale_control/control.json"
+    results.append(check("global frame headroom over its floor", 1.46,
+                         ctrl[("global", "Global frame")]["headroom_ratio"],
+                         src, tol=0.01))
+    results.append(check("  global frame is NOT fully circular (0=no)", 0.0,
+                         float(ctrl[("global", "Global frame")]["fully_circular"]),
+                         src, tol=0))
+    for disp, hr in (("Right arm", 1.13), ("Left arm", 1.15),
+                     ("Right leg", 1.23), ("Left leg", 1.23)):
+        r = ctrl[("long_axis", disp)]
+        results.append(check("  long-axis %s headroom" % disp, hr,
+                             r["headroom_ratio"], src, tol=0.01))
+        results.append(check("    %s fully circular (1=yes)" % disp, 1.0,
+                             float(r["fully_circular"]), src, tol=0))
+    # The comparison that isolates it: same joints, same oracle, one more builder.
+    results.append(check("  shipped Right arm canonical (mm)", 58.0,
+                         ctrl[("shipped", "Right arm")]["canonical_mm"],
+                         src, tol=0.1, unit="mm"))
+    results.append(check("  long-axis Right arm canonical (mm)", 27.3,
+                         ctrl[("long_axis", "Right arm")]["canonical_mm"],
+                         src, tol=0.1, unit="mm"))
+    results.append(check("  their oracle is identical (mm)",
+                         ctrl[("shipped", "Right arm")]["oracle_mm"],
+                         ctrl[("long_axis", "Right arm")]["oracle_mm"],
+                         src, tol=0.01, unit="mm"))
+
     # ---------- axis-length law: quantitative fit and its interval -----------
     # These were quoted in the report for two days from a scratch script that was
     # never committed, so nothing verified them. They are produced by

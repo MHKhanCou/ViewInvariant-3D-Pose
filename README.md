@@ -26,6 +26,8 @@ The answer is a boundary, established by three pre-registered tests, two of whic
 
 Human3.6M, 180 held-out camera pairs, subjects S9 and S11, which took no part in developing the method.
 
+**These measure cross-view *agreement* between two camera-relative predictions, not 3D pose accuracy.** The frozen estimator's output is unchanged; only the coordinate frame it is expressed in changes.
+
 | Result | Value |
 |---|---|
 | Cross-view distance reduction | **74.1 %** (CI [+69.8, +77.2], clustered by subject-action) |
@@ -41,7 +43,8 @@ All improvement figures are the mean over camera pairs of each pair's own percen
 
 | Claim tested | Outcome |
 |---|---|
-| Axis length decides *between* frame constructions | **Holds** — ρ = +0.904 / +0.880 on two backbones |
+| Axis length decides *between* frame constructions | **Holds** — on the clean global-frame test, where joint set and constructor count are fixed |
+| The per-limb multi-scale improvement (55.1 %) | **Demoted to exploratory** — those frames are built from exactly the joints they are scored on, and sit within 13–23 % of their own Procrustes floor |
 | …decides *which frame* within a construction to trust | **Fails** — indistinguishable from a random null |
 | …decides *which joint* will disagree | **Fails** — articulation dominates; torso-rigid joints sit at a *larger* radius yet disagree **2.5× less** |
 | Temporal bone-length inconsistency predicts error | **Retracted** — ρ = +0.492 on one dataset, +0.098 on the other |
@@ -55,15 +58,15 @@ Four pre-registrations were committed to version history **before** the experime
 
 ## Reproducing the claims
 
-Every number in the 87-page report is recomputed from stored artifacts:
-
 ```bash
-python -m evaluation.audit_numbers      # 167 claims verified against thesis_artifacts/
-python -m unittest discover -s tests -q # 72 tests
+python -m evaluation.audit_numbers      # 180 claims checked against thesis_artifacts/
+python -m unittest discover -s tests -q # 72 tests, no model or dataset required
 python -m presentation.render --teaser  # regenerate every figure from the artifacts
 ```
 
-`audit_numbers.py` fails loudly if any reported figure drifts from the JSON artifact it came from. The figures are generated from the same artifacts, so a figure cannot disagree with the number it illustrates.
+**This is an artifact-consistency audit, not a re-run of the experiments.** It verifies that every number quoted in the report still matches the stored JSON it came from, and fails loudly if one drifts. It does not regenerate model predictions. The figures are drawn from those same artifacts, so a figure cannot disagree with the number it illustrates.
+
+Regenerating the predictions themselves requires the Human3.6M preprocessing and checkpoints described under Setup, and takes considerably longer.
 
 ---
 
@@ -152,11 +155,12 @@ The baseline reproduces the published MotionAGFormer-XS figure to three decimals
 ## Citation
 
 ```bibtex
-@mastersthesis{khan2026viewinvariant,
+@thesis{khan2026viewinvariant,
   title  = {Reliability-Aware View-Invariant 3D Human Pose Estimation
             from a Frozen Monocular Estimator},
   author = {Mehedi Hasan Khan},
   school = {Comilla University},
+  type   = {Undergraduate thesis},
   year   = {2026}
 }
 ```
