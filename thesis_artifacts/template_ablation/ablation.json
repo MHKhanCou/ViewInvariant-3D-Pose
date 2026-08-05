@@ -1,0 +1,105 @@
+{
+ "A_template_independence": {
+  "mpi_canonical": {
+   "n_pairs": 180,
+   "mean_anatomical_mm": 75.31521846225431,
+   "mean_template_mm": 53.033269964779365,
+   "paired_difference": {
+    "mean": -22.281948497474943,
+    "ci95": [
+     -41.12868561256884,
+     -9.425368345975233
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "template_wins": true
+  },
+  "raw_first": {
+   "n_pairs": 180,
+   "mean_anatomical_mm": 75.31521846225431,
+   "mean_template_mm": 53.82505822442678,
+   "paired_difference": {
+    "mean": -21.490160237827542,
+    "ci95": [
+     -40.33109655409974,
+     -8.59160816590352
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "template_wins": true
+  },
+  "synthetic": {
+   "n_pairs": 180,
+   "mean_anatomical_mm": 75.31521846225431,
+   "mean_template_mm": 55.443842012973555,
+   "paired_difference": {
+    "mean": -19.871376449280756,
+    "ci95": [
+     -38.75870238730659,
+     -6.917122019830273
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "template_wins": true
+  }
+ },
+ "B_fit_set": {
+  "all_17": {
+   "n_pairs": 180,
+   "mean_anatomical_mm": 121.85618614032397,
+   "mean_template_mm": 67.56171547463946,
+   "paired_difference": {
+    "mean": -54.29447066568453,
+    "ci95": [
+     -86.56824115012807,
+     -31.783582062281845
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "template_wins": true
+  },
+  "torso_rigid_9": {
+   "n_pairs": 180,
+   "mean_anatomical_mm": 121.85618614032397,
+   "mean_template_mm": 96.34270832764264,
+   "paired_difference": {
+    "mean": -25.51347781268134,
+    "ci95": [
+     -58.510232626659786,
+     -3.769582777325882
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "template_wins": true
+  }
+ },
+ "B_torso_rigid_gain_mm": -28.780992853003184,
+ "B_prediction_holds": false,
+ "torso_rigid_joints": [
+  0,
+  1,
+  4,
+  7,
+  8,
+  9,
+  10,
+  11,
+  14
+ ],
+ "articulated_joints": [
+  2,
+  3,
+  5,
+  6,
+  12,
+  13,
+  15,
+  16
+ ],
+ "prediction_cache": "preds.npz"
+}

@@ -1,0 +1,105 @@
+{
+ "A_template_independence": {
+  "mpi_canonical": {
+   "n_pairs": 180,
+   "mean_anatomical_mm": 60.09302487522748,
+   "mean_template_mm": 51.26592256521522,
+   "paired_difference": {
+    "mean": -8.82710231001224,
+    "ci95": [
+     -10.222525546128484,
+     -7.395354196029965
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "template_wins": true
+  },
+  "raw_first": {
+   "n_pairs": 180,
+   "mean_anatomical_mm": 60.09302487522748,
+   "mean_template_mm": 52.12223332902785,
+   "paired_difference": {
+    "mean": -7.970791546199621,
+    "ci95": [
+     -9.389360945785038,
+     -6.496123986539702
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "template_wins": true
+  },
+  "synthetic": {
+   "n_pairs": 180,
+   "mean_anatomical_mm": 60.09302487522748,
+   "mean_template_mm": 53.73281812710886,
+   "paired_difference": {
+    "mean": -6.3602067481186095,
+    "ci95": [
+     -7.9460624829050115,
+     -4.723135957019287
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "template_wins": true
+  }
+ },
+ "B_fit_set": {
+  "all_17": {
+   "n_pairs": 180,
+   "mean_anatomical_mm": 97.03615814116965,
+   "mean_template_mm": 66.57304469749441,
+   "paired_difference": {
+    "mean": -30.463113443675255,
+    "ci95": [
+     -33.78650513848321,
+     -27.272829602128464
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "template_wins": true
+  },
+  "torso_rigid_9": {
+   "n_pairs": 180,
+   "mean_anatomical_mm": 97.03615814116965,
+   "mean_template_mm": 91.80594388917355,
+   "paired_difference": {
+    "mean": -5.230214251996099,
+    "ci95": [
+     -6.744423342466215,
+     -3.7838819316443715
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "template_wins": true
+  }
+ },
+ "B_torso_rigid_gain_mm": -25.232899191679138,
+ "B_prediction_holds": false,
+ "torso_rigid_joints": [
+  0,
+  1,
+  4,
+  7,
+  8,
+  9,
+  10,
+  11,
+  14
+ ],
+ "articulated_joints": [
+  2,
+  3,
+  5,
+  6,
+  12,
+  13,
+  15,
+  16
+ ],
+ "prediction_cache": "preds_motionbert.npz"
+}

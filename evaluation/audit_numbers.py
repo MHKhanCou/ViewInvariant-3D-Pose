@@ -567,6 +567,30 @@ def main():
         results.append(check("  %s verdict is template_better (1=yes)" % label, 1.0,
                              float(tb["verdict"] == "template_better"), src, tol=0))
 
+    # ---------- template ablations: independence, and a failed prediction ----
+    for tag, label, syn, gain in (("", "XS", -19.87, -28.78),
+                                  ("_motionbert", "MB", -6.36, -25.23)):
+        ab = load("template_ablation/ablation%s.json" % tag)
+        src = "template_ablation/ablation%s.json" % tag
+        # A: every template wins, including one built from no pose data at all.
+        for tname in ("mpi_canonical", "raw_first", "synthetic"):
+            results.append(check("ablation %s: %s template wins" % (label, tname),
+                                 1.0, float(ab["A_template_independence"]
+                                            [tname]["template_wins"]), src, tol=0))
+        results.append(check("  %s synthetic-template difference (mm)" % label,
+                             syn, ab["A_template_independence"]["synthetic"]
+                             ["paired_difference"]["mean"], src,
+                             tol=0.05, unit="mm"))
+        # B: the pre-registered prediction failed, and by how much.
+        results.append(check("  %s torso-rigid prediction FAILS (0=fails)" % label,
+                             0.0, float(ab["B_prediction_holds"]), src, tol=0))
+        results.append(check("  %s torso-rigid minus all-17 (mm)" % label, gain,
+                             ab["B_torso_rigid_gain_mm"], src, tol=0.05, unit="mm"))
+        results.append(check("  %s fit and score sets are disjoint" % label, 1.0,
+                             float(not (set(ab["torso_rigid_joints"])
+                                        & set(ab["articulated_joints"]))),
+                             src, tol=0))
+
     # ---------- circularity control: how much is removed by construction -----
     # The per-limb frames in the long-axis definitions are built from exactly the
     # joints they are scored on. These claims pin the headroom above the
