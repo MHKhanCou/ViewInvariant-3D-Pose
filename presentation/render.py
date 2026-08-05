@@ -21,6 +21,7 @@ Run:  ./venv/Scripts/python.exe -m presentation.render            (all figures)
 import argparse
 import json
 import os
+import re
 import sys
 
 import matplotlib
@@ -505,10 +506,86 @@ def fig_teaser(out="fig_teaser.png", preds=None, dpi=300):
     return out, d
 
 
+def fig_app(out="fig_app.png", image=None, dpi=200):
+    """
+    What the demonstration application actually returns, on one input.
+
+    Chapter 4 describes the application in prose and the report otherwise never
+    shows its output. This calls the same entry point the Gradio callback does,
+    `app.on_image_run`, and lays out the three panels it produces together with
+    the reliability readout it prints beside them. Nothing is redrawn for the
+    figure: the 2D overlay is the array the application returns, and the two 3D
+    panels are its Plotly view exported under each coordinate-system setting.
+    """
+    import tempfile
+
+    from PIL import Image as PILImage
+
+    sys.path.insert(0, REPO_ROOT)
+    import app as gradio_app                       # noqa: E402
+
+    # A frame of the demonstration footage rather than one of the stock stills
+    # in examples/, which carry a vendor watermark across the subject and have
+    # no place in a submitted report.
+    if image:
+        rgb = np.array(PILImage.open(image).convert("RGB"))
+    else:
+        import cv2
+        clip = os.path.join(
+            REPO_ROOT, "examples",
+            "13605188_1080_1920_30fps (online-video-cutter.com).mp4")
+        cap = cv2.VideoCapture(clip)
+        cap.set(cv2.CAP_PROP_POS_FRAMES,
+                int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) // 2)
+        ok, bgr = cap.read()
+        cap.release()
+        if not ok:
+            raise RuntimeError("could not read a frame from %s" % clip)
+        rgb = bgr[:, :, ::-1].copy()
+
+    panels, status = {}, None
+    tmp = tempfile.mkdtemp()
+    for key, space in (("camera", "Camera Coordinate System"),
+                       ("canonical", "View-Invariant Coordinate System")):
+        fig3d, overlay, s1, _s2, _m = gradio_app.on_image_run(rgb, space, 0)
+        p = os.path.join(tmp, key + ".png")
+        fig3d.write_image(p, width=760, height=760)
+        panels[key] = np.array(PILImage.open(p).convert("RGB"))
+        panels["overlay"] = overlay
+        if status is None:
+            status = s1 or ""
+
+    # The plausibility line, pulled from the application's own status string
+    # rather than recomputed, so the figure cannot disagree with the interface.
+    m = re.search(r"plausibility\s+([0-9]+\.[0-9]+)", status)
+    plaus = m.group(1) if m else "n/a"
+
+    fig, axes = plt.subplots(1, 3, figsize=(13.2, 5.0))
+    for ax, key, title in (
+            (axes[0], "overlay", "2D detection\nYOLOv8-pose, COCO-17"),
+            (axes[1], "camera", "3D pose\nCamera Coordinate System"),
+            (axes[2], "canonical", "3D pose\nView-Invariant Coordinate System")):
+        ax.imshow(panels[key])
+        ax.set_title(title, fontsize=10.5, pad=8)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        for s in ax.spines.values():
+            s.set_color("#bbbbbb")
+    fig.text(0.5, 0.015,
+             "Application status: geometry plausible, plausibility %s. "
+             "The two 3D panels hold the same predicted joints; only the frame "
+             "they are expressed in differs." % plaus,
+             ha="center", fontsize=9.5, color="#333333")
+    fig.savefig(os.path.join(IMG, out), dpi=dpi, bbox_inches="tight")
+    plt.close(fig)
+    return out, plaus
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--twoview", action="store_true")
     ap.add_argument("--teaser", action="store_true")
+    ap.add_argument("--app", action="store_true")
     args = ap.parse_args()
 
     os.makedirs(IMG, exist_ok=True)
@@ -522,6 +599,9 @@ def main():
         out, d = fig_teaser()
         print("wrote %s   raw %.0f -> canonical %.0f mm  (-%.0f%%)"
               % (out, d["raw_mm"], d["canonical_mm"], d["reduction_pct"]))
+    if args.app:
+        out, plaus = fig_app()
+        print("wrote %s   application plausibility %s" % (out, plaus))
 
 
 if __name__ == "__main__":
