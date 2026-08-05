@@ -680,6 +680,15 @@ Three engineering decisions carry scientific weight. First, the lifting path use
 
 An interactive demonstration built with Gradio accepts an uploaded image or video, runs detection and lifting, and displays the raw and canonical skeletons side by side together with the reliability score and its six components. It also exports a canonicalized sequence as a BVH motion-capture file, which animation software imports directly; that format stores joint rotations relative to each parent and contains no camera, so it is the natural consumer of a body-fixed frame. The demonstration exists to make failure modes visible rather than to add a result, and it was the route by which several were noticed, including a rendering fault that drew canonical skeletons on their side in the video path.
 
+Figure \ref{fig:interface} shows the interface a user operates, and Figure \ref{fig:app} what it returns.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/fig_interface.png}
+\caption[The demonstration interface]{The demonstration interface. The Representation control switches between the camera frame and the body-fixed frame, which is the operation this report measures at scale in Chapter 5. The lower left shows the two display-only controls, both of which state in the interface that they alter nothing scored: limb-length equalization is a rendering convenience and the stylized avatar is a presentation view. The lower right shows the plausibility readout with its six components. Beneath it the application prints a caution, omitted from this crop only because it named a section number the report has since renumbered: that plausibility is a degeneracy gate rather than a confidence score, that the report falsifies it as a predictor of accuracy along five independent axes, and that a pose smoothly wrong in depth still scores highly. These are the only screen captures in this report; every other figure is generated from stored artifacts by \texttt{presentation/render.py}.}
+\label{fig:interface}
+\end{figure}
+
 Figure \ref{fig:app} shows what the application returns for a single frame. The panels are its own outputs rather than a redrawing: the left is the overlay array it produces, and the two right-hand panels are its interactive viewer exported under each setting of the coordinate-system control. They are the same seventeen predicted joints in two frames, which is the whole of what the control does, and the plausibility figure beneath is the one the interface prints beside them.
 
 \begin{figure}[htbp]

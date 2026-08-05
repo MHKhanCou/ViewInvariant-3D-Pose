@@ -121,10 +121,14 @@ def on_image_run(image, coord_space, rotation_deg, show_avatar=False,
         status = (f"**Status:** Completed\n\n"
                   f"**Geometric plausibility:** {verdict}\n"
                   f"<sub>{comp_line}</sub>\n\n"
+                  # No section number here on purpose: it was written as 5.7,
+                  # the report has since renumbered it to 5.8, and it will move
+                  # again. A reference that cannot go stale is worth more than a
+                  # precise one that does.
                   f"<sub>⚠️ Plausibility is a degeneracy gate, not a confidence "
-                  f"score. Section 5.7 of the report shows it does not rank "
-                  f"predictions by accuracy; a pose that is smoothly wrong in "
-                  f"depth still scores highly.</sub>\n\n"
+                  f"score. The report falsifies it as a predictor of accuracy "
+                  f"along five independent axes; a pose that is smoothly wrong "
+                  f"in depth still scores highly.</sub>\n\n"
                   f"**Inference time:** {t:.2f}s\n"
                   f"**Keypoints:** {kp_valid}/17 (conf={result['scores'].mean():.3f})\n"
                   f"**Coordinate space:** {space_label}")
