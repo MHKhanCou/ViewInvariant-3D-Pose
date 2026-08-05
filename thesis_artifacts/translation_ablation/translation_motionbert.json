@@ -1,0 +1,33 @@
+{
+ "n_pairs": 180,
+ "cells_mm": {
+  "anatomical_root_mm": 60.09302487522748,
+  "anatomical_centroid_mm": 60.77917412264057,
+  "template_root_mm": 56.93124575582182,
+  "template_centroid_mm": 51.26592256521522
+ },
+ "gaps": {
+  "root": {
+   "mean": -3.1617791194056384,
+   "ci95": [
+    -4.775463922009959,
+    -1.5028921674978388
+   ],
+   "n_clusters": 30,
+   "draws": 10000
+  },
+  "centroid": {
+   "mean": -9.513251557425328,
+   "ci95": [
+    -10.817655569366131,
+    -8.230783295168465
+   ],
+   "n_clusters": 30,
+   "draws": 10000
+  }
+ },
+ "reported_mixed_gap_mm": -8.827102310012258,
+ "like_for_like_gap_mm": -6.337515338415483,
+ "translation_share_mm": -2.4895869715967747,
+ "prediction_cache": "preds_motionbert.npz"
+}

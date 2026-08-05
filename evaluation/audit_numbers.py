@@ -567,6 +567,29 @@ def main():
         results.append(check("  %s verdict is template_better (1=yes)" % label, 1.0,
                              float(tb["verdict"] == "template_better"), src, tol=0))
 
+    # ---------- translation ablation: how much of the gap is centring? -------
+    for tag, label, share, root_gap in (("", "XS", -3.20, -15.36),
+                                        ("_motionbert", "MB", -2.49, -3.16)):
+        tr = load("translation_ablation/translation%s.json" % tag)
+        src = "translation_ablation/translation%s.json" % tag
+        results.append(check("translation %s: share from centring (mm)" % label,
+                             share, tr["translation_share_mm"], src,
+                             tol=0.05, unit="mm"))
+        results.append(check("  %s gap with both root-centred (mm)" % label,
+                             root_gap, tr["gaps"]["root"]["mean"], src,
+                             tol=0.05, unit="mm"))
+        # The direction survives the least favourable centring for the baseline.
+        results.append(check("  %s template wins even root-centred" % label, 1.0,
+                             float(tr["gaps"]["root"]["ci95"][1] < 0), src, tol=0))
+        results.append(check("  %s and centroid-centred" % label, 1.0,
+                             float(tr["gaps"]["centroid"]["ci95"][1] < 0),
+                             src, tol=0))
+        # Centroid-centring makes OUR frame slightly worse, not better.
+        results.append(check("  %s centroid hurts the anatomical frame" % label,
+                             1.0, float(tr["cells_mm"]["anatomical_centroid_mm"]
+                                        > tr["cells_mm"]["anatomical_root_mm"]),
+                             src, tol=0))
+
     # ---------- template ablations: independence, and a failed prediction ----
     for tag, label, syn, gain in (("", "XS", -19.87, -28.78),
                                   ("_motionbert", "MB", -6.36, -25.23)):

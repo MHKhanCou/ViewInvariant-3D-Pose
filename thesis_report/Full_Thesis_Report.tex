@@ -249,7 +249,7 @@ The geometry this project builds on is not ours. The frame construction is the T
 
 \item \textbf{[Engineering]} \textbf{Calibration-free multi-view fusion in the shared frame}, with two qualifications that matter more than the headline. The estimator must be robust when views are few, since at four views a median improves the aggregate by 8.4 percent while an unweighted mean does not. But the gain is not uniform: nine of fifteen actions improve and six worsen, one of them catastrophically, and the mean across actions is negative. Fusion helps where the single view is already poor and can harm where it is already good.
 
-\item \textbf{[Systems]} \textbf{A framework and an evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added to a frozen estimator, 402 floating-point operations per frame, no labels and no camera parameters at any stage; 230 numerical claims checked against stored artifacts by an automated audit; 76 tests; and seven pre-registrations committed to version history before the experiments they govern, five of which failed their own criteria and one of which returned a competing method as the better one (Section \ref{sec:template}).
+\item \textbf{[Systems]} \textbf{A framework and an evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added to a frozen estimator, 402 floating-point operations per frame, no labels and no camera parameters at any stage; 240 numerical claims checked against stored artifacts by an automated audit; 76 tests; and eight pre-registrations committed to version history before the experiments they govern, five of which failed their own criteria and one of which returned a competing method as the better one (Section \ref{sec:template}).
 \end{itemize}
 
 \section{Report Organization}
@@ -691,7 +691,7 @@ Figure \ref{fig:qual} shows the system on frames of that demonstration footage, 
 
 \section{Reproducibility Infrastructure}
 
-The reporting practice adopted here is a response to the fact that several early claims in this project did not survive scrutiny. Three mechanisms are used. The automated audit re-derives 230 headline claims from stored artifacts and fails on any drift, so a number cannot silently rot after a re-run; it is an artifact-consistency check rather than a re-execution of the experiments, and it verifies that what the report says matches what the runs produced, not that the runs were repeated. A unit test suite of 76 tests covers the geometric core, the corruption operators, the fusion arithmetic and the aggregation logic of the Human3.6M experiments, using stub models so that it runs without weights or data. Finally, the criterion for each of seven experiments --- test-time augmentation, the multi-landmark frame, conditioning-based abstention, the joint-level radial test, the non-constructor recomputation, the template baseline and its two ablations --- was written down and committed to version control before that experiment was run, so an unwelcome outcome cannot be attributed to a criterion chosen afterwards. Five of the seven failed their own criteria, and a fifth returned a competing method as the better one.
+The reporting practice adopted here is a response to the fact that several early claims in this project did not survive scrutiny. Three mechanisms are used. The automated audit re-derives 240 headline claims from stored artifacts and fails on any drift, so a number cannot silently rot after a re-run; it is an artifact-consistency check rather than a re-execution of the experiments, and it verifies that what the report says matches what the runs produced, not that the runs were repeated. A unit test suite of 76 tests covers the geometric core, the corruption operators, the fusion arithmetic and the aggregation logic of the Human3.6M experiments, using stub models so that it runs without weights or data. Finally, the criterion for each of eight experiments --- test-time augmentation, the multi-landmark frame, conditioning-based abstention, the joint-level radial test, the non-constructor recomputation, the template baseline and its three ablations --- was written down and committed to version control before that experiment was run, so an unwelcome outcome cannot be attributed to a criterion chosen afterwards. Five of the eight failed their own criteria, and a fifth returned a competing method as the better one.
 
 The appendix tables are generated from the artifacts by a script rather than typed, which closes the last gap between what the artifacts contain and what the report claims.
 
@@ -890,11 +890,38 @@ The reference skeleton is the mean canonical pose over the MPI-INF-3DHP cache, 2
 
 \textbf{The baseline is better, on both backbones, by a wide margin.} On the thirteen non-constructor joints the anatomical frame gives 93.4 mm against the template's 57.5 mm on the first backbone, a paired difference of $-35.9$ mm with a cluster bootstrap interval of $[-59.0, -19.9]$, and 74.8 against 55.9 mm on the second, a difference of $-18.9$ with an interval of $[-20.9, -16.9]$. Both intervals exclude zero in the baseline's favour. The anatomical frame is closer on \textbf{none} of the 180 pairs under either backbone, and on 1 and 5 pairs respectively when all seventeen joints are scored. This is outcome 1 of the three the pre-registration fixed in advance: on these data, the anatomical construction is not justified against the simplest alternative that meets the same requirements.
 
-Two properties of the comparison belong with the number rather than after it. The template estimator fits its rotation by least squares over all seventeen joints, where ours reads two anatomical vectors, so it uses strictly more of each prediction. And it normalizes translation by the centroid of the pose while ours uses the root joint alone, so part of the gap may be better translation handling rather than better orientation; we have not separated the two. Both observations describe how the baseline wins, not whether it does.
+Two properties of the comparison belong with the number rather than after it. The template estimator fits its rotation by least squares over all seventeen joints, where ours reads two anatomical vectors, so it uses strictly more of each prediction. And it normalizes translation by the centroid of the pose while ours uses the root joint alone. Section \ref{sec:translation} separates that second effect and finds it minor but not negligible. Both observations describe how the baseline wins, not whether it does.
 
 We record the result and stop there. What it implies for the framing of this report is a judgement that should be made on the evidence as a whole rather than appended to the experiment that produced it, and Section \ref{sec:limitations} lists it as the strongest outstanding objection to the method.
 
-\subsection{Two Ablations of That Baseline}
+\subsection{Orientation or Translation?}
+\label{sec:translation}
+
+The two methods do not place their poses at the same origin. Ours is root-centred, putting joint 0 at the origin; the template baseline is centroid-centred, because the Kabsch fit subtracts the mean of the point set. Centroid-centring averages seventeen joints where root-centring relies on one, so some of the reported advantage may be steadier translation rather than better orientation. We pre-registered the separation and ran the two-by-two, changing only where the output is centred and leaving both estimators untouched.
+
+\begin{table}[htbp]
+\centering
+\caption[Orientation or translation]{Mean cross-view distance in millimetres under each centring, on the same 180 pairs. Only the origin of the output changes; the rotation estimates are unaltered.}
+\label{tab:translation}
+{\fontsize{10}{12}\selectfont
+\begin{tabular}{llrr}
+\hline
+\textbf{Backbone} & \textbf{Method} & \textbf{Root-centred} & \textbf{Centroid-centred} \\
+\hline
+MotionAGFormer-XS & anatomical & 75.32 & 75.85 \\
+                  & template   & 59.96 & \textbf{53.03} \\
+\hline
+MotionBERT        & anatomical & 60.09 & 60.78 \\
+                  & template   & 56.93 & \textbf{51.27} \\
+\hline
+\end{tabular}}
+\end{table}
+
+Three things follow. \textbf{The baseline wins under every centring on both backbones}, with intervals excluding zero in all four cases, so the result of Section \ref{sec:template} is not an artifact of the mismatch. \textbf{Translation accounts for a minority of the gap but not a trivial one}: comparing like with like gives 19.1 and 6.3 mm against the 22.3 and 8.8 reported, so 14 percent of the advantage on the first backbone and 28 percent on the second is translation handling rather than orientation. \textbf{And the magnitude is centring-dependent in a way worth stating plainly.} Under the centring least favourable to the baseline, both methods root-centred, the gap on MotionBERT falls from 8.8 mm to 3.2, an interval of $[-4.8, -1.5]$. The direction of the result is robust; its size is not, and a reader comparing these methods should know which convention produced which number.
+
+The asymmetry has a simple cause. Centroid-centring improves the template by 6.9 and 5.7 mm because its rotation was fitted under exactly that centring, so the two agree. It makes the anatomical frame slightly \emph{worse}, by 0.5 and 0.7 mm, because that frame is constructed about the root and re-centring it elsewhere is inconsistent with its own definition. Each method is best served by the origin it was built for, which is why the mixed comparison in Section \ref{sec:template} --- each method in its natural form --- remains the one a practitioner would face.
+
+\subsection{Two Further Ablations of That Baseline}
 \label{sec:templateablation}
 
 Two objections to the comparison arise immediately and neither is answered by the experiment that produced it. Both were pre-registered and run.

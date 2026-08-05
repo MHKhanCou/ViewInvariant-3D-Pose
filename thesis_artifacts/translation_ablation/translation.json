@@ -1,0 +1,33 @@
+{
+ "n_pairs": 180,
+ "cells_mm": {
+  "anatomical_root_mm": 75.31521846225431,
+  "anatomical_centroid_mm": 75.84554683865899,
+  "template_root_mm": 59.95535595530261,
+  "template_centroid_mm": 53.033269964779365
+ },
+ "gaps": {
+  "root": {
+   "mean": -15.35986250695171,
+   "ci95": [
+    -33.896802697248816,
+    -2.8689081211190155
+   ],
+   "n_clusters": 30,
+   "draws": 10000
+  },
+  "centroid": {
+   "mean": -22.812276873879625,
+   "ci95": [
+    -41.8291381647572,
+    -9.935451014883103
+   ],
+   "n_clusters": 30,
+   "draws": 10000
+  }
+ },
+ "reported_mixed_gap_mm": -22.281948497474943,
+ "like_for_like_gap_mm": -19.08606969041567,
+ "translation_share_mm": -3.195878807059273,
+ "prediction_cache": "preds.npz"
+}
