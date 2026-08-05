@@ -378,6 +378,39 @@ the most recently checked.
 
 ---
 
+### 10c. "A simpler method beats yours. Then why build the frame at all?"
+
+**This follows immediately once they accept your framing, and it is the question
+the whole thesis turns on. Know it cold.**
+
+First concede without hedging:
+
+> Kabsch alignment to a fixed skeleton beats my frame on both backbones, every
+> centring, three unrelated templates and all fifteen actions. I found no pose
+> regime where mine is preferable, I pre-registered that comparison with its
+> readings fixed beforehand, and it is in my abstract.
+
+Then the answer they are actually asking for:
+
+> **Because the baseline cannot run the experiment.** It has no anatomical axis,
+> so there is no variable to hold fixed and vary. My central result is that axis
+> length decides between frame constructions and nothing finer, and the test for
+> it is hip axis against shoulder axis with the joint set, the scored set and
+> the constructor count held identical and only the length differing. That
+> comparison does not exist in a template-alignment method — there is no axis to
+> lengthen. The frame is the instrument because it exposes the parameter the
+> question is about.
+>
+> So the baseline wins the engineering comparison and is silent on the
+> scientific one. Section 2.6 called the construction an instrument rather than
+> a result before I had any reason to need that framing, and the boundary
+> analysis is unaffected by the baseline result.
+
+**Do not present this as consolation.** It is a statement about what each method
+can and cannot measure, and it is true independently of which one aligns better.
+
+---
+
 ### 11. "Show me it's useful for anything." — WEAKEST ANSWER, do not bluff
 
 > I can't, and it is the clearest gap in the work. My retrieval experiment is
