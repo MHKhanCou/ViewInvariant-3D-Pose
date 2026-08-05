@@ -177,6 +177,13 @@ I would like to express my deepest gratitude to my project supervisor, \textbf{D
 % ========================== CHAPTER 1 ================================
 \chapter{INTRODUCTION}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{images/fig_teaser.png}
+\caption{The problem and the operation, on one instant of Human3.6M seen by two synchronized cameras. Left and right are drawn from above, because two views of the same instant differ mainly in azimuth and a frontal projection conceals almost all of it; the frame in the centre is drawn from the front, where its construction is legible. The instant shown is the one whose improvement is the median for its sequence, not the most favourable. All three panels are real predictions and the distances are the measured ones.}
+\label{fig:teaser}
+\end{figure}
+
 \section{Background}
 
 Three-dimensional human pose estimation recovers the spatial coordinates of body joints from visual input. Depth sensors and calibrated multi-camera rigs achieve high accuracy, but their cost and setup requirements make them impractical for deployment outside the laboratory. Monocular estimation from ordinary RGB video is therefore of considerable practical interest, and modern transformer-based lifting networks such as MotionAGFormer [1] and MotionBERT [2] achieve mean per-joint position errors near 45 mm on the Human3.6M benchmark [11].
@@ -212,22 +219,22 @@ The framework described below is the vehicle for answering it rather than the en
 
 \section{Contributions}
 
-The primary contribution is a design principle for anatomical reference frames, derived and then bounded by experiment. The framework is the vehicle that makes it testable, and the negative results are reported at the same weight as the positive ones.
+The geometry this project builds on is not ours. The frame construction is the TRIAD algorithm [19], the rule that the better-determined direction should be primary is Shuster and Oh's [20], and the propagation of landmark error into anatomical frame orientation is developed in biomechanics [23, 24]. What we contribute is the transfer of that reasoning to joints inferred by a frozen network rather than placed by an examiner, and, principally, the experimental boundary of how far it carries. Each item below is labelled with the kind of contribution it is, so that a reader can weigh them without inferring the category from the prose.
 
 \begin{itemize}
-\item \textbf{A transfer of established geometry to inferred anatomy, claimed as a transfer and not a discovery.} The construction is TRIAD [19]; the rule that the better-known direction should be primary is Shuster and Oh's [20]; the propagation of landmark error into anatomical frame orientation is developed in biomechanics [23, 24]. None of these is claimed here. What is ours is their application to joints inferred by a frozen network rather than placed by an examiner, where the error has a different origin, and the design consequence that follows for choosing a canonical axis. On two independently trained backbones of different architecture and nineteen-fold different size, rank correlation with cross-view consistency is 0.904 and 0.880. The ordering is what we claim; the fitted constant is not determined tightly enough by eight frame definitions to be called physical, and Section \ref{sec:multilandmark} withdraws an earlier argument that rested on it. Acting on the ordering raises the multi-scale improvement from 25.6 to 55.1 percent at no parameter cost.
+\item \textbf{[Analysis]} \textbf{A three-level delimitation of the axis-length principle, pre-registered at each level.} Axis length governs the choice \emph{between} frame constructions, at rank correlations of 0.904 and 0.880 on two independently trained backbones of different architecture and nineteen-fold different size. It does not govern which frame within one construction to trust, because there the axis is an anatomical near-constant. It does not govern which joint within a frame will disagree. Two of the three tests are failures, and the boundary they establish is the contribution: it tells a designer to apply the principle when choosing what to build the frame from, and not to expect it to do anything finer.
 
-\item \textbf{A three-level delimitation of that principle, pre-registered at each level.} It governs the choice between frame constructions. It does not govern which frame within a construction to trust, because there the axis is an anatomical near-constant, and it does not govern which joint within a frame will disagree, because joint-level disagreement is dominated by articulation: joints rigid with the torso sit at a larger radius than articulated ones yet disagree by a factor of 2.5 less. Two of the three tests are failures, and the boundary they establish is what tells a designer where to apply the principle.
+\item \textbf{[Negative result]} \textbf{Articulation, not radius, governs per-joint disagreement.} The rigid-segment relation that displacement grows with distance from the frame origin [24] does not survive on a whole articulated skeleton. Joints rigid with the torso sit at a \emph{larger} mean radius than articulated joints and yet disagree across views by a factor of two and a half \emph{less}, on both backbones, with matched-radius pairs differing by one to three percent in radius and roughly a factor of two in distance. Neither the aerospace nor the single-segment biomechanical literature had reason to test this.
 
-\item A canonicalization and reliability framework that adds zero learned parameters to a frozen estimator, evaluated over 209 camera pairs across two datasets and, without a line of code changed, over a second backbone nineteen times larger and of a different architecture family.
+\item \textbf{[Validation]} \textbf{Cross-dataset and cross-backbone replication of the central claim.} On Human3.6M, which took no part in developing the method, canonicalization improves 179 of 180 held-out camera pairs and closes 90.5 percent of the gap to a per-frame Procrustes oracle; the same code unmodified improves 359 of 360 pairs across two backbones sharing no architecture.
 
-\item A cross-dataset replication of the central claim on Human3.6M, where canonicalization improves 179 of 180 held-out camera pairs and closes 90.5 percent of the gap to a per-frame Procrustes oracle.
+\item \textbf{[Empirical finding]} \textbf{The falsified reliability score gates canonicalization quality.} Falsified as an accuracy predictor along five independent axes, with the cause identified, the same score nonetheless triages the quantity its own specification names, cutting mean cross-view distance by 22 percent at thirty percent abstention and surviving a confound control on both backbones. This result was a comparator within its pre-registration rather than its subject, and is reported as exploratory throughout.
 
-\item Calibration-free multi-view fusion in the shared frame, together with the finding that the estimator must be robust when views are few, since at four views a median reliably improves on an arbitrary single view while an unweighted mean does not.
+\item \textbf{[Negative result]} \textbf{A retraction of our own error predictor.} A temporal bone-length signal reaching $\rho = +0.492$ on the first dataset falls to $+0.098$ on the second and fails every criterion; we retract the general claim and state the narrower condition under which it holds.
 
-\item A systematic falsification of the proposed quality signal along five independent axes with identification of its underlying cause, followed by a pre-registered experiment establishing the narrower claim that the same score does gate canonicalization quality, cutting mean cross-view distance by 22 percent at thirty percent abstention and surviving a confound control on both backbones.
+\item \textbf{[Engineering]} \textbf{Calibration-free multi-view fusion in the shared frame}, with the finding that the estimator must be robust when views are few, since at four views a median reliably improves on an arbitrary single view while an unweighted mean does not.
 
-\item A cross-dataset replication that retracts our own bone-length error predictor and bounds the condition under which it holds.
+\item \textbf{[Systems]} \textbf{A framework and an evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added to a frozen estimator, 402 floating-point operations per frame, no labels and no camera parameters at any stage; 167 numerical claims recomputed from stored artifacts by an automated audit; 72 tests; and four pre-registrations committed to version history before the experiments they govern, two of which the results then contradicted.
 \end{itemize}
 
 \section{Report Organization}
@@ -1235,13 +1242,62 @@ Canonicalization degrades cross-view retrieval, with recall at rank one falling 
 We flag one limitation of this experiment explicitly, because it is a departure from the protocol used everywhere else in this report. It predates the correction described in Section \ref{sec:protocol}: it evaluates fifty near-identical standing poses under the superseded single-frame protocol, and a recall at rank one of 0.02 before canonicalization indicates that the task was close to chance to begin with, so there was little for the method to degrade. We therefore report the number as a bound rather than as a measurement, and we do not claim it establishes that canonicalization harms retrieval in general. A proper test would use the cached Human3.6M predictions and a gallery drawn per subject and action, and it is listed in Section \ref{sec:future} as future work rather than presented here.
 
 % ========================== CHAPTER 5 ================================
-\chapter{CONCLUSION AND FUTURE WORK}
+\chapter{DISCUSSION, CONCLUSION AND FUTURE WORK}
+
+\section{Discussion}
+\label{sec:discussion}
+
+This project began with a method and ended with a question, and the question turned out to be the more useful of the two. We set out to make the predictions of a frozen estimator comparable across viewpoints; we finish able to say which geometric intuitions about reference frames survive contact with an articulated human body reconstructed by a neural network, and which do not. This section sets out what we learned, in the order in which it changed our own understanding rather than in the order the experiments were run.
+
+\subsection*{What Transferred From Rigid-Body Geometry}
+
+Three ideas from attitude determination transferred intact, and their transfer was not obvious in advance, because that literature was written for spacecraft carrying instruments that report their own uncertainty.
+
+The first is the asymmetry of the construction. TRIAD reproduces its primary direction exactly and lets the secondary determine only the rotation about it, so the two inputs are not interchangeable and the choice of primary is a design decision. Our results are an instance of this: the frames that performed worst were those built on a short primary axis, and correcting that raised the multi-scale improvement from 25.6 to 55.1 percent without adding a parameter.
+
+The second is the rule that follows, that the better-determined direction should be primary [20]. For a skeleton, better-determined means longer, because the angular uncertainty of a segment direction falls as $2\sigma/L$. That step is the one biomechanics had already taken for palpated markers [23, 24], and our contribution is to apply it where the landmarks are network outputs rather than examiner judgements.
+
+The third is Wahba's condition. Combining more than two directions is only optimal under inverse-variance weighting and independence, and both assumptions are visibly false here: the axes span 138 to 461 mm, so their variances differ by an order of magnitude, and one network predicting all seventeen joints from one image makes their errors dependent. We tested the combination anyway, and it failed in exactly the manner the theory predicts, which we regard as a stronger outcome than a success would have been. It is also the reason the plain two-vector construction survives: it never relied on either assumption.
+
+\subsection*{What Did Not Transfer, and Why}
+
+One idea did not survive, and it is the one we had most reason to expect would. Both source literatures carry a relation of the form: a frame in error by a small angle displaces a point at distance $l$ from the origin by roughly $l\alpha$. It is exact for a rigid body, it is the basis of the pivot effect in marker-based motion capture, and it predicts that distal joints should disagree across views more than proximal ones in proportion to their radius.
+
+On a whole articulated skeleton it is not merely imprecise but wrong in sign. Joints that move rigidly with the torso --- the neck, the head, the shoulders --- sit at a \emph{larger} mean radius than the knees, feet, elbows and wrists, and disagree across views by a factor of two and a half \emph{less}. Matching on radius removes any doubt about the grouping: the shoulder and the knee differ by 1.2 percent in radius and by a factor of 2.6 in cross-view distance.
+
+The explanation is that a body is not a rigid body, which is obvious once stated and was not obvious to us beforehand. A joint rigidly attached to the torso inherits the frame's error and nothing else, so the pivot relation applies to it. A joint beyond a hinge carries, in addition, the estimator's error in that hinge angle, and for a backbone operating in its training domain that second term dominates. The rigid-body reasoning is not wrong; it is simply describing a smaller share of the error than the geometry alone would suggest.
+
+\subsection*{What Surprised Us}
+
+Two results ran against our expectations, and in both cases the expectation was ours rather than the literature's.
+
+The analytic reliability score was falsified as a predictor of pose accuracy along five independent axes, and we spent a chapter explaining why a within-frame plausibility measure cannot see a coherent depth error. We then tested it against the target its own specification names --- whether the body frame is fit to canonicalize with --- and it worked, on both backbones, surviving a confound control. The lesson is narrow and we state it narrowly: five careful falsifications can all be aimed at the wrong target. We had never asked the score to do the job it was written for.
+
+The reverse happened with geometric conditioning. It was derived to succeed, follows directly from the relation the rest of the report relies on, and was pre-registered with a criterion we expected to pass. It failed. In hindsight the reason was measurable in advance and we should have measured it: within one frame construction the lateral axis is essentially the subject's hip width, varying by 5.5 percent, whereas between constructions it varies by a factor of 3.34. A relation confirmed across a factor of three has no purchase on a factor of one point three.
+
+\subsection*{What a Future Researcher Should Take From This}
+
+Three things, stated as advice rather than as findings.
+
+Apply the axis-length principle at design time, not at inference. It is a rule for deciding what to build a frame from, and our attempt to convert it into a per-frame abstention criterion failed for a reason that will recur: within a fixed anatomical construction there is almost nothing left for it to vary over.
+
+Do not assume rigid-body error propagation across an articulated chain. The relation holds within a segment. Across a hinge it is dominated by a term the geometry does not model, and any per-joint uncertainty estimate built on radius alone will be wrong in a way that looks plausible.
+
+Separate the joints that define a frame from those that are scored by it. Canonicalization appears nearly perfect at the thorax and hips, at 22.1 and 54.4 mm against 197.5 mm for articulated joints, because the construction pins those joints by definition. Any per-joint average over all seventeen absorbs that artifact silently and overstates the method, including ours before we noticed.
+
+\subsection*{Why This Work Is Valuable Despite Being Incremental}
+
+We do not propose a new architecture, a new loss, or a new training procedure, and the geometry we use is between forty and sixty years old. What this project offers instead is an investigation of how a training-free anatomical canonicalization actually behaves: where classical geometric reasoning transfers to articulated pose estimated by a network, where it stops, and what that costs a system built on it. The framework is the instrument rather than the result, and the negative results are load-bearing rather than incidental --- two of the four pre-registered experiments failed, and the boundary they mark is what a practitioner needs in order to know when the remaining positive result applies. A deployment-oriented canonicalization system built after this report should be able to make its frame-design choices from evidence rather than from intuition, and should know not to expect the same reasoning to carry to per-frame or per-joint confidence. That is a modest contribution, and we prefer to describe it accurately than to inflate it.
+
+\section{Conclusion}
 
 In this project we developed a framework that makes the predictions of a frozen monocular 3D pose estimator comparable across viewpoints without training, labels, or camera calibration. Canonicalization reduces cross-view joint distance by 32.4 percent across twenty-seven held-out camera pairs of MPI-INF-3DHP and by 74.1 percent, with a cluster bootstrap interval of $[+69.8, +77.2]$ percent, across 180 held-out pairs of Human3.6M, where it improves 179 of 180 pairs and closes 90.5 percent of the gap to a per-frame Procrustes oracle. The multi-scale extension improves every pair tested on the first dataset and 179 of 180 on the second, and reporting its levels separately showed that the length of the axis a frame is built from governs how consistent that frame is across views. Rebuilding each segment frame from its own long axis raises the gain from 25.6 to 55.1 percent and improves all 180 pairs. The shared frame enables calibration-free multi-view fusion, which on Human3.6M requires a median rather than a mean, because at four views only the median improves reliably on an arbitrary single camera.
 
 It is worth stating plainly what kind of contribution this is. The work is a deployment-oriented geometric framework, not a new learning algorithm. Body-frame normalization is not itself novel, and Section 2.3 says so: 3DPCNet addresses the same problem and reports a hand-built baseline of this kind performing worse than its learned alternative. What we claim is the combination and its evidence. The framework adds zero trained parameters, consumes no labels and requires no calibration, so applying it to a new estimator, camera or domain costs nothing but the arithmetic; and it is evaluated over 209 camera pairs across two datasets, the second of which took no part in its design. Whether that trade is worth making depends on whether a practitioner can afford to train, which is a deployment question rather than an accuracy one.
 
-One finding is genuinely a design result rather than an evaluation, and we regard it as the most transferable thing in this report, since any method that builds a frame from anatomical landmarks faces the same choice. The consistency of a body frame across viewpoints is governed by the length of the axis it is built from. We predicted it from the construction, discovered it through a bilateral asymmetry we had not gone looking for, confirmed it by correcting that asymmetry, generalized it to a second case the same reasoning identified, and then derived it from first principles as $\theta \approx 2\sigma/L$.
+One thread runs through the positive results and is worth separating from them, because any method that builds a frame from anatomical landmarks faces the same choice. The consistency of a body frame across viewpoints is governed by the length of the axis it is built from. We arrived at it by prediction from the construction, then through a bilateral asymmetry we had not gone looking for, then by correcting that asymmetry, then by generalizing to a second case the same reasoning identified, and finally by writing it as $\theta \approx 2\sigma/L$ --- which, as Section \ref{sec:triad} records, restates a result the biomechanics literature already had.
+
+We therefore do not present that relation as the transferable finding. The transferable finding is the boundary around it.
 
 We are careful about what part of this is ours, and a late literature check narrowed it twice. The construction is TRIAD [19] and the rule that the better-determined direction should be primary is Shuster and Oh's [20], both predating this work by decades. The propagation of landmark position error into anatomical frame orientation is likewise established, in biomechanics rather than in aerospace, by Della Croce and colleagues [23, 24], who also give the companion relation that displacement at distance $l$ from the frame origin grows as $l \tan\alpha$. An earlier draft of this report presented equation \eqref{eq:theta} as a derivation of ours; it is a restatement, and Section \ref{sec:triad} now says so.
 

@@ -9,6 +9,79 @@ trace, and that is worth more than one recalled digit.
 
 ---
 
+## FOUR LENGTHS — rehearse each aloud until it is not a recitation
+
+### 10 seconds
+
+> Two cameras looking at the same person produce two different sets of 3D
+> coordinates. I remove the camera from the answer using the body's own anatomy,
+> with no training and no calibration — and I establish exactly how far that
+> geometric reasoning carries.
+
+### 30 seconds
+
+> Monocular 3D pose estimators report the skeleton in the camera's frame, so the
+> same pose from two viewpoints gives two different answers. I build a coordinate
+> frame out of the predicted body itself — torso axis, then hip axis — and apply
+> it after prediction. It adds no parameters and needs no calibration. On
+> Human3.6M, which I did not use to develop it, cross-view distance falls 74
+> percent across 180 held-out pairs and 179 of them improve. The construction is
+> the TRIAD algorithm from spacecraft attitude determination; I do not claim it.
+> What I contribute is where the reasoning behind it stops working on a human
+> body.
+
+### 2 minutes
+
+> Add, after the 30-second version:
+>
+> The design question is what to build the frame from, and the geometry answers
+> it: a direction read from two joints a distance L apart is uncertain by about
+> 2σ/L, so use the longest axis available. Acting on that raised my multi-scale
+> result from 25.6 to 55.1 percent at no cost.
+>
+> I then pre-registered three tests of how far that principle goes, committing
+> each criterion to version control before running. It decides between frame
+> constructions — rank correlation 0.90 and 0.88 on two different backbones. It
+> does **not** decide which individual frame to trust, because within one
+> construction the axis is essentially the subject's hip width and barely varies.
+> And it does not decide which joint will disagree, which is the interesting
+> failure: joints rigidly attached to the torso sit *further* from the root than
+> the knees and yet disagree two and a half times *less*. That contradicts the
+> rigid-body prediction in the wrong direction to be a matter of degree. A body
+> has hinges; a spacecraft does not.
+>
+> Two of my three pre-registered tests failed, and the boundary they establish is
+> the contribution.
+
+### 5 minutes
+
+> The 2-minute version, then the negative results as a block, in this order,
+> because volunteering them is worth more than defending them:
+>
+> 1. **The reliability score.** I proposed it, then falsified it as an accuracy
+>    predictor five independent ways, and identified the cause — a within-frame
+>    plausibility measure is blind to a coherent depth error, which is what
+>    dominates monocular estimation. Then I tested it against the target its own
+>    docstring names, whether the frame is fit to canonicalize with, and it works
+>    on both backbones. Five careful falsifications had all been aimed at the
+>    wrong target. I report that as exploratory because it was a comparator in
+>    its pre-registration, not its subject.
+> 2. **The bone-length signal.** My strongest single-view finding, ρ = +0.49 on
+>    MPI-INF-3DHP. It falls to +0.10 on Human3.6M and fails every criterion. I
+>    retract it and state the narrower condition where it holds.
+> 3. **Redundant landmarks.** Combining more axes made things worse. The
+>    explanation is Wahba's problem: least-squares over multiple directions is
+>    optimal only under inverse-variance weighting and independence, and both
+>    fail here — my axes span 138 to 461 mm, and one network predicting all
+>    seventeen joints makes their errors dependent.
+>
+> Then the apparatus: 167 numerical claims recomputed from stored artifacts by an
+> automated audit, 72 tests, four pre-registrations timestamped ahead of their
+> results, and two claims withdrawn during the final week because they did not
+> survive a check I should have run earlier.
+
+---
+
 ## The 30-second answer, if you only get one
 
 > I make the predictions of a frozen 3D pose estimator comparable across camera
@@ -203,6 +276,88 @@ defensive: the problem and the gap are unchanged, only the method inverted.
 no gait or sports application was evaluated. The proposal listed four datasets;
 two were used, both multi-camera, which is what the central claim requires. Say
 this plainly rather than let it be discovered.
+
+---
+
+### 7. "Isn't 2σ/L just Cappozzo? Isn't your frame just TRIAD?"
+
+**Both yes. Say so before he finishes the sentence.** This is the question that
+would have ended the defense a week ago and is now one of your strongest moments,
+because you found it yourself and put it in Chapter 2.
+
+> Yes to both, and Section 2.5 says so at length. The construction is TRIAD,
+> Black 1964. The rule that the better-determined axis should be primary is
+> Shuster and Oh, 1981. The propagation from landmark error to frame orientation
+> is Della Croce and Cappozzo, 1999 and 2005. I claim none of it, and an earlier
+> draft of my report did claim the propagation — I withdrew that during the final
+> literature review.
+>
+> What I claim is two things. The transfer: that reasoning was built for markers
+> placed by a human examiner, and I apply it where the landmarks are network
+> outputs, whose error is dominated by coherent depth ambiguity rather than
+> independent placement noise. And the boundary, which is the real result: the
+> rigid-body pivot relation those papers rely on does not survive on an
+> articulated skeleton, and I have the pre-registered experiment that shows it.
+
+**If he presses — "so you found nothing new":**
+
+> I found where a sixty-year-old piece of geometry stops applying to the problem
+> everyone is now using it for, and I found it by pre-registering a test I
+> expected to pass. That is a smaller claim than the one I started the year with,
+> and it is the one that survives.
+
+---
+
+### 8. "Your headline percentage doesn't match your own table."
+
+He may divide 320.4 and 75.3 and get 76.5, not 74.1. **This is disclosed in
+§5.10; know it cold.**
+
+> Every improvement figure is the mean over camera pairs of each pair's own
+> percentage, not the ratio of the aggregate means. The ratio of means would give
+> 76.5 here and 81.0 on the second backbone — both larger. I report the smaller,
+> per-pair convention because it weights every pair equally instead of letting
+> the widest-baseline pairs dominate, and Section 5.10 states this in the
+> paragraph where the numbers first appear.
+
+---
+
+### 9. "You bootstrapped that constant the day before submission."
+
+> Yes. The report had claimed that two backbones producing constants within one
+> percent of each other showed the mechanism was physical. That inference needs a
+> confidence interval on the constant and I had not computed one. When I did, the
+> interval was wider than the estimate — 19 to 42 against a point estimate of 21
+> — so the agreement was a coincidence. I withdrew the argument in the text
+> rather than deleting it quietly, and the bootstrap now runs inside the audit.
+
+**Do not apologise past this point.** Finding your own error late is better than
+not finding it.
+
+---
+
+### 10. "Your triage result wasn't pre-registered." — WEAK, concede it
+
+> Correct, and I label it exploratory everywhere it appears. It was the
+> comparator in a pre-registration whose actual subject failed. What makes me
+> willing to state it at all is that it replicates on two backbones with
+> intervals excluding zero and survives a partial correlation controlling for
+> skeletal distortion. My bone-length signal had less support than that and still
+> died on the second dataset, which is exactly why I will not call this
+> confirmed.
+
+---
+
+### 11. "Show me it's useful for anything." — WEAKEST ANSWER, do not bluff
+
+> I can't, and it is the clearest gap in the work. My retrieval experiment is
+> negative and used a protocol I later superseded. Every result in the report
+> measures a geometric quantity, and none demonstrates that improving it improves
+> a downstream task. That is stated in the limitations and it is the first thing
+> I would do with more time.
+
+Say it in that order — concede, explain, own it. Any attempt to dress this up
+will be seen through, and the honest version costs you less.
 
 ---
 

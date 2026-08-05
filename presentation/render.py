@@ -425,12 +425,90 @@ def two_view(subject=None, action=None, frame=None, cams=None,
     plt.close(fig)
     return out, {"raw_mm": d_raw, "canonical_mm": d_can, "oracle_mm": d_orc,
                  "cameras": [ca, cb], "frame": int(i),
-                 "reduction_pct": 100.0 * (d_raw - d_can) / d_raw}
+                 "reduction_pct": 100.0 * (d_raw - d_can) / d_raw,
+                 "poses": (A[0], B[0], cA[0], cB[0])}
+
+
+def fig_teaser(out="fig_teaser.png", preds=None, dpi=300):
+    """
+    The whole thesis in one row: disagreement, the frame, agreement.
+
+    Reuses two_view's frame selection, so the instant shown is the one whose
+    improvement is the median for its sequence rather than the most flattering,
+    and the numbers printed are the real ones for that instant.
+
+    The projection is from above throughout. Two cameras of a single instant
+    differ mainly in azimuth, which a frontal view conceals almost entirely; the
+    teaser would otherwise show two skeletons that look identical above a caption
+    claiming they are 346 mm apart.
+    """
+    d = two_view(out="_teaser_scratch.png", preds=preds)[1]
+    A, B, cA, cB = d["poses"]
+
+    fig, axes = plt.subplots(1, 3, figsize=(13.0, 4.6))
+    for ax in axes:
+        ax.set_aspect("equal")
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.grid(False)
+        for s in ax.spines.values():
+            s.set_color("#cccccc")
+            s.set_linewidth(0.9)
+
+    draw_pose(axes[0], A, color="#1f77b4", lw=2.6, plane="top")
+    draw_pose(axes[0], B, color="#d62728", lw=2.6, plane="top", alpha=0.9)
+    axes[0].set_title("RAW\ntwo cameras, one instant", fontsize=11.5, pad=10)
+
+    # Centre panel: the construction itself, drawn on one pose from the front.
+    # The x limits are set explicitly because equal aspect on a tall, narrow
+    # skeleton leaves a window too narrow for the horizontal hip arrow, which is
+    # then silently clipped - the axis that is half the point of the panel.
+    draw_pose(axes[1], A, color="#b8b8b8", lw=2.0, flip_y=True, plane="front")
+    draw_frame_axes(axes[1], A, scale=330.0, flip_y=True)
+    axes[1].set_xlim(A[0, 0] - 430, A[0, 0] + 430)
+    axes[1].text(A[0, 0] + 40, -A[0, 1] + 330, "torso\n(primary)", fontsize=9.5,
+                 color="#2ca02c", ha="left", va="center")
+    axes[1].text(A[0, 0] + 350, -A[0, 1] + 25, "hip\n(secondary)", fontsize=9.5,
+                 color="#ff7f0e", ha="center", va="bottom")
+    axes[1].set_title("TRIAD BODY FRAME\nbuilt from the prediction itself",
+                      fontsize=11.5, pad=10)
+
+    draw_pose(axes[2], cA, color="#1f77b4", lw=2.6, plane="top")
+    draw_pose(axes[2], cB, color="#d62728", lw=2.6, plane="top", alpha=0.9)
+    axes[2].set_title("CANONICAL\nsame two cameras", fontsize=11.5, pad=10)
+
+    for ax in (axes[0], axes[2]):
+        xs, ys = ax.get_xlim(), ax.get_ylim()
+        cx, cy = sum(xs) / 2, sum(ys) / 2
+        half = max(xs[1] - xs[0], ys[1] - ys[0]) / 2 * 1.08
+        ax.set_xlim(cx - half, cx + half)
+        ax.set_ylim(cy - half, cy + half)
+
+    for ax, mm, colour in ((axes[0], d["raw_mm"], "#b3261e"),
+                           (axes[2], d["canonical_mm"], "#1a7f37")):
+        ax.text(0.5, -0.09, "%.0f mm apart" % mm, transform=ax.transAxes,
+                ha="center", va="top", fontsize=20, color=colour)
+
+    for x in (0.352, 0.655):
+        fig.text(x, 0.52, r"$\Longrightarrow$", fontsize=26, color="#555555",
+                 ha="center", va="center")
+    fig.text(0.5, -0.02,
+             "no training  $\\cdot$  no labels  $\\cdot$  no camera calibration"
+             "  $\\cdot$  0 trained parameters  $\\cdot$  402 FLOPs per frame",
+             ha="center", fontsize=12, color="#333333")
+    fig.savefig(os.path.join(IMG, out), dpi=dpi, bbox_inches="tight")
+    plt.close(fig)
+    try:
+        os.remove(os.path.join(IMG, "_teaser_scratch.png"))
+    except OSError:
+        pass
+    return out, d
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--twoview", action="store_true")
+    ap.add_argument("--teaser", action="store_true")
     args = ap.parse_args()
 
     os.makedirs(IMG, exist_ok=True)
@@ -440,6 +518,10 @@ def main():
         out, d = two_view()
         print("wrote %s   raw %.1f -> canonical %.1f mm (oracle %.1f)"
               % (out, d["raw_mm"], d["canonical_mm"], d["oracle_mm"]))
+    if args.teaser:
+        out, d = fig_teaser()
+        print("wrote %s   raw %.0f -> canonical %.0f mm  (-%.0f%%)"
+              % (out, d["raw_mm"], d["canonical_mm"], d["reduction_pct"]))
 
 
 if __name__ == "__main__":
