@@ -1,235 +1,179 @@
-# Update since the last plan
+# Update for review — current state
 
 Thesis: view-invariant 3D human pose estimation. Report due 6 Aug, defense 9 Aug.
-This covers everything done since the one-day sprint plan was written.
+This supersedes the previous version of this file, which was written before the
+final correctness pass.
 
-Current state: **74 pages, 150/150 audit claims verified against stored
-artifacts, 72/72 tests passing.** Every number below traces to a JSON artifact
-via `python -m evaluation.audit_numbers`.
+**Current state: 87 pages, 167/167 audit claims verified against stored
+artifacts, 72/72 tests, abstract on one page, all 24 references cited.**
+
+Since the last update the research was frozen and the work turned to correctness
+and communication. **No new experiment was run.** Four things were withdrawn or
+corrected, and every one of them made the thesis weaker on paper and stronger
+under scrutiny.
 
 ---
 
-## 1. The conditioning-abstention experiment (plan item 1, primary)
+## 1. A claim was withdrawn because it had no confidence interval
 
-The plan was to build a label-free successor to the analytic reliability score
-out of the geometry the report derives in Section 3.2.
+The report argued that a fitted constant agreeing across two independently
+trained backbones — c = 21.3 and 21.5 mm, "within one percent" — showed the
+mechanism was physical, and called this its strongest evidence.
 
-**Before implementing, the implication was checked mathematically, and it did not
-hold in the form first written down.** `theta_rms ~= 2*sigma/L` describes the
-distribution of angular error for a given axis length, not one frame's
-realisation of it. Measured over 52,900 frames, the lateral axis varies by
-CV 5.5 percent and p99/p1 = 1.29 *within* a construction, against 3.34 *between*
-constructions - roughly 4.6x less variation in the regime the experiment would
-have run in. The index is also computed from the prediction, so a distorted pose
-raises both the index and the error; a positive correlation would have been
-uninterpretable, which is exactly the trap the bone-length signal fell into.
+That inference requires an interval on c, and none had been computed. A bootstrap
+over the frame definitions gives:
 
-So the pre-registration was rewritten to the narrower question the theory does
-support - can conditioning identify a tail to abstain on - with a coverage-error
-curve against a random-ordering null and a partial correlation given bone-ratio
-deviation as the confound control. Committed as `fc2428a` before any number
-existed.
+| Backbone | c | 95% CI | width |
+|---|---|---|---|
+| MotionAGFormer-XS | 21.3 | **[19.1, 42.4]** | 23.4 mm |
+| MotionBERT | 21.5 | **[19.2, 42.7]** | 23.5 mm |
 
-**Result: the pre-registered criterion FAILED.** Conditioning passes on
-MotionBERT and fails on MotionAGFormer. The pre-registration required both, so it
-is reported as not replicating.
+The interval is wider than the estimate and the two nearly coincide, so two draws
+landing one percent apart is unremarkable. **The argument is withdrawn** — in the
+abstract, contributions, §5.16 and the conclusion — and the withdrawal is stated
+rather than quietly dropped. What survives is the rank correlation, +0.904 and
++0.880, which was always the better-supported half.
 
-**The comparator is the finding.** The analytic reliability score - the component
-the report spends five falsifications demolishing - passes the same test on both
-backbones:
+**Worse than the claim was why it went unchecked.** The axis-law numbers had been
+produced for two days by a scratch script that was never committed, so
+`audit_numbers.py` verified none of them, and the σ stored in the artifact was
+near zero from a stale division while the report quoted 7.5 from elsewhere. The
+committed module now computes exactly what the report quotes, with eleven new
+audit claims covering it.
 
-| | MotionAGFormer-XS | MotionBERT |
+## 2. The prior art was found, twice, and both times it narrowed the claim
+
+**First: the construction is TRIAD.** The Gram-Schmidt body frame built from
+torso and hip axes is the TRIAD algorithm (Black, 1964), the first practical
+method for determining spacecraft attitude from two direction measurements. The
+rule that the better-determined direction should be primary — which is the
+axis-length principle — is Shuster and Oh (1981).
+
+**Second, and this one cost more: the error propagation is established in
+biomechanics.** An external reviewer flagged that "we derive the propagation from
+joint noise to angular uncertainty" had become the heart of the thesis and should
+be verified against biomechanics, motion capture and photogrammetry before
+submission. It does not survive. Della Croce, Cappozzo & Kerrigan (1999)
+propagated anatomical landmark calibration precision to bone geometry and joint
+angles; Della Croce, Leardini, Chiari & Cappozzo (2005) assessed landmark
+misplacement and its effect on joint kinematics. That literature states directly
+that landmark imprecision propagates to anatomical frame orientation, and carries
+the companion pivot relation `e = l·tan α` — which is, in substance, the Level-3
+prediction §5.19 tests and finds to fail.
+
+Equation (3.2) is therefore **a restatement, not a derivation**, and the report
+now says so in §2.5, the abstract, the contributions and the conclusion.
+
+**What survives, stated as three narrower things:**
+
+1. **The transfer** — that reasoning was built for markers placed by a human
+   examiner; we apply it where the landmarks are network outputs, whose error is
+   dominated by coherent depth ambiguity rather than independent placement noise.
+2. **The design consequence** — connecting the biomechanical propagation result
+   to TRIAD's primary-axis rule for choosing a canonical axis.
+3. **The empirical boundary — the actual contribution.** The rigid-segment pivot
+   relation does not survive on an articulated skeleton. Neither aerospace nor
+   single-segment biomechanics had reason to test that.
+
+**The same literature also explains a failure the report previously could not.**
+The SVD variant of the multi-landmark experiment is the *unweighted* solution to
+Wahba's problem, whose optimality requires inverse-variance weights; over axes
+spanning 138 to 461 mm those variances differ by an order of magnitude, and an
+unweighted solution can fall below TRIAD on the best pair alone. The correctly
+weighted variant then fails Wahba's *second* assumption, independence, which one
+network predicting all seventeen joints violates. Both assumptions fail; the
+two-vector construction survives because it needs neither.
+
+## 3. The headline percentage did not reproduce from its own table
+
+Found by trying to reject the report — recomputing its numbers from its tables.
+
+§5.10 read *"reduces mean cross-view joint distance from 320.4 mm to 75.3 mm, an
+improvement of 74.1 percent."* Those two numbers give **76.5 percent**. Every
+improvement figure is the mean over camera pairs of each pair's own percentage,
+while the sentence invites a ratio of aggregate means. The same gap appears on
+the second backbone (77.6 against 81.0) and in the oracle-gap figures (90.5
+against 91.1; 94.5 against 96.1).
+
+Nothing was recomputed and no number changed — the per-pair convention is the
+conservative one in every case. What changed is that the report now says so, in
+the paragraph where a reader first reaches for a calculator, with six audit
+claims pinning both conventions and asserting the quoted one is the smaller.
+
+## 4. The README cited three papers wrongly
+
+A correctness problem outside the .tex. The README contradicted the thesis's own
+bibliography:
+
+| Work | README said | Correct |
 |---|---|---|
-| mean canonical distance, 0% abstained | 76.2 mm | 60.8 mm |
-| 30% abstained | **59.5 mm** | **54.7 mm** |
-| gain over random @10% | +5.44 mm, 95% CI [+1.53, +9.27] | +2.74 mm [+1.55, +3.81] |
-| worst 5% tail ratio | 1.54x | 1.49x |
-| partial rho given bone deviation | -0.306 | -0.322 |
+| VideoPose3D | *"…in the Wild by Adversarial Learning"*, **Joao Carreira** | *"…in Video with Temporal Convolutions"*, **Pavllo et al.** |
+| MotionBERT | ICCV **2021**, "Wenjie Zhu, Moli Peng" | ICCV **2023**, Zhu, Ma, Liu, Liu, Wu, Wang |
+| P-STMO | NeurIPS 2020, "Mikel Rodriguez" | ECCV 2022, Shan et al. |
 
-Both intervals exclude zero. Both survive the confound control.
-
-**This retracts nothing.** The five falsifications tested the score against
-*ground-truth pose error*, and it still does not predict that. They tested the
-wrong target for part of its purpose: `reliability.py`'s own docstring says the
-score estimates whether the body-frame axes are reliable enough to canonicalize
-with, and against *that* target it works on two backbones.
-
-Consequence for the thesis: "Reliability-Aware" in the approved title is now
-defensible, for a narrow claim. Stated as **exploratory** everywhere it appears,
-because it was a comparator in that pre-registration, not its subject.
-
-Commit `63ddd6e`.
+Fabricated-looking author names in a public repository, with the BibTeX block
+repeating one. It also still described the pre-thesis project — a baseline
+reproduction with a demo — so anyone arriving from the report found different
+work. Rewritten thesis-first, citations checked against the thesis bibliography.
 
 ---
 
-## 2. The joint-level test of the axis-length law (unplanned, added after)
+## What the thesis now claims
 
-The law had been tested *between frame constructions* (confirmed) and *between
-frames of one construction* (failed, above). The level the derivation speaks to
-most directly had never been tested: **across the joints of one canonicalized
-pose.**
-
-A frame carrying rotation error `Theta` displaces a joint at `p_j` by
-`Theta x p_j`, so the frame-induced part of cross-view distance should be linear
-in that joint's radius. A per-frame Procrustes rotation separates that part from
-the estimator's own error.
-
-**What made it worth doing: nothing is fitted.** `sigma = 7.5 mm` came from the
-limb-frame fit, `L_hip = 275.8 mm` and `L_torso = 456.1 mm` from independent
-measurements, giving a predicted slope band of **[0.038, 0.073]** before any data
-was read. The Procrustes bias was recorded in advance as upward, so a slope
-*below* the band would count for more than one above. Pre-registered in
-`be19314`.
-
-**All three predictions failed.** Slope 0.218 and 0.105 against the band;
-R² 0.339 and 0.337 against a 0.80 threshold. On MotionBERT the confound control
-failed too (1.30x vs required 2.0), which the pre-registration had already named
-as voiding the decomposition there. Dropping the frame-defining joints made it
-worse (R² = -0.070).
-
-`tests/test_radial_law.py` includes a **positive control**: on synthetic views
-differing by a pure rotation, the same code path recovers R² > 0.80. So the
-hypothesis failed, not the arithmetic.
-
-**Why it failed (post-hoc, labelled as such, replicates on both backbones):**
-
-| Joint group | mean radius | cross-view distance |
-|---|---|---|
-| Rigid with torso (neck, head, shoulders) | 566 mm | **71.9 mm** |
-| Beyond a hinge (knees, feet, elbows, wrists) | 532 mm | 197.5 mm |
-
-Larger radius, *less* disagreement - the radius model is contradicted in the
-wrong direction to be a matter of degree. Matched pairs remove any grouping
-choice: left shoulder vs left knee differ by **1.2% in radius and 2.62x in
-distance** (MotionBERT: 0.9% and 2.06x). The governing variable is position in
-the kinematic chain relative to the frame's defining segment, not Euclidean
-radius.
-
-**A flattering artifact this caught in our own evaluation:** canonicalization
-looks near-perfect at the thorax (22.1 mm) and hips (54.4 mm) *because the frame
-is built from those joints and the construction pins them*. Any per-joint average
-over all seventeen joints silently absorbs this and overstates the method. Our
-per-joint figures now separate them.
-
-Commit `7794907`.
-
----
-
-## 3. The resulting three-level bound
-
-Three pre-registered tests, two of them failures, now delimit the report's
-central design principle:
+The three-level boundary, each level pre-registered before running:
 
 | Level | Question | Verdict |
 |---|---|---|
-| Between frame **constructions** | Which frame to build? | **Confirmed** - rho +0.904 / +0.880, implied sigma agrees to 1% across two backbones; acting on it raises multi-scale improvement 25.6% -> 55.1% |
-| Between **frames** of one construction | Which frame to trust? | **Fails** - within a construction the axis is an anatomical near-constant |
-| Between **joints** of one frame | Which joint will disagree? | **Fails** - articulation dominates geometry |
+| Between frame **constructions** | What should the frame be built from? | **Holds** — ρ = +0.904 / +0.880; acting on it raises multi-scale 25.6% → 55.1% |
+| Between **frames** of one construction | Which frame to trust? | **Fails** — indistinguishable from a random null |
+| Between **joints** of one frame | Which joint will disagree? | **Fails** — articulation dominates; torso-rigid joints sit at a *larger* radius yet disagree **2.5× less** |
 
-This is now presented as the primary contribution rather than as three scattered
-results.
+Two of three failed, and the boundary is the contribution. Supporting results:
+74.1% cross-view reduction over 180 held-out H36M pairs (179 improve, 90.5% of
+the oracle gap), replicating at 77.5% on a second backbone with unmodified code;
+the falsified reliability score gating canonicalization quality on both backbones
+(reported as exploratory); and the bone-length retraction.
 
----
+## Structural and presentational changes
 
-## 4. Narrative reframe (commit `492e3b7`)
+- **Chapter 6 is now DISCUSSION, CONCLUSION AND FUTURE WORK**, with the
+  Discussion as its first section — what transferred from rigid-body geometry,
+  what did not and why, the two results that surprised us, three pieces of advice
+  for anyone building on this, and a paragraph on why the work is worth reading
+  despite being incremental.
+- **Contribution list retagged by type**: [Analysis], [Negative result] ×2,
+  [Validation], [Empirical finding], [Engineering], [Systems]. The axis-length
+  principle is no longer listed as a contribution; it is inherited.
+- **Narrative leads with the question**, not the framework — canonicalization is
+  occupied prior work (3DPCNet, ICASSP 2026), the scope question is not.
+- **`presentation/render.py`** generates the teaser, four report figures and the
+  two-view comparison from stored artifacts, so a figure cannot drift from the
+  number it illustrates. Three deliberate choices: the two-view picks the
+  **sequence-median frame, not the most flattering**; panels share a scale so the
+  canonical column cannot look tighter by being drawn smaller; and the level-2
+  panel plots a reference curve purely to fix an honest vertical scale, since on
+  a 2 mm axis a null result looks dramatic.
+- **`FREEZE_CHECKLIST.md`** and **`SUPERVISOR_EMAIL.md`** added; `DEFENSE_QA.md`
+  gains 10s/30s/2min/5min explanations and five new questions.
 
-Canonicalization of 3D pose is occupied prior work - 3DPCNet (ICASSP 2026) does
-it with a learned network, and the report already cites and tabulates it. Leading
-with "a training-free canonicalization framework" therefore puts the weakest
-claim first.
+## Where the work is weakest — unchanged, and stated in the report
 
-The question the report actually answers is not occupied: *what determines
-whether an anatomical reference frame is consistent across viewpoints.* It was
-buried - derived in Section 3.2, tested across Chapter 5, third in the
-contributions list, absent from the abstract's opening.
+1. **The metric measures agreement, not correctness.** Two predictions wrong in
+   the same way agree perfectly. The oracle floor and the retained correlation
+   with ground-truth error bound this but do not eliminate it, and that check
+   exists on one dataset only. **Still the sharpest attack.**
+2. **No downstream task succeeds.** Retrieval is negative and used a superseded
+   protocol. The honest ceiling on significance.
+3. **Two datasets, both lab rigs; two backbones, both transformers.**
+4. **The triage finding is exploratory** — a comparator in its pre-registration,
+   not its subject.
 
-Changed: the abstract now states the question, the derivation and the three-level
-result **and still fits on one page**; the contributions list leads with the
-principle and its delimitation, framework demoted to the vehicle; the conclusion
-carries the full arc. Narrative only - nothing re-run, no artifact touched.
+## Questions worth putting to a reviewer
 
-Two stale figures fixed: the abstract claimed the reliability score was falsified
-along *seven* axes when Section 5.9 reports five, and `DEFENSE_QA.md` claimed
-97 tests when `unittest` discovers 67 (now 72).
-
----
-
-## 5. Report corrections found while writing the above (commit `599008b`)
-
-- **Future Work asked for a second frozen backbone** as "the single most valuable
-  outstanding experiment". That experiment is in Section 5.15. Replaced with the
-  gap that actually remains: both backbones are transformers.
-- **Section 5.17 contradicted Section 4.3.** The cross-view retrieval result
-  predates the protocol correction, uses fifty near-identical standing poses, and
-  starts from Recall@1 = 0.02 - close to chance before canonicalization touches
-  it. Now reported as a bound, not a measurement, with the proper experiment
-  moved to Future Work.
-- **CHAMP and CUPS added as [17] and [18].** The report twice said it offers no
-  coverage guarantee "of the kind conformal methods provide" without citing any.
-
----
-
-## 6. Plan status, including one item that died
-
-| Plan item | Status |
-|---|---|
-| 1. Conditioning abstention (primary) | Done - failed as pre-registered, produced the triage finding |
-| 2. Cross-view retrieval (secondary) | **Cut deliberately.** Needed a gallery protocol, a per-backbone run and a careful non-comparison to Pr-VIPE; a null result on the last day would buy a fourth negative in a report already carrying three. The Section 3.7 / 5.14 contradiction it was meant to fix was fixed directly instead |
-| 3. View-count curve ("free", 20 min) | **Dead.** The curve on disk has `weighted_mean` (reliability-weighted), `median`, `reliability_pick`, `mean_single`, `oracle_best` - **no unweighted mean**, which is what the Section 5.11 crossover question is about. Recovering it means re-running `fusion_eval.py`, which rewrites an audited artifact the day before freeze. It stays a stated limitation |
-
----
-
-## 7. Presentation layer - honest status
-
-**Built and working:**
-
-- Gradio app (`app.py`), Image and Video tabs: 2D keypoint overlay, 3D canonical
-  skeleton, avatar render, coordinate-space toggle, rotation control
-- `presentation/bvh_export.py` - body-relative BVH, no camera, 7 tests
-- `presentation/avatar_renderer.py`
-- `canonical/visualization.py`
-- 16 figures in the report, all generated from stored artifacts
-
-**Against the original proposal:** the proposal listed four datasets; two were
-used, both multi-camera, which is what the central claim requires. CMU Panoptic
-and CASIA Gait were not used, and **no gait or sports application was
-evaluated.**
-
-**The honest gap, and it is a real one.** The demo shows the *pipeline* - one
-video in, canonical skeleton out. It does not show the *result*. The thesis's
-central claim is that two cameras viewing the same instant produce poses that
-agree after canonicalization, and nothing in the presentation layer demonstrates
-that. A two-view side-by-side viewer with the live cross-view distance and the
-oracle floor is the one demo that would, estimated at 2.5 h with medium
-engineering risk since the app has no notion of two synchronized inputs. It is
-the only build task left and it changes no claim.
-
----
-
-## 8. Where the work is weakest - stated for review
-
-1. **The headline metric measures agreement, not correctness.** Cross-view
-   distance falls if both predictions are wrong the same way. Guards: the
-   Procrustes oracle floor (canonicalization closes 90.5% of the gap to it), and
-   the multi-scale distance retaining its correlation with ground-truth error
-   (+0.610 vs +0.601). The second check exists on one dataset only. **This is the
-   sharpest available attack.**
-2. **No downstream task succeeds.** Retrieval is negative and its protocol is
-   superseded. The work improves a metric and never shows the metric buys
-   anything. This is the honest ceiling on its significance.
-3. **Two datasets, both lab multi-camera rigs; two backbones, both transformers.**
-   "Model-independent" rests on n=2.
-4. **The triage finding in section 1 above is exploratory**, not the subject of
-   its pre-registration. It replicates on two backbones and survives one confound
-   control, which is more than the bone-length signal ever had - and that signal
-   still died on the second dataset.
-
-## 9. Specific questions
-
-1. Is leading with the axis-length principle rather than the framework the right
-   call, given that two of its three levels are failures?
-2. Is reporting the reliability-triage result at all defensible given it was a
-   comparator rather than the pre-registered subject, or should it be confined to
-   a remark?
-3. Is the two-view viewer worth 2.5 h on the last day, or is defense rehearsal a
-   better use of it?
+1. Is the boundary result — two pre-registered failures plus one confirmation —
+   defensible as the *primary* contribution, or does an examiner read three
+   experiments where two failed as a weak chapter?
+2. Having found the prior art late and narrowed the claim twice in one week, is
+   the reporting of those withdrawals a strength, or does volunteering them
+   invite doubt about what else went unchecked?
+3. Is anything still overstated after the TRIAD and Cappozzo corrections?
