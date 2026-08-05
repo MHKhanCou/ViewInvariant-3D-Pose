@@ -121,8 +121,39 @@ def _resize_to_width(img, target_w):
     return cv2.resize(img, (target_w, int(round(h * scale))), interpolation=cv2.INTER_AREA)
 
 
-def make_frame(img_2d, img_3d):
+def _crop_to_content(img, pad_frac=0.06, bg_thresh=246):
+    """
+    Trim the white margin around a rendered 3D panel.
+
+    Matplotlib reserves a wide margin around a 3D axes, and the panel is drawn
+    at a fixed landscape aspect regardless of the input video. On portrait
+    footage the composite therefore came out around half empty: the 2D strip was
+    304 px wide beside a 960 px panel whose skeleton occupied a fraction of it.
+
+    The crop is driven by the rendered content rather than by fixed insets, so
+    it cannot clip the skeleton no matter what pose or aspect is drawn. If the
+    panel is uniformly background it is returned unchanged.
+    """
+    if img is None or img.size == 0:
+        return img
+    mask = (img < bg_thresh).any(axis=2)
+    rows = np.flatnonzero(mask.any(axis=1))
+    cols = np.flatnonzero(mask.any(axis=0))
+    if rows.size == 0 or cols.size == 0:
+        return img
+    pad_y = int(round((rows[-1] - rows[0] + 1) * pad_frac))
+    pad_x = int(round((cols[-1] - cols[0] + 1) * pad_frac))
+    y0 = max(0, rows[0] - pad_y)
+    y1 = min(img.shape[0], rows[-1] + 1 + pad_y)
+    x0 = max(0, cols[0] - pad_x)
+    x1 = min(img.shape[1], cols[-1] + 1 + pad_x)
+    return img[y0:y1, x0:x1]
+
+
+def make_frame(img_2d, img_3d, trim_3d=True):
     """Stack the 2D and 3D panels side-by-side, equal height."""
+    if trim_3d:
+        img_3d = _crop_to_content(img_3d)
     # Match heights for horizontal stacking.
     h2 = img_2d.shape[0]
     h3 = img_3d.shape[0]
