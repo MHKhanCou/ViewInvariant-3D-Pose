@@ -100,7 +100,39 @@ conservative one in every case. What changed is that the report now says so, in
 the paragraph where a reader first reaches for a calculator, with six audit
 claims pinning both conventions and asserting the quoted one is the smaller.
 
-## 4. The README cited three papers wrongly
+## 4. The articulation boundary is validation, not discovery
+
+A reviewer asked the deciding question: has biomechanics, motion capture or gait
+analysis already observed that rigid-body propagation breaks at articulated
+joints? If yes, the contribution becomes validation in neural pose estimation
+rather than novelty. **The answer is yes**, from two directions:
+
+- **Biomechanics and robotics.** Error accumulation along a kinematic chain is
+  standard — a 1° rotation error at the shoulder becomes centimetres at the
+  wrist; the ankle, as chain endpoint, carries the most accumulated error;
+  rigid-body violation within segments is documented for foot models.
+- **Pose estimation itself.** Wrists and ankles carry the largest per-joint error
+  in every published Human3.6M results table. This is common knowledge in the
+  field.
+
+So the phenomenon is not ours and the report no longer implies it is. Three
+places said or suggested that "neither literature had reason to test this"; all
+three are rewritten.
+
+**What the result still establishes**, stated narrowly: the *frame-geometry
+model* — which predicts per-joint disagreement from radius alone, and which the
+two preceding levels make it natural to reach for — is the wrong model at this
+level. That was tested pre-registered, parameter-free, with a matched-radius
+control removing the confound, and it failed. The value is that it closes a door
+the earlier sections leave conspicuously open.
+
+The reviewer also flagged that calling the axis-length principle simply
+"inherited" was too strong, distinguishing the underlying physics (known) from
+the design guideline for training-free canonicalization frame selection
+(potentially ours). That distinction is now made explicitly in §2.5, and the word
+"transfer" has been replaced with an evaluation-of-applicability framing.
+
+## 5. The README cited three papers wrongly
 
 A correctness problem outside the .tex. The README contradicted the thesis's own
 bibliography:

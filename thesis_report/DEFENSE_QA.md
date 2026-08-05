@@ -348,6 +348,30 @@ not finding it.
 
 ---
 
+### 10b. "Distal joints having more error is common knowledge. What did you find?"
+
+**He is right and you must agree immediately.** This is the newest correction and
+the most recently checked.
+
+> He is right, and I say so in the report. Error accumulating toward the distal
+> end of a kinematic chain is standard biomechanics, and wrists and ankles
+> carrying the largest error is visible in the per-joint table of every paper on
+> this benchmark. I did not discover that.
+>
+> What I tested was a model, not the phenomenon. Having found that axis length
+> governs the choice between frame constructions, the obvious next step is to
+> carry the same geometric account down to individual joints — error should grow
+> with radius. I pre-registered that, tested it parameter-free with constants
+> measured in a different experiment, and it failed, with a matched-radius
+> control ruling out the confound: the shoulder and the knee differ by one
+> percent in radius and a factor of 2.6 in disagreement. So the result closes a
+> door that my own two previous sections leave open, and saves the next person
+> the experiment.
+
+**Do not say "novel" anywhere in this answer.**
+
+---
+
 ### 11. "Show me it's useful for anything." — WEAKEST ANSWER, do not bluff
 
 > I can't, and it is the clearest gap in the work. My retrieval experiment is
