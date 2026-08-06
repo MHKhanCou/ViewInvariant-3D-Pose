@@ -44,7 +44,7 @@ trace, and that is worth more than one recalled digit.
 > I then pre-registered three tests of how far that principle goes, committing
 > each criterion to version control before running. It decides between frame
 > constructions — established by the controlled global-frame comparison above,
-> not by the limb-level correlation, which §5.16 shows is confounded with
+> not by the limb-level correlation, which §5.9.1 ("A Circularity Control, and a Demotion") shows is confounded with
 > constructor count. It
 > does **not** decide which individual frame to trust, because within one
 > construction the axis is essentially the subject's hip width and barely varies.
@@ -343,8 +343,8 @@ own disclosure back to you.
 > does for the median fusion, I report the weaker claim: +4.7 percent per frame
 > with an interval spanning zero.
 
-**Do not** say "the conservative convention is used throughout". It is not, and
-§5.17 says so.
+**Do not** say "the conservative convention is used throughout". It is not, and the report says so where the convention is first stated.
+Cite the section by NAME at the viva, never by number.
 
 ---
 
@@ -356,7 +356,7 @@ claim. This is fair and you should not bluster.
 > It is one controlled comparison, yes -- and it is the only one in the report
 > where the scored set and the constructor count are held identical and only the
 > axis length differs, which is why it is the one I cite and why I do not cite
-> the limb-level correlations that Section 5.16 shows are confounded.
+> the limb-level correlations that Section 5.9.1 ("A Circularity Control, and a Demotion") shows are confounded.
 >
 > What it has is replication rather than volume: two independently trained
 > networks, different architectures, nineteen-fold different size, byte-identical
@@ -378,7 +378,7 @@ claim. This is fair and you should not bluster.
 > at 1.22 times its floor. It is not a three-joint segment, but four of the six
 > joints it is scored on build its frame, so the same objection applies. I had
 > originally written that the circularity was confined to three-joint limbs,
-> which was too narrow, and Section 5.16 now says it is a property of any
+> which was too narrow, and Section 5.9.1 ("A Circularity Control, and a Demotion") now says it is a property of any
 > segment frame built mostly from the joints it is scored on.
 >
 > What it does not touch is the global frame, and the reason is the ratio rather
@@ -402,13 +402,13 @@ immediately -- this is the honest answer and the report now says it:
 ### 8. "Your headline percentage doesn't match your own table."
 
 He may divide 320.4 and 75.3 and get 76.5, not 74.1. **This is disclosed in
-§5.10; know it cold.**
+§5.6 ("Cross-View Canonicalization on Human3.6M"); know it cold.**
 
 > Every improvement figure is the mean over camera pairs of each pair's own
 > percentage, not the ratio of the aggregate means. The ratio of means would give
 > 76.5 here and 81.0 on the second backbone — both larger. I report the smaller,
 > per-pair convention because it weights every pair equally instead of letting
-> the widest-baseline pairs dominate, and Section 5.10 states this in the
+> the widest-baseline pairs dominate, and Section 5.6 ("Cross-View Canonicalization on Human3.6M") states this in the
 > paragraph where the numbers first appear.
 
 ---
@@ -560,7 +560,7 @@ coherent.
 | Oracle gap closed | 87.0% off the frame's own joints (90.5% over all 17) |
 | Frame validity | 100% |
 | Multi-scale, as implemented | +25.6% |
-| Multi-scale, own long axis | +55.1% -- **DEMOTED, largely circular (§5.16). Do not volunteer this number.** |
+| Multi-scale, own long axis | +55.1% -- **DEMOTED, largely circular (§5.9.1, "A Circularity Control"). Do not volunteer this number.** |
 | Fusion, median over 4 views | 37.8 → 34.6 mm, CI [+2.1, +13.7] |
 | Fusion, unweighted mean | −3.4%, CI spans zero — **not** reliably worse |
 | Bone signal | +0.492 → **+0.098**, retracted |
