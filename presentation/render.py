@@ -667,13 +667,23 @@ def main():
     ap.add_argument("--teaser", action="store_true")
     ap.add_argument("--app", action="store_true")
     ap.add_argument("--interface", action="store_true")
+    # Sequence selection for --twoview. Omit them all and the frame whose
+    # improvement is the median over every camera pair is chosen, which is the
+    # defensible default and the one the report's figures use.
+    ap.add_argument("--subject", help="S9 or S11")
+    ap.add_argument("--action", help="act_02 .. act_16, e.g. act_14 (Walking)")
+    ap.add_argument("--cams", help="two cameras, e.g. ca_01,ca_03")
+    ap.add_argument("--frame", type=int, help="frame index (needs --cams)")
+    ap.add_argument("--out", default="fig_twoview.png", help="output filename")
     args = ap.parse_args()
 
     os.makedirs(IMG, exist_ok=True)
     for fn in (fig_three_levels, fig_matched_radius, fig_triage, fig_pipeline):
         print("wrote", fn())
     if args.twoview:
-        out, d = two_view()
+        out, d = two_view(subject=args.subject, action=args.action,
+                          frame=args.frame, out=args.out,
+                          cams=tuple(args.cams.split(",")) if args.cams else None)
         print("wrote %s   raw %.1f -> canonical %.1f mm (oracle %.1f)"
               % (out, d["raw_mm"], d["canonical_mm"], d["oracle_mm"]))
     if args.teaser:

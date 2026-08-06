@@ -1,0 +1,20 @@
+{
+ "subject": "S1",
+ "sequence": "Seq1",
+ "frame": 26,
+ "n_cameras": 8,
+ "cameras": [
+  0,
+  1,
+  2,
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "mean_pairwise_raw": 0.14908801246408707,
+ "mean_pairwise_canonical": 0.09455515045140471,
+ "improvement_pct": 36.57763029460095,
+ "units": "normalised, as the MPI-INF-3DHP cache stores them"
+}

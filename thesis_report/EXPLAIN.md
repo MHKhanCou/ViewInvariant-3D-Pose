@@ -103,7 +103,7 @@ profile.
 **It beats our method on all 180 pairs, both backbones, and all fifteen
 actions.**
 
-This is in the abstract, the contributions list, §5.10, Limitations, and the
+This is in the abstract, the contributions list, §5.6.1 ("A Single-View Baseline, and It Wins"), Limitations, and the
 conclusion. It was pre-registered — the criterion and all three possible outcomes
 were written down and committed to git *before* the experiment ran.
 
@@ -312,7 +312,7 @@ requirement নিজেদের বৈশিষ্ট্য বলে দা�
 **এটা আমাদের method-কে হারিয়ে দেয় — ১৮০টা জোড়ার সবগুলোতে, দুইটা backbone-এই,
 এবং পনেরোটা action-এর সবগুলোতে।**
 
-এটা abstract-এ আছে, contribution তালিকায় আছে, §5.10-এ আছে, Limitations-এ আছে,
+এটা abstract-এ আছে, contribution তালিকায় আছে, §5.6.1 ("A Single-View Baseline, and It Wins")-এ আছে, Limitations-এ আছে,
 conclusion-এও আছে। এবং এটা pre-registered ছিল — criterion এবং তিনটা সম্ভাব্য
 ফলাফলই পরীক্ষা চালানোর **আগে** লিখে git-এ commit করা হয়েছিল।
 

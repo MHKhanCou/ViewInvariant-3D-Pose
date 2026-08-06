@@ -5,11 +5,11 @@ thing to look at; nothing here is "check it looks right".
 
 ## 1. Numbers
 
-- [ ] `python -m evaluation.audit_numbers` → **248/248**, exit 0.
+- [ ] `python -m evaluation.audit_numbers` → **255/255**, exit 0.
       Fails loudly if any reported figure drifts from its JSON artifact.
 - [ ] `python -m unittest discover -s tests -q` → **76 tests, OK**.
 - [ ] Spot-check by hand that the two averaging conventions still disagree the way
-      §5.10 says: per-pair against ratio-of-aggregate-means, 76.2 vs 76.5. If
+      §5.10 says: per-pair against ratio-of-aggregate-means, 74.1 vs 76.5 percent. If
       someone "fixes" one of them the disclosure becomes false.
 - [ ] The headline is the **non-constructor** figure, 72.2 % over 180 pairs with
       179 improving, with the seventeen-joint 74.1 % given alongside and the

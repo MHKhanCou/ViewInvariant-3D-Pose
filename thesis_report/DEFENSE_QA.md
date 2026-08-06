@@ -3,7 +3,7 @@
 Defense: 9 August 2026. Read this the night before and the morning of.
 
 Every number here is verified by `python -m evaluation.audit_numbers`
-(248 claims). If a question asks for a figure not in this document, say you will
+(255 claims). If a question asks for a figure not in this document, say you will
 check it rather than guess — you have never once quoted a number you could not
 trace, and that is worth more than one recalled digit.
 
@@ -24,7 +24,7 @@ trace, and that is worth more than one recalled digit.
 > same pose from two viewpoints gives two different answers. I build a coordinate
 > frame out of the predicted body itself — torso axis, then hip axis — and apply
 > it after prediction. It adds no parameters and needs no calibration. On
-> Human3.6M, which I did not use to develop it, cross-view distance falls 74
+> Human3.6M, which I did not use to develop it, cross-view distance falls 72.2
 > percent across 180 held-out pairs and 179 of them improve. The construction is
 > the TRIAD algorithm from spacecraft attitude determination; I do not claim it.
 > What I contribute is where the reasoning behind it stops working on a human
@@ -79,8 +79,8 @@ trace, and that is worth more than one recalled digit.
 >    fail here — my axes span 138 to 461 mm, and one network predicting all
 >    seventeen joints makes their errors dependent.
 >
-> Then the apparatus: 248 numerical claims recomputed from stored artifacts by an
-> automated audit, 72 tests, four pre-registrations timestamped ahead of their
+> Then the apparatus: 255 numerical claims recomputed from stored artifacts by an
+> automated audit, 76 tests, nine pre-registrations timestamped ahead of their
 > results, and two claims withdrawn during the final week because they did not
 > survive a check I should have run earlier.
 
@@ -92,7 +92,7 @@ trace, and that is worth more than one recalled digit.
 > viewpoints, by constructing a body-fixed coordinate frame from the predicted
 > anatomy after prediction. It adds no trained parameters, needs no labels and
 > no camera calibration. On Human3.6M, which I did not use to develop the
-> method, it reduces cross-view distance by 74 percent across 180 held-out
+> method, it reduces cross-view distance by 72.2 percent across 180 held-out
 > camera pairs and improves 179 of them.
 
 Then stop talking. Let them ask.
@@ -137,7 +137,7 @@ Concede immediately — the report already does, in Section 2.3.
 >
 > What is mine is the requirement profile and the evidence. Zero trained
 > parameters, no labels, no calibration, evaluated on 209 camera pairs across
-> two datasets, reaching 90.5 percent of a Procrustes oracle. 3DPCNet reported
+> two datasets, reaching 87.0 percent of a Procrustes oracle. 3DPCNet reported
 > that a hand-built frame underperforms. My data says that is a function of
 > which axes you build it from.
 
@@ -227,7 +227,7 @@ not bluff. Give the three defences and then concede the gap.
 
 > Three things guard against it. The Procrustes oracle is the floor — it aligns
 > the two predictions optimally with full knowledge of both, so no rotation-based
-> method can beat it, and canonicalization closes 90.5 percent of the gap to it.
+> method can beat it, and canonicalization closes 87.0 percent of the gap to it.
 > The multi-scale distance keeps its correlation with ground-truth error, +0.610
 > against +0.601 for the global frame, so collapsing agreement is not what
 > produced the gain. And the rotation-cancellation result is exact, so the
@@ -250,14 +250,15 @@ not bluff. Give the three defences and then concede the gap.
 > body frame is computed once per pose and every pair is then comparable.
 >
 > It is a floor on what any rotation can achieve, not a competing method. My
-> claim is that a construction seeing one pose at a time recovers 90.5 percent
+> claim is that a construction seeing one pose at a time recovers 87.0 percent
 > of what a construction seeing both can do.
 
 ---
 
 ### 6. "Your proposal said you would train a network with geometric losses. You didn't."
 
-Your supervisor wrote the proposal. Expect this, possibly first. Do not be
+Sir's brief set this direction, and your own submitted proposal committed to
+it. Expect this, possibly first. Do not be
 defensive: the problem and the gap are unchanged, only the method inverted.
 
 > The problem statement and the research gap are exactly the ones in the
@@ -339,7 +340,7 @@ own disclosure back to you.
 > pairs dominate. The fusion experiment is defined on pooled frames, so the
 > pooled ratio is its natural unit. I did not pick per experiment to flatter the
 > number -- and where the conservative convention changes the verdict, as it
-> does for the unweighted-mean fusion, I report the weaker claim: +4.7 percent
+> does for the median fusion, I report the weaker claim: +4.7 percent per frame
 > with an interval spanning zero.
 
 **Do not** say "the conservative convention is used throughout". It is not, and
@@ -453,7 +454,7 @@ the most recently checked.
 > carry the same geometric account down to individual joints — error should grow
 > with radius. I pre-registered that, tested it parameter-free with constants
 > measured in a different experiment, and it failed, with a matched-radius
-> control ruling out the confound: the shoulder and the knee differ by one
+> control ruling out the confound: the shoulder and the knee differ by 1.2
 > percent in radius and a factor of 2.6 in disagreement. So the result closes a
 > door that my own two previous sections leave open, and saves the next person
 > the experiment.
@@ -556,7 +557,7 @@ coherent.
 |---|---|
 | Cross-view, MPI-INF-3DHP | +32.4%, 27 held-out pairs |
 | Cross-view, Human3.6M | **+72.2%** off the frame's own joints (+74.1% over all 17), 179/180 pairs |
-| Oracle gap closed | 90.5% |
+| Oracle gap closed | 87.0% off the frame's own joints (90.5% over all 17) |
 | Frame validity | 100% |
 | Multi-scale, as implemented | +25.6% |
 | Multi-scale, own long axis | +55.1% -- **DEMOTED, largely circular (§5.16). Do not volunteer this number.** |
@@ -564,10 +565,10 @@ coherent.
 | Fusion, unweighted mean | −3.4%, CI spans zero — **not** reliably worse |
 | Bone signal | +0.492 → **+0.098**, retracted |
 | Reliability vs corruption | −0.813 (this one works) |
-| Backbone reproduction | 45.149 mm vs 45.149 published |
+| Backbone reproduction | 45.149 mm vs 45.1 published (their own script gives 45.149) |
 | Added trainable parameters | **0** |
 | Canonicalization cost | 402 FLOPs/frame, 0.0005% of backbone |
-| Audit / tests | 248 claims, 76 tests |
+| Audit / tests | 255 claims, 76 tests |
 
 **Two datasets: 209 camera pairs total. Four subjects.**
 

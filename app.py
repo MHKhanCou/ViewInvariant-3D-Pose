@@ -32,8 +32,11 @@ import gradio as gr
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from backend import twoview
 from backend.inference import estimate_poses, predict_video
 from demo_live.plotly_renderer import render_pose_plotly, get_bone_length_summary
+
+tv_sequences = twoview.sequences()
 
 
 def on_image_run(image, coord_space, rotation_deg, show_avatar=False,
@@ -284,6 +287,63 @@ with gr.Blocks(title="View-Invariant 3D Pose — Training-Free Canonicalization"
                                            visible=False, interactive=False)
 
             vid_status = gr.Markdown("**Status:** Ready")
+
+        # ── Two-View Tab ──
+        # The central claim is agreement between two cameras, which no
+        # single-input tab can show. This one runs on the held-out Human3.6M
+        # pairs through presentation.render.two_view, so every number shown
+        # comes from the same code that produced Figure 1.1.
+        with gr.TabItem("Two-View (the claim)"):
+            gr.Markdown(
+                "One instant, two synchronized cameras. Both predictions are "
+                "correct; they disagree because each is expressed in its own "
+                "camera's frame. Canonicalization removes that disagreement "
+                "with no training, no labels and no calibration. "
+                "Human3.6M, held out."
+            )
+            with gr.Row():
+                with gr.Column(scale=1):
+                    tv_seq = gr.Dropdown(
+                        choices=tv_sequences, value=tv_sequences[0],
+                        label="Sequence (subject and action)",
+                    )
+                    tv_auto = gr.Checkbox(
+                        value=True, label="Median frame (the defensible choice)",
+                        info="Picks the frame whose improvement is the median "
+                             "for this sequence, not the most flattering one. "
+                             "Uncheck to choose a pair and frame by hand.",
+                    )
+                    tv_pair = gr.Dropdown(choices=[], label="Camera pair",
+                                          visible=False)
+                    tv_frame = gr.Slider(0, 100, value=0, step=1,
+                                         label="Frame", visible=False)
+                    tv_btn = gr.Button("Show", variant="primary")
+                with gr.Column(scale=2):
+                    tv_image = gr.Image(label="Raw against canonical",
+                                        interactive=False)
+                    tv_stats = gr.Markdown("")
+
+            def on_tv_controls(auto, seq):
+                pairs = twoview.camera_pairs(seq)
+                return (gr.update(visible=not auto, choices=pairs,
+                                  value=pairs[0]),
+                        gr.update(visible=not auto,
+                                  maximum=twoview.n_frames(seq) - 1, value=0))
+
+            def on_tv_run(seq, pair, frame, auto):
+                try:
+                    return twoview.run(seq, pair, frame, auto)
+                except Exception as e:
+                    import traceback
+                    traceback.print_exc()
+                    return None, "**Error --** %s" % e
+
+            tv_auto.change(on_tv_controls, [tv_auto, tv_seq],
+                           [tv_pair, tv_frame])
+            tv_seq.change(lambda seq, auto: on_tv_controls(auto, seq),
+                          [tv_seq, tv_auto], [tv_pair, tv_frame])
+            tv_btn.click(on_tv_run, [tv_seq, tv_pair, tv_frame, tv_auto],
+                         [tv_image, tv_stats])
 
     # ── Architecture Info ──
     gr.Markdown(

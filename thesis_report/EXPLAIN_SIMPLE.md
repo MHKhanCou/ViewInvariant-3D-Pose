@@ -135,7 +135,7 @@ on this data, use the simpler method.**
   and saved it with a timestamp so nobody can claim I changed my mind afterwards.
 - **Five of the nine failed.** I reported all five.
 - A sixth showed a rival method was better. I put that in the abstract.
-- A computer program re-checks all **252 numbers** in my report against the raw
+- A computer program re-checks all **255 numbers** in my report against the raw
   data files, and fails if even one of them drifts.
 - When I found one of my own results was measuring the wrong thing, I said so and
   took it back.
@@ -268,7 +268,7 @@ you the timestamps.**
   সময়-চিহ্ন সহ সংরক্ষণ করেছি — যাতে কেউ বলতে না পারে আমি পরে মত বদলেছি।
 - **নয়টার মধ্যে পাঁচটা ব্যর্থ হয়েছে।** পাঁচটাই রিপোর্ট করেছি।
 - ষষ্ঠটায় দেখা গেল প্রতিদ্বন্দ্বী পদ্ধতি ভালো। সেটা abstract-এ লিখেছি।
-- একটা প্রোগ্রাম আমার রিপোর্টের **২৫২টা সংখ্যা** কাঁচা ডেটা ফাইলের সাথে মিলিয়ে
+- একটা প্রোগ্রাম আমার রিপোর্টের **২৫৫টা সংখ্যা** কাঁচা ডেটা ফাইলের সাথে মিলিয়ে
   দেখে, আর একটাও এদিক-ওদিক হলে fail করে।
 - নিজের একটা ফলাফল ভুল জিনিস মাপছিল বুঝতে পেরে সেটা বলে দিয়েছি এবং ফিরিয়ে নিয়েছি।
 

@@ -9,7 +9,8 @@ no.
 |---|---|---|
 | `E:\thesis\Proposal.docx` | **Supervisor's brief** — the research direction Sir set | 18 Jan 2026 |
 | `E:\thesis\research_proposal_12108004.tex` | **Your own submitted proposal** — the formal one with objectives and schedule | 16 Feb 2026 |
-| `github.com/TaatiTeam/MotionAGFormer` | **The example repository the university gave**, and this repo's `origin` | — |
+| `github.com/KelvinHong/pose-estimation-3d` | **The repo Sir gave** when he asked to see output — its demo output is the only result Sir has seen so far | — |
+| `github.com/TaatiTeam/MotionAGFormer` | **The backbone you chose yourself** (MotionBERT as the second), and this repo's `origin` | — |
 
 Your own work lives on the `thesis` remote: `github.com/MHKhanCoU/ViewInvariant-3D-Pose`.
 
@@ -22,10 +23,10 @@ examiner will check against.
 
 | # | Objective as written | Delivered | Where |
 |---|---|---|---|
-| **1** | "Implement a reproducible baseline 2D-to-3D lifting model on Human3.6M" | **✅ Done.** 45.149 mm against the published 45.1 mm — matching the backbone's own evaluation script to three decimal places | §5.9 |
+| **1** | "Implement a reproducible baseline 2D-to-3D lifting model on the Human3.6M dataset" | **✅ Done.** 45.149 mm against the published 45.1 mm — matching the backbone's own evaluation script to three decimal places | §5.9 |
 | **2** | "Design a lightweight canonicalization step to reduce sensitivity to camera rotation" | **✅ Done, and it became the whole thesis.** 402 FLOPs, zero parameters, 72.2% cross-view reduction over 180 held-out pairs | §3.2, §5.10 |
-| **3** | "Incorporate bone-length consistency as an auxiliary loss" | **⚠️ Changed, then retracted.** Not built as a loss — tested as a test-time signal instead. ρ = +0.492 on the first dataset, +0.098 on the second. **Retracted in the report** | §5.12 |
-| **4** | "Evaluate cross-view generalization and perform ablation studies" | **✅ Exceeded.** Nine pre-registered experiments, two datasets, two backbones, 209 camera pairs, cluster bootstrap intervals throughout | Ch. 5 |
+| **3** | "Incorporate bone-length consistency as an auxiliary loss to enforce anatomical plausibility" | **⚠️ Changed, then retracted.** Not built as a loss — tested as a test-time signal instead. ρ = +0.492 on the first dataset, +0.098 on the second. **Retracted in the report** | §5.12 |
+| **4** | "Evaluate cross-view generalization and perform ablation studies …" | **✅ Exceeded.** Nine pre-registered experiments, two datasets, two backbones, 209 camera pairs, cluster bootstrap intervals throughout | Ch. 5 |
 | **5** | "Analyze failure modes such as occlusions and noisy 2D detections" | **✅ Done — and this became the contribution.** The boundary: where the geometric principle holds and where it stops | §5.16, §6.1 |
 
 **Four of five delivered. One changed direction and was retracted, and the report
@@ -56,7 +57,7 @@ is where the actual contribution came from.
 All three landed, and the third one landed exactly as written:
 
 1. *"An empirical study of how simple canonicalization and explicit bone-length regularization jointly affect monocular 3D pose lifting."* → **Delivered.** The canonicalization half is positive, the bone-length half is negative and retracted.
-2. *"A lightweight and reproducible training strategy suitable for undergraduate implementation."* → **Exceeded.** There is no training at all, which is lighter than proposed.
+2. *"A lightweight and reproducible training strategy suitable for undergraduate implementation and classroom replication."* → **Exceeded.** There is no training at all, which is lighter than proposed.
 3. *"Evidence on whether structural priors improve generalization across camera viewpoints without requiring complex architectures."* → **This is precisely the thesis.** The evidence is split, and the split is the result.
 
 > Quote contribution 3 back at the examiner if he asks whether you drifted from
@@ -110,11 +111,15 @@ Sir's `Proposal.docx` set the direction. Mapping it honestly:
 
 ## 6. What was given to you, and what is yours
 
-The university handed you MotionAGFormer as a working example. An examiner is
-entitled to ask what you added. **The answer is checkable in one command**
+When Sir asked to see output he gave you `KelvinHong/pose-estimation-3d`, and
+the output you showed him came from that. MotionAGFormer you found and chose
+yourself as the frozen backbone (it is this repo's `origin`); the KelvinHong
+repo remained as a reference system the demo is compared against. That is the
+full extent of what Sir has seen — keep it in mind when presenting. An examiner
+is entitled to ask what you added. **The answer is checkable in one command**
 (`git diff --name-only bb3bb2e HEAD`):
 
-| Given by the example repo | Written by you |
+| From the backbone repo (your choice) | Written by you |
 |---|---|
 | `model/` — the MotionAGFormer architecture | `canonical/` — the frame construction, 11 files, 1,682 lines |
 | Training code, configs, checkpoints | `evaluation/` — every experiment, 43 files, 10,101 lines |
@@ -168,7 +173,8 @@ Do not wait to be asked. Say it in this order:
 
 - **স্যারের `Proposal.docx`** (১৮ জানু) — গবেষণার দিকনির্দেশ
 - **আপনার নিজের `research_proposal_12108004.tex`** (১৬ ফেব্রু) — আনুষ্ঠানিক প্রস্তাব, objective আর schedule সহ
-- **বিশ্ববিদ্যালয়ের দেওয়া example repo** — TaatiTeam/MotionAGFormer, এই repo-র `origin`
+- **স্যারের দেওয়া repo** — KelvinHong/pose-estimation-3d, output দেখতে চাওয়ার সময় দিয়েছিলেন; ওটার output-ই স্যারকে দেখানো হয়েছে
+- **আপনার নিজের বেছে নেওয়া backbone** — TaatiTeam/MotionAGFormer (এই repo-র `origin`), সাথে MotionBERT
 
 ## পাঁচটা Objective-এর হিসাব
 
@@ -209,8 +215,10 @@ Bone-length loss → 3D pose
 
 ## যা দেওয়া হয়েছিল, আর যা আপনার নিজের
 
-বিশ্ববিদ্যালয় MotionAGFormer একটা চালু উদাহরণ হিসেবে দিয়েছিল। পরীক্ষক জিজ্ঞেস করতে
-পারেন আপনি কী যোগ করেছেন — উত্তরটা এক command-এ যাচাই করা যায়:
+স্যার output দেখতে চেয়ে KelvinHong/pose-estimation-3d দিয়েছিলেন, আর ওটার output-ই
+আপনি দেখিয়েছেন — স্যার এই পর্যন্তই জানেন। MotionAGFormer backbone-টা আপনি নিজে
+খুঁজে বেছে নিয়েছেন। পরীক্ষক জিজ্ঞেস করতে পারেন আপনি কী যোগ করেছেন — উত্তরটা এক
+command-এ যাচাই করা যায়:
 
 | Repo যা দিয়েছে | আপনি যা লিখেছেন |
 |---|---|

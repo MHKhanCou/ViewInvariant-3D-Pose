@@ -780,6 +780,22 @@ def main():
                          (45.149 if "45.14" in flat else None),
                          "baseline_results.json", tol=0.01, unit="mm"))
 
+    # ---------- the real-camera figure -------------------------------------
+    # Figure fig_realview prints three numbers on its face, so they are audited
+    # like every other number in the report rather than trusted because they
+    # were drawn by a script.
+    rvp = os.path.join(ART, "figures", "realview.json")
+    if os.path.exists(rvp):
+        with io.open(rvp, encoding="utf-8") as fh:
+            rv = json.load(fh)
+        src = "figures/realview.json"
+        results.append(check("realview figure: raw mean pairwise", 0.149,
+                             rv["mean_pairwise_raw"], src, tol=0.001))
+        results.append(check("  canonical mean pairwise", 0.095,
+                             rv["mean_pairwise_canonical"], src, tol=0.001))
+        results.append(check("  improvement %", 36.6,
+                             rv["improvement_pct"], src, tol=0.1, unit="%"))
+
     # ---------- the report's own self-referential counts ---------------------
     # These have gone stale four times: 131, 167, 180, 192, 216, 230, 240, 248.
     # They are the one class of number outside the audit, which is exactly why

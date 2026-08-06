@@ -13,12 +13,12 @@ this page. Ordered by how likely you are to need it, not alphabetically.
 | 2 | `canonical/body_frame.py` | The entire method. The thesis is this file plus what was learned from testing it |
 | 3 | `evaluation/h36m_crossview.py` | The central result: 372.7 → 93.4 mm |
 | 4 | `evaluation/template_baseline.py` | The baseline that beats you. Know this one cold |
-| 5 | `evaluation/audit_numbers.py` | Re-derives all 255 reported claims from stored artifacts |
+| 5 | `evaluation/audit_numbers.py` | Re-derives all 258 reported claims from stored artifacts |
 
 **One command proves the whole report is internally consistent:**
 
 ```bash
-./venv/Scripts/python.exe -m evaluation.audit_numbers        # 255/255, exit 0
+./venv/Scripts/python.exe -m evaluation.audit_numbers        # 258/258, exit 0
 ./venv/Scripts/python.exe -m unittest discover -s tests -q   # 76 tests
 ```
 
@@ -67,6 +67,7 @@ hand.**
 | `tta_consistency.py` | `tta/` | Failed all three criteria |
 | `multiscale_control.py` | `h36m_multiscale/` | Circularity control that demoted the 55.1 % figure |
 | `occlusion_robustness.py` | `occlusion/` | The tenth, run after the freeze. Failed |
+| `template_mismatch.py` | `mismatch/` | The eleventh. Failed - the baseline needs no matching template |
 
 ### Supporting
 
@@ -95,7 +96,7 @@ thesis_report/
 
 ```
 thesis_artifacts/
-  <experiment>/PREREGISTRATION.md   ten of them, each committed BEFORE its run
+  <experiment>/PREREGISTRATION.md   eleven of them, each committed BEFORE its run
   occlusion/RESULT.md               the tenth, and why it failed
   defense_deck.html                 16 slides
   planning/                         superseded working notes - do not quote these
@@ -142,5 +143,5 @@ them before the defence.**
 | "Show me the method" | `canonical/body_frame.py`, 40 lines |
 | "How do I know the numbers are real?" | Run `audit_numbers.py`, then `git log` for the pre-registration timestamps |
 | "Where is the base vs proposed comparison?" | `thesis_artifacts/figures/fig_realview.png` and Table `tab:h36mcv` |
-| "You said a baseline beats you — where?" | Report §5.10, `thesis_artifacts/template/template.json` |
-| "What did you pre-register?" | `ls thesis_artifacts/*/PREREGISTRATION.md` — ten files, all timestamped before their results |
+| "You said a baseline beats you — where?" | Report §5.6.1 "A Single-View Baseline, and It Wins", `thesis_artifacts/template/template.json` |
+| "What did you pre-register?" | `ls thesis_artifacts/*/PREREGISTRATION.md` — eleven files, all timestamped before their results |

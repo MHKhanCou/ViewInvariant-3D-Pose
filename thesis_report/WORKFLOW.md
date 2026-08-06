@@ -89,7 +89,7 @@ A simpler baseline beats this method. Kabsch-align every pose to one fixed
 reference skeleton: training-free, label-free, calibration-free, single-view — it
 meets *every* requirement I claim as my profile. It scores **57.5 mm against my
 93.4 mm**, and it wins on **180 of 180 pairs, both backbones, all fifteen
-actions**. It is in the abstract, §5.10, Limitations and the conclusion, and its
+actions**. It is in the abstract, §5.6.1 ("A Single-View Baseline, and It Wins"), Limitations and the conclusion, and its
 criterion was committed to git before the experiment ran.
 
 The work still stands because **that baseline cannot run the experiment this
@@ -210,7 +210,7 @@ reference কঙ্কালের সাথে Kabsch দিয়ে align ক
 calibration-free, single-view — আমি যেসব requirement নিজের বৈশিষ্ট্য বলে দাবি
 করি, তার *প্রত্যেকটা* এটাও পূরণ করে। ওটার ফল **৫৭.৫ mm, আমার ৯৩.৪ mm-এর
 বিপরীতে**, এবং **১৮০টার সবগুলো জোড়ায়, দুইটা backbone-এ, পনেরোটা action-এ** জেতে।
-এটা abstract-এ, §5.10-এ, Limitations-এ আর conclusion-এ আছে, আর এর criterion
+এটা abstract-এ, §5.6.1 ("A Single-View Baseline, and It Wins")-এ, Limitations-এ আর conclusion-এ আছে, আর এর criterion
 পরীক্ষা চালানোর আগেই git-এ commit করা ছিল।
 
 তারপরও কাজটা টেকে, কারণ **ওই baseline দিয়ে এই thesis-এর পরীক্ষাটাই চালানো যায়

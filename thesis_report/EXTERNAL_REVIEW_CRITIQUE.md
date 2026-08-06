@@ -1,5 +1,11 @@
 # External Review: Adversarial Critique of Full_Thesis_Report.tex
 
+> **Partially superseded snapshot (pre-freeze).** Findings 1 and 2 are fixed in
+> the frozen report (torso row at the circularity table; the 62.7 vs 75.3 mm
+> footnote). Finding 3's specific counts no longer describe the current
+> DEFENSE_QA. The report's claim count is now 255 throughout. Findings 4-6
+> still stand.
+
 Prepared 2026-08-06 in the role defined in `EXTERNAL_REVIEW_PROMPT.md`. Independent read.
 The thesis's own admitted findings (items 1-8 of the prompt) are not re-reported as
 findings here. Every claim below was checked against the report text, the nine

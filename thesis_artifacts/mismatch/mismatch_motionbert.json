@@ -1,0 +1,201 @@
+{
+ "verdict": {
+  "sanity_reproduces_published": true,
+  "crossover_limb_factor": null,
+  "control_matches_anatomical": null,
+  "reading": "3: no crossover within |f-1| <= 0.4; the baseline is robust to body-proportion mismatch and its advantage is unqualified on this data"
+ },
+ "levels": [
+  {
+   "limb_factor": 0.6,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 74.79384133516388,
+   "mean_template17_mm": 56.021606923374264,
+   "mean_template4_mm": 70.11065045197162,
+   "pairs_where_anatomical_better": 0,
+   "t17_minus_anatomical": {
+    "mean": -18.772234411789615,
+    "ci95": [
+     -20.767449924787705,
+     -16.804347650809856
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "t4_minus_anatomical": {
+    "mean": -4.683190883192261,
+    "ci95": [
+     -5.495219174239546,
+     -3.9391625312143073
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "template_better"
+  },
+  {
+   "limb_factor": 0.8,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 74.79384133516388,
+   "mean_template17_mm": 55.92990543926426,
+   "mean_template4_mm": 70.11065045197162,
+   "pairs_where_anatomical_better": 0,
+   "t17_minus_anatomical": {
+    "mean": -18.863935895899626,
+    "ci95": [
+     -20.884358218856402,
+     -16.86850348653431
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "t4_minus_anatomical": {
+    "mean": -4.683190883192261,
+    "ci95": [
+     -5.495219174239546,
+     -3.9391625312143073
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "template_better"
+  },
+  {
+   "limb_factor": 1.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 74.79384133516388,
+   "mean_template17_mm": 55.90723245675714,
+   "mean_template4_mm": 70.11065045197162,
+   "pairs_where_anatomical_better": 0,
+   "t17_minus_anatomical": {
+    "mean": -18.88660887840673,
+    "ci95": [
+     -20.920918579843946,
+     -16.87829557230799
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "t4_minus_anatomical": {
+    "mean": -4.683190883192261,
+    "ci95": [
+     -5.495219174239546,
+     -3.9391625312143073
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "template_better"
+  },
+  {
+   "limb_factor": 1.2,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 74.79384133516388,
+   "mean_template17_mm": 55.92415335982971,
+   "mean_template4_mm": 70.11065045197162,
+   "pairs_where_anatomical_better": 0,
+   "t17_minus_anatomical": {
+    "mean": -18.869687975334163,
+    "ci95": [
+     -20.91394716831091,
+     -16.8463339175824
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "t4_minus_anatomical": {
+    "mean": -4.683190883192261,
+    "ci95": [
+     -5.495219174239546,
+     -3.9391625312143073
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "template_better"
+  },
+  {
+   "limb_factor": 1.4,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 74.79384133516388,
+   "mean_template17_mm": 55.96399378238728,
+   "mean_template4_mm": 70.11065045197162,
+   "pairs_where_anatomical_better": 0,
+   "t17_minus_anatomical": {
+    "mean": -18.829847552776585,
+    "ci95": [
+     -20.88219292337334,
+     -16.796543434567212
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "t4_minus_anatomical": {
+    "mean": -4.683190883192261,
+    "ci95": [
+     -5.495219174239546,
+     -3.9391625312143073
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "template_better"
+  }
+ ],
+ "limb_bones": [
+  2,
+  3,
+  5,
+  6,
+  12,
+  13,
+  15,
+  16
+ ],
+ "parents": [
+  -1,
+  0,
+  1,
+  2,
+  0,
+  4,
+  5,
+  0,
+  7,
+  8,
+  9,
+  8,
+  11,
+  12,
+  8,
+  14,
+  15
+ ],
+ "scored_joints": [
+  2,
+  3,
+  5,
+  6,
+  7,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16
+ ],
+ "constructor_joints": [
+  0,
+  1,
+  4,
+  8
+ ],
+ "mismatch_limit": 0.4,
+ "control_match_pct": 10.0,
+ "sanity_checked": false,
+ "template_frames": 2460,
+ "template_streams": 26,
+ "prediction_cache": "preds_motionbert.npz"
+}

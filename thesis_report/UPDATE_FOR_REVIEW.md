@@ -1,4 +1,8 @@
-# Update for review — current state
+# Update for review — SUPERSEDED SNAPSHOT (6 Aug 2026)
+
+> **Stale.** The frozen report is 90 pages, 255 audit claims, 76 tests, 28
+> references. Numbers below reflect an earlier state; trust DEFENSE_QA.md and
+> the report itself.
 
 Thesis: training-free body-frame canonicalization for cross-view comparability of
 frozen monocular 3D pose predictions. Report due 6 Aug, defense 9 Aug. This
