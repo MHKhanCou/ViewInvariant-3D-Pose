@@ -217,6 +217,30 @@ of exactly my family, **and beats it**. I cite that rather than hide it.
 > And I say plainly that as a way of reducing cross-view distance on this data,
 > the simpler method is better. It is in the abstract.
 
+### "Someone has already published your method as a baseline, and it lost."
+
+*(Raise this yourself. 3DPCNet, ICASSP 2026, §3.3 — see `RESEARCH_FINDINGS.md`.)*
+
+> Yes Sir, and I should raise it rather than wait to be asked. 3DPCNet publishes
+> a geometric baseline of my family — a two-vector anatomical construction — and
+> reports it at 20.6 degrees of rotation error against 3.6 for their learned
+> module. Three things qualify it. It is their own self-implemented baseline in
+> a single table with no error bars. It measures alignment to a ground-truth
+> canonical pose, whereas I measure agreement between two cameras, so it answers
+> a different question. And its primary axis is the shoulder-hip plane normal,
+> which is not my construction, so it is TRIAD-family rather than mine. But the
+> direction agrees with my own finding, and I would rather say the evidence
+> points the same way twice than argue it away.
+
+### "Is cross-view agreement an accepted way to evaluate pose?"
+
+> I define it precisely in my protocol section as cross-view joint distance,
+> prediction against prediction, and I report it with a per-frame Procrustes
+> oracle as its floor. I have **not** established that it is a named standard in
+> the literature, and I will not claim that it is. What I can say is that it
+> measures the property my thesis is about, which accuracy against ground truth
+> does not.
+
 ### "How do I know these numbers are real?"
 
 > Open the git log, Sir. Nine pre-registrations with timestamps preceding their
