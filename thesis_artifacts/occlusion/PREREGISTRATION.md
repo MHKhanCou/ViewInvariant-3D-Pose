@@ -14,10 +14,16 @@ baseline cannot pose the question the thesis asks, because it has no anatomical
 axis to hold fixed and vary. That answer is correct and it is not an experiment.
 
 There is one structural difference between the two that is testable. The
-anatomical frame reads exactly five joints — {root, r\_hip, l\_hip, spine,
-thorax}. Template Kabsch least-squares-fits all seventeen, so error in a wrist or
-an ankle rotates the entire alignment. If the distal joints are unreliable, the
-baseline should degrade and the anatomical frame should not.
+anatomical frame reads exactly four joints — `{0 root, 1 r_hip, 4 l_hip,
+8 thorax}`, since y = P[8] − P[0] and x\_raw = P[1] − P[4]. Template Kabsch
+least-squares-fits all seventeen, so error in a wrist or an ankle rotates the
+entire alignment. If the distal joints are unreliable, the baseline should
+degrade and the anatomical frame should not.
+
+*(Correction, made before any result exists: the first version of this file said
+five joints and included the spine. The spine is not a constructor. Committed as
+a separate revision so the record shows the error and its fix, both preceding
+the run.)*
 
 **This is a regime chosen because we expect to win in it. Stating that plainly is
 a condition of running it**, and the control arm below is what stops it being
@@ -45,9 +51,9 @@ the corruption we injected.
 
 | Arm | Alignment | Joints it reads |
 |---|---|---|
-| **A** anatomical | Gram-Schmidt body frame (ours) | the 5 constructors |
+| **A** anatomical | Gram-Schmidt body frame (ours) | the 4 constructors |
 | **B** template-17 | Kabsch onto the fixed template | all 17 |
-| **C** template-5 *(control)* | Kabsch onto the same template | the 5 constructors only |
+| **C** template-4 *(control)* | Kabsch onto the same template | the 4 constructors only |
 
 Arm C is mandatory. It is arm B told which joints to trust, so it separates *"the
 anatomy helps"* from *"reading fewer, more reliable joints helps"*.
