@@ -25,9 +25,9 @@ MotionAGFormer-XS
 Camera Coordinate      View-Invariant
      System            Coordinate System
         │                       │
-        │              MoViD-inspired
+        │              Gram-Schmidt
         │              Body-Frame
-        │              Transform
+        │              Transform (TRIAD)
         │                       │
         └───────────┬───────────┘
                     │

@@ -1,0 +1,172 @@
+{
+ "verdict": {
+  "sanity_template_better_at_zero": true,
+  "crossover_sigma_mm": 40.0,
+  "control_matches_anatomical": false,
+  "reading": "1: crossover at 40 mm and the control does not match; a bounded robustness regime the baseline lacks"
+ },
+ "levels": [
+  {
+   "sigma_mm": 0.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 44.12691365033018,
+   "mean_template17_mm": 40.95789519261814,
+   "mean_template4_mm": 47.05043363749026,
+   "pairs_where_anatomical_better": 44,
+   "t17_minus_anatomical": {
+    "mean": -3.1690184577120415,
+    "ci95": [
+     -4.886361917616204,
+     -1.3409689278040615
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "t4_minus_anatomical": {
+    "mean": 2.9235199871600743,
+    "ci95": [
+     1.950891617146954,
+     4.000724200832942
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "template_better"
+  },
+  {
+   "sigma_mm": 20.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 44.12691365033018,
+   "mean_template17_mm": 42.31602669832076,
+   "mean_template4_mm": 47.70870659262396,
+   "pairs_where_anatomical_better": 68,
+   "t17_minus_anatomical": {
+    "mean": -1.8108869520094149,
+    "ci95": [
+     -3.5423949833426134,
+     0.054834881756271645
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "t4_minus_anatomical": {
+    "mean": 3.5817929422937835,
+    "ci95": [
+     2.5992611350735904,
+     4.669897426128431
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "not_established"
+  },
+  {
+   "sigma_mm": 40.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 44.12691365033018,
+   "mean_template17_mm": 45.98432755127069,
+   "mean_template4_mm": 49.50340343559976,
+   "pairs_where_anatomical_better": 114,
+   "t17_minus_anatomical": {
+    "mean": 1.857413900940515,
+    "ci95": [
+     0.12515134990907362,
+     3.694379429961004
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "t4_minus_anatomical": {
+    "mean": 5.3764897852695785,
+    "ci95": [
+     4.393396423590148,
+     6.45125680318715
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "anatomical_better"
+  },
+  {
+   "sigma_mm": 80.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 44.12691365033018,
+   "mean_template17_mm": 58.17136878011301,
+   "mean_template4_mm": 56.330526074773175,
+   "pairs_where_anatomical_better": 176,
+   "t17_minus_anatomical": {
+    "mean": 14.044455129782829,
+    "ci95": [
+     12.190099502667515,
+     16.019156730454238
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "t4_minus_anatomical": {
+    "mean": 12.203612424442989,
+    "ci95": [
+     11.257978900902442,
+     13.21359939065449
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "anatomical_better"
+  },
+  {
+   "sigma_mm": 160.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 44.12691365033018,
+   "mean_template17_mm": 91.38526046141311,
+   "mean_template4_mm": 76.79840398333218,
+   "pairs_where_anatomical_better": 180,
+   "t17_minus_anatomical": {
+    "mean": 47.258346811082944,
+    "ci95": [
+     44.7815049896887,
+     49.812229277846996
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "t4_minus_anatomical": {
+    "mean": 32.67149033300199,
+    "ci95": [
+     31.58136994416804,
+     33.826380885911426
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "anatomical_better"
+  }
+ ],
+ "corrupted_joints": [
+  2,
+  3,
+  5,
+  6,
+  12,
+  13,
+  15,
+  16
+ ],
+ "scored_joints": [
+  9,
+  10,
+  11,
+  14
+ ],
+ "constructor_joints": [
+  0,
+  1,
+  4,
+  8
+ ],
+ "crossover_limit_mm": 80.0,
+ "control_match_pct": 10.0,
+ "template_frames": 2460,
+ "template_streams": 26,
+ "prediction_cache": "preds_motionbert.npz"
+}

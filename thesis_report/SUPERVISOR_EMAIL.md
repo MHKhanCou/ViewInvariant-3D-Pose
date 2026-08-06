@@ -6,24 +6,62 @@ the defence.
 
 ---
 
-**Subject:** Thesis report — a result against our own method, and three positioning changes
+**Subject:** Thesis report — how the work developed, and a result against my own method
 
 Dear Sir,
 
-The thesis report is attached. Before you read it I want to flag four things,
-because one of them is a finding that works against the method and the others
-change how the contribution is framed. None of them should come as a surprise in
-the PDF.
+The thesis report is attached, along with a one-page walkthrough
+(`WORKFLOW.md`) that answers the two questions you asked me: what the system is
+actually doing, and how the output compares to base MotionAGFormer. Before you
+read either, let me say briefly how the work got from your proposal to this
+report.
 
-**1. A simpler baseline beats our method, and the report says so in the
-abstract.** I ran the comparison a reader would ask for and had not been run:
-aligning each predicted pose to a single fixed reference skeleton by the Kabsch
-algorithm. It is training-free, label-free, calibration-free and single-view, so
-it meets every requirement our framework claims as its profile. It beats our
-anatomical frame on **all 180 held-out pairs of Human3.6M, under both
-backbones**, and on **all fifteen actions**. The criterion and all three possible
-readings were written down and committed before the experiment ran, so this is
-the outcome the pre-registration committed me to reporting.
+**How it developed.** Your proposal set the direction: the same person seen from
+different cameras produces different 3D coordinates, because each prediction is
+expressed in that camera's own frame, which makes cross-view comparison
+impossible. I studied the literature and ran the `pose-estimation-3d`
+repository you shared, and the output I showed you came from it. From there I
+decided to keep the estimator **completely frozen** rather than train a new
+network. I selected **MotionAGFormer** myself as the lifting backbone, and later
+added **MotionBERT** to check that the observations were not an artifact of one
+model. The pipeline became:
+
+> RGB video → 2D detection → MotionAGFormer (frozen) → training-free body-frame
+> canonicalization → cross-view comparable 3D pose
+
+The idea is to leave the estimator untouched and transform its predicted
+skeleton into a body-centred coordinate system built from anatomical landmarks,
+so predictions from different viewpoints become comparable without retraining
+and without calibrating the cameras.
+
+**Your two questions, directly.** The estimator's accuracy does not improve, and
+cannot: it is frozen and canonicalization adds zero parameters. Action-balanced
+MPJPE on Human3.6M is **45.149 mm before and after**, matching the backbone's own
+published figure. What improves is agreement between cameras: mean cross-view
+joint distance falls from **372.7 mm to 93.4 mm**, a 72.2 percent reduction over
+180 held-out camera pairs, with 179 of 180 improving and 75.8 percent on the
+second backbone. Those are the same predictions, expressed in a different frame.
+
+The early results were good, but I did not stop there. Instead of asking only
+whether the method works, I investigated **why** it works and **what determines
+the quality of a body-fixed frame**. That became the research question of the
+thesis. Along the way I found that several ideas I believed were mine were
+already established, and I have said so rather than claim them.
+
+Four things I would rather you hear from me than meet for the first time in the
+PDF. One of them works against the method; the others change how the
+contribution is framed.
+
+**1. A simpler baseline beats my method, and the report says so in the
+abstract.** I ran the comparison a reader would ask for and that had not been
+run: aligning each predicted pose to a single fixed reference skeleton by the
+Kabsch algorithm. It is training-free, label-free, calibration-free and
+single-view, so it meets every requirement my framework claims as its profile.
+It scores **57.5 mm against my 93.4 mm** and beats the anatomical frame on **all
+180 held-out pairs of Human3.6M, under both backbones**, and on **all fifteen
+actions**. The criterion and all three possible readings were written down and
+committed before the experiment ran, so this is the outcome the pre-registration
+committed me to reporting.
 
 I have not hidden it or softened it. It is in the abstract, the contributions
 list, Section 5.10, the Limitations section, and the opening of the conclusion.
@@ -36,17 +74,17 @@ viewpoints. The contribution is that boundary, and the instrument that makes it
 askable — not the number. I would rather present it that way than argue the
 baseline away.
 
-**2. Our frame construction is a known algorithm.** The Gram-Schmidt body frame
+**2. My frame construction is a known algorithm.** The Gram-Schmidt body frame
 built from the torso and hip axes is the TRIAD algorithm, published by Black in
 1964 for spacecraft attitude determination. The accompanying rule — that the more
-accurately known direction should be primary — is Shuster and Oh (1981). Our
+accurately known direction should be primary — is Shuster and Oh (1981). My
 axis-length finding is that rule applied to anatomy.
 
 **3. The error propagation is also established, in biomechanics.** The relation
 that a direction read from two joints a distance L apart is uncertain by about
 2σ/L restates results developed by Della Croce, Cappozzo and colleagues (1999,
-2005) for anatomical landmark misplacement. An earlier draft presented it as our
-derivation. It is not, and the report now says so explicitly.
+2005) for anatomical landmark misplacement. An earlier draft presented it as my
+own derivation. It is not, and the report now says so explicitly.
 
 The thesis therefore no longer claims to have invented the frame or discovered
 the principle. It claims the **transfer** of that reasoning to joints inferred by
@@ -68,7 +106,7 @@ which joint will disagree, because articulation dominates there.
   text rather than quietly removed.
 - The headline cross-view figure now **excludes the four joints the frame is
   built from**, since the construction pins them and any seventeen-joint average
-  flatters us. It is 72.2 percent over 180 held-out pairs with 179 improving; the
+  flatters me. It is 72.2 percent over 180 held-out pairs with 179 improving; the
   seventeen-joint figure, 74.1 percent, is given alongside with the reason.
 
 I also found and fixed an error in two of my own figures while preparing the
@@ -102,12 +140,21 @@ defending it at the viva. Your call, and I am glad either way.
 The report is 90 pages. Nine experiments were pre-registered with their criteria
 committed to version history before each run; **five failed their own criteria
 and a sixth returned a competing method as the better one**. Every reported
-number is recomputed from stored result files by an automated audit of 248
+number is recomputed from stored result files by an automated audit of 255
 claims, alongside 76 unit tests, and both pass.
 
-Thank you for your guidance throughout — particularly the instruction to justify
-every claim against evidence, which is what produced the negative results above
-rather than a report that only reported what worked.
+Throughout, I tried to put scientific correctness ahead of preserving my earlier
+hypotheses. Whenever an experiment or the literature contradicted an assumption,
+I revised the report rather than the evidence, so what remains is only what both
+support.
+
+I would value your comments on the final report before the defence, particularly
+on its positioning, its contribution and its title.
+
+Thank you for setting the direction in your proposal document and for the
+repository you shared — the gap it named, that existing methods lack explicit
+geometric priors and view-invariant constraints, is unchanged and is the gap
+this report addresses.
 
 Best regards,
 Mehedi Hasan Khan
@@ -115,6 +162,31 @@ ID 12108004
 Session 2020–21, Department of Computer Science and Engineering
 
 ---
+
+**Attach both:** `Full_Thesis_Report.pdf` and `WORKFLOW.md`. The walkthrough is
+the page that answers his two questions in five minutes; the report is the
+90-page account behind it.
+
+---
+
+## If he asks "what is your model actually doing?"
+
+> Sir, I do not generate a new pose. The exact same MotionAGFormer prediction is
+> re-expressed in a coordinate system built from the person's own hips and torso.
+> Then I measure how closely two cameras agree. Mean cross-view joint distance
+> drops from 372.7 mm to 93.4 mm across 180 held-out pairs.
+
+## If he asks "how much better is it than base MotionAGFormer?"
+
+> Its accuracy is not better, Sir — it is identical, 45.149 millimetres either
+> way, because the estimator is frozen and I add zero parameters. What improves
+> is cross-view consistency: two cameras that disagreed by 372.7 mm now agree to
+> 93.4 mm. And a simpler Kabsch baseline reaches 57.5 mm, so on that metric it
+> beats mine; the report says so in the abstract.
+
+Never call the cross-view number MPJPE. MPJPE is error against ground truth and
+it does not move. This is *cross-view joint distance*, prediction against
+prediction.
 
 ## If he asks "so what is actually yours?"
 
