@@ -1146,7 +1146,7 @@ One consequence deserves emphasis, because it bears on the reliability score. Th
 
 The multi-scale extension is the third component to receive the cross-dataset treatment. We compare the combined per-limb distance against the global frame on the same 180 held-out pairs, taking both quantities from the same code path so that the baseline and the treatment differ only in the frame used.
 
-The extension replicates. Multi-scale reduces the combined cross-view distance from 62.7 mm to 46.2 mm, an improvement of 25.6 percent with a cluster bootstrap interval of $[+23.6, +27.6]$ percent, and improves 179 of the 180 pairs. No segment fell back to the global frame on any evaluated pose, so the per-limb frames are well conditioned throughout. The improvement is largest exactly where the global frame is weakest: SittingDown gains 32.9 percent on all twelve of its pairs, against 17.8 percent for Walking. This is the expected relationship, since a limb frame is built from that limb's own joints and does not inherit the error in the torso and hip axes that Section \ref{sec:h36mcv} identified as the cause of the SittingDown result.
+The extension replicates. Multi-scale reduces the combined cross-view distance from 62.7 mm to 46.2 mm,\footnote{The global frame appears here at 62.7 mm against the 75.3 mm of Section \ref{sec:h36mcv}, on the same 180 pairs and the same prediction cache. The two are not the same measurement. The cross-view experiment threads the previous frame's forward axis through the sequence for temporal sign consistency; the multi-scale module does not, and it computes its baseline and its treatment through that same unthreaded path so that the comparison is internally consistent by construction. Mixing them would score a threaded baseline against an unthreaded treatment and credit the difference to multi-scale. The absolute values in this section are therefore not comparable with those of Section \ref{sec:h36mcv}; the ratio between them is what this section reports.} an improvement of 25.6 percent with a cluster bootstrap interval of $[+23.6, +27.6]$ percent, and improves 179 of the 180 pairs. No segment fell back to the global frame on any evaluated pose, so the per-limb frames are well conditioned throughout. The improvement is largest exactly where the global frame is weakest: SittingDown gains 32.9 percent on all twelve of its pairs, against 17.8 percent for Walking. This is the expected relationship, since a limb frame is built from that limb's own joints and does not inherit the error in the torso and hip axes that Section \ref{sec:h36mcv} identified as the cause of the SittingDown result.
 
 \subsection{A Bilateral Asymmetry, and What Caused It}
 
@@ -1162,7 +1162,9 @@ Applying the diagnosis consistently exposes a second instance of it. Both arms t
 
 Rebuilding both arms from their own long segments, shoulder-to-elbow as primary and elbow-to-wrist as secondary, produces the largest single improvement in this chapter. The right arm falls from 57.1 mm to 26.8 mm and the left from 57.6 mm to 26.3 mm. The combined multi-scale distance falls to 28.2 mm, the improvement over the global frame reaches 55.1 percent with a cluster bootstrap interval of $[+53.6, +56.5]$ percent, and all 180 pairs improve with no segment falling back to the global frame.
 
-The corrected levels support the diagnosis independently of the improvement they produce. All five now lie between 26.3 mm and 30.7 mm, where before they ranged from 28.6 mm to 69.4 mm. A construction applied consistently to five anatomically different segments should give five similar numbers, and it now does. That convergence was not optimized for, since each segment was redefined by the same rule rather than tuned, and it is the strongest evidence that axis length, not anatomy, was driving the spread.
+The corrected levels support the diagnosis independently of the improvement they produce. All five now lie between 26.3 mm and 30.7 mm, where before they ranged from 28.6 mm to 69.4 mm. A construction applied consistently to five anatomically different segments should give five similar numbers, and it now does. That convergence was not optimized for, since each segment was redefined by the same rule rather than tuned.
+
+An earlier version of this report called that convergence the strongest evidence that axis length, not anatomy, was driving the spread. \textbf{Section \ref{sec:circularity} withdraws that reading.} Every one of these five levels is built entirely or mostly from the joints it is then scored on --- the four limbs from three of three, the torso from four of six --- and convergence into a narrow band is what that circularity predicts on its own, without any contribution from axis length. The convergence is therefore reported here as a consistency check on the implementation fix, confirming that one rule was applied uniformly, and not as evidence for the axis-length principle. The evidence for that principle is the global-frame comparison of Section \ref{sec:multilandmark}, where the scored set and the constructor count are held identical and only the axis length differs.
 
 \begin{table}[htbp]
 \centering
@@ -1300,6 +1302,7 @@ Long-axis & Right arm & 3 & \textbf{3} & 27.3 & \textbf{1.13$\times$} \\
 Long-axis & Left arm & 3 & \textbf{3} & 26.7 & \textbf{1.15$\times$} \\
 Long-axis & Right leg & 3 & \textbf{3} & 30.1 & \textbf{1.23$\times$} \\
 Long-axis & Left leg & 3 & \textbf{3} & 31.6 & \textbf{1.23$\times$} \\
+Long-axis & Torso & 6 & \textbf{4} & 29.1 & \textbf{1.22$\times$} \\
 \hline
 \end{tabular}}
 \end{table}
@@ -1312,7 +1315,9 @@ Two things follow, and the first is worse than the second.
 
 \textbf{What survives is the clean test.} Section \ref{sec:multilandmark} compares two global frames, one built from the hip axis and one from the longer shoulder axis. Both are scored on all seventeen joints and both take four constructor joints, so the joint set, the scored set and the constructor count are identical and only the axis length differs. The shoulder axis wins on both backbones, by 5.2 and 4.4 percent, with cluster bootstrap intervals of $[+1.6, +7.8]$ and $[+1.7, +3.6]$ excluding zero. That is the evidence for the axis-length principle in this report, and the limb-level correlation is demoted to illustration alongside it.
 
-The global cross-view result of Section \ref{sec:h36mcv} is unaffected. Its frame takes four constructor joints out of seventeen scored, thirteen are held out, and it sits at 1.46 times its Procrustes floor with substantial orientation disagreement still measurable. The circularity identified here is a property of three-joint limb segments, not of the method.
+The global cross-view result of Section \ref{sec:h36mcv} is unaffected. Its frame takes four constructor joints out of seventeen scored, thirteen are held out, and it sits at 1.46 times its Procrustes floor with substantial orientation disagreement still measurable.
+
+\textbf{The torso belongs in the demoted band as well, and an earlier version of this section said otherwise.} It is not a three-joint segment, but four of the six joints it is scored on build its frame, and it sits at 1.22 times its own floor --- inside the 1.13 to 1.23 range that demotes the limbs. We previously wrote that the circularity was a property of three-joint limb segments rather than of the method, which was too narrow: it is a property of any segment frame built mostly from the joints it is then scored on, and the torso qualifies. What separates the global frame is the ratio rather than the segment size, four constructors against seventeen scored, and that ratio is what leaves it 1.46 times above its floor with disagreement still measurable.
 
 \subsection{Testing the Predicted Law}
 

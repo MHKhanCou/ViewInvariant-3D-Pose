@@ -651,6 +651,20 @@ def main():
                              r["headroom_ratio"], src, tol=0.01))
         results.append(check("    %s fully circular (1=yes)" % disp, 1.0,
                              float(r["fully_circular"]), src, tol=0))
+    # The torso. Not a three-joint limb, but four of its six scored joints build
+    # its frame, which puts it inside the same demoted band. An earlier draft of
+    # the report omitted this row from the table and concluded that circularity
+    # was confined to three-joint segments; these claims stop that recurring.
+    torso = ctrl[("long_axis", "Torso")]
+    results.append(check("  long-axis Torso headroom", 1.22,
+                         torso["headroom_ratio"], src, tol=0.01))
+    results.append(check("    Torso scored joints", 6.0,
+                         float(torso["n_scored"]), src, tol=0))
+    results.append(check("    Torso joints that build its frame", 4.0,
+                         float(torso["n_scored_that_build_the_frame"]), src, tol=0))
+    results.append(check("    Torso headroom is inside the demoted limb band", 1.0,
+                         float(1.13 <= torso["headroom_ratio"] <= 1.23), src, tol=0))
+
     # The comparison that isolates it: same joints, same oracle, one more builder.
     results.append(check("  shipped Right arm canonical (mm)", 58.0,
                          ctrl[("shipped", "Right arm")]["canonical_mm"],

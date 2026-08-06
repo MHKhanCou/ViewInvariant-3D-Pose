@@ -3,7 +3,7 @@
 Defense: 9 August 2026. Read this the night before and the morning of.
 
 Every number here is verified by `python -m evaluation.audit_numbers`
-(131 claims). If a question asks for a figure not in this document, say you will
+(248 claims). If a question asks for a figure not in this document, say you will
 check it rather than guess — you have never once quoted a number you could not
 trace, and that is worth more than one recalled digit.
 
@@ -36,12 +36,16 @@ trace, and that is worth more than one recalled digit.
 >
 > The design question is what to build the frame from, and the geometry answers
 > it: a direction read from two joints a distance L apart is uncertain by about
-> 2σ/L, so use the longest axis available. Acting on that raised my multi-scale
-> result from 25.6 to 55.1 percent at no cost.
+> 2σ/L, so use the longest axis available. The clean test of that is a
+> global-frame comparison: swapping the hip axis for the longer shoulder axis,
+> with the scored set and the constructor count held identical, wins on both
+> backbones by 5.2 and 4.4 percent with intervals excluding zero.
 >
 > I then pre-registered three tests of how far that principle goes, committing
 > each criterion to version control before running. It decides between frame
-> constructions — rank correlation 0.90 and 0.88 on two different backbones. It
+> constructions — established by the controlled global-frame comparison above,
+> not by the limb-level correlation, which §5.16 shows is confounded with
+> constructor count. It
 > does **not** decide which individual frame to trust, because within one
 > construction the axis is essentially the subject's hip width and barely varies.
 > And it does not decide which joint will disagree, which is the interesting
@@ -75,7 +79,7 @@ trace, and that is worth more than one recalled digit.
 >    fail here — my axes span 138 to 461 mm, and one network predicting all
 >    seventeen joints makes their errors dependent.
 >
-> Then the apparatus: 167 numerical claims recomputed from stored artifacts by an
+> Then the apparatus: 248 numerical claims recomputed from stored artifacts by an
 > automated audit, 72 tests, four pre-registrations timestamped ahead of their
 > results, and two claims withdrawn during the final week because they did not
 > survive a check I should have run earlier.
@@ -146,8 +150,12 @@ Concede immediately — the report already does, in Section 2.3.
 > had been defined with different axes. Correcting that raised the multi-scale
 > improvement from 25.6 to 37.2 percent. I then predicted the same defect in
 > both arms, which the bilateral check could not reveal because both arms shared
-> it, and confirmed it: 55.1 percent, all 180 pairs improving, and all five
-> levels converging into a 4.4 mm band where they had spanned 28.6 to 69.4.
+> it, and confirmed the defect was there. **But I then found the measurement
+> was largely circular** -- each corrected limb frame is built from exactly the
+> three joints it is scored on, and the torso from four of its six -- so I
+> demoted that result to exploratory and it is not evidence for anything. The
+> convergence confirms the implementation fix was applied uniformly, nothing
+> more.
 >
 > That convergence was not optimised for. One rule applied to five anatomically
 > different segments produced five similar numbers. That is a design principle
@@ -272,8 +280,9 @@ defensive: the problem and the gap are unchanged, only the method inverted.
 > The proposal hypothesised that explicit geometric priors would deliver both
 > view-invariance and reliability. I tested that hypothesis in its cheapest
 > possible form, analytically and with zero training, and the verdict is split.
-> The view-invariance half holds: 74.1 percent across 180 held-out pairs on a
-> dataset I did not develop on. The geometric-priors-as-quality-signal half does
+> The view-invariance half holds: 72.2 percent across 180 held-out pairs on a
+> dataset I did not develop on, measured off the four joints the frame is built
+> from; 74.1 percent if all seventeen are counted. The geometric-priors-as-quality-signal half does
 > not: bone-length consistency scored +0.492 on the first dataset and +0.098 on
 > the second, and I retract it. So the proposal's question is answered, not
 > avoided, and half the answer is negative.
@@ -311,6 +320,35 @@ because you found it yourself and put it in Chapter 2.
 > everyone is now using it for, and I found it by pre-registering a test I
 > expected to pass. That is a smaller claim than the one I started the year with,
 > and it is the one that survives.
+
+---
+
+### 7b. "Your circularity table leaves out the torso."
+
+**He is right, and an earlier draft did.** The table now includes it. Answer:
+
+> Yes -- the torso is in the demoted band with the limbs, and the table lists it
+> at 1.22 times its floor. It is not a three-joint segment, but four of the six
+> joints it is scored on build its frame, so the same objection applies. I had
+> originally written that the circularity was confined to three-joint limbs,
+> which was too narrow, and Section 5.16 now says it is a property of any
+> segment frame built mostly from the joints it is scored on.
+>
+> What it does not touch is the global frame, and the reason is the ratio rather
+> than the segment size: four constructors against seventeen scored, thirteen
+> joints held out, and it sits at 1.46 times its floor with real disagreement
+> still measurable. The headline result is scored there.
+
+**If he pushes: "so your five converging levels are all circular?"** Concede it
+immediately -- this is the honest answer and the report now says it:
+
+> All five, yes. Four limbs built from three of three, the torso from four of
+> six. I previously called that convergence my strongest evidence for the
+> axis-length principle and I withdrew it, because convergence is exactly what
+> the circularity predicts by itself. The evidence for the principle is the
+> global-frame comparison where only the axis length differs -- shoulder axis
+> against hip axis, same scored set, same constructor count, wins on both
+> backbones with intervals excluding zero.
 
 ---
 
@@ -471,11 +509,11 @@ coherent.
 | Claim | Number |
 |---|---|
 | Cross-view, MPI-INF-3DHP | +32.4%, 27 held-out pairs |
-| Cross-view, Human3.6M | **+74.1%**, CI [+69.8, +77.2], 179/180 pairs |
+| Cross-view, Human3.6M | **+72.2%** off the frame's own joints (+74.1% over all 17), 179/180 pairs |
 | Oracle gap closed | 90.5% |
 | Frame validity | 100% |
 | Multi-scale, as implemented | +25.6% |
-| Multi-scale, own long axis | **+55.1%**, CI [+53.6, +56.5], 180/180 |
+| Multi-scale, own long axis | +55.1% -- **DEMOTED, largely circular (§5.16). Do not volunteer this number.** |
 | Fusion, median over 4 views | 37.8 → 34.6 mm, CI [+2.1, +13.7] |
 | Fusion, unweighted mean | −3.4%, CI spans zero — **not** reliably worse |
 | Bone signal | +0.492 → **+0.098**, retracted |
@@ -483,7 +521,7 @@ coherent.
 | Backbone reproduction | 45.149 mm vs 45.149 published |
 | Added trainable parameters | **0** |
 | Canonicalization cost | 402 FLOPs/frame, 0.0005% of backbone |
-| Audit / tests | 131 claims, 67 tests |
+| Audit / tests | 248 claims, 76 tests |
 
 **Two datasets: 209 camera pairs total. Four subjects.**
 
