@@ -323,6 +323,52 @@ because you found it yourself and put it in Chapter 2.
 
 ---
 
+### 7c. "You used the favourable averaging convention where it suited you."
+
+The sharpest statistical question available. **Concede the shape of it, then
+give the reason** -- the report already discloses this, so he is reading your
+own disclosure back to you.
+
+> That asymmetry is real and it is in the report. The cross-view improvement
+> uses the per-pair mean, which is the lower of the two -- 72.2 against 76.5 --
+> and the fusion headline uses the ratio of aggregate means, which is the higher
+> one. I report both in both places rather than choosing for the reader.
+>
+> The reason is the unit the experiment is defined on. An improvement defined
+> per camera pair should be averaged per camera pair, or the widest-baseline
+> pairs dominate. The fusion experiment is defined on pooled frames, so the
+> pooled ratio is its natural unit. I did not pick per experiment to flatter the
+> number -- and where the conservative convention changes the verdict, as it
+> does for the unweighted-mean fusion, I report the weaker claim: +4.7 percent
+> with an interval spanning zero.
+
+**Do not** say "the conservative convention is used throughout". It is not, and
+§5.17 says so.
+
+---
+
+### 7d. "One comparison on two backbones, and you call it 'governs'?"
+
+He has conceded everything else and is squeezing the single surviving positive
+claim. This is fair and you should not bluster.
+
+> It is one controlled comparison, yes -- and it is the only one in the report
+> where the scored set and the constructor count are held identical and only the
+> axis length differs, which is why it is the one I cite and why I do not cite
+> the limb-level correlations that Section 5.16 shows are confounded.
+>
+> What it has is replication rather than volume: two independently trained
+> networks, different architectures, nineteen-fold different size, byte-identical
+> evaluation code, both intervals excluding zero, and the direction registered
+> before the number existed. The effect is small -- 5.2 and 4.4 percent -- and I
+> state it as such rather than rounding it up.
+>
+> If you are asking whether 5 percent is worth a contribution, my answer is that
+> the contribution is the boundary rather than the effect size: this is the level
+> where the principle still holds, and the two levels below it are where it stops.
+
+---
+
 ### 7b. "Your circularity table leaves out the torso."
 
 **He is right, and an earlier draft did.** The table now includes it. Answer:

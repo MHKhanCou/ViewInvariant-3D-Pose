@@ -84,8 +84,20 @@ confirmation rather than assuming it stands, as I do not believe it was formally
 approved. It says *canonicalization framework* rather than pose estimation
 because the estimator is untouched, and *cross-view comparability* rather than
 view-invariant estimation because what improves is agreement between two
-camera-relative predictions, not their accuracy. If you would prefer something
-shorter, or one that foregrounds the boundary result, I am glad to change it.
+camera-relative predictions, not their accuracy.
+
+**One word in it I am not certain of, and would rather raise than defend
+later: "Reliability-Aware".** The report falsifies the reliability score as an
+accuracy predictor along five independent axes, and the pre-registered
+conditioning criterion fails. What survives is narrower: the score does gate
+canonicalization *quality* on both backbones, which is the function its own
+specification names. So the word is defensible for that narrower claim and the
+report states plainly which claim it is — but it sits in the most prominent
+position in the document and describes a component the body largely falsifies.
+If you think it overstates, dropping it to *"A Lightweight, Training-Free
+Geometric Canonicalization Framework for Cross-View Comparability of Frozen
+Monocular 3D Pose Predictions"* costs nothing and I would prefer that to
+defending it at the viva. Your call, and I am glad either way.
 
 The report is 90 pages. Nine experiments were pre-registered with their criteria
 committed to version history before each run; **five failed their own criteria

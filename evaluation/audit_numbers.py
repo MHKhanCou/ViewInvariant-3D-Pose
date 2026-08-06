@@ -9,9 +9,12 @@ silently rot after a re-run.
 Run:  ./venv/Scripts/python.exe -m evaluation.audit_numbers
 """
 
+import io
 import json
 import os
+import re
 import sys
+import unittest
 
 import numpy as np
 from scipy.stats import spearmanr
@@ -776,6 +779,39 @@ def main():
                          b.get("mpjpe") or b.get("MPJPE") or
                          (45.149 if "45.14" in flat else None),
                          "baseline_results.json", tol=0.01, unit="mm"))
+
+    # ---------- the report's own self-referential counts ---------------------
+    # These have gone stale four times: 131, 167, 180, 192, 216, 230, 240, 248.
+    # They are the one class of number outside the audit, which is exactly why
+    # they keep drifting, so they are inside it now. SELF_CHECKS counts the
+    # claims added in this block, since the total the report quotes includes
+    # them; get it wrong and this block fails against itself.
+    SELF_CHECKS = 3
+    total = len(results) + SELF_CHECKS
+    tex = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                       "thesis_report", "Full_Thesis_Report.tex")
+    with io.open(tex, encoding="utf-8") as fh:
+        body = fh.read()
+
+    stated_claims = [int(m) for m in re.findall(
+        r"(\d+)\s+(?:numerical|headline)\s+claims", body)]
+    results.append(check("report's stated claim count matches this audit",
+                         float(total),
+                         float(stated_claims[0]) if stated_claims else None,
+                         "Full_Thesis_Report.tex", tol=0))
+    results.append(check("  every site in the report quotes the same count",
+                         1.0,
+                         float(len(set(stated_claims)) == 1 and bool(stated_claims)),
+                         "Full_Thesis_Report.tex", tol=0))
+
+    n_tests = unittest.defaultTestLoader.discover(
+        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                     "tests")).countTestCases()
+    stated_tests = [int(m) for m in re.findall(r"(\d+)\s+tests", body)]
+    results.append(check("report's stated test count matches the suite",
+                         float(n_tests),
+                         float(stated_tests[0]) if stated_tests else None,
+                         "tests/", tol=0))
 
     n_ok = sum(results)
     print(f"\n{n_ok}/{len(results)} claims verified against artifacts")
