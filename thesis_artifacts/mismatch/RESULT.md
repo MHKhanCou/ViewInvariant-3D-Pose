@@ -17,7 +17,7 @@ in these words: **the baseline's advantage is unqualified on this data.**
 | 1.40 | 93.35 | 57.53 | 72.54 | −35.82 [−58.92, −19.85] | template better |
 
 Criterion 1 (sanity) passed exactly: at f = 1.0 the run reproduces the stored
-Section 5.6.1 ("A Single-View Baseline, and It Wins") figures, 93.35 mm and 57.47 mm, to the digit.
+the section "A Single-View Baseline, and It Wins" figures, 93.35 mm and 57.47 mm, to the digit.
 
 Criterion 2 (crossover) never fired. There is nothing to adjudicate under
 criterion 3.
@@ -49,7 +49,7 @@ frame beats Kabsch-to-template, and both failed:
 | 10 | Distal joint corruption | Crossover on MotionBERT at 40 mm, MotionAGFormer only at 160 mm — one backbone, not two |
 | 11 | Template proportion mismatch | No crossover at any proportion tested; the baseline moves by 0.2 % |
 
-**Section 5.6.1 ("A Single-View Baseline, and It Wins")'s sentence "We found no pose regime in which our construction is
+**the section "A Single-View Baseline, and It Wins"'s sentence "We found no pose regime in which our construction is
 preferable" now has two further failed searches behind it rather than none.**
 That is a stronger statement of the limitation than the report currently makes,
 and it is the honest direction for it to move.

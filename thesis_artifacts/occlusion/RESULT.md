@@ -25,7 +25,7 @@ spans zero, and the interval only excludes zero at 160 mm — a severity the
 pre-registration explicitly ruled out in advance.
 
 Criterion 1 (sanity) passed on both: the template baseline is better at σ = 0,
-so the scored subset did not change the Section 5.6.1 ("A Single-View Baseline, and It Wins") result.
+so the scored subset did not change the the section "A Single-View Baseline, and It Wins" result.
 
 ## This is the conditioning failure again
 

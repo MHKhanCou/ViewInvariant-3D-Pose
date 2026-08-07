@@ -49,7 +49,7 @@ Kabsch-aligning each pose onto a single fixed reference skeleton is training-fre
 | Cross-view distance (13 joints, XS) | 93.4 mm | **57.5 mm** |
 | Camera pairs where it wins | 0 / 180 | **180 / 180** |
 
-It wins on both backbones, all fifteen actions, under three unrelated templates and every centring tested. The criterion and all three readings were committed to git before the experiment ran. This is in the report's abstract, Section 5.6.1 ("A Single-View Baseline, and It Wins"), Limitations and Conclusion, and it is stated here for the same reason.
+It wins on both backbones, all fifteen actions, under three unrelated templates and every centring tested. The criterion and all three readings were committed to git before the experiment ran. This is in the report's abstract, the section "A Single-View Baseline, and It Wins", Limitations and Conclusion, and it is stated here for the same reason.
 
 The method is kept because the baseline **cannot run the experiment this project is about**: Kabsch alignment has no anatomical axis, so there is no axis to hold fixed and vary, and the question of what governs frame consistency cannot be posed inside it. As a way of reducing cross-view distance on this data, the simpler method is better.
 

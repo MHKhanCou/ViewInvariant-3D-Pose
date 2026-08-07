@@ -855,21 +855,6 @@ Table \ref{tab:crossview} summarizes the result and Figure \ref{fig:pairs} shows
 \label{fig:oracle}
 \end{figure}
 
-\section{Why the Reliability Score Fails and What Succeeds}
-\label{sec:relfails}
-
-We conducted five independent experiments that falsify the reliability score as a predictor of accuracy. Within a frame, its correlation with per-view error across simultaneous cameras is approximately zero. View selection straddles chance, as described above. Its sign inverts across backbones, at $-0.707$ on MotionBERT against $+0.375$ on a multilayer perceptron baseline. Reliability-weighted fusion of heterogeneous models is worse than an unweighted mean. Finally, we pre-registered a pass criterion for test-time augmentation dispersion and committed it to version control before running that experiment; the result failed all three criteria, with a coefficient of $+0.100$, inconsistent signs across strata, and a bootstrap interval spanning zero.
-
-We attribute these results to a single cause. The score measures within-frame geometric plausibility, which a coherent depth error leaves intact, since a pose can be symmetric, correctly proportioned and well conditioned while being wrong in depth. The score therefore detects corruption, which destroys plausibility, but not the depth ambiguity that dominates monocular estimation. The failure of test-time augmentation sharpens this point, because it indicates that the model agrees with itself while being wrong, so self-consistency carries little error information.
-
-A constraint enforced by the world rather than by the model does carry that information. We find that temporal bone-length inconsistency predicts error at a Spearman coefficient of $+0.492$ over 2460 frames, with the same sign in all four strata. It is not a proxy for detector confidence, since the partial correlation controlling for confidence is $+0.481$; it is not an artifact of scale, since the scale-free formulation scores $+0.492$ against $+0.367$ for scale alone; and it is not transductive, since a causal reference window disjoint from the scored frames gives $+0.473$ and a skeleton estimated from a different camera gives $+0.440$. A cluster bootstrap over cameras places the improvement over the incumbent score in the interval $[+0.108, +0.515]$. Every figure in this paragraph describes MPI-INF-3DHP alone. Section \ref{sec:h36m} tests whether they survive on a second dataset, and reports that they do not.
-
-All five experiments share a target: ground-truth pose error. Section \ref{sec:conditioning} tests the score against the different target its own specification names, namely whether the body frame is fit to canonicalize with, and finds that against that target it works on both backbones. The falsifications below are therefore bounds on what the score predicts, not a verdict that it predicts nothing.
-
-The signal is nevertheless frame-level rather than joint-level. Assigning each joint the deviation of its adjacent bones yields chance-level ranking within a frame, so it supports triage of whole predictions but not spatial localization of error.
-
-Component analysis further shows that the incumbent score's weakness lies in its combination rule rather than in its parts. Four of the six components individually predict error roughly twice as well as their geometric mean. Selecting components on subject S1 and scoring on held-out subject S2 raises the held-out coefficient from $-0.162$ to $-0.357$, and combining the pruned composite with the bone-length signal reaches $+0.395$. This analysis uses ground-truth error for selection and is therefore reported as diagnosis rather than as a deployable method.
-
 \section{Replication on Human3.6M and Retraction of the Bone-Length Claim}
 \label{sec:h36m}
 
@@ -915,67 +900,6 @@ The reference skeleton is the mean canonical pose over the MPI-INF-3DHP cache, 2
 Two properties of the comparison belong with the number rather than after it. The template estimator fits its rotation by least squares over all seventeen joints, where ours reads two anatomical vectors, so it uses strictly more of each prediction. And it normalizes translation by the centroid of the pose while ours uses the root joint alone. Section \ref{sec:translation} separates that second effect and finds it minor but not negligible. Both observations describe how the baseline wins, not whether it does.
 
 We record the result and stop there. What it implies for the framing of this report is a judgement that should be made on the evidence as a whole rather than appended to the experiment that produced it, and Section \ref{sec:limitations} lists it as the strongest outstanding objection to the method.
-
-\section{Calibration-Free Fusion on Human3.6M}
-\label{sec:h36mfuse}
-
-We apply the same treatment to multi-view fusion, using the four synchronized cameras as four uncalibrated views. The baseline is the expected error of an arbitrary single view, which is what a deployment with one uncalibrated camera obtains. Every pose is scored by the similarity-aligned distance used throughout this report, which removes rotation and therefore denies any advantage to a pose merely for living in a convenient frame. What canonicalization supplies is the ability to average at all.
-
-Fusion replicates, but only with a robust estimator, and the qualification is the finding. A coordinate-wise median across the four canonical views reduces error from 37.8 mm to 34.6 mm, an improvement of 8.4 percent with a cluster bootstrap interval of $[+2.1, +13.7]$ percent over the thirty videos. The mean across the same four views gives 39.1 mm, a point estimate of $-3.4$ percent whose interval is $[-21.5, +10.5]$ percent. The oracle that selects the best view using ground truth reaches 27.4 mm.
-
-Those intervals discipline the claim in two directions. The mean's apparent harm is not established, since its interval does not exclude zero: the point estimate is negative but the evidence does not distinguish it from no effect, and it would be an overreach to report that an unweighted mean damages accuracy.
-
-\textbf{The median's advantage is weaker than that interval alone suggests, and the qualification is important enough to state before anything else.} The figure of 8.4 percent is the ratio of aggregate means, and its interval excludes zero. Averaging the per-frame improvements instead gives 4.7 percent with an interval of $[-1.2, +9.8]$, which does not. The two conventions are the pair distinguished in Section \ref{sec:h36mcv}, and here, unlike there, they disagree about significance. We report both because reporting only the first would select the convention that favours the claim, having selected the conservative one elsewhere. The defensible statement is therefore that median fusion improves the aggregate and is not established as improving a typical frame.
-
-The instability of the mean is itself informative. Per frame, it improves on the single-view baseline in 67.9 percent of cases, so the typical frame does benefit. Its aggregate is dragged down, and its interval widened, by a minority of catastrophic frames that averaging propagates and a median discards. On MPI-INF-3DHP up to eight views were fused, where one bad view contributes an eighth of the average; with four views it contributes a quarter. We therefore refine rather than retract the fusion claim: canonicalization enables calibration-free fusion, and the estimator must be robust when the number of views is small.
-
-\subsection{Fusion Is Bimodal by Action, and the Aggregate Conceals It}
-\label{sec:fusionaction}
-
-The aggregate figure averages over an outcome that is not unimodal, and a reader who stopped at 8.4 percent would take away the wrong picture. Broken down by action, median fusion improves nine of the fifteen and harms six. Table \ref{tab:fusionaction} gives the extremes.
-
-\begin{table}[htbp]
-\centering
-\caption[Median fusion by action, the six worst and four best of fifteen]{Median fusion by action, the six worst and four best of fifteen. The final column is the same fusion with anatomical reflection handling, included because it bears on the diagnosis below.}
-\label{tab:fusionaction}
-{\fontsize{10}{12}\selectfont
-\begin{tabular}{lrrrr}
-\hline
-\textbf{Action} & \textbf{Single view} & \textbf{Fused} & \textbf{Change} & \textbf{Anatomical} \\
-\hline
-Discussion & 38.3 & \textbf{76.1} & $\mathbf{-98.3\%}$ & 51.2 \\
-WalkDog & 35.9 & 49.4 & $-37.7\%$ & 38.1 \\
-Walking & 25.2 & 26.6 & $-5.7\%$ & 27.3 \\
-WalkTogether & 29.2 & 30.8 & $-5.3\%$ & 32.1 \\
-Greeting & 33.5 & 35.3 & $-5.3\%$ & 42.2 \\
-Directions & 34.7 & 36.2 & $-4.3\%$ & 36.3 \\
-\hline
-Phoning & 37.6 & 32.4 & $+13.9\%$ & 34.8 \\
-Photo & 42.6 & 37.0 & $+13.2\%$ & 39.3 \\
-SittingDown & 57.2 & 47.0 & $+17.8\%$ & 46.7 \\
-Sitting & 45.7 & 36.9 & $+19.3\%$ & 37.3 \\
-\hline
-\end{tabular}}
-\end{table}
-
-Three things follow.
-
-\textbf{The mean over actions is negative.} It is $-3.0$ percent unweighted and $-5.4$ percent weighted by frame count, against a median action of $+7.7$ percent and a pooled figure of $+8.4$ percent. The sign of the conclusion depends on the unit of aggregation, which is a stronger version of the caution already given above. Almost all of that reversal is one action: excluding Discussion, the mean over the remaining fourteen is $+3.8$ percent.
-
-\textbf{Discussion is not a mild regression but a failure.} Fusing four views doubles its error, from 38.3 mm to 76.1 mm. A method that can double the error on one of fifteen actions is not one we would deploy without a per-frame check, and the abstention mechanism of Section \ref{sec:conditioning} is the obvious place for that check to live.
-
-\textbf{The pattern is not random.} Every one of the six failures involves either locomotion or conversational gesture --- Discussion, Greeting, Directions, Walking, WalkTogether, WalkDog --- while the clear successes are stationary: Sitting, SittingDown, Phoning, Photo. The rank correlation between an action's single-view error and its fusion gain is $+0.586$, so fusion helps most where the single view is already worst and can hurt where it is already good. That is a useful operating rule and an uncomfortable one, because the actions a deployment is likeliest to encounter are locomotion.
-
-We can partly diagnose the two severe cases and not the four mild ones. Repeating the fusion with anatomical reflection handling recovers much of the damage on Discussion, from 76.1 to 51.2 mm, and on WalkDog, from 49.4 to 38.1 mm, while leaving Walking, WalkTogether, Greeting and Directions no better or slightly worse. That is consistent with the severe failures arising from left-right mirror ambiguity, which gesture-heavy and two-person actions would be expected to provoke and which the naive variant resolves against the highest-weight view, and with the mild regressions having some other cause we have not identified. We state this as a diagnosis of the extremes only, since the reflection variant is one comparison and not a controlled test.
-
-One consequence deserves emphasis, because it bears on the reliability score. The plain median uses no reliability score, no weights and no learned parameters, and at 34.6 mm it outperforms the reliability-weighted mean at 36.6 mm. The weighted mean's own interval, $[-8.4, +12.3]$ percent, includes zero, so weighting by the reliability score does not demonstrably improve on using one arbitrary camera. The sixth independent result concerning that score is that discarding it entirely is better than using it. Figure \ref{fig:h36mfuse} shows the ordering.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.95\textwidth]{images/fig_h36m_fusion.png}
-\caption[Fusion strategies on Human3.6M]{Fusion strategies on Human3.6M. Bars below the dashed line beat an arbitrary single view. Every strategy shown is training-free and label-free, and the best of them uses no reliability score.}
-\label{fig:h36mfuse}
-\end{figure}
 
 \section{A Second Backbone}
 \label{sec:backbone}
@@ -1113,56 +1037,6 @@ The functional form, however, is too simple. The fit explains 70 percent of the 
 We therefore claim the mechanism and not the equation. Axis length governs frame stability, the direction and the constant are reproducible across backbones, and the specific inverse law is a first-order account that should not be quoted as a predictive model.
 
 The practical consequence is small and concrete. The best available global frame among those tested is not a multi-landmark estimate but the existing construction with one vector exchanged for a longer one, a change of two joint indices. We report it as a measured improvement rather than adopting it in the results above, which were computed with the original definition throughout, and we note that the corresponding change to the segment frames in Section \ref{sec:h36mms} was validated on Human3.6M only. Re-running both datasets under the corrected definitions is the cheapest outstanding item in this report.
-
-\section{Abstention, and What the Reliability Score Is Actually For}
-\label{sec:conditioning}
-
-Section \ref{sec:axistheory} derives that frame error scales as $2\sigma/L$, which suggests a label-free abstention rule: a frame whose axes are poorly conditioned should be distrusted. We pre-registered that test and, in doing so, rejected the obvious version of it before running anything.
-
-The obvious version asks whether a conditioning index predicts canonicalization error continuously. Two measurements taken beforehand argue it should not. The derivation describes the distribution of angular error for a given axis length, not one frame's realization of it, and it discriminates between frame constructions because axis length spans 138 to 461 mm there. Within a single construction the lateral axis is essentially the subject's hip width: over 52900 frames its coefficient of variation is 5.5 percent and its first-to-ninety-ninth percentile ratio is 1.29, against 3.34 between constructions. Worse, the index is computed from the prediction, so a distorted pose both raises the index and canonicalizes badly, and a positive correlation would not separate the two. That is the confound which made the bone-length signal uninterpretable until a second dataset settled it.
-
-We therefore pre-registered the narrower question the theory supports: can conditioning identify a tail of frames on which canonicalization should be abstained from. The metric is a coverage-error curve against a random-ordering null, with a partial correlation given bone-ratio deviation as the confound control.
-
-\textbf{It fails.} On the first backbone, discarding the worst tenth of frames by conditioning gains $+0.26$ mm over discarding a random tenth, with an interval of $[-1.92, +1.73]$ that spans zero, and the worst five percent are only 1.08 times the pooled mean. On the second backbone the same test passes. A criterion that works on one estimator and not the other has not been demonstrated, and we report it as failed.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{images/fig_triage.png}
-\caption[Abstention curves on both backbones]{Abstention curves on both backbones. The pre-registered criterion, geometric conditioning, is indistinguishable from the random null. The analytic reliability score, which Section \ref{sec:relfails} falsifies as an accuracy predictor, lowers the mean monotonically against this different target.}
-\label{fig:triage}
-\end{figure}
-
-\subsection{The Score We Falsified Passes This Test}
-
-The same experiment measured the analytic reliability score on identical frames, and the result is the more interesting one. Table \ref{tab:triage} reports it.
-
-\begin{table}[htbp]
-\centering
-\caption[Triage of canonicalization quality]{Triage of canonicalization quality. Mean canonical cross-view distance after discarding the worst frames by each criterion.}
-\label{tab:triage}
-{\fontsize{10}{12}\selectfont
-\begin{tabular}{lrrrrrr}
-\hline
-& \multicolumn{3}{c}{\textbf{MotionAGFormer-XS}} & \multicolumn{3}{c}{\textbf{MotionBERT}} \\
-\textbf{Dropped} & \textbf{cond.} & \textbf{reliab.} & \textbf{random} & \textbf{cond.} & \textbf{reliab.} & \textbf{random} \\
-\hline
-0\%  & 76.2 & 76.2 & 76.2 & 60.8 & 60.8 & 60.8 \\
-10\% & 75.9 & \textbf{70.7} & 76.2 & 58.9 & \textbf{58.1} & 60.8 \\
-20\% & 76.5 & \textbf{63.5} & 76.2 & 58.0 & \textbf{56.2} & 60.8 \\
-30\% & 77.9 & \textbf{59.5} & 76.2 & 57.6 & \textbf{54.7} & 60.8 \\
-\hline
-\end{tabular}}
-\end{table}
-
-Ordering by reliability lowers the mean monotonically on both backbones, reaching a 22 percent reduction at thirty percent discarded on the first. The gain over random at ten percent discarded is $+5.44$ mm with an interval of $[+1.53, +9.27]$, and $+2.74$ mm with $[+1.55, +3.81]$ on the second; both exclude zero. The worst five percent of frames by reliability carry 1.54 and 1.49 times the pooled error. The relationship survives the confound control, with partial correlations of $-0.306$ and $-0.322$ given bone-ratio deviation, so it is not merely detecting distorted skeletons.
-
-This does not retract anything in Section \ref{sec:relfails}. The score still does not predict ground-truth pose accuracy, and the five falsifications stand. What it shows is that those falsifications tested the score against the wrong target for part of its purpose. Its own specification is to estimate whether the body-frame axes are reliable enough to canonicalize with, and against that target, measured on two backbones, it works.
-
-We state the resulting position precisely, because it is narrow. The analytic reliability score is not a confidence estimate for the pose. It is a usable gate on the canonicalization step, and a deployment that must choose which frames to trust for cross-view comparison has a label-free, training-free criterion available with no second view and no calibration. That is a smaller claim than the one this project began with, and unlike that claim it is supported on both datasets and both estimators.
-
-Three caveats belong with it. The score contains axis conditioning among its six components, yet conditioning alone fails this test while the score passes, which means the discriminating work is being done by the other components rather than by the geometry the theory identifies. The triage result is a comparator within this pre-registration rather than its subject, so it is exploratory in the same sense as the bone-length signal, and it is stated as such wherever it appears. And triage is not calibration.
-
-The last point deserves a comparison, since the natural alternative is conformal prediction, which does supply a guarantee. CHAMP [17] conformalizes multi-hypothesis 3D pose estimation and CUPS [18] conformalizes pose and shape with a learned uncertainty function that remains valid when exchangeability is violated, both producing prediction sets with a stated coverage level. Neither is a substitute here, for two reasons. Both require a labelled calibration set drawn from the deployment distribution, which is precisely the requirement this framework exists to avoid, and both target the error of the pose rather than the fitness of the frame, which is the quantity measured above. A conformal treatment of frame fitness would be a genuine extension and is listed in Section \ref{sec:future}.
 
 \section{The Third Level: Where the Axis-Length Principle Stops}
 \label{sec:radial}

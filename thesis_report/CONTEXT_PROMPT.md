@@ -91,7 +91,7 @@ A **Kabsch-alignment-to-one-fixed-template** baseline is training-free,
 label-free, calibration-free and single-view — it meets *every* requirement I
 claim as my framework's profile. It scores **57.5 mm against my 93.4 mm** and
 wins on **180/180 pairs, both backbones, all 15 actions, three unrelated
-templates, every centring tested.** It is in my abstract, §5.6.1, Limitations
+templates, every centring tested.** It is in my abstract, the section "A Single-View Baseline, and It Wins", Limitations
 and Conclusion. Its criterion was committed to git before it ran.
 
 I have since pre-registered and run **two further searches for a regime where my

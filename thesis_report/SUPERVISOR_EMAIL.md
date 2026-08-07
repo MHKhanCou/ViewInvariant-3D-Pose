@@ -64,7 +64,7 @@ committed before the experiment ran, so this is the outcome the pre-registration
 committed me to reporting.
 
 I have not hidden it or softened it. It is in the abstract, the contributions
-list, Section 5.6.1 ("A Single-View Baseline, and It Wins"), the Limitations section, and the opening of the conclusion.
+list, the section "A Single-View Baseline, and It Wins", the Limitations section, and the opening of the conclusion.
 
 What I would say if asked to defend the work in spite of it: the baseline wins on
 the metric, but it **cannot run the experiment this thesis is about**. Kabsch

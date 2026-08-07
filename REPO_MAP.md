@@ -143,5 +143,5 @@ them before the defence.**
 | "Show me the method" | `canonical/body_frame.py`, 40 lines |
 | "How do I know the numbers are real?" | Run `audit_numbers.py`, then `git log` for the pre-registration timestamps |
 | "Where is the base vs proposed comparison?" | `thesis_artifacts/figures/fig_realview.png` and Table `tab:h36mcv` |
-| "You said a baseline beats you — where?" | Report §5.6.1 "A Single-View Baseline, and It Wins", `thesis_artifacts/template/template.json` |
+| "You said a baseline beats you — where?" | Report the section "A Single-View Baseline, and It Wins", `thesis_artifacts/template/template.json` |
 | "What did you pre-register?" | `ls thesis_artifacts/*/PREREGISTRATION.md` — eleven files, all timestamped before their results |
