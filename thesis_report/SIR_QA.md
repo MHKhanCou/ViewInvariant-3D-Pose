@@ -285,8 +285,10 @@ MotionBERT. Claiming a universal negative that my artifact refutes is a worse
 error than the loss it tries to cover.**
 
 > I tested whether the anatomical frame could win under asymmetric corruption.
-> The effect of laterality on alignment is 1.5 millimetres, against a
-> 41.5 millimetre gap between the two methods — twenty-seven times too small.
+> The effect of laterality on alignment is at most 1.5 millimetres, and it points
+> the wrong way — one-sided corruption damages the rigid fit *less*, not more.
+> On the same scored joints the deficit it would need to overcome is 10.2
+> millimetres, several times the lever, and the method-level gap is far larger.
 > The reason is that a rigid-body fit absorbs asymmetric error into its
 > rotation, while balanced error offers it no such relief. So that particular
 > avenue is closed by measurement rather than by my giving up on it.

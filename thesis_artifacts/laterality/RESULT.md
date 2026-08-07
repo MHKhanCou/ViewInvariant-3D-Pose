@@ -70,3 +70,14 @@ Nothing. The pre-registration fixed in advance that no reading of this
 experiment could produce a regime where the frame beats Kabsch, and none did.
 Seventeen pre-registrations; this is the seventh consecutive failure of the
 family, and the first one that explains the other six.
+
+## Correction, 7 Aug 2026 (later the same day)
+
+The "twenty-seven times too small" ratio above compares the lever
+(1.53 mm, measured on the scored set {9, 10, 11, 14}) against the
+best-frame gap (41.49 mm, measured on a different nine-joint set). That
+is a cross-set comparison and it overstates the ratio. On the same
+scored joints, the clean-data deficit is 10.15 mm (XS) and 3.17 mm (MB),
+so the same-set ratios are roughly 6.6x and 2.1x. The conclusion is
+unchanged and rests on the sign, which is backwards on both backbones
+with intervals excluding zero; the report now states it that way.
