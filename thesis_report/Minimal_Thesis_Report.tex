@@ -408,6 +408,14 @@ MPI-INF-3DHP \cite{mpi} is a markerless multi-camera capture dataset with fourte
 
 \section{Human3.6M}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/fig_qualitative.png}
+\caption[The pipeline on uncontrolled footage]{The pipeline on uncontrolled footage, outside either evaluation dataset. Left: the input frame with the detected 2D keypoints. Middle: the lifted 3D prediction in the camera's frame. Right: the same prediction after canonicalization. The datasets below are laboratory multi-camera rigs; this is what the same code does on an ordinary video.}
+\label{fig:qualitative}
+\end{figure}
+
+
 Human3.6M \cite{h36m} is the standard benchmark for monocular 3D pose estimation. Eleven subjects perform fifteen actions while recorded by four hardware-synchronized cameras at fifty frames per second. Following the established protocol we evaluate on subjects S9 and S11 using the backbone's preprocessing (20872 non-overlapping twenty-seven-frame windows). Two properties make it the right second dataset: the cameras are synchronized, so pairing needs no interpolation, and it played no part in developing the method, so all 180 camera pairs are held out in a stronger sense than the MPI pairs.
 
 \begin{table}[H]
@@ -451,16 +459,21 @@ criteria, and one returned a competing method as the better one. The failures ar
 reported at the same length as the confirmations, because a pre-registration that
 only counts when it succeeds is not a pre-registration.
 
-\begin{table}[H]
-\centering
-\caption[Every claim tested, and its verdict]{Every claim tested in this project and its verdict. Pre-registered experiments are marked \textsc{pr}.}
-\label{tab:summary}
 {\fontsize{9}{11}\selectfont
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{>{\raggedright\arraybackslash}p{6.2cm}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{2.3cm}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{6.2cm}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{2.3cm}}
+\caption[Every claim tested, and its verdict]{Every claim tested in this project and its verdict. Pre-registered experiments are marked \textsc{pr}.}\label{tab:summary}\\
 \hline
 \textbf{Claim} & \textbf{Evidence} & \textbf{Verdict} \\
 \hline
+\endfirsthead
+\multicolumn{3}{l}{\textit{Table \thetable\ (continued)}}\\
+\hline
+\textbf{Claim} & \textbf{Evidence} & \textbf{Verdict} \\
+\hline
+\endhead
+\hline
+\endfoot
 Canonicalization improves cross-view comparability
  & $372.7 \to 93.4$~mm, $+72.2\%$, 179 of 180 held-out pairs; $+75.8\%$ on the second backbone
  & Holds \\
@@ -524,11 +537,17 @@ The shared frame enables calibration-free fusion
 Canonicalization aids cross-view retrieval
  & Recall falls
  & Withdrawn \\
-\hline
-\end{tabular}}
-\end{table}
+\end{longtable}}
 
 \section{Pipeline Verification}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{images/fig_app.png}
+\caption[What the demonstration application returns]{What the demonstration application returns for a single frame, produced by calling the same entry point the evaluation uses. The reported numbers and the demonstrated behaviour therefore cannot diverge.}
+\label{fig:app}
+\end{figure}
+
 
 \begin{figure}[H]
 \centering
@@ -553,7 +572,7 @@ The baseline reproduces the published MotionAGFormer-XS figures to three decimal
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/fig_realview.png}
-\caption[The effect on eight real cameras]{What the method does, on photographs rather than stick figures. One instant of MPI-INF-3DHP seen by all eight synchronized cameras. Below left, the eight predictions in their own camera frames: the same pose eight times, and they do not overlap. Below right, the same eight after canonicalization, each camera processed independently, in ignorance of the others and without calibration. Mean pairwise distance falls from 0.149 to 0.095 in the normalised units the cache stores, a reduction of 36.6 percent. This is a single frame and it illustrates rather than measures; the measured figures over 180 held-out camera pairs are in Table \ref{tab:baseproposed}.}
+\caption[The effect on eight real cameras]{What the method does, on photographs rather than stick figures. One instant of MPI-INF-3DHP seen by all eight synchronized cameras. Below left, the eight predictions in their own camera frames: the same pose eight times, and they do not overlap. Below right, the same eight after canonicalization, each camera processed independently, in ignorance of the others and without calibration. Mean pairwise distance falls from 0.149 to 0.095 in the normalised units the cache stores, a reduction of 36.6 percent. This is a single frame and it illustrates rather than measures; the measured figures over 180 held-out camera pairs are in Table \ref{tab:crossview}.}
 \label{fig:realview}
 \end{figure}
 
@@ -566,7 +585,7 @@ Table \ref{tab:crossview} is the answer to the question a reader asks first---ho
 \caption[Base output versus proposed output]{Base output vs proposed output on Human3.6M (MotionAGFormer-XS, 180 held-out camera pairs).}
 \label{tab:crossview}
 \small
-\begin{tabular}{lccc}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.9cm}cc>{\raggedright\arraybackslash}p{3.5cm}}
 \toprule
  & \textbf{Base} & \textbf{Proposed} & \textbf{Change} \\
 \midrule
@@ -575,6 +594,9 @@ Cross-view distance, 13 non-constructor joints & 372.7 mm & 93.4 mm & $-72.2\%$ 
 Cross-view distance, all 17 joints & 320.4 mm & 75.3 mm & $-74.1\%$ \\
 Per-frame Procrustes oracle & --- & 56.2 mm & 87.0\% of gap closed \\
 Pairs improved (13-joint) & --- & 179 / 180 & --- \\
+Added trained parameters & 0 & 0 & none \\
+Added cost per frame & --- & 402 FLOPs & --- \\
+Requirements & detector + lifter & unchanged & no training, labels or calibration \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -963,41 +985,17 @@ The one live gap is atypical morphology: template-based alignment needs a skelet
 
 \end{thebibliography}
 
-% ========================== APPENDIX A ===============================
 \appendix
-\chapter{BASE VERSUS PROPOSED: THE COMPARISON AT A GLANCE}
-
-Table \ref{tab:baseproposed} collects, in one place, the comparison between the base pipeline and the proposed pipeline that the defence commonly asks for. Every row is reproduced from stored artifacts by the audit.
-
-\begin{table}[H]
-\centering
-\caption{Base vs proposed, end to end.}
-\label{tab:baseproposed}
-\small
-\begin{tabular}{>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}p{5.4cm}>{\raggedright\arraybackslash}p{5.4cm}}
-\toprule
- & \textbf{Base (frozen estimator output)} & \textbf{Proposed (canonicalized output)} \\
-\midrule
-What changes & nothing---reference pipeline & coordinate frame only \\
-MPJPE (H36M) & 45.149 mm & 45.149 mm \\
-Cross-view distance (13 joints) & 372.7 mm & 93.4 mm \\
-Cross-view distance (17 joints) & 320.4 mm & 75.3 mm \\
-Added trained parameters & 0 & 0 \\
-Added cost per frame & --- & 402 FLOPs \\
-Requirements & detector + lifter & + no training, no labels, no calibration \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 The pre-registered experiments: nine govern the body of this report, several of which failed their own criteria and one of which returned a competing method as the better one. Eight more were run after the freeze. Two were established --- anchor corruption, and the invariance of the frozen lifter to two-dimensional keypoint error. One, the routing rule, met its criteria under a simulated confidence gate and is reported as exploratory, because the experiment that followed it measured the real gate and found no usable signal on clean data. The remaining five failed: distal corruption, template proportion mismatch, a comparison of every frame construction against the baseline, one-sided corruption, and a laterality control that refuted its own mechanism. Seventeen experiments in sixteen documents, one of which covers two; every criterion was committed to version history before the run it governs, and \texttt{evaluation/verify\_prereg\_order.py} verifies that ordering and passes on all sixteen.
 
 \newpage
-\chapter*{APPENDIX B: COMPLETE RESULT TABLES}
+
+\chapter*{APPENDIX: COMPLETE RESULT TABLES}
 \label{sec:h36mms}
-\addcontentsline{toc}{chapter}{APPENDIX B: COMPLETE RESULT TABLES}
-\markboth{APPENDIX B}{APPENDIX B}
+\addcontentsline{toc}{chapter}{APPENDIX: COMPLETE RESULT TABLES}
+\markboth{APPENDIX}{APPENDIX}
 \setcounter{table}{0}
-\renewcommand{\thetable}{B.\arabic{table}}
+\renewcommand{\thetable}{A.\arabic{table}}
 
 Every table in this appendix is generated from the stored JSON artifacts by
 \texttt{python -m evaluation.make\_appendix\_tables} rather than typed by hand,
