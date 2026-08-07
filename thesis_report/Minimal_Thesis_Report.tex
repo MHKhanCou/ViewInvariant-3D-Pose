@@ -119,7 +119,7 @@ Certified that this project report is the bonafide work of \textbf{MEHEDI HASAN 
 }
 \vspace{3cm}
 \begin{center}
-{\fontsize{11}{13}\selectfont
+{\fontsize{10}{12}\selectfont
  \begin{tabular}{cc}
         \underline{\hspace{5.6cm}} & \underline{\hspace{5.6cm}} \\
         \textbf{SIGNATURE} & \textbf{SIGNATURE} \\
@@ -232,6 +232,7 @@ Building an orthonormal frame from two measured directions by taking one as prim
 \centering
 \caption{Requirements of related approaches at deployment time}
 \label{tab:requirements}
+\small
 \begin{tabular}{|l|c|c|c|c|}
 \hline
 \textbf{Method} & \textbf{Training} & \textbf{Labels} & \textbf{Camera params} & \textbf{Multi-view input} \\
@@ -363,6 +364,7 @@ Table \ref{tab:crossview} is the answer to the question a reader asks first---ho
 \centering
 \caption{Base output vs proposed output on Human3.6M (MotionAGFormer-XS, 180 held-out camera pairs).}
 \label{tab:crossview}
+\small
 \begin{tabular}{lccc}
 \toprule
  & \textbf{Base} & \textbf{Proposed} & \textbf{Change} \\
@@ -519,7 +521,8 @@ Table \ref{tab:baseproposed} collects, in one place, the comparison between the 
 \centering
 \caption{Base vs proposed, end to end.}
 \label{tab:baseproposed}
-\begin{tabular}{lp{5.2cm}p{5.2cm}}
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.6cm}>{\raggedright\arraybackslash}p{5.4cm}>{\raggedright\arraybackslash}p{5.4cm}}
 \toprule
  & \textbf{Base (frozen estimator output)} & \textbf{Proposed (canonicalized output)} \\
 \midrule
