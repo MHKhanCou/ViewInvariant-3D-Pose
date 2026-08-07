@@ -90,7 +90,10 @@ failure-surface map in `thesis_artifacts/anchor_corruption/RESULT.md`.
 - Not a claim of optimality: the threshold is fixed, not tuned, and was
   committed before this experiment ran. The rule does not make the anatomical
   frame win; it makes the *combination* no worse, in aggregate mean, than the
-  better single alignment, and strictly better where the two are separated.
+  better single alignment. It is never *better* than the better single arm --- a
+  selector cannot exceed the arm it selects. Routed equals best-single in 9 of
+  10 cells and is 5.4 mm worse in the tenth. The 38-47 mm margin is over
+  template alignment ALONE, not over the better arm.
 
 ## Effect on the frozen report
 
