@@ -137,11 +137,13 @@ Geometric Canonicalization Framework for Cross-View Comparability of Frozen
 Monocular 3D Pose Predictions"* costs nothing and I would prefer that to
 defending it at the viva. Your call, and I am glad either way.
 
-The report is 90 pages. Nine experiments were pre-registered with their criteria
-committed to version history before each run; **five failed their own criteria
-and a sixth returned a competing method as the better one**. Every reported
-number is recomputed from stored result files by an automated audit of 255
-claims, alongside 76 unit tests, and both pass.
+The report is 35 pages, with a 92-page technical version attached as a supplement in case you want the full evidence. Seventeen experiments were pre-registered with their criteria
+committed to version history before each run; **more than half failed their own
+criteria, and one returned a competing method as the better one**. Every
+reported number is recomputed from stored result files by an automated audit
+of 304 claims, alongside 76 unit tests, and both pass. A separate script
+verifies that every pre-registration was committed before its own result, and
+it passes on all sixteen documents.
 
 Throughout, I tried to put scientific correctness ahead of preserving my earlier
 hypotheses. Whenever an experiment or the literature contradicted an assumption,
@@ -163,9 +165,13 @@ Session 2020–21, Department of Computer Science and Engineering
 
 ---
 
-**Attach both:** `Full_Thesis_Report.pdf` and `WORKFLOW.md`. The walkthrough is
-the page that answers his two questions in five minutes; the report is the
-90-page account behind it.
+**Attach:** `Thesis_12108004.pdf` (the 35-page submission), `WORKFLOW.md`, and
+`fig_realview.png`. Optionally `Thesis_12108004_supplement.pdf`, the 92-page
+technical version, if you want him to have the complete evidence.
+
+**Add one question before sending:** whether the department sets a minimum page
+count for the report. Thirty-five clears most rules, but it is his to confirm
+and it costs one sentence to ask.
 
 ---
 
