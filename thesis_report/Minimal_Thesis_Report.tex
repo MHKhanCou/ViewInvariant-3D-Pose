@@ -1,0 +1,539 @@
+% =====================================================================
+%  Minimal_Thesis_Report.tex
+%  The submission document (~20 pages). Every number traces to a stored
+%  artifact in thesis_artifacts/ and is checked by evaluation.audit_numbers
+%  (the 258-claim audit covers the full report; the tables here use the
+%  same artifact values). Compile with pdfLaTeX, run TWICE.
+%
+%  This is the condensed companion to Full_Thesis_Report.tex. Same
+%  preamble, same title page, same headline results, same negative
+%  results, none of the scaffolding. Section 5.8 is the post-freeze
+%  addendum: the failure-support map and the routing rule (pre-registered
+%  7 Aug 2026).
+% =====================================================================
+\documentclass[12pt,a4paper]{report}
+\usepackage[left=1.2in,right=0.8in,top=1in,bottom=1in]{geometry}
+\usepackage{times}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage[hidelinks,hypertexnames=false]{hyperref}
+\usepackage[english]{babel}
+\usepackage{ragged2e}
+\usepackage{parskip}
+
+\renewcommand{\rmdefault}{ptm}
+\onehalfspacing
+
+\titleformat{\chapter}[display]
+{\normalfont\fontsize{16}{19}\bfseries\centering}
+{\chaptertitlename\ \thechapter}{20pt}{\fontsize{16}{19}\bfseries\uppercase}
+\titlespacing*{\chapter}{0pt}{10pt}{25pt}
+\titleformat{\section}
+{\normalfont\fontsize{14}{17}\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+{\normalfont\fontsize{12}{15}\bfseries}{\thesubsection}{1em}{}
+
+\pagenumbering{roman}
+\emergencystretch=3em
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.75}
+\renewcommand{\textfraction}{0.12}
+\renewcommand{\floatpagefraction}{0.90}
+\setlength{\cftbeforefigskip}{0pt}
+\setlength{\cftbeforetabskip}{0pt}
+\setlength{\cftparskip}{0pt}
+
+\begin{document}
+
+% ========================= TITLE PAGE ================================
+\begin{titlepage}
+\centering
+\vspace*{0.5cm}
+
+\includegraphics[width=2.5cm]{images/university logo.jpg}
+\vspace{0.5cm}
+
+{\fontsize{17}{21}\bfseries
+A LIGHTWEIGHT, TRAINING-FREE, RELIABILITY-AWARE GEOMETRIC CANONICALIZATION FRAMEWORK FOR CROSS-VIEW COMPARABILITY OF FROZEN MONOCULAR 3D POSE PREDICTIONS
+}
+\vspace{0.7cm}
+
+{\fontsize{14}{17}\selectfont
+A PROJECT REPORT
+}
+\vspace{0.4cm}
+
+{\fontsize{14}{17}\selectfont
+Submitted by
+}
+\vspace{0.4cm}
+
+{\fontsize{16}{19}\selectfont\itshape
+MEHEDI HASAN KHAN
+}
+\vspace{0.3cm}
+
+{\fontsize{14}{17}\selectfont
+ID: 12108004 \quad\textbullet\quad Session: 2020-21
+}
+\vspace{0.6cm}
+
+{\fontsize{14}{18}\itshape in partial fulfillment for the award of the degree of\par}
+\vspace{0.4cm}
+
+{\fontsize{16}{20} BACHELOR OF SCIENCE IN COMPUTER SCIENCE AND ENGINEERING\par}
+\vspace{0.4cm}
+
+{\fontsize{14}{18} DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING\par}
+\vspace{0.6cm}
+
+{\fontsize{16}{20} COMILLA UNIVERSITY :: COMILLA-3506\par}
+\vspace{0.8cm}
+
+{\fontsize{14}{18} August 2026\par}
+
+\end{titlepage}
+
+% ===================== BONAFIDE CERTIFICATE ==========================
+\newpage
+\thispagestyle{empty}
+\begin{center}
+{\fontsize{18}{22}\bfseries COMILLA UNIVERSITY :: COMILLA-3506}
+\vspace{1cm}
+{\fontsize{16}{19}\bfseries BONAFIDE CERTIFICATE}
+\end{center}
+\vspace{2cm}
+\doublespacing
+{\fontsize{14}{17}\selectfont
+Certified that this project report is the bonafide work of \textbf{MEHEDI HASAN KHAN} who carried out the project work under my supervision.
+}
+\vspace{3cm}
+\begin{center}
+{\fontsize{11}{13}\selectfont
+ \begin{tabular}{cc}
+        \underline{\hspace{5.6cm}} & \underline{\hspace{5.6cm}} \\
+        \textbf{SIGNATURE} & \textbf{SIGNATURE} \\
+        \textbf{Dr. Md. Faisal Bin Abdul Aziz} & \textbf{Dr. Mahmudul Hasan} \\
+        Chairman, Exam Committee & Supervisor \\
+        Associate Professor & Associate Professor \\
+        Department of Computer Science \& Engineering & Department of Computer Science \& Engineering \\
+        Comilla University, Cumilla & Comilla University, Cumilla \\
+    \end{tabular}}
+\end{center}
+
+% ============================ ABSTRACT ===============================
+\newpage
+\setcounter{page}{3}
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{ABSTRACT}
+
+\doublespacing
+{\fontsize{12}{15}\selectfont
+Monocular 3D pose estimators express skeletons in the observing camera's frame, so one motion recorded from two viewpoints yields two different sets of coordinates, preventing direct comparison in gait and sports analysis. Existing remedies retrain the estimator, require calibration, or learn a canonicalization network. We build a body-fixed frame from anatomical axes and apply it after prediction, adding no trained parameters to a frozen estimator, and ask what determines whether such a frame is consistent across viewpoints. The construction is the TRIAD algorithm of spacecraft attitude determination, and how accurately an anatomical direction is known comes from biomechanics: a direction from two joints $L$ apart, each with noise $\sigma$, is uncertain by about $2\sigma/L$. We claim neither, and ask how far they carry to network-inferred joints. On Human3.6M, which played no part in developing it, canonicalization cuts cross-view distance by 72.2 percent over 180 held-out camera pairs, improving 179. A single-view baseline meeting the same requirements, Kabsch alignment to one fixed skeleton, beats our frame on all 180 pairs under both backbones, and we report that in the abstract rather than hide it. A reliability score is falsified as an accuracy predictor five ways, though it does gate canonicalization quality; a bone-length signal reaching $+0.492$ on one dataset falls to $+0.098$ on the other and is retracted. The contribution is the experimental boundary of how far the geometry carries, and, post-freeze, a pre-registered map of where the two alignments fail: distal corruption is invisible to the frame and visible to the template, anchor corruption is the reverse, and a confidence-gated routing rule exploiting this is never worse than the better single alignment, and 38--47~mm better than template alignment alone under severe distal corruption.
+}
+
+% ======================== ACKNOWLEDGEMENT ============================
+\newpage
+\chapter*{ACKNOWLEDGEMENT}
+\addcontentsline{toc}{chapter}{ACKNOWLEDGEMENT}
+\justifying
+{\fontsize{12pt}{15pt}\selectfont
+I would like to express my deepest gratitude to my project supervisor, \textbf{Dr. Mahmudul Hasan}, for his invaluable guidance and continuous support. His requirement to justify every claim against evidence shaped this work: an early evaluation was found to rest on an invalid protocol, and the corrected methodology and audited reporting adopted here follow directly from that. I also thank the Department of Computer Science and Engineering, Comilla University, for the resources and infrastructure, and my family and friends for their constant support.
+}
+
+\begin{spacing}{1.0}
+\newpage
+\tableofcontents
+\end{spacing}
+
+\newpage
+\pagenumbering{arabic}
+\onehalfspacing
+
+% ========================== CHAPTER 1 ================================
+\chapter{INTRODUCTION}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/fig_teaser.png}
+\caption[The problem and the operation]{The problem and the operation, on one instant of Human3.6M seen by two synchronized cameras. Left and right are drawn from above, because two views of the same instant differ mainly in azimuth. All three panels are real predictions and the distances are the measured ones.}
+\label{fig:teaser}
+\end{figure}
+
+\section{Background}
+
+Three-dimensional human pose estimation recovers the spatial coordinates of body joints from visual input. Monocular estimation from ordinary RGB video is of considerable practical interest, and modern transformer-based lifting networks such as MotionAGFormer \cite{motionagformer} and MotionBERT \cite{motionbert} reach mean per-joint position errors near 45~mm on the Human3.6M benchmark \cite{h36m}.
+
+These estimators share a property that limits their use in comparative analysis. The predicted skeleton is expressed relative to the observing camera, so two cameras viewing the same subject at the same instant produce two different sets of coordinates for the same physical pose. Applications that compare poses across viewpoints---gait analysis across sessions, sports analytics across camera positions---must first reconcile those coordinate frames.
+
+\section{Motivation}
+
+Three practical constraints motivate the approach. First, practitioners frequently cannot retrain the estimator: it is a third-party artifact, the deployment data has no labels, and no training budget is available. Second, camera calibration is often impossible, as in footage from uncontrolled devices. Third, a system that silently produces a wrong pose is more dangerous than one that declines to answer, so a deployable framework should indicate when its output should not be trusted.
+
+\section{Research Question and Objectives}
+
+The question this project sets out to answer is:
+
+\begin{quote}
+\textbf{What determines whether an anatomical reference frame is consistent across viewpoints?}
+\end{quote}
+
+The framework is the vehicle for answering it rather than the end in itself: building a frame that is cheap, frozen and free of calibration is what makes the question testable, because every variable except the frame's own construction can then be held fixed. The specific objectives are to construct a viewpoint-independent coordinate frame over a frozen estimator with no training, labels or camera parameters; to identify the design variable that governs frame consistency and establish where the derivation holds and where it stops; to score prediction reliability analytically and abstain when it is low; and to evaluate under an auditable protocol in which every reported number is recomputed from stored artifacts.
+
+\section{Contributions}
+
+The geometry this project builds on is not ours: the frame is TRIAD \cite{triad}, the primary-axis rule is Shuster and Oh's \cite{shuster}, and the propagation of landmark error into frame orientation is biomechanics \cite{dellacroce1999,dellacroce2005}. What we contribute is the transfer of that reasoning to joints inferred by a frozen network, and principally the experimental boundary of how far it carries. Each item is labelled with its kind of contribution.
+
+\begin{itemize}
+\item \textbf{[Analysis]} \textbf{A three-level delimitation of the axis-length principle, pre-registered at each level.} Axis length governs the choice \emph{between} frame constructions (the longer shoulder axis wins on both backbones, 5.2 and 4.4 percent, intervals excluding zero) and nothing finer: neither which frame to trust within a construction, nor which joint will disagree, because articulation dominates there. Two of the three tests are failures, and the boundary is the contribution.
+\item \textbf{[Validation]} \textbf{Cross-view replication of the central claim, scored off the joints that define the frame.} On Human3.6M canonicalization reduces cross-view distance by 72.2 and 75.8 percent on two backbones over the thirteen joints the construction does not touch, improving 179 and 180 of 180 held-out camera pairs and closing 87.0 and 91.4 percent of the gap to a per-frame Procrustes oracle. This validates that the construction works, not that it is the best available: Section 5.3 reports a pre-registered baseline that beats it on every pair.
+\item \textbf{[Empirical finding]} \textbf{The falsified reliability score gates canonicalization quality.} Falsified as an accuracy predictor along five independent axes, the same score triages the quantity its own specification names, cutting mean cross-view distance by 22 percent at thirty percent abstention and surviving a confound control on both backbones. Reported as exploratory throughout.
+\item \textbf{[Negative result]} \textbf{Retraction of our own error predictor.} A temporal bone-length signal reaching $\rho = +0.492$ on one dataset falls to $+0.098$ on the other and fails every criterion; we retract the general claim.
+\item \textbf{[Engineering]} \textbf{Calibration-free multi-view fusion in the shared frame}, with a qualification that matters more than the headline: with few views the choice of statistic decides whether fusion helps, and across actions the mean gain is negative.
+\item \textbf{[Systems]} \textbf{An evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added, 402 floating-point operations per frame, 258 numerical claims checked against stored artifacts by an automated audit, 76 tests, and nine pre-registrations committed to version history before the experiments they governed, several of which failed.
+\end{itemize}
+
+\section{Report Organization}
+
+Chapter 2 reviews related work and positions this project against it. Chapter 3 describes the methodology. Chapter 4 describes the datasets and the evaluation protocol. Chapter 5 presents the results, including the negative results and the post-freeze failure-support map and routing rule. Chapter 6 concludes.
+
+% ========================== CHAPTER 2 ================================
+\chapter{LITERATURE REVIEW}
+
+\section{Monocular 3D Pose Estimation}
+
+Contemporary monocular pipelines follow a two-stage design: a 2D keypoint detector locates joints, and a lifting network maps the 2D sequence to 3D coordinates. The division persists because the two stages fail differently---detection on occlusion and motion blur, lifting on depth ambiguity. Martinez et al. \cite{martinez} showed that a network of two residual blocks given ground-truth 2D keypoints outperformed contemporary image-based systems, establishing that most of the difficulty is the lifting problem itself.
+
+Temporal context resolves much of the depth ambiguity, and the field moved to sequence models: dilated temporal convolutions \cite{videopose}, and dual-stream spatio-temporal transformers such as MotionBERT \cite{motionbert} and MotionAGFormer \cite{motionagformer}, which combines a transformer stream with a graph-convolutional stream and reaches 45.1~mm MPJPE on Human3.6M with 2.2 million parameters. We use the extra-small variant of the latter as a frozen component throughout. Two observations matter for this work: reported accuracies are in-domain averages that vary by a factor of two across actions, and no architecture produces output comparable across cameras, because each predicts in the observing camera's frame. Accuracy and comparability are separate properties, and progress on the first has not delivered the second.
+
+\section{Canonicalization and View-Invariant Representations}
+
+The closest prior work addresses the same problem statement. 3DPCNet \cite{3dpcnet} performs estimator-agnostic canonicalization of 3D pose with a learned network trained on synthetically rotated poses, and it benchmarks a hand-built anatomical-landmark baseline of the same family as ours---which its learned module beats by roughly six times in rotation error. We cite this rather than hide it, and Section 6 discusses the qualifications. MoViD \cite{3dpcnet2} disentangles motion from viewpoint with a learned orthogonal projection under SMPL supervision. V-VIPE \cite{vvipe} learns a variational view-invariant embedding and uses Kabsch alignment of hips and spine as preprocessing. Wei et al. \cite{vihc} transform predicted poses into consistent views to feed a trained refinement network and discriminator. All of these require training, labels, or both; what differs in the present work is everything around the geometry---the requirement profile of a frozen estimator with no training, no labels and no calibration.
+
+\section{Quality and Uncertainty Estimation for Pose}
+
+A system that abstains on unreliable predictions needs a signal correlated with its own error. Learned uncertainty trains a variance head or ensemble to predict error, and Khanal and Zhou \cite{khanal} report the motivating failure mode in the adjacent setting of skeleton action recognition: under severe domain shift, energy-based scoring detects that the distribution has changed while the model stays confidently incorrect on individual predictions. Conformal prediction \cite{yangpavone} offers a coverage guarantee at the cost of a labelled calibration set from the deployment distribution. The third family is analytic and training-free, scoring a prediction by its geometric plausibility. This family requires nothing at deployment, which is why we adopt it; Chapter 5 reports at length that our instance of it does not predict accuracy, and why.
+
+\section{What This Work Inherits From Attitude Determination}
+
+Building an orthonormal frame from two measured directions by taking one as primary, removing its component from the second, and completing with a cross product is the TRIAD algorithm of Black \cite{triad} (1964). Shuster and Oh \cite{shuster} established that the more accurately known direction should be primary, and that the attitude is most accurately determined when the two observations are orthogonal. The least-squares generalization to more than two observations is Wahba's problem \cite{wahba}, whose optimality is conditional on inverse-variance weighting. The uncertainty of a direction read from two joints $L$ apart, each noisy by $\sigma$, is approximately $2\sigma/L$; the specific question of how landmark error propagates into anatomical frame orientation is developed in biomechanics \cite{dellacroce1999,dellacroce2005}. Table \ref{tab:requirements} summarizes what each approach requires at deployment. No prior method operates on a frozen estimator with no training, no labels and no camera parameters simultaneously; that requirement profile, rather than any individual mechanism, is the position this project occupies.
+
+\begin{table}[H]
+\centering
+\caption{Requirements of related approaches at deployment time}
+\label{tab:requirements}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Method} & \textbf{Training} & \textbf{Labels} & \textbf{Camera params} & \textbf{Multi-view input} \\
+\hline
+MoViD \cite{3dpcnet2} & Required & GT SMPL & No & No \\
+\hline
+3DPCNet \cite{3dpcnet} & Required & Synthetic rotations & No & No \\
+\hline
+V-VIPE \cite{vvipe} & Required & 3D ground truth & No & No \\
+\hline
+Conformal \cite{yangpavone} & None & Labeled calibration set & No & No \\
+\hline
+\textbf{This work} & \textbf{None} & \textbf{None} & \textbf{None} & Optional \\
+\hline
+\end{tabular}
+\end{table}
+
+% ========================== CHAPTER 3 ================================
+\chapter{METHODOLOGY}
+
+\section{Scope of the Term Training-Free}
+
+The complete pipeline is not training-free: both the 2D detector and the lifting network are trained by their authors and used here in frozen form. What is training-free is everything this project adds on top of them. The property claimed is a property of the deployment requirement, not of the pipeline's history: to apply this framework to a new estimator, a practitioner needs no training data, no labels, no calibration and no gradient step. The claim is falsified if the method turns out to require tuning per dataset; the Human3.6M results are the strongest evidence that it does not, since the constants were fixed on MPI-INF-3DHP and applied unchanged to 180 unseen camera pairs.
+
+\section{Body-Frame Canonicalization}
+
+Let $P \in \mathbb{R}^{17\times 3}$ be a root-relative predicted pose in the H36M-17 joint convention. We construct a body-fixed orthonormal frame as
+\begin{align}
+\mathbf{y} &= \frac{P_{8} - P_{0}}{\lVert P_{8} - P_{0} \rVert}, \qquad
+\mathbf{x}_{\text{raw}} = P_{1} - P_{4}, \\
+\mathbf{z} &= \frac{\mathbf{x}_{\text{raw}} \times \mathbf{y}}{\lVert \mathbf{x}_{\text{raw}} \times \mathbf{y} \rVert},
+\qquad
+\mathbf{x} = \mathbf{y} \times \mathbf{z}, \\
+R &= [\,\mathbf{x} \mid \mathbf{y} \mid \mathbf{z}\,], \qquad
+P_{\text{can}} = P R .
+\end{align}
+Here $\mathbf{y}$ is the torso vertical axis (pelvis to thorax, joints 0 and 8) and $\mathbf{x}_{\text{raw}}$ the hip axis (right hip to left hip, joints 1 and 4). The construction is closed form, costs $O(17)$ operations per frame, and has no free parameters. It is TRIAD with the torso axis primary, named rather than claimed. The construction is deliberately asymmetric: $\mathbf{y}$ is reproduced exactly while $\mathbf{x}_{\text{raw}}$ influences only the rotation about it, so the choice of primary axis is a design decision, and the established guidance is to make the more accurately known direction primary---for a skeleton, the longer segment.
+
+\subsection{Why This Construction Achieves View Invariance}
+
+Suppose cameras $A$ and $B$ observe one configuration, so their root-relative predictions are related by an unknown rotation, $P^{(B)} = P^{(A)} Q$ for some $Q \in SO(3)$. Because the axes are built from the joint positions themselves, each axis rotates with the pose, so the frames satisfy $R^{(B)} = Q^{\top} R^{(A)}$, and
+\begin{equation}
+P^{(B)}_{\text{can}} = P^{(B)} R^{(B)} = \left(P^{(A)} Q\right)\left(Q^{\top} R^{(A)}\right) = P^{(A)}_{\text{can}} .
+\end{equation}
+The unknown rotation cancels exactly, without ever being estimated. This is why no calibration is required. The argument is exact only when both cameras yield the same pose up to rotation; in practice each prediction carries its own error, and the residual canonical distance we measure is precisely that term.
+
+\subsection{Why Axis Length Governs Frame Stability}
+
+Suppose a direction is estimated from two predicted joints separated by distance $L$, each carrying independent isotropic position noise of standard deviation $\sigma$. The segment vector carries variance $2\sigma^2$ per component; only the perpendicular component rotates it, with two degrees of freedom, so for small angles the induced angular error is
+\begin{equation}
+\theta_{\mathrm{rms}} \;\approx\; \frac{2\sigma}{L} .
+\label{eq:theta}
+\end{equation}
+Angular error is inversely proportional to segment length. Propagating to the measured quantity---a frame in error by $\theta$ displaces a joint at radius $r$ by roughly $r\theta$, and two views combine in quadrature---gives
+\begin{equation}
+d^{2} \;\approx\; \Big(c\,\frac{\bar{r}}{L}\Big)^{2} + d_0^{2},
+\end{equation}
+which is falsifiable and is tested in Section 5.4.
+
+\subsection{Degeneracy Handling}
+
+Three configurations are detected and reported as invalid rather than silently returned: a torso axis shorter than five percent of the median bone length, a hip axis nearly parallel to the torso axis, and a frame failing an orthonormality check. Invalid frames are excluded from every aggregate. On Human3.6M the construction is valid on every frame evaluated.
+
+\section{Analytic Reliability Score}
+
+Six quantities are computed from the predicted pose alone: axis conditioning, the torso--hip angle, bilateral symmetry of limb lengths, the fraction of anatomically abnormal bone ratios, the minimum detector keypoint confidence, and temporal stability of the frame. They are normalized to $[0,1]$ with hand-set constants and combined by geometric mean, so that any single catastrophic component drives the score to zero; four hard geometric gates trigger abstention regardless of the combined score. Chapter 5 reports that this does not predict pose error, and why: every quantity is computed from a single frame's geometry, and a pose wrong purely in depth remains symmetric, correctly proportioned and well conditioned.
+
+\section{Calibration-Free Multi-View Fusion}
+
+Because canonicalization expresses every camera's prediction in the same body-fixed frame, predictions from several uncalibrated cameras become directly comparable and may be combined without extrinsics or correspondence search. We evaluate the reliability-weighted mean, the unweighted mean and the coordinate-wise median. The choice matters because of a difference in breakdown behaviour: a mean has breakdown point zero, while a median is unaffected until nearly half the views fail. Section 5.7 reports that with few views this decides whether fusion helps or hurts.
+
+\section{Temporal Bone-Length Inconsistency}
+
+A person's bones do not change length, so temporal variation in predicted bone length is evidence of error. For each frame the sixteen bone lengths are divided by the frame's mean bone length, and the signal is the mean relative deviation from a label-free reference skeleton estimated as the median over a window.
+
+% ========================== CHAPTER 4 ================================
+\chapter{DATASETS AND EVALUATION PROTOCOL}
+
+\section{MPI-INF-3DHP}
+
+MPI-INF-3DHP \cite{mpi} is a markerless multi-camera capture dataset with fourteen cameras, of which eight observe the subject from positions distributed around the room. We use subjects S1 and S2 under static and dynamic conditions, treated as separate strata throughout. Twenty-nine camera pairs are formed: one is reserved as the development pair on which all tuning was performed, twenty-seven are held out on S1, and one pair covers held-out subject S2. The dataset is the development set: it is where the method's constants were fixed.
+
+\section{Human3.6M}
+
+Human3.6M \cite{h36m} is the standard benchmark for monocular 3D pose estimation. Eleven subjects perform fifteen actions while recorded by four hardware-synchronized cameras at fifty frames per second. Following the established protocol we evaluate on subjects S9 and S11 using the backbone's preprocessing (20872 non-overlapping twenty-seven-frame windows). Two properties make it the right second dataset: the cameras are synchronized, so pairing needs no interpolation, and it played no part in developing the method, so all 180 camera pairs are held out in a stronger sense than the MPI pairs.
+
+\begin{table}[H]
+\centering
+\caption{The two evaluation datasets.}
+\label{tab:datasets}
+\begin{tabular}{lll}
+\toprule
+\textbf{Property} & \textbf{MPI-INF-3DHP} & \textbf{Human3.6M} \\
+\midrule
+Cameras used & 8 & 4 \\
+Synchronized & yes & yes \\
+Test subjects & S1, S2 & S9, S11 \\
+Conditions & static, dynamic & 15 actions \\
+2D front end & YOLOv8-pose & Stacked Hourglass \\
+Role & development & validation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Metrics}
+
+Three distinct quantities appear in Chapter 5 and conflating them would be an error. \emph{Cross-view joint distance} is the mean Euclidean distance between two root-relative predictions of the same instant from different cameras: it measures agreement, never accuracy, and two views can agree perfectly while both are wrong. The \emph{per-frame Procrustes oracle} aligns one prediction onto the other with the optimal rigid transform; it requires the second view and is therefore a floor no single-view method can reach. \emph{MPJPE} (error against ground truth) is reported in exactly one place: the pipeline verification, where reproducing the published figure is the purpose.
+
+\section{Statistical Treatment}
+
+Frames within a camera stream are not independent, so intervals come from a cluster bootstrap of ten thousand draws that resamples whole subject--action groups---thirty clusters on Human3.6M rather than 180 camera pairs or 52900 frames. Intervals changed two conclusions, and both are flagged in the text rather than hidden.
+
+\section{Pre-registration and the Audit}
+
+Every experiment in this report was pre-registered: its criterion and all plausible readings were written down and committed to version control \emph{before} the experiment ran. Nine such pre-registrations govern Chapter 5, several of which failed their own criteria; four more were run after the freeze (Sections 5.8), two of which are the subject of this report's addendum. Every reported number is recomputed from stored result files by an automated audit of 258 claims, alongside 76 unit tests; both pass. No number in the report was typed by hand.
+
+% ========================== CHAPTER 5 ================================
+\chapter{EXPERIMENTAL RESULTS}
+
+\section{Pipeline Verification}
+
+The baseline reproduces the published MotionAGFormer-XS figures to three decimals: MPJPE 45.149~mm against the reported 45.1, and P-MPJPE 36.892~mm against 36.9. This is what makes the negative results interpretable: a negative result is only informative if the apparatus is not what failed.
+
+\section{The Central Claim: Cross-View Comparability}
+
+Table \ref{tab:crossview} is the answer to the question a reader asks first---how does the proposed output compare to the base output. Accuracy is identical by construction: the estimator is frozen and canonicalization adds zero parameters. What changes is agreement between cameras.
+
+\begin{table}[H]
+\centering
+\caption{Base output vs proposed output on Human3.6M (MotionAGFormer-XS, 180 held-out camera pairs).}
+\label{tab:crossview}
+\begin{tabular}{lccc}
+\toprule
+ & \textbf{Base} & \textbf{Proposed} & \textbf{Change} \\
+\midrule
+MPJPE vs ground truth & 45.149 mm & 45.149 mm & identical \\
+Cross-view distance, 13 non-constructor joints & 372.7 mm & 93.4 mm & $-72.2\%$ \\
+Cross-view distance, all 17 joints & 320.4 mm & 75.3 mm & $-74.1\%$ \\
+Per-frame Procrustes oracle & --- & 56.2 mm & 87.0\% of gap closed \\
+Pairs improved (13-joint) & --- & 179 / 180 & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The headline excludes the four joints the frame is built from, because the construction pins them by construction (the thorax canonicalizes at 22.1~mm against 197.5~mm for articulated joints); including them flatters the method. The improvement is 72.2 percent with cluster-bootstrap interval $[+67.9, +75.5]$, clustered over the thirty subject--action groups. On the second backbone, MotionBERT, the improvement is 75.8 percent over 180 of 180 pairs. A caveat is stated rather than waited for: MotionAGFormer-XS was trained on Human3.6M, so the \emph{backbone} is in-domain; held out is the \emph{method}.
+
+\section{A Single-View Baseline, and It Wins}
+
+Kabsch-aligning each predicted pose onto one fixed reference skeleton is training-free, label-free, calibration-free and single-view---it meets every requirement this framework claims as its profile, and it is what V-VIPE uses as preprocessing. It was pre-registered before it was run, including all three readings of the outcome.
+
+\begin{table}[H]
+\centering
+\caption{The pre-registered baseline comparison (13 non-constructor joints, XS).}
+\label{tab:template}
+\begin{tabular}{lcc}
+\toprule
+ & \textbf{Anatomical frame} & \textbf{Kabsch-to-template} \\
+\midrule
+Cross-view distance & 93.4 mm & \textbf{57.5 mm} \\
+Camera pairs where it wins & 0 / 180 & \textbf{180 / 180} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The baseline wins on both backbones, all fifteen actions, under three unrelated templates and every centring tested, with the paired-difference interval excluding zero. It is in this abstract, here, the limitations and the conclusion. The method is kept because the baseline \emph{cannot run the experiment this report is about}: Kabsch alignment has no anatomical axis, so there is no axis to hold fixed and vary, and the question of what governs frame consistency cannot be posed inside it. As a way of reducing cross-view distance on this data, the simpler method is better, and we say so plainly. Section 5.8 returns to this with an experimental answer rather than a rhetorical one.
+
+\section{The Axis-Length Boundary}
+
+The derived law ($\theta \approx 2\sigma/L$) is tested at three levels, each pre-registered.
+
+\emph{Between constructions}---the principle holds. Holding the joint set, the scored set and the constructor count identical and replacing the hip axis with the longer shoulder axis improves the global frame on both backbones, by 5.2 and 4.4 percent, with intervals excluding zero.
+
+\emph{Which frame within a construction to trust}---it fails. The per-limb multi-scale extension previously reported 55.1 percent; each limb frame is built from exactly the three joints it is then scored on, which removes the orientation being measured by construction. A per-segment Procrustes control confirms it, and the figure is demoted to exploratory.
+
+\emph{Which joint will disagree}---it fails, and the reason is the finding. The radius model predicts per-joint disagreement from distance to the frame origin; its slope is 0.218 with $R^2 = 0.34$, far outside the pre-registered predicted band $[0.038, 0.073]$. The control explains it: joints rigid with the torso sit at a \emph{larger} mean radius than articulated joints and yet disagree by a factor of two and a half \emph{less}---the shoulder and knee agree to within 1--3 percent in radius and differ by roughly a factor of two in canonical distance. Articulation dominates; the frame-geometry model is the wrong model at this level.
+
+\section{Reliability: Falsified, and What It Is For}
+
+The analytic reliability score was falsified as an accuracy predictor along five independent axes: correlation near zero across simultaneous cameras; view selection straddling chance; a cross-backbone sign flip; reliability-weighted fusion worse than a plain mean (92.6 vs 88.5~mm); and a pre-registered test-time-augmentation test failing all three criteria (pooled $\rho = 0.10$, interval $[-0.59, 0.48]$). The shared cause is that geometric plausibility is invariant to coherent depth error: a network that gets depth wrong but self-consistently produces a skeleton that looks anatomically perfect.
+
+The same score, however, gates the quantity its own specification names---canonicalization quality. Dropping the worst thirty percent of frames by score reduces mean cross-view distance by 22 percent, against a random baseline that does not move it, and the triage survives a bone-deviation confound control on both backbones (gain at ten percent abstention 5.4~mm, interval $[+1.5, +9.3]$). This was a comparator in its pre-registration, not its subject, and is reported as exploratory.
+
+\section{Retractions and Failed Pre-registrations}
+
+A temporal bone-length signal reached $\rho = +0.492$ on MPI-INF-3DHP and fell to $+0.098$ on Human3.6M, failing every criterion; it is retracted, and the narrower condition under which it holds is stated in the full report. Two post-freeze pre-registrations also failed. Corrupting the eight distal joints of the predicted pose leaves the anatomical frame exactly flat at 53.45~mm at every severity (it never reads them) while the Kabsch baseline degrades from 43.3 to 92.3~mm---but the crossover the pre-registration required at $\sigma \le 80$~mm on both backbones fired on MotionBERT at 40~mm and on MotionAGFormer only at 160~mm, so the regime was not established at the committed severity. And scaling the template's limbs to child-like proportions moves the baseline by 0.12~mm (0.2 percent): the baseline needs no matching template.
+
+\section{Fusion}
+
+In the shared frame, with eight views a median improves the aggregate while an unweighted mean does not, and the median's advantage grows as the number of views falls, as the breakdown analysis predicts. But the gain is not uniform across actions---nine of fifteen actions improve and six worsen---so the aggregate conceals a bimodal distribution, and the mean across actions is negative.
+
+\section{Post-Freeze Addendum: Where the Two Alignments Fail, and a Routing Rule}
+
+Two pre-registered experiments (7 August 2026, commits preceding results in the repository history) complete the map of Section 5.3. The distal-corruption experiment showed the anatomical frame is immune to corruption of joints it never reads. Its mirror, corrupting the frame's own support joints {1 r-hip, 4 l-hip, 8 thorax}, shows the frame collapses while the 17-joint Kabsch fit degrades gracefully (Table \ref{tab:anchor}).
+
+\begin{table}[H]
+\centering
+\caption{Anchor-joint corruption: the frame's failure is concentrated in its four-joint support (cross-view distance, mm).}
+\label{tab:anchor}
+\begin{tabular}{lcccc}
+\toprule
+$\sigma$ (mm) & XS anatomical & XS template & MB anatomical & MB template \\
+\midrule
+0 & 53.45 & 43.30 & 44.13 & 40.96 \\
+20 & 71.95 & 43.70 & 64.57 & 41.38 \\
+40 & 103.91 & 44.87 & 99.40 & 42.61 \\
+80 & 215.66 & 49.15 & 217.81 & 47.15 \\
+160 & 337.87 & 63.22 & 339.86 & 61.63 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The failure supports are disjoint: distal corruption is invisible to the frame and visible to the template; anchor corruption is catastrophic for the frame and diluted in the 17-joint fit. A four-joint Kabsch control collapses with the frame, proving the effect is the joint support, not the anatomical construction.
+
+This complementarity yields a decision rule. In deployment a detector reports per-joint confidence; the rule uses the anatomical frame iff the core joints {1, 4, 8} are reliable (minimum confidence $\ge 0.7$) and the distal joints are not (minimum confidence $< 0.7$), else template Kabsch. Because the corruption experiments inject noise with no confidence channel, the rule's input is simulated as a calibrated function of the injected noise and is labelled as such. Evaluated over both corruption regimes and both backbones (Table \ref{tab:routing}), the routed distance is never worse than the better single alignment at 19 of 20 cells, trails it by 5.4~mm in the single transition cell (tolerance 7~mm, pre-registered), and beats template-Kabsch alone by 38.8~mm (XS) and 47.3~mm (MB) at $\sigma = 160$~mm distal corruption, with bootstrap intervals excluding zero. At clean data the rule uses Kabsch---the better method there---and under anchor corruption it never routes into the collapsed arm.
+
+\begin{table}[H]
+\centering
+\caption{Confidence-gated routing vs each single alignment (cross-view distance, mm).}
+\label{tab:routing}
+\begin{tabular}{llcccc}
+\toprule
+Regime & $\sigma$ (mm) & Route & Routed (XS) & t17 (XS) & Routed (MB) \\
+\midrule
+distal & 0 & t17 & 43.30 & 43.30 & 40.96 \\
+distal & 40 & anat & 53.45 & 48.05 & \textbf{44.13} \\
+distal & 80 & anat & \textbf{53.45} & 59.83 & \textbf{44.13} \\
+distal & 160 & anat & \textbf{53.45} & 92.29 & \textbf{44.13} \\
+anchor & 40 & t17 & 44.87 & 103.91 & 42.61 \\
+anchor & 160 & t17 & 63.22 & 337.87 & 61.63 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The honest boundaries are stated alongside the result: the confidence signal is simulated, not measured; the corruption is injected Gaussian noise rather than real occlusion; ``never worse'' is within a pre-registered 7~mm transition allowance on one dataset and two backbones; and the threshold is fixed, not tuned. The rule does not make the anatomical frame win---it makes the \emph{combination} never worse than the better single alignment, and strictly better where the two are separated.
+
+% ========================== CHAPTER 6 ================================
+\chapter{DISCUSSION, CONCLUSION AND FUTURE WORK}
+
+\section{Discussion}
+
+Four weaknesses are stated rather than defended away. First, the core mechanism is a coordinate transform that predates this thesis by decades; the defence is the requirement profile and the boundary measurement, not the geometry. Second, the headline metric measures agreement, not correctness: two predictions wrong in the same way agree perfectly, and the oracle floor and the retained correlation with ground-truth error bound but do not eliminate this. Third, no downstream task succeeds---the retrieval experiment is negative---so the thesis improves a metric and never shows the metric buys anything; this is the honest ceiling on the work's significance. Fourth, two datasets, both laboratory multi-camera rigs, and two backbones is n = 2.
+
+Against that, the negative results are real science: more than half the pre-registered experiments failed their own criteria, the failures are reported in the same detail as the successes, one competing method is reported as beating the proposed method, and 258 numbers trace to stored artifacts. That discipline is the thesis's actual contribution to a reader, and it is rarer at this level than any single result would be.
+
+The post-freeze addendum sharpens the positioning. The answer to ``why keep the anatomical frame when Kabsch wins'' is no longer rhetorical: the two alignments fail on disjoint joint supports, and the routing rule is never worse than the better single alignment and strictly better under severe distal corruption. The frame is the right instrument exactly when the core is reliable and the periphery is not.
+
+\section{Conclusion}
+
+This thesis asked what determines whether an anatomical reference frame is consistent across viewpoints, using a training-free canonicalization of a frozen estimator as the instrument. The answer, established by pre-registered experiments on two datasets and two backbones, is a boundary: axis length governs the choice between frame constructions and nothing finer; articulation, not radius, governs which joint disagrees; the reliability score fails as an accuracy predictor and works as a gate on canonicalization quality; and a simpler baseline beats the frame on the headline metric, which we report. A confidence-gated routing rule that exploits the two alignments' disjoint failure supports is never worse than the better single alignment within a pre-registered tolerance, and 38--47~mm better than template alignment alone under severe distal corruption.
+
+\section{Future Work}
+
+The one live gap is atypical morphology: template-based alignment needs a skeleton resembling the subject, while the anatomical frame needs only that the subject has hips and a torso. Non-standard body proportions, children and assistive-device users are the honest place to look for a regime where the frame wins outright, and no prior work was found evaluating either alignment there. Real occlusion and real detector failure---rather than injected noise---would give the routing rule a defensible severity scale, and a deployment-grade confidence signal would replace the simulated one. A downstream task that consumes cross-view comparability, such as gait comparison across sessions, would show that the improved agreement buys something.
+
+% ========================== REFERENCES ===============================
+\begin{thebibliography}{99}
+
+\bibitem{motionagformer} S. Mehraban, B. Adeli, and A. Taati, ``MotionAGFormer: Enhancing 3D human pose estimation with a transformer-GCNFormer network,'' WACV 2024.
+\bibitem{motionbert} W. Zhu, X. Ma, Z. Liu, L. Liu, W. Wu, and Y. Wang, ``MotionBERT: A unified perspective on learning human motion representations,'' ICCV 2023.
+\bibitem{3dpcnet} Ekanayake et al., ``3DPCNet: Estimator-agnostic canonicalization of 3D human pose,'' ICASSP 2026.
+\bibitem{3dpcnet2} ``MoViD: Motion-view disentanglement,'' 2026.
+\bibitem{vvipe} R. Levy and A. Shrivastava, ``V-VIPE: Variational view-invariant pose embedding,'' 2024.
+\bibitem{vihc} X. Wei, L. Lan, X. Zeng, and C. Chen, ``View-invariant 3D human pose estimation,'' 2019.
+\bibitem{martinez} J. Martinez, R. Hossain, J. Romero, and J. J. Little, ``A simple yet effective baseline for 3D human pose estimation,'' ICCV 2017.
+\bibitem{videopose} D. Pavllo, C. Feichtenhofer, D. Grangier, and M. Auli, ``3D human pose estimation in video with temporal convolutions and semi-supervised training,'' CVPR 2019.
+\bibitem{khanal} Khanal and Zhou, ``Learned uncertainty under severe domain shift in skeleton action recognition,'' 2026.
+\bibitem{yangpavone} B. Yang and M. Pavone, ``Object pose estimation with statistical guarantees: Conformal keypoint detection and beyond,'' ICCV 2023.
+\bibitem{triad} H. D. Black, ``A passive system for determining the attitude of a satellite,'' AIAA Journal 2(7), 1964.
+\bibitem{shuster} M. D. Shuster and S. D. Oh, ``Three-axis attitude determination from vector observations,'' J. Guidance and Control 4(1), 1981.
+\bibitem{wahba} G. Wahba, ``A least squares estimate of satellite attitude,'' SIAM Review 7(3), 1965.
+\bibitem{dellacroce1999} U. Della Croce, A. Cappozzo, and D. C. Kerrigan, ``Pelvis and lower limb anatomical landmark calibration precision and its propagation to bone geometry and joint angles,'' Med. Biol. Eng. Comput. 37(2), 1999.
+\bibitem{dellacroce2005} U. Della Croce, A. Leardini, L. Chiari, and A. Cappozzo, ``Human movement analysis using stereophotogrammetry. Part 4: Assessment of anatomical landmark misplacement,'' Gait \& Posture 21(2), 2005.
+\bibitem{h36m} C. Ionescu, D. Papava, V. Olaru, and C. Sminchisescu, ``Human3.6M: Large scale datasets and predictive methods for 3D human sensing in natural environments,'' TPAMI 2014.
+\bibitem{mpi} D. Mehta et al., ``Monocular 3D human pose estimation in the wild using improved CNN supervision,'' 3DV 2017.
+
+\end{thebibliography}
+
+% ========================== APPENDIX A ===============================
+\appendix
+\chapter{BASE VERSUS PROPOSED: THE COMPARISON AT A GLANCE}
+
+Table \ref{tab:baseproposed} collects, in one place, the comparison between the base pipeline and the proposed pipeline that the defence commonly asks for. Every row is reproduced from stored artifacts by the audit.
+
+\begin{table}[H]
+\centering
+\caption{Base vs proposed, end to end.}
+\label{tab:baseproposed}
+\begin{tabular}{lp{5.2cm}p{5.2cm}}
+\toprule
+ & \textbf{Base (frozen estimator output)} & \textbf{Proposed (canonicalized output)} \\
+\midrule
+What changes & nothing---reference pipeline & coordinate frame only \\
+MPJPE (H36M) & 45.149 mm & 45.149 mm \\
+Cross-view distance (13 joints) & 372.7 mm & 93.4 mm \\
+Cross-view distance (17 joints) & 320.4 mm & 75.3 mm \\
+Added trained parameters & 0 & 0 \\
+Added cost per frame & --- & 402 FLOPs \\
+Requirements & detector + lifter & + no training, no labels, no calibration \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The pre-registered experiments: nine govern the body of this report (several failed their own criteria, and the template comparison of Section 5.3 returned a competing method as the better one); the tenth and eleventh (distal corruption, template mismatch) failed; the twelfth and thirteenth (anchor corruption, routing rule) were established. All thirteen are recorded in \texttt{thesis\_artifacts/} with criteria committed to version history before their runs.
+
+\end{document}
