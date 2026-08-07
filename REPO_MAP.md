@@ -102,7 +102,7 @@ thesis_report/
 
 ```
 thesis_artifacts/
-  <experiment>/PREREGISTRATION.md   eleven of them, each committed BEFORE its run
+  <experiment>/PREREGISTRATION.md   fourteen of them, each committed BEFORE its run
   occlusion/RESULT.md               the tenth, and why it failed
   defense_deck.html                 16 slides
   planning/                         superseded working notes - do not quote these
@@ -150,4 +150,4 @@ them before the defence.**
 | "How do I know the numbers are real?" | Run `audit_numbers.py`, then `git log` for the pre-registration timestamps |
 | "Where is the base vs proposed comparison?" | `thesis_artifacts/figures/fig_realview.png` and Table `tab:h36mcv` |
 | "You said a baseline beats you — where?" | Report the section "A Single-View Baseline, and It Wins", `thesis_artifacts/template/template.json` |
-| "What did you pre-register?" | `ls thesis_artifacts/*/PREREGISTRATION.md` — eleven files, all timestamped before their results |
+| "What did you pre-register?" | `ls thesis_artifacts/*/PREREGISTRATION.md` — fourteen files, all timestamped before their results |

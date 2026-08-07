@@ -70,7 +70,7 @@ All improvement figures are the mean over camera pairs of each pair's own percen
 | Does the frame survive distal corruption better than Kabsch? | **Fails its own criterion** — required a crossover on both backbones at ≤ 80 mm noise; got MotionBERT at 40 mm, MotionAGFormer only at 160 mm |
 | Does the baseline need a template matching the subject's build? | **No** — scaling the template's limbs to child-like proportions moves it 0.12 mm, 0.2 %. The competitor came out of this stronger |
 
-**Eleven pre-registrations** were committed to version history **before** the experiments they govern, timestamps visible in the git log. **Seven failed their own criteria, and one returned a competing method as the better one.** The report describes nine; the tenth and eleventh were run after it was frozen and are recorded in `thesis_artifacts/occlusion/RESULT.md` and `thesis_artifacts/mismatch/RESULT.md`. Both looked for a regime where this method beats the Kabsch baseline. Neither found one.
+**Fourteen pre-registrations** were committed to version history **before** the experiments they govern, timestamps visible in the git log. **More than half failed their own criteria, and one returned a competing method as the better one** — the report's own wording, so it can be checked against the document rather than against this file. The frozen report describes nine; five more were run after it (`occlusion`, `mismatch`, `anchor_corruption`, `selection`, `misdetect`). Two of those five looked for a regime where this method beats the Kabsch baseline, and neither found one.
 
 ---
 
@@ -103,7 +103,7 @@ evaluation/       one module per experiment, each writing a JSON artifact
 presentation/
   render.py         all report figures + the two-view comparison, from artifacts
   bvh_export.py     body-relative BVH export
-thesis_artifacts/ stored results + the eleven PREREGISTRATION.md files
+thesis_artifacts/ stored results + the fourteen PREREGISTRATION.md files
 thesis_report/    the report, DEFENSE_QA.md, FREEZE_CHECKLIST.md
 tests/            76 tests, no dataset required
 ```
