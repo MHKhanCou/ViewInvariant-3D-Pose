@@ -37,7 +37,6 @@ Run:  ./venv/Scripts/python.exe -m evaluation.selection_rule
 """
 
 import argparse
-import itertools
 import json
 import os
 import sys
@@ -58,10 +57,9 @@ from evaluation.anchor_corruption import (CORRUPTED_JOINTS as ANCHOR,
 
 OUT_DIR = os.path.join(REPO_ROOT, "thesis_artifacts", "selection")
 
-ANCHOR_SET = (1, 4, 8)          # the frame's support minus the root
-# note: imported DISTAL and ANCHOR above are the corrupted joint sets of the
-# two regimes; ANCHOR (the variable) re-defines the core set identically to
-# anchor_corruption.CORRUPTED_JOINTS, which is the frame's support.
+# The rule's core set is the frame's support minus the root, which is exactly
+# the anchor regime's corrupted joint set (imported above as ANCHOR).
+ANCHOR_SET = ANCHOR
 CONFIDENCE_SATURATION_MM = 80.0 # confidence hits zero at this noise level
 CONFIDENCE_THRESHOLD = 0.7      # "core reliable / periphery broken"
 TRANSITION_TOLERANCE_MM = 7.0   # allowed shortfall in the transition band

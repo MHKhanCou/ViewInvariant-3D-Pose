@@ -45,13 +45,15 @@ per-pair ceiling `min(anat, t17)` and is labelled as such.
 - **R4 (clean):** at σ = 0 the rule routes to template — the better method at
   clean — on both regimes and backbones. **Holds.**
 
-**Reading 1: routing established.** The routed distance matches the better
-single alignment at 19 of 20 cells, trails it by 5.4 mm in the one transition
-cell (where the two methods' bootstrap intervals overlap and their crossover
-severity differs between backbones), and is 38–47 mm better than template-Kabsch
-alone under severe distal corruption. The routed distance sits close to the
-per-pair oracle at every cell (e.g. XS distal σ=160: 53.45 routed vs 49.16
-oracle), so the rule captures most of the gain that perfect routing would.
+**Reading 1: routing established.** The routed distance attains the better
+single alignment's aggregate mean at 19 of 20 cells, trails it by 5.4 mm in the
+one transition cell (where the two methods' bootstrap intervals overlap and
+their crossover severity differs between backbones), and is 38–47 mm better
+than template-Kabsch alone under severe distal corruption. The routed distance
+approaches the per-pair oracle where the methods are separated (e.g. XS distal
+σ=160: 53.45 routed vs 49.16 oracle) and is 7.9 mm from it in the single
+transition cell (σ=40 XS), which is the same cell where it trails the better
+single alignment.
 
 ## What this answers
 
@@ -65,17 +67,30 @@ failure-surface map in `thesis_artifacts/anchor_corruption/RESULT.md`.
 
 ## Honest boundaries
 
-- The confidence signal is **simulated**, not measured: the corruption
-  experiments inject noise with no confidence channel. In deployment the rule
-  consumes the detector's real per-joint confidence; the correspondence between
-  injected noise and detector confidence is a model, and it is labelled as one
-  in the code, the JSON and the report.
-- "Never worse" is within a pre-registered 7 mm transition allowance, on one
-  dataset, two backbones, under Gaussian 3D corruption. Not a claim of
-  optimality: the threshold is fixed, not tuned.
-- The rule does not make the anatomical frame win; it makes the *combination*
-  never worse than the better single alignment, and strictly better where the
-  two are separated.
+- The confidence signal is **simulated, not measured, and noiseless**: the
+  corruption experiments inject noise with no confidence channel, and the
+  signal is an exact deterministic function of (severity, corrupted set). It is
+  therefore an **upper bound** on what a real, noisy detector-confidence
+  channel could provide, and it is labelled as such in the code, the JSON and
+  the report. In deployment the rule consumes the detector's real per-joint
+  confidence; the correspondence between injected noise and detector
+  confidence is a model.
+- The evaluation is of the **conditional choice per corruption level**, not of
+  per-frame routing: confidence is constant within a level, so the decision is
+  constant within a level. Per-frame deployment driven by noisy, per-frame
+  confidence is the rule's assumption, not something this experiment measures.
+- "Never worse" holds for **aggregate means** within a pre-registered 7 mm
+  transition allowance, on one dataset, two backbones, under Gaussian 3D
+  corruption. Pair by pair it does not hold in the transition cell (XS distal
+  σ = 40): the routed arm (anatomical, 53.45 mm) is worse than template
+  (48.05 mm) for every pair there, and routed minus the per-pair oracle is
+  7.9 mm in that cell. The 5.4 mm shortfall is a point estimate whose interval
+  is not established — at the neighbouring severity (σ = 80) the XS interval
+  spans zero.
+- Not a claim of optimality: the threshold is fixed, not tuned, and was
+  committed before this experiment ran. The rule does not make the anatomical
+  frame win; it makes the *combination* no worse, in aggregate mean, than the
+  better single alignment, and strictly better where the two are separated.
 
 ## Effect on the frozen report
 

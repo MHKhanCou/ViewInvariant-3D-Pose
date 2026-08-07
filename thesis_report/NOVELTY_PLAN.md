@@ -44,9 +44,12 @@ fixed rule — *use the frame iff core confidence ≥ 0.7 AND distal confidence
 > **The two training-free alignments have disjoint failure supports — distal
 > corruption is invisible to the anatomical frame and visible to the template,
 > anchor corruption is the reverse — and a confidence-gated routing rule that
-> exploits this is never worse than the better single alignment at every
-> severity tested, within a pre-registered 7 mm transition allowance, and beats
-> Kabsch alone by 38–47 mm under severe distal corruption.**
+> exploits this attains the better single alignment's aggregate-mean
+> cross-view distance at 19 of 20 (regime, severity, backbone) cells, trails
+> it by 5.4 mm in the single transition cell (within a pre-registered 7 mm
+> allowance), and beats Kabsch alone by 38–47 mm under severe distal
+> corruption — evaluated under a simulated, noiseless confidence signal that
+> is labelled as such.**
 
 ## The anti-claims (say these before anyone else does)
 
@@ -65,7 +68,18 @@ fixed rule — *use the frame iff core confidence ≥ 0.7 AND distal confidence
    one dataset, injected 3D noise. Real occlusion/detector failure is future
    work.
 5. **"This doesn't make the frame win."** Correct — that is the point. The
-   *combination* is never worse than the best single alignment.
+   *combination* is never worse, in aggregate mean, than the best single
+   alignment.
+6. **"You picked the threshold 0.7 to fit the crossovers."** The threshold was
+   fixed and committed before this experiment ran (`5dbc47a`), and it is
+   deliberately conservative — it loses 5.4 mm on XS in the transition band
+   rather than being tuned to win. Tuning it per backbone to the known
+   crossovers (40 vs 160 mm) would be the exact tuning-on-test failure the
+   pre-registrations exist to prevent.
+7. **"The routing isn't per-frame."** Correct — in this controlled experiment
+   the decision is per corruption level (confidence is constant within a
+   level). Per-frame deployment with noisy real detector confidence is the
+   assumption the rule makes, not something the synthetic experiment measures.
 
 ## Why this is defensible as undergraduate novelty
 
