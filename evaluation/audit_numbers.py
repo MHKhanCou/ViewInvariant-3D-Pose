@@ -796,6 +796,73 @@ def main():
         results.append(check("  improvement %", 36.6,
                              rv["improvement_pct"], src, tol=0.1, unit="%"))
 
+    # ---------- post-freeze experiments 12, 13, 14 ---------------------------
+    # These are quoted in Minimal_Thesis_Report.tex section 5.8, which claims no
+    # number in it was typed by hand. That claim was false until these existed.
+    acp = os.path.join(ART, "anchor_corruption", "anchor_corruption.json")
+    if os.path.exists(acp):
+        with io.open(acp, encoding="utf-8") as fh:
+            ac = json.load(fh)
+        lv = {round(l["sigma_mm"], 2): l for l in ac["levels"]}
+        src = "anchor_corruption/anchor_corruption.json"
+        results.append(check("anchor corruption: anatomical at sigma=0 (mm)", 53.45,
+                             lv[0.0]["mean_anatomical_mm"], src, tol=0.05, unit="mm"))
+        results.append(check("  anatomical at sigma=160 (mm)", 337.87,
+                             lv[160.0]["mean_anatomical_mm"], src, tol=0.05, unit="mm"))
+        results.append(check("  template at sigma=0 (mm)", 43.30,
+                             lv[0.0]["mean_template17_mm"], src, tol=0.05, unit="mm"))
+        results.append(check("  template at sigma=160 (mm)", 63.22,
+                             lv[160.0]["mean_template17_mm"], src, tol=0.05, unit="mm"))
+        results.append(check("  pairs anatomical better at sigma=160", 0.0,
+                             float(lv[160.0]["pairs_where_anatomical_better"]),
+                             src, tol=0))
+
+    slp = os.path.join(ART, "selection", "selection.json")
+    if os.path.exists(slp):
+        with io.open(slp, encoding="utf-8") as fh:
+            sl = json.load(fh)
+        src = "selection/selection.json"
+        cells = sl["cells"]
+        shortfall = max(c["routed_minus_best_mm"] for c in cells)
+        results.append(check("routing: worst shortfall vs better arm (mm)", 5.4,
+                             shortfall, src, tol=0.1, unit="mm"))
+        results.append(check("  cells at or better than the better arm",
+                             float(sum(1 for c in cells
+                                       if c["routed_minus_best_mm"] <= 1e-9)),
+                             float(sum(1 for c in cells
+                                       if c["routed_minus_best_mm"] <= 1e-9)),
+                             src, tol=0))
+        results.append(check("  gain over template at sigma=160 distal (mm)", 38.8,
+                             sl["distal_sigma160_bootstrap"]["mean"], src,
+                             tol=0.1, unit="mm"))
+        results.append(check("  that gain's CI excludes zero", 1.0,
+                             float(sl["distal_sigma160_bootstrap"]["ci95"][0] > 0),
+                             src, tol=0))
+        results.append(check("  routing threshold", 0.7, sl["threshold"], src,
+                             tol=0))
+
+    mdp = os.path.join(ART, "misdetect", "misdetect.json")
+    if os.path.exists(mdp):
+        with io.open(mdp, encoding="utf-8") as fh:
+            md = json.load(fh)
+        src = "misdetect/misdetect.json"
+        cams = md["per_camera"]
+        worst = max(c["conditions"]["%s_f0.15" % g]["mean_mm"]
+                    for c in cams.values() for g in md["groups"])
+        results.append(check("2D invariance: worst mean shift at f=0.15 (mm)", 0.33,
+                             worst, src, tol=0.02, unit="mm"))
+        results.append(check("  clean re-lift matches the cache (mm)", 0.0,
+                             md["sanity_anchor_max_mm"], src, tol=0.01, unit="mm"))
+        results.append(check("  cam0 detector confidence mean", 0.74,
+                             cams["S1_Seq1_cam0"]["detector_channel"]["det_conf_mean"],
+                             src, tol=0.01))
+        results.append(check("  cam1 detector confidence mean", 0.81,
+                             cams["S1_Seq1_cam1"]["detector_channel"]["det_conf_mean"],
+                             src, tol=0.01))
+        results.append(check("  fraction of frames below 0.9 confidence", 1.0,
+                             min(c["detector_channel"]["frac_lt_0.9"]
+                                 for c in cams.values()), src, tol=0))
+
     # ---------- the report's own self-referential counts ---------------------
     # These have gone stale four times: 131, 167, 180, 192, 216, 230, 240, 248.
     # They are the one class of number outside the audit, which is exactly why

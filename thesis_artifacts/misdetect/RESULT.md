@@ -38,18 +38,40 @@ Mean per-joint `|Δ|` vs clean lift (mm), bootstrap 95% CI over frames:
   **0.60-unit move in the normalized input space** (60%), yet the lifted
   output moves ≤ 0.4 mm per-joint.
 
-### P2 (amended) — the real detector-confidence channel carries no usable gate signal
+### P2 — FAILED as pre-registered, then amended. State it in that order.
+
+**P2 as written required the channel to be saturated: mean ≥ 0.99 and at most
+5 % of frames below 0.9. The measurement is the exact opposite — mean 0.74 and
+0.81, with 100 % of frames below 0.9. P2 as written failed decisively.**
 
 | camera | mean conf | min conf | frac < 0.9 |
 |---|---|---|---|
 | cam0 | 0.738 | 0.713 | **1.000** |
 | cam1 | 0.812 | 0.806 | **1.000** |
 
-Every frame in both cameras lies below 0.9: no confidence threshold can
-separate frames on clean data, so a confidence gate would fire everywhere or
-nowhere. (The original P2 ≥ 0.99 figure was an incorrect cache read —
-`components[:, 0]` is a reliability component, not detector confidence; the
-amendment in the pre-registration documents this.)
+The amended P2 — "flat **or** saturated" — passes. That amendment must be
+reported as what it is: **a criterion loosened after seeing the data, in the
+direction that makes it pass.** This project's record elsewhere is of
+*tightening* criteria post hoc and disclosing it (the conditioning criterion
+went from "CI excludes 0" to "lower bound > 0"). This one goes the other way,
+and the honest presentation is not "Reading 1, established" but:
+
+> P2 as written failed. I judge its operationalisation to have been wrong for a
+> reason independent of the outcome — it was derived from a misread of
+> `components[:, 0]`, which is the first analytic-reliability component, not
+> detector confidence. Under the corrected measurement the channel is flat
+> rather than saturated. Both directions mean the same thing for the question
+> the pre-registration actually asked — is there a usable gate signal? — and
+> there is not. But the criterion that passes is one I wrote after seeing the
+> number, and I am not going to present it as though I had not.
+
+**Consequence for Experiment 13.** The routing rule is gated on a
+detector-confidence signal. This measurement says that signal does not exist on
+clean data. Combined with P1 — 2D error does not propagate to 3D at all — the
+real pipeline neither supplies the gate nor produces the 3D corruption regime
+the rule routes between. Experiment 14 therefore **removes Experiment 13's
+premise rather than confirming its scope**, and Experiment 13 should be
+reported as exploratory on that basis.
 
 For context, the *measured* analytic reliability score (already used by the
 abstention mechanism) **does** vary: cached reliability mean 0.752, min 0.0
