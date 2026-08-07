@@ -1,0 +1,119 @@
+{
+ "verdict": {
+  "sanity_template_better_at_zero": true,
+  "crossover_sigma_mm": 80.0,
+  "reading": "1: crossover at 80 mm, at or below the 80 mm the tenth pre-registration required and failed"
+ },
+ "levels": [
+  {
+   "sigma_mm": 0.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 44.12691365033018,
+   "mean_template17_mm": 40.95789519261814,
+   "mean_template4_mm": 47.05043363749026,
+   "t17_minus_anatomical": {
+    "mean": -3.1690184577120415,
+    "ci95": [
+     -4.886361917616204,
+     -1.3409689278040615
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "template_better"
+  },
+  {
+   "sigma_mm": 20.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 44.12691365033018,
+   "mean_template17_mm": 41.61383848065665,
+   "mean_template4_mm": 47.35354572743759,
+   "t17_minus_anatomical": {
+    "mean": -2.513075169673525,
+    "ci95": [
+     -4.23295114668018,
+     -0.663870752195341
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "template_better"
+  },
+  {
+   "sigma_mm": 40.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 44.12691365033018,
+   "mean_template17_mm": 43.50200909834507,
+   "mean_template4_mm": 48.33330148422376,
+   "t17_minus_anatomical": {
+    "mean": -0.6249045519851071,
+    "ci95": [
+     -2.3320880837415823,
+     1.2101647174239794
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "not_established"
+  },
+  {
+   "sigma_mm": 80.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 44.12691365033018,
+   "mean_template17_mm": 49.73780932282049,
+   "mean_template4_mm": 51.80645287043242,
+   "t17_minus_anatomical": {
+    "mean": 5.610895672490313,
+    "ci95": [
+     3.822996518192753,
+     7.5078200795675984
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "anatomical_better"
+  },
+  {
+   "sigma_mm": 160.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 44.12691365033018,
+   "mean_template17_mm": 69.42776421521609,
+   "mean_template4_mm": 64.00761944830934,
+   "t17_minus_anatomical": {
+    "mean": 25.3008505648859,
+    "ci95": [
+     23.153709767492778,
+     27.507060767732394
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "anatomical_better"
+  }
+ ],
+ "corrupted_joints": [
+  5,
+  6,
+  12,
+  13
+ ],
+ "symmetric_reference_joints": [
+  2,
+  3,
+  5,
+  6,
+  12,
+  13,
+  15,
+  16
+ ],
+ "scored_joints": [
+  9,
+  10,
+  11,
+  14
+ ],
+ "crossover_limit_mm": 80.0,
+ "template_frames": 2460,
+ "prediction_cache": "preds_motionbert.npz"
+}

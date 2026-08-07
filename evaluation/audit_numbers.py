@@ -863,6 +863,47 @@ def main():
                              min(c["detector_channel"]["frac_lt_0.9"]
                                  for c in cams.values()), src, tol=0))
 
+    # ---------- experiments 15 and 16 ---------------------------------------
+    bfp = os.path.join(ART, "bestframe", "bestframe.json")
+    if os.path.exists(bfp):
+        with io.open(bfp, encoding="utf-8") as fh:
+            bf = json.load(fh)
+        src = "bestframe/bestframe.json"
+        v9 = bf["scored_9"]["variants"]
+        results.append(check("best frame: template on 9 joints (mm)", 65.84,
+                             bf["scored_9"]["mean_template_mm"], src,
+                             tol=0.05, unit="mm"))
+        results.append(check("  published default 'both' (mm)", 115.01,
+                             v9["both"]["mean_mm"], src, tol=0.05, unit="mm"))
+        results.append(check("  best variant svd (mm)", 107.33,
+                             v9["svd"]["mean_mm"], src, tol=0.05, unit="mm"))
+        results.append(check("  best beats default by (mm)", 7.68,
+                             bf["scored_9"]["best_minus_default_mm"], src,
+                             tol=0.05, unit="mm"))
+        results.append(check("  variants beating Kabsch", 0.0,
+                             float(len(bf["verdict"]["variants_beating_template"])),
+                             src, tol=0))
+        results.append(check("  all-17 shoulder_only (mm)", 71.37,
+                             bf["all_17_joints"]["variants"]["shoulder_only"]["mean_mm"],
+                             src, tol=0.05, unit="mm"))
+
+    asp = os.path.join(ART, "asymmetric", "asymmetric.json")
+    if os.path.exists(asp):
+        with io.open(asp, encoding="utf-8") as fh:
+            asy = json.load(fh)
+        lv = {round(l["sigma_mm"], 2): l for l in asy["levels"]}
+        src = "asymmetric/asymmetric.json"
+        results.append(check("asymmetric: XS template at sigma=160 (mm)", 70.68,
+                             lv[160.0]["mean_template17_mm"], src, tol=0.05,
+                             unit="mm"))
+        results.append(check("  XS no crossover at or below 80mm", 1.0,
+                             float(asy["verdict"]["crossover_sigma_mm"] is None),
+                             src, tol=0))
+        results.append(check("  anatomical flat across severities (mm range)", 0.0,
+                             max(l["mean_anatomical_mm"] for l in asy["levels"])
+                             - min(l["mean_anatomical_mm"] for l in asy["levels"]),
+                             src, tol=0.01, unit="mm"))
+
     # ---------- the report's own self-referential counts ---------------------
     # These have gone stale four times: 131, 167, 180, 192, 216, 230, 240, 248.
     # They are the one class of number outside the audit, which is exactly why

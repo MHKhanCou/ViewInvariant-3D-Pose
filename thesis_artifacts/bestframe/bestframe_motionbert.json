@@ -1,0 +1,146 @@
+{
+ "scored_9": {
+  "n_pairs": 180,
+  "mean_template_mm": 64.42107027097929,
+  "variants": {
+   "both": {
+    "mean_mm": 91.73879683401994,
+    "mean_gain_vs_template_mm": -27.317726563040683,
+    "gain_ci95": [
+     -30.221930905541765,
+     -24.527788385821662
+    ],
+    "pairs_beating_template": 0,
+    "verdict": "template_better"
+   },
+   "hip_only": {
+    "mean_mm": 91.01458243006861,
+    "mean_gain_vs_template_mm": -26.59351215908934,
+    "gain_ci95": [
+     -29.47500203196114,
+     -23.81769453206926
+    ],
+    "pairs_beating_template": 0,
+    "verdict": "template_better"
+   },
+   "shoulder_only": {
+    "mean_mm": 86.87047131442121,
+    "mean_gain_vs_template_mm": -22.44940104344195,
+    "gain_ci95": [
+     -25.148736840565565,
+     -19.92850334274542
+    ],
+    "pairs_beating_template": 0,
+    "verdict": "template_better"
+   },
+   "weighted": {
+    "mean_mm": 93.42619599205213,
+    "mean_gain_vs_template_mm": -29.005125721072858,
+    "gain_ci95": [
+     -46.35342025424802,
+     -19.19991205965677
+    ],
+    "pairs_beating_template": 0,
+    "verdict": "template_better"
+   },
+   "svd": {
+    "mean_mm": 101.93899273962845,
+    "mean_gain_vs_template_mm": -37.51792246864913,
+    "gain_ci95": [
+     -61.38970906555792,
+     -20.740391102948447
+    ],
+    "pairs_beating_template": 0,
+    "verdict": "template_better"
+   }
+  },
+  "best_variant": "shoulder_only",
+  "best_minus_default_mm": 4.868325519598727
+ },
+ "all_17_joints": {
+  "n_pairs": 180,
+  "mean_template_mm": 51.26592256521522,
+  "variants": {
+   "both": {
+    "mean_mm": 60.09302487522748,
+    "mean_gain_vs_template_mm": -8.82710231001224,
+    "gain_ci95": [
+     -10.222525546128484,
+     -7.395354196029965
+    ],
+    "pairs_beating_template": 5,
+    "verdict": "template_better"
+   },
+   "hip_only": {
+    "mean_mm": 59.66404073041376,
+    "mean_gain_vs_template_mm": -8.398118165198525,
+    "gain_ci95": [
+     -9.765047149188227,
+     -7.001108599059391
+    ],
+    "pairs_beating_template": 6,
+    "verdict": "template_better"
+   },
+   "shoulder_only": {
+    "mean_mm": 57.45008618068239,
+    "mean_gain_vs_template_mm": -6.184163615467166,
+    "gain_ci95": [
+     -7.335480196401108,
+     -5.096594877675903
+    ],
+    "pairs_beating_template": 4,
+    "verdict": "template_better"
+   },
+   "weighted": {
+    "mean_mm": 61.468153349158584,
+    "mean_gain_vs_template_mm": -10.202230783943355,
+    "gain_ci95": [
+     -20.890898627603313,
+     -4.2904153525507365
+    ],
+    "pairs_beating_template": 12,
+    "verdict": "template_better"
+   },
+   "svd": {
+    "mean_mm": 68.9273167129095,
+    "mean_gain_vs_template_mm": -17.661394147694274,
+    "gain_ci95": [
+     -33.30335230069035,
+     -6.866256226880017
+    ],
+    "pairs_beating_template": 6,
+    "verdict": "template_better"
+   }
+  },
+  "best_variant": "shoulder_only",
+  "best_minus_default_mm": 2.6429386945450872
+ },
+ "verdict": {
+  "sanity_template_beats_default": true,
+  "variants_beating_template": [],
+  "reading": "2/3: no construction beats Kabsch; best is shoulder_only, gap 22.45 mm"
+ },
+ "union_constructors": [
+  0,
+  1,
+  4,
+  7,
+  8,
+  9,
+  11,
+  14
+ ],
+ "scored_joints": [
+  2,
+  3,
+  5,
+  6,
+  10,
+  12,
+  13,
+  15,
+  16
+ ],
+ "template_frames": 2460,
+ "prediction_cache": "preds_motionbert.npz"
+}

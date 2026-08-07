@@ -13,12 +13,12 @@ this page. Ordered by how likely you are to need it, not alphabetically.
 | 2 | `canonical/body_frame.py` | The entire method. The thesis is this file plus what was learned from testing it |
 | 3 | `evaluation/h36m_crossview.py` | The central result: 372.7 → 93.4 mm |
 | 4 | `evaluation/template_baseline.py` | The baseline that beats you. Know this one cold |
-| 5 | `evaluation/audit_numbers.py` | Re-derives all 273 reported claims from stored artifacts |
+| 5 | `evaluation/audit_numbers.py` | Re-derives all 282 reported claims from stored artifacts |
 
 **One command proves the whole report is internally consistent:**
 
 ```bash
-./venv/Scripts/python.exe -m evaluation.audit_numbers        # 273/273, exit 0
+./venv/Scripts/python.exe -m evaluation.audit_numbers        # 282/282, exit 0
 ./venv/Scripts/python.exe -m unittest discover -s tests -q   # 76 tests
 ```
 

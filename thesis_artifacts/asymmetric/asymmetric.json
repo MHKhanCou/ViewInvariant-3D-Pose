@@ -1,0 +1,119 @@
+{
+ "verdict": {
+  "sanity_template_better_at_zero": true,
+  "crossover_sigma_mm": null,
+  "reading": "2/3: no crossover at or below 80 mm; first at 160 mm"
+ },
+ "levels": [
+  {
+   "sigma_mm": 0.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 53.44914895701612,
+   "mean_template17_mm": 43.30261667433071,
+   "mean_template4_mm": 49.68856683237027,
+   "t17_minus_anatomical": {
+    "mean": -10.146532282685428,
+    "ci95": [
+     -19.466046366023356,
+     -3.540249203891986
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "template_better"
+  },
+  {
+   "sigma_mm": 20.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 53.44914895701612,
+   "mean_template17_mm": 43.91792940746934,
+   "mean_template4_mm": 49.97732908688848,
+   "t17_minus_anatomical": {
+    "mean": -9.5312195495468,
+    "ci95": [
+     -18.86255076409231,
+     -2.930163659125823
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "template_better"
+  },
+  {
+   "sigma_mm": 40.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 53.44914895701612,
+   "mean_template17_mm": 45.72035426653278,
+   "mean_template4_mm": 50.9405704547373,
+   "t17_minus_anatomical": {
+    "mean": -7.728794690483351,
+    "ci95": [
+     -17.053054565385565,
+     -1.136911754737896
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "template_better"
+  },
+  {
+   "sigma_mm": 80.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 53.44914895701612,
+   "mean_template17_mm": 51.71134350551229,
+   "mean_template4_mm": 54.25821378110538,
+   "t17_minus_anatomical": {
+    "mean": -1.7378054515038488,
+    "ci95": [
+     -10.992188710549122,
+     4.828744480581656
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "not_established"
+  },
+  {
+   "sigma_mm": 160.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 53.44914895701612,
+   "mean_template17_mm": 70.68057530283909,
+   "mean_template4_mm": 66.04324202052535,
+   "t17_minus_anatomical": {
+    "mean": 17.231426345822946,
+    "ci95": [
+     8.343867669154374,
+     23.58131664081659
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict_vs_template17": "anatomical_better"
+  }
+ ],
+ "corrupted_joints": [
+  5,
+  6,
+  12,
+  13
+ ],
+ "symmetric_reference_joints": [
+  2,
+  3,
+  5,
+  6,
+  12,
+  13,
+  15,
+  16
+ ],
+ "scored_joints": [
+  9,
+  10,
+  11,
+  14
+ ],
+ "crossover_limit_mm": 80.0,
+ "template_frames": 2460,
+ "prediction_cache": "preds.npz"
+}
