@@ -140,7 +140,7 @@ Certified that this project report is the bonafide work of \textbf{MEHEDI HASAN 
 
 \doublespacing
 {\fontsize{12}{15}\selectfont
-Monocular 3D pose estimators express skeletons in the observing camera's frame, so one motion recorded from two viewpoints yields two different sets of coordinates, preventing direct comparison in gait and sports analysis. Existing remedies retrain the estimator, require calibration, or learn a canonicalization network. We build a body-fixed frame from anatomical axes and apply it after prediction, adding no trained parameters to a frozen estimator, and ask what determines whether such a frame is consistent across viewpoints. The construction is the TRIAD algorithm of spacecraft attitude determination, and how accurately an anatomical direction is known comes from biomechanics: a direction from two joints $L$ apart, each with noise $\sigma$, is uncertain by about $2\sigma/L$. We claim neither, and ask how far they carry to network-inferred joints. On Human3.6M, which played no part in developing it, canonicalization cuts cross-view distance by 72.2 percent over 180 held-out camera pairs, improving 179. A single-view baseline meeting the same requirements, Kabsch alignment to one fixed skeleton, beats our frame on all 180 pairs under both backbones, and we report that in the abstract rather than hide it. A reliability score is falsified as an accuracy predictor five ways, though it does gate canonicalization quality; a bone-length signal reaching $+0.492$ on one dataset falls to $+0.098$ on the other and is retracted. The contribution is the experimental boundary of how far the geometry carries, and, post-freeze, a pre-registered map of where the two alignments fail: distal corruption is invisible to the frame and visible to the template, anchor corruption is the reverse. A confidence-gated rule exploiting this is, given knowledge of which joints are corrupted, never worse in aggregate mean than the better single alignment at 19 of 20 cells and 38--47~mm better than template alignment alone under severe distal corruption; we then measured whether that knowledge is available and it is not, so the rule is reported as exploratory. Through the real detection and lifting path, 2D keypoint corruption up to 21 percent of the frame width leaves the lifted pose unchanged (mean $\le 0.33$~mm) and the real detector-confidence channel is flat, every frame below 0.9. The failure map stands as a structural fact about the two alignments; the rule that would exploit it does not yet have an input.
+Monocular 3D pose estimators express skeletons in the observing camera's frame, so one motion recorded from two viewpoints yields two different sets of coordinates, preventing direct comparison in gait and sports analysis. Existing remedies retrain the estimator, require calibration, or learn a canonicalization network. We build a body-fixed frame from anatomical axes and apply it after prediction, adding no trained parameters to a frozen estimator, and ask what determines whether such a frame is consistent across viewpoints. The construction is the TRIAD algorithm of spacecraft attitude determination, and how accurately an anatomical direction is known comes from biomechanics: a direction from two joints $L$ apart, each with noise $\sigma$, is uncertain by about $2\sigma/L$. We claim neither, and ask how far they carry to network-inferred joints. On Human3.6M, which played no part in developing it, canonicalization cuts cross-view distance by 72.2 percent over 180 held-out camera pairs, improving 179. A single-view baseline meeting the same requirements, Kabsch alignment to one fixed skeleton, beats our frame on all 180 pairs under both backbones, and we report that in the abstract rather than hide it. A reliability score is falsified as an accuracy predictor five ways, though it does gate canonicalization quality; a bone-length signal reaching $+0.492$ on one dataset falls to $+0.098$ on the other and is retracted. The contribution is the experimental boundary of how far the geometry carries, and, post-freeze, a pre-registered map of where the two alignments fail: distal corruption is invisible to the frame and visible to the template, anchor corruption is the reverse. A confidence-gated rule exploiting this is, given knowledge of which joints are corrupted, never worse in aggregate mean than the better single alignment at 19 of 20 cells and 38--47~mm better than template alignment alone under severe distal corruption; we then measured whether that knowledge is available and it is not, so the rule is reported as exploratory. Through the real detection and lifting path, 2D keypoint corruption up to 21 percent of the frame width leaves the lifted pose unchanged (mean $\le 0.33$~mm) and the real detector-confidence channel is flat, every frame below 0.9. The failure map stands as a structural fact about the two alignments; the rule that would exploit it does not yet have an input. Three further pre-registrations close the search: no frame construction the framework implements beats the baseline, one-sided corruption does not favour the frame either, and a matched control shows why. Laterality moves the baseline by at most 1.5~mm against a 41.5~mm gap, so the lever is roughly twenty-seven times too small and the family of corruption-geometry searches is closed by measurement rather than by exhaustion.
 }
 
 % ======================== ACKNOWLEDGEMENT ============================
@@ -155,6 +155,15 @@ I would like to express my deepest gratitude to my project supervisor, \textbf{D
 \begin{spacing}{1.0}
 \newpage
 \tableofcontents
+\end{spacing}
+
+\begin{spacing}{1.0}
+\newpage
+\listoffigures
+\addcontentsline{toc}{chapter}{LIST OF FIGURES}
+\newpage
+\listoftables
+\addcontentsline{toc}{chapter}{LIST OF TABLES}
 \end{spacing}
 
 \newpage
@@ -189,7 +198,7 @@ The question this project sets out to answer is:
 \textbf{What determines whether an anatomical reference frame is consistent across viewpoints?}
 \end{quote}
 
-The framework is the vehicle for answering it rather than the end in itself: building a frame that is cheap, frozen and free of calibration is what makes the question testable, because every variable except the frame's own construction can then be held fixed. The specific objectives are to construct a viewpoint-independent coordinate frame over a frozen estimator with no training, labels or camera parameters; to identify the design variable that governs frame consistency and establish where the derivation holds and where it stops; to score prediction reliability analytically and abstain when it is low; and to evaluate under an auditable protocol in which every reported number is recomputed from stored artifacts.
+The framework is the vehicle for answering it rather than the end in itself: building a frame that is cheap, frozen and free of calibration is what makes the question testable, because every variable except the frame's own construction can then be held fixed. The specific objectives are to construct a viewpoint-independent coordinate frame over a frozen estimator with no training, labels or camera parameters; to identify the design variable that governs frame consistency and establish where the derivation holds and where it stops; to score prediction reliability analytically and abstain when it is low; and to evaluate under an auditable protocol in which every number this project measures is recomputed from stored artifacts.
 
 \section{Contributions}
 
@@ -252,6 +261,72 @@ Conformal \cite{yangpavone} & None & Labeled calibration set & No & No \\
 \end{table}
 
 % ========================== CHAPTER 3 ================================
+\section{Multi-View Fusion}
+
+Classical multi-view pose estimation triangulates 2D detections using known
+camera calibration, which yields excellent accuracy and requires the
+calibration. CMANet learns a canonical space for multi-view 3D pose without
+manual 3D annotation, supervising itself from the confident outputs of an
+existing 2D detector, and V-VIPE learns a variational view-invariant embedding
+that supports retrieval across viewpoints. Both require training, and CMANet
+additionally requires several views at inference rather than only during
+training.
+
+The gap this project occupies is fusion when calibration is unavailable and
+training is not an option. If predictions from several cameras can be placed in a
+shared frame by construction, they can be combined by simple statistics without
+correspondence search or extrinsics. Chapter \ref{ch:results} reports that this
+works, and that the statistic must be robust when the views are few.
+
+\section{Positioning of This Work, and the Closest Prior Baseline}
+\label{sec:positioning}
+
+No prior method operates on a frozen estimator with no training, no labels and no
+camera parameters simultaneously. That requirement profile, rather than any
+individual mechanism, is the position this project occupies. Geometric
+canonicalization itself is not claimed here as novel, and the specific
+construction is more thoroughly trodden than a single comparison would suggest.
+
+\textbf{One prior result bears directly against this work and is stated here
+rather than left for a reader to find.} 3DPCNet, published at ICASSP 2026,
+addresses the same problem with a learned self-supervised module, and includes a
+hand-built geometric baseline of the same family as ours: it defines a plane from
+the shoulder and hip joints, aligns that plane's normal to a fixed axis, and then
+aligns the shoulder vector to a second axis. That is a two-vector attitude
+construction of the TRIAD family. Their Table 1 reports it at \textbf{20.6
+degrees of rotation error against 3.58 degrees} for their learned module, on the
+MM-Fi dataset. The anatomical family is therefore not unmeasured in the
+literature; it is measured, and characterised as inferior to a learned
+alternative.
+
+Four qualifications apply, and none of them overturns that result. Their MPJPE
+column is confounded by their own admission, because their module makes non-rigid
+shape edits the geometric baseline never attempts, so only the rotation column is
+a clean comparison. It is the proposing authors' own implementation of a
+competitor, in a single table without error bars, seeds or an oracle upper bound.
+It measures alignment against a ground-truth canonical pose, whereas this report
+measures agreement between two cameras, which is a different quantity. And its
+primary axis is the shoulder-hip plane normal, which is not the construction used
+here, so the correct description is same-family rather than identical. The
+direction of their finding nevertheless agrees with the baseline comparison of
+Chapter \ref{ch:results}, and it is more honest to say that the evidence points
+the same way twice than to argue either result away.
+
+Closer still, Wei et al. transform predicted poses into consistent views before
+refining them, first at the global body level and then at the level of local body
+parts, which is the same two-level decomposition this report arrives at, from the
+same anatomical landmarks. What differs is not the geometry but everything around
+it: their transformation feeds a trained correction network and a trained
+discriminator, so it is unavailable to a practitioner who cannot train, and the
+consistent views are an intermediate step rather than a quantity they evaluate.
+
+The contribution is therefore not the construction but the requirement profile
+that keeps it usable on a frozen estimator, and the experimental boundary that
+follows. The construction is treated as an instrument rather than as a result: a
+frame with no trained parameters and no calibration allows every variable except
+the frame's own construction to be held fixed, and that is what makes the
+boundary measurable.
+
 \chapter{METHODOLOGY}
 
 \section{Scope of the Term Training-Free}
@@ -364,16 +439,117 @@ Frames within a camera stream are not independent, so intervals come from a clus
 
 \section{Pre-registration and the Audit}
 
-Every experiment in this report was pre-registered: its criterion and all plausible readings were written down and committed to version control \emph{before} the experiment ran. Nine such pre-registrations govern Chapter 5, several of which failed their own criteria; five more were run after the freeze (Section 5.8), three of which are reported there. Every reported number is recomputed from stored result files by an automated audit of 304 claims, alongside 76 unit tests; both pass. No number in the report was typed by hand.
+Every experiment in this report was pre-registered: its criterion and all plausible readings were written down and committed to version control \emph{before} the experiment ran. Nine such pre-registrations govern the body of this report, several of which failed their own criteria; eight more were run after the freeze. Every number this project measured is recomputed from stored result files by an automated audit of 304 claims, alongside 76 unit tests, and both pass. A second checker confirms that no measured figure in the text lacks an artifact behind it, and a third verifies that every pre-registration was committed before its own result. The only figures in this report not produced by that pipeline are those quoted from other authors' papers, which are cited to their source.
 
 % ========================== CHAPTER 5 ================================
 \chapter{EXPERIMENTAL RESULTS}
+\label{ch:results}
+
+\noindent \textbf{How to read this chapter.} Table \ref{tab:summary} states every
+claim this project tested and how it came out, before any of them is argued.
+Seventeen experiments were pre-registered, more than half failed their own
+criteria, and one returned a competing method as the better one. The failures are
+reported at the same length as the confirmations, because a pre-registration that
+only counts when it succeeds is not a pre-registration.
+
+\begin{table}[H]
+\centering
+\caption{Every claim tested in this project and its verdict. Pre-registered experiments are marked \textsc{pr}.}
+\label{tab:summary}
+{\fontsize{9}{11}\selectfont
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{>{\raggedright\arraybackslash}p{6.2cm}>{\raggedright\arraybackslash}p{5.0cm}>{\raggedright\arraybackslash}p{2.3cm}}
+\hline
+\textbf{Claim} & \textbf{Evidence} & \textbf{Verdict} \\
+\hline
+Canonicalization improves cross-view comparability
+ & $372.7 \to 93.4$~mm, $+72.2\%$, 179 of 180 held-out pairs; $+75.8\%$ on the second backbone
+ & Holds \\
+The result transfers across estimators
+ & Same code, unmodified, on a backbone 19$\times$ larger
+ & Holds, $n=2$ \\
+Axis length governs the choice \emph{between} frame constructions \textsc{pr}
+ & Shoulder axis beats hip axis on both backbones, intervals excluding zero
+ & Holds \\
+\ldots governs which frame instance to trust \textsc{pr}
+ & Passes on one backbone, fails on the other
+ & Fails \\
+\ldots governs which joint will disagree \textsc{pr}
+ & Torso-rigid joints sit at larger radius yet disagree 2.5$\times$ less
+ & Fails, backwards \\
+A simpler single-view baseline beats the frame \textsc{pr}
+ & Kabsch to a fixed template wins on 180 of 180 pairs, both backbones, all 15 actions
+ & Confirmed against us \\
+\ldots and it is not an artifact of frame choice \textsc{pr}
+ & All five constructions lose; the best narrows the gap to 41.5~mm from 49.2
+ & Confirmed against us \\
+\ldots nor of a matching template \textsc{pr}
+ & Child-like limb proportions move the baseline 0.12~mm
+ & Confirmed against us \\
+The frame and the baseline fail on disjoint joints \textsc{pr}
+ & Frame flat under distal corruption, collapses $53.4 \to 337.9$~mm under anchor corruption; baseline the reverse
+ & Holds \\
+Distal corruption gives the frame a winning regime \textsc{pr}
+ & Crossover on one backbone at the committed severity, not two
+ & Fails \\
+One-sided corruption gives it one \textsc{pr}
+ & Crossover on one backbone only
+ & Fails \\
+\ldots because laterality rotates a rigid fit \textsc{pr}
+ & One-sided damages the baseline \emph{less}, by 1.5~mm against a 41.5~mm gap
+ & Refuted \\
+A confidence gate can route between the two \textsc{pr}
+ & Never worse at 19 of 20 cells, but only given knowledge of which joints are corrupted
+ & Exploratory \\
+\ldots and a real gate signal exists \textsc{pr}
+ & Detector confidence is flat, every frame below 0.9
+ & Fails \\
+2D keypoint error reaches the 3D stage \textsc{pr}
+ & 434~px of displacement moves the lifted pose $\le 0.33$~mm
+ & Fails \\
+The reliability score predicts accuracy
+ & Falsified on five independent axes
+ & Withdrawn \\
+\ldots but gates canonicalization quality \textsc{pr}
+ & 22\% reduction at 30\% abstention, survives a confound control
+ & Exploratory \\
+Bone-length inconsistency predicts error \textsc{pr}
+ & $\rho = +0.492$ on one dataset, $+0.098$ on the other
+ & Withdrawn \\
+Multi-scale per-limb frames improve on the global frame
+ & Improve, but each limb frame is built from the joints it is scored on
+ & Demoted \\
+The shared frame enables calibration-free fusion
+ & Median improves the aggregate; 9 of 15 actions improve and 6 worsen
+ & Holds, qualified \\
+Canonicalization aids cross-view retrieval
+ & Recall falls
+ & Withdrawn \\
+\hline
+\end{tabular}}
+\end{table}
 
 \section{Pipeline Verification}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/fig_interface.png}
+\caption{The demonstration interface. The Representation control switches between the camera frame and the body-fixed frame, which is the operation this report measures at scale. The evaluation and the demonstration share the same lifting module, so what is shown and what is measured cannot diverge. The plausibility readout is displayed with its own caution: it is a degeneracy gate, not a confidence score, and this report falsifies it as a predictor of accuracy.}
+\label{fig:interface}
+\end{figure}
+
 
 The baseline reproduces the published MotionAGFormer-XS figures to three decimals: MPJPE 45.149~mm against the reported 45.1, and P-MPJPE 36.892~mm against 36.9. This is what makes the negative results interpretable: a negative result is only informative if the apparatus is not what failed.
 
 \section{The Central Claim: Cross-View Comparability}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/fig_h36m_distances.png}
+\caption{The headline result as a distribution rather than a mean. Each point is one of the 180 held-out camera pairs, before and after canonicalization. The single pair that does not improve is visible, and is reported rather than trimmed.}
+\label{fig:distances}
+\end{figure}
+
 
 \begin{figure}[H]
 \centering
@@ -408,6 +584,15 @@ The headline excludes the four joints the frame is built from, because the const
 
 \section{A Single-View Baseline, and It Wins}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/fig_oracle.png}
+\caption{Where the method sits against its floor. The per-frame Procrustes oracle is allowed to see both views and is therefore unreachable by any single-view method; it bounds how much of the remaining disagreement is removable by rotation at all.}
+\label{fig:oracle}
+\end{figure}
+
+\label{sec:template}
+
 Kabsch-aligning each predicted pose onto one fixed reference skeleton is training-free, label-free, calibration-free and single-view---it meets every requirement this framework claims as its profile, and it is what V-VIPE uses as preprocessing. It was pre-registered before it was run, including all three readings of the outcome.
 
 \begin{table}[H]
@@ -426,7 +611,53 @@ Camera pairs where it wins & 0 / 180 & \textbf{180 / 180} \\
 
 The baseline wins on both backbones, all fifteen actions, under three unrelated templates and every centring tested, with the paired-difference interval excluding zero. It is in this abstract, here, the limitations and the conclusion. The method is kept because the baseline \emph{cannot run the experiment this report is about}: Kabsch alignment has no anatomical axis, so there is no axis to hold fixed and vary, and the question of what governs frame consistency cannot be posed inside it. As a way of reducing cross-view distance on this data, the simpler method is better, and we say so plainly. Section 5.8 returns to this with an experimental answer rather than a rhetorical one.
 
+\section{A Second Backbone}
+\label{sec:backbone2}
+
+The framework consumes a seventeen-by-three array and nothing else, so
+independence from the estimator is structural. It is not, on that argument
+alone, empirical. We test it by replacing the backbone and changing nothing
+else: MotionBERT, roughly nineteen times larger than MotionAGFormer-XS, with the
+canonicalization code, the protocol, the joint sets and the statistical
+treatment all unmodified.
+
+\begin{table}[H]
+\centering
+\caption{The central result under both backbones. Same code, same protocol, same 180 held-out camera pairs.}
+\label{tab:backbone}
+\begin{tabular}{lcc}
+\toprule
+& MotionAGFormer-XS & MotionBERT \\
+\midrule
+Raw cross-view distance, 13 joints & 372.7 mm & 368.0 mm \\
+After canonicalization & 93.4 mm & 74.8 mm \\
+Improvement & $+72.2\%$ & $+75.8\%$ \\
+Pairs improved & 179 / 180 & 180 / 180 \\
+Over all 17 joints & $+74.1\%$ & $+77.5\%$ \\
+Added parameters & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent The improvement is slightly larger on the stronger backbone, which is
+the expected direction: canonicalization removes the camera rotation exactly, so
+what remains is the estimator's own error, and a better estimator leaves less of
+it. \textbf{Two backbones is replication, not universality.} Every claim in this
+report that depends on the estimator is stated for $n = 2$, and the one signal
+that behaved differently on a third architecture --- the reliability score, whose
+correlation with error changed sign on a plain multi-layer perceptron --- is
+reported as falsified partly because of it.
+
 \section{The Axis-Length Boundary}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/fig_matched_radius.png}
+\caption{Articulation, not radius, governs which joint disagrees. Joints rigid with the torso sit at a larger mean radius than joints beyond a hinge and yet disagree by a factor of two and a half less, which is the opposite of what the rigid-segment model predicts. Matched-radius pairs differ by one to three percent in radius and roughly a factor of two in distance.}
+\label{fig:matchedradius}
+\end{figure}
+
+\label{sec:axisboundary}
 
 \begin{figure}[H]
 \centering
@@ -451,6 +682,14 @@ The analytic reliability score was falsified as an accuracy predictor along five
 The same score, however, gates the quantity its own specification names---canonicalization quality. Dropping the worst thirty percent of frames by score reduces mean cross-view distance by 22 percent, against a random baseline that does not move it, and the triage survives a bone-deviation confound control on both backbones (gain at ten percent abstention 5.4~mm, interval $[+1.5, +9.3]$). This was a comparator in its pre-registration, not its subject, and is reported as exploratory.
 
 \section{Retractions and Failed Pre-registrations}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{images/fig_h36m_bone.png}
+\caption{The retraction. A temporal bone-length signal that looked like a genuine error predictor on the first dataset does not survive on the second, and every pre-registered criterion fails there.}
+\label{fig:bone}
+\end{figure}
+
 \label{sec:h36m}
 
 A temporal bone-length signal reached $\rho = +0.492$ on MPI-INF-3DHP and fell to $+0.098$ on Human3.6M, failing every criterion; it is retracted, and the narrower condition under which it holds is stated in the full report. Two post-freeze pre-registrations also failed. Corrupting the eight distal joints of the predicted pose leaves the anatomical frame exactly flat at 53.45~mm at every severity (it never reads them) while the Kabsch baseline degrades from 43.3 to 92.3~mm---but the crossover the pre-registration required at $\sigma \le 80$~mm on both backbones fired on MotionBERT at 40~mm and on MotionAGFormer only at 160~mm, so the regime was not established at the committed severity. And scaling the template's limbs to child-like proportions moves the baseline by 0.12~mm (0.2 percent): the baseline needs no matching template.
@@ -460,6 +699,7 @@ A temporal bone-length signal reached $\rho = +0.492$ on MPI-INF-3DHP and fell t
 In the shared frame, with eight views a median improves the aggregate while an unweighted mean does not, and the median's advantage grows as the number of views falls, as the breakdown analysis predicts. But the gain is not uniform across actions---nine of fifteen actions improve and six worsen---so the aggregate conceals a bimodal distribution, and the mean across actions is negative.
 
 \section{Post-Freeze Addendum: Where the Two Alignments Fail, and a Routing Rule}
+\label{sec:addendum}
 
 Two pre-registered experiments (7 August 2026, commits preceding results in the repository history) complete the map of Section 5.3. The distal-corruption experiment showed the anatomical frame is immune to corruption of joints it never reads. Its mirror, corrupting the frame's own support joints {1 r-hip, 4 l-hip, 8 thorax}, shows the frame collapses while the 17-joint Kabsch fit degrades gracefully (Table \ref{tab:anchor}).
 
@@ -528,6 +768,154 @@ frames with confidence $< 0.9$ & 100\% & 100\% \\
 \end{table}
 
 % ========================== CHAPTER 6 ================================
+
+\section{Closing the Search: Three Further Pre-registrations}
+\label{sec:closing}
+
+Sections \ref{sec:template} and \ref{sec:addendum} leave one question open. The
+baseline comparison was run against the default frame construction, and the
+corruption regimes tested so far were bilaterally symmetric. Three further
+pre-registrations, committed before their runs like the rest, close both gaps.
+None of them produces a regime in which the anatomical frame is preferable, and
+the third explains why the search should stop.
+
+\subsection{Was the Comparison Run Against the Wrong Frame?}
+
+The baseline comparison calls the default two-vector construction, with the hip
+axis primary. But the confirmed level-one result of Section \ref{sec:axisboundary}
+is that axis length governs the choice between constructions, and that the longer
+shoulder axis makes the better frame. The headline comparison was therefore run
+against a construction this report's own principle predicts is suboptimal, and
+the best one had never been put against Kabsch. The fifteenth pre-registration
+does that, for all five constructions the framework implements, scored on the
+nine joints that are a constructor for none of them so that no construction is
+flattered by joints its own frame pins.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Every frame construction against Kabsch-to-template, scored on the nine joints no construction builds from. Gain is positive when the frame is closer than the template.}
+\label{tab:bestframe}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{MotionAGFormer-XS} & \multicolumn{2}{c}{MotionBERT} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Construction & mm & gain vs template & mm & gain vs template \\
+\midrule
+Two-vector, hip primary (default) & 115.01 & $-49.17$ & 91.74 & $-27.32$ \\
+Hip axis only & 114.46 & $-48.62$ & 91.01 & $-26.59$ \\
+Shoulder axis only & 108.16 & $-42.32$ & \textbf{86.87} & $-22.45$ \\
+Weighted multi-landmark & 109.67 & $-43.83$ & 93.43 & $-29.01$ \\
+Spine principal direction (SVD) & \textbf{107.33} & $-41.49$ & 101.94 & $-37.52$ \\
+\midrule
+\textbf{Kabsch to fixed template} & \textbf{65.84} & --- & \textbf{64.42} & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent \textbf{No construction beats the baseline, on either backbone, with every
+interval excluding zero.} The result is therefore not an artifact of frame choice.
+What the experiment does establish is that the published comparison understated
+the method: the best construction is 7.68~mm better than the default on
+MotionAGFormer-XS and 4.87~mm better on MotionBERT, so the true gap is 41.49~mm
+rather than the 49.17~mm a reader would infer from the default alone. Over all
+seventeen joints the same ordering holds, with the shoulder-axis frame at
+71.37~mm against 53.03~mm for the template.
+
+One honest qualification: there is no single best construction. The spine
+principal direction wins on MotionAGFormer at nine joints, the shoulder axis
+wins everywhere else, and the spine variant is \emph{worse} than the default on
+MotionBERT, at 101.94~mm against 91.74. This is consistent with the level-one
+finding, which ranks constructions by axis length rather than crowning one.
+
+\subsection{Asymmetric Corruption}
+
+Both corruption regimes tested so far were bilaterally symmetric. Since Kabsch
+fits a rotation, and a symmetric perturbation leaves the point cloud's principal
+axes where they are, a one-sided corruption might rotate the fit where a
+balanced one does not. The sixteenth pre-registration corrupts only the left
+distal joints, leaving the four the frame reads untouched.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Left-side-only distal corruption. The anatomical frame is flat by construction, since it reads none of the corrupted joints.}
+\label{tab:asymmetric}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{MotionAGFormer-XS} & \multicolumn{2}{c}{MotionBERT} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+$\sigma$ (mm) & anatomical & template & anatomical & template \\
+\midrule
+0 & 53.45 & \textbf{43.30} & 44.13 & \textbf{40.96} \\
+40 & 53.45 & \textbf{45.72} & 44.13 & 43.50 \\
+80 & 53.45 & 51.71 & \textbf{44.13} & 49.74 \\
+160 & \textbf{53.45} & 70.68 & \textbf{44.13} & 69.43 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent The crossover arrives at 80~mm on MotionBERT and not until 160~mm on
+MotionAGFormer-XS, a severity the pre-registration ruled out in advance. One
+backbone is not two, which is the rule by which the conditioning index and the
+tenth pre-registration were both rejected, so this fails on the same terms.
+
+\subsection{Laterality, With the Confound Removed}
+
+The comparison above is confounded: the one-sided set has four joints against the
+earlier bilateral set's eight, so laterality and joint count moved together. The
+seventeenth pre-registration holds the count and the anatomical types fixed --- one
+knee, one foot, one elbow, one wrist in both arms --- and varies only which side
+they sit on.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Laterality at matched joint count. Positive would mean one-sided corruption damages the template alignment more, which is what was predicted.}
+\label{tab:laterality}
+\begin{tabular}{lccc}
+\toprule
+$\sigma$ (mm) & one-sided (mm) & balanced (mm) & one-sided $-$ balanced \\
+\midrule
+\multicolumn{4}{l}{\emph{MotionAGFormer-XS}} \\
+80 & 51.71 & 52.23 & $-0.52$ \: $[-0.66, -0.38]$ \\
+160 & 70.68 & 72.21 & $-1.53$ \: $[-1.86, -1.17]$ \\
+\multicolumn{4}{l}{\emph{MotionBERT}} \\
+80 & 49.74 & 50.27 & $-0.53$ \: $[-0.68, -0.37]$ \\
+160 & 69.43 & 70.94 & $-1.51$ \: $[-1.82, -1.19]$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent \textbf{The sign is negative wherever the interval excludes zero, on both
+backbones. One-sided corruption damages the template alignment \emph{less}, not
+more: the hypothesis is refuted rather than merely unsupported.} The two
+backbones agree to two decimal places, $-0.52$ against $-0.53$ and $-1.53$
+against $-1.51$, so this is a small effect measured precisely rather than a
+marginal one read hopefully.
+
+The mechanism accounts for the whole family. A rigid fit can absorb part of a
+one-sided displacement by rotating toward it; a balanced displacement offers the
+rotation nothing. Damage at $\sigma = 160$~mm orders accordingly: eight bilateral
+joints cost the template 92.29~mm, four balanced joints 72.21~mm, four one-sided
+joints 70.68~mm.
+
+\subsection{Why the Search Stops Here}
+
+\textbf{Laterality moves the template alignment by at most 1.53~mm. The gap
+between the two methods is 41.49~mm.} The lever is roughly twenty-seven times too
+small, so no manipulation of corruption geometry in this family could have closed
+it. That is a quantitative reason to stop rather than another qualitative failure,
+and it is worth more than the searches that preceded it: had the effect size been
+measured first, several of those experiments would not have been run.
+
+The frame does win under severe distal corruption, at 160~mm on both backbones
+and at 40~mm on MotionBERT. What no regime produced is a crossover at a severity
+committed to in advance, on both backbones. Six pre-registered searches have now
+looked --- distal corruption, template proportion mismatch, anchor corruption, every
+frame construction, one-sided corruption, and the laterality control --- and the
+sentence that no pose regime favours this construction is backed by all six.
+
 \chapter{DISCUSSION, CONCLUSION AND FUTURE WORK}
 
 \section{Discussion}
@@ -541,6 +929,8 @@ The post-freeze addendum sharpens the positioning without settling it. The two a
 \section{Conclusion}
 
 This thesis asked what determines whether an anatomical reference frame is consistent across viewpoints, using a training-free canonicalization of a frozen estimator as the instrument. The answer, established by pre-registered experiments on two datasets and two backbones, is a boundary: axis length governs the choice between frame constructions and nothing finer; articulation, not radius, governs which joint disagrees; the reliability score fails as an accuracy predictor and works as a gate on canonicalization quality; and a simpler baseline beats the frame on the headline metric, which we report. The two alignments fail on disjoint joint supports, which is measured and unconditional. A confidence-gated rule exploiting that is never worse than the better single alignment within a pre-registered tolerance and 38--47~mm better than template alignment alone under severe distal corruption---but only given knowledge of which joints are corrupted, which the same set of experiments shows this pipeline does not provide. The map is a finding; the rule is exploratory.
+
+Six pre-registered searches have now looked for a pose regime in which the anatomical construction is preferable to the template baseline, and none found one at a severity committed to in advance on both backbones. The last of them measured why: the largest effect available from manipulating corruption geometry is 1.5~mm, against a 41.5~mm deficit. That is the difference between a search abandoned and a search closed, and it is the more useful of the two outcomes.
 
 \section{Future Work}
 

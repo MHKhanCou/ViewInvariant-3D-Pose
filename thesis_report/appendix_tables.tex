@@ -1,4 +1,4 @@
-
+\begin{center}
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{lrrrr}
 \caption{Cross-view canonicalization on Human3.6M, by action.}\label{tab:appcvaction}\\
@@ -30,9 +30,11 @@ Directions & 12 & 63.7 & +71.9 & 12/12 \\
 SittingDown & 12 & 274.1 & +36.1 & 11/12 \\
 \end{longtable}
 }
+\end{center}
 
 \vspace{0.6cm}
 
+\begin{center}
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{llrrrrrr}
 \caption{All 180 held-out Human3.6M camera pairs. Distances in millimetres.}\label{tab:apppairs}\\
@@ -229,11 +231,12 @@ S9 & WalkTogether & 02--04 & 171 & 137.6 & 51.0 & 38.3 & +62.9 \\
 S9 & WalkTogether & 03--04 & 171 & 315.4 & 57.8 & 45.2 & +81.7 \\
 \end{longtable}
 }
-
+\end{center}
 \noindent The single regressing pair is S9 SittingDown 01--03. Its raw distance of 218.4 mm is unusually small for that action, where the other pairs range above 500 mm, so little was available to gain. See Section \ref{sec:h36mcv}.
 
 \vspace{0.6cm}
 
+\begin{center}
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{lrrrr}
 \caption{Calibration-free fusion on Human3.6M by action, median over four views.}\label{tab:appfusion}\\
@@ -265,9 +268,11 @@ Greeting & 180 & 33.5 & 42.2 & -26.0 \\
 Discussion & 300 & 38.3 & 51.2 & -33.6 \\
 \end{longtable}
 }
+\end{center}
 
 \vspace{0.6cm}
 
+\begin{center}
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{lrr}
 \caption{Fusion strategies on Human3.6M, all four views, 2819 frames.}\label{tab:appfusionstrat}\\
@@ -295,11 +300,12 @@ Worst view & 50.8 & --- \\
 Oracle best view (requires ground truth) & 27.4 & --- \\
 \end{longtable}
 }
-
+\end{center}
 \noindent Every strategy above the line is training-free and label-free. The best of them uses no reliability score at all.
 
 \vspace{0.6cm}
 
+\begin{center}
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{lrrr}
 \caption{Multi-scale per-limb canonicalization on Human3.6M, by action. Improvement is measured against the global frame.}\label{tab:appms}\\
@@ -331,11 +337,12 @@ WalkTogether & 12 & +20.8 & 12/12 \\
 Walking & 12 & +17.8 & 12/12 \\
 \end{longtable}
 }
-
+\end{center}
 \noindent The gain is largest on SittingDown, the action on which the global frame performs worst, because a limb frame does not inherit the error in the torso and hip axes. See Section \ref{sec:h36mms}.
 
 \vspace{0.6cm}
 
+\begin{center}
 {\fontsize{10}{12}\selectfont
 \begin{longtable}{lrr}
 \caption{The bone-length signal on both datasets. The claim is retracted.}\label{tab:appbone}\\
@@ -360,5 +367,359 @@ Median aligned error (mm) & 202.1 & 32.6 \\
 Median bone deviation & 0.082 & 0.033 \\
 \end{longtable}
 }
-
+\end{center}
 \noindent All five pass criteria are met on MPI-INF-3DHP and none on Human3.6M. See Section \ref{sec:h36m}.
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{lrrrl}
+\caption{Every frame construction against the template baseline, MotionAGFormer-XS, scored on the nine joints no construction builds from.}\label{tab:appbestframe_xs}\\
+\hline
+\textbf{Construction} & \textbf{mm} & \textbf{Gain} & \textbf{CI95} & \textbf{Verdict} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{Construction} & \textbf{mm} & \textbf{Gain} & \textbf{CI95} & \textbf{Verdict} \\
+\hline
+\endhead
+\hline
+\endfoot
+both & 115.01 & -49.17 & [-78.45, -28.81] & template better \\
+hip only & 114.46 & -48.62 & [-77.71, -28.31] & template better \\
+shoulder only & 108.16 & -42.32 & [-67.20, -24.61] & template better \\
+weighted & 109.67 & -43.83 & [-73.22, -23.48] & template better \\
+svd & 107.33 & -41.49 & [-66.10, -23.92] & template better \\
+\hline \\
+Kabsch to fixed template & 65.84 & --- & --- & --- \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{lrrrl}
+\caption{Every frame construction against the template baseline, MotionBERT, scored on the nine joints no construction builds from.}\label{tab:appbestframe_motionbert}\\
+\hline
+\textbf{Construction} & \textbf{mm} & \textbf{Gain} & \textbf{CI95} & \textbf{Verdict} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{Construction} & \textbf{mm} & \textbf{Gain} & \textbf{CI95} & \textbf{Verdict} \\
+\hline
+\endhead
+\hline
+\endfoot
+both & 91.74 & -27.32 & [-30.22, -24.53] & template better \\
+hip only & 91.01 & -26.59 & [-29.48, -23.82] & template better \\
+shoulder only & 86.87 & -22.45 & [-25.15, -19.93] & template better \\
+weighted & 93.43 & -29.01 & [-46.35, -19.20] & template better \\
+svd & 101.94 & -37.52 & [-61.39, -20.74] & template better \\
+\hline \\
+Kabsch to fixed template & 64.42 & --- & --- & --- \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{rrrrl}
+\caption{Distal joint corruption, MotionAGFormer-XS.}\label{tab:appocclusion_xs}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endhead
+\hline
+\endfoot
+0 & 53.45 & 43.30 & 49.69 & template better \\
+20 & 53.45 & 44.59 & 50.32 & template better \\
+40 & 53.45 & 48.05 & 52.05 & not established \\
+80 & 53.45 & 59.83 & 58.59 & not established \\
+160 & 53.45 & 92.29 & 78.62 & anatomical better \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{rrrrl}
+\caption{Distal joint corruption, MotionBERT.}\label{tab:appocclusion_motionbert}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endhead
+\hline
+\endfoot
+0 & 44.13 & 40.96 & 47.05 & template better \\
+20 & 44.13 & 42.32 & 47.71 & not established \\
+40 & 44.13 & 45.98 & 49.50 & anatomical better \\
+80 & 44.13 & 58.17 & 56.33 & anatomical better \\
+160 & 44.13 & 91.39 & 76.80 & anatomical better \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{rrrrl}
+\caption{Left-side-only distal corruption, MotionAGFormer-XS.}\label{tab:appasymmetric_xs}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endhead
+\hline
+\endfoot
+0 & 53.45 & 43.30 & 49.69 & template better \\
+20 & 53.45 & 43.92 & 49.98 & template better \\
+40 & 53.45 & 45.72 & 50.94 & template better \\
+80 & 53.45 & 51.71 & 54.26 & not established \\
+160 & 53.45 & 70.68 & 66.04 & anatomical better \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{rrrrl}
+\caption{Left-side-only distal corruption, MotionBERT.}\label{tab:appasymmetric_motionbert}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endhead
+\hline
+\endfoot
+0 & 44.13 & 40.96 & 47.05 & template better \\
+20 & 44.13 & 41.61 & 47.35 & template better \\
+40 & 44.13 & 43.50 & 48.33 & not established \\
+80 & 44.13 & 49.74 & 51.81 & anatomical better \\
+160 & 44.13 & 69.43 & 64.01 & anatomical better \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{rrrrl}
+\caption{Anchor joint corruption, MotionAGFormer-XS.}\label{tab:appanchor_corruption_xs}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endhead
+\hline
+\endfoot
+0 & 53.45 & 43.30 & 49.69 & template better \\
+20 & 71.95 & 43.70 & 64.24 & template better \\
+40 & 103.91 & 44.87 & 93.43 & template better \\
+80 & 215.66 & 49.15 & 164.18 & template better \\
+160 & 337.87 & 63.22 & 304.95 & template better \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{rrrrl}
+\caption{Anchor joint corruption, MotionBERT.}\label{tab:appanchor_corruption_motionbert}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & \textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict} \\
+\hline
+\endhead
+\hline
+\endfoot
+0 & 44.13 & 40.96 & 47.05 & template better \\
+20 & 64.57 & 41.38 & 62.06 & template better \\
+40 & 99.40 & 42.61 & 91.96 & template better \\
+80 & 217.81 & 47.15 & 163.55 & template better \\
+160 & 339.86 & 61.63 & 305.42 & template better \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{rrrrr}
+\caption{Laterality at matched joint count, MotionAGFormer-XS. A negative difference means one-sided corruption damages the template alignment less.}\label{tab:applaterality_xs}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{One-sided} & \textbf{Balanced} & \textbf{Difference} & \textbf{CI95} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{One-sided} & \textbf{Balanced} & \textbf{Difference} & \textbf{CI95} \\
+\hline
+\endhead
+\hline
+\endfoot
+0 & 43.30 & 43.30 & +0.00 & [+0.00, +0.00] \\
+20 & 43.92 & 43.93 & -0.01 & [-0.03, +0.01] \\
+40 & 45.72 & 45.72 & -0.00 & [-0.05, +0.04] \\
+80 & 51.71 & 52.23 & -0.52 & [-0.66, -0.38] \\
+160 & 70.68 & 72.21 & -1.53 & [-1.86, -1.17] \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{rrrrr}
+\caption{Laterality at matched joint count, MotionBERT. A negative difference means one-sided corruption damages the template alignment less.}\label{tab:applaterality_motionbert}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{One-sided} & \textbf{Balanced} & \textbf{Difference} & \textbf{CI95} \\
+\hline
+\endfirsthead
+\multicolumn{5}{l}{\textit{(continued)}}\\
+\hline
+\textbf{$\sigma$ (mm)} & \textbf{One-sided} & \textbf{Balanced} & \textbf{Difference} & \textbf{CI95} \\
+\hline
+\endhead
+\hline
+\endfoot
+0 & 40.96 & 40.96 & +0.00 & [+0.00, +0.00] \\
+20 & 41.61 & 41.65 & -0.03 & [-0.06, -0.00] \\
+40 & 43.50 & 43.54 & -0.04 & [-0.10, +0.02] \\
+80 & 49.74 & 50.27 & -0.53 & [-0.68, -0.37] \\
+160 & 69.43 & 70.94 & -1.51 & [-1.82, -1.19] \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{rrr}
+\caption{Template proportion mismatch. Scaling the template's limbs across the full range moves the baseline by a fraction of a millimetre.}\label{tab:appmismatch}\\
+\hline
+\textbf{Limb factor} & \textbf{Anatomical (mm)} & \textbf{Template (mm)} \\
+\hline
+\endfirsthead
+\multicolumn{3}{l}{\textit{(continued)}}\\
+\hline
+\textbf{Limb factor} & \textbf{Anatomical (mm)} & \textbf{Template (mm)} \\
+\hline
+\endhead
+\hline
+\endfoot
+0.6 & 93.35 & 57.59 \\
+0.8 & 93.35 & 57.49 \\
+1.0 & 93.35 & 57.47 \\
+1.2 & 93.35 & 57.49 \\
+1.4 & 93.35 & 57.53 \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{llrr}
+\caption{Invariance of the frozen lifter to 2D keypoint displacement, through the real detection path.}\label{tab:appmisdetect}\\
+\hline
+\textbf{Camera} & \textbf{Condition} & \textbf{Mean $|\Delta|$ (mm)} & \textbf{Max (mm)} \\
+\hline
+\endfirsthead
+\multicolumn{4}{l}{\textit{(continued)}}\\
+\hline
+\textbf{Camera} & \textbf{Condition} & \textbf{Mean $|\Delta|$ (mm)} & \textbf{Max (mm)} \\
+\hline
+\endhead
+\hline
+\endfoot
+S1 Seq1 cam0 & core f0.03 & 0.15 & 0.54 \\
+S1 Seq1 cam0 & core f0.10 & 0.26 & 0.73 \\
+S1 Seq1 cam0 & core f0.15 & 0.32 & 0.77 \\
+S1 Seq1 cam0 & distal f0.03 & 0.06 & 0.34 \\
+S1 Seq1 cam0 & distal f0.10 & 0.15 & 0.46 \\
+S1 Seq1 cam0 & distal f0.15 & 0.21 & 0.56 \\
+S1 Seq1 cam1 & core f0.03 & 0.08 & 0.16 \\
+S1 Seq1 cam1 & core f0.10 & 0.23 & 0.41 \\
+S1 Seq1 cam1 & core f0.15 & 0.33 & 0.57 \\
+S1 Seq1 cam1 & distal f0.03 & 0.06 & 0.23 \\
+S1 Seq1 cam1 & distal f0.10 & 0.18 & 0.46 \\
+S1 Seq1 cam1 & distal f0.15 & 0.25 & 0.54 \\
+\end{longtable}
+}
+\end{center}
+
+\vspace{0.6cm}
+
+\begin{center}
+{\fontsize{10}{12}\selectfont
+\begin{longtable}{lrlrrr}
+\caption{The confidence-gated routing rule, evaluated under a simulated gate. Reported as exploratory.}\label{tab:appselection}\\
+\hline
+\textbf{Regime} & \textbf{$\sigma$} & \textbf{Routes to} & \textbf{Anatomical} & \textbf{Template} & \textbf{Routed} \\
+\hline
+\endfirsthead
+\multicolumn{6}{l}{\textit{(continued)}}\\
+\hline
+\textbf{Regime} & \textbf{$\sigma$} & \textbf{Routes to} & \textbf{Anatomical} & \textbf{Template} & \textbf{Routed} \\
+\hline
+\endhead
+\hline
+\endfoot
+distal & 0 & template & 53.45 & 43.30 & 43.30 \\
+distal & 20 & template & 53.45 & 44.59 & 44.59 \\
+distal & 40 & anatomical & 53.45 & 48.05 & 53.45 \\
+distal & 80 & anatomical & 53.45 & 59.83 & 53.45 \\
+distal & 160 & anatomical & 53.45 & 92.29 & 53.45 \\
+anchor & 0 & template & 53.45 & 43.30 & 43.30 \\
+anchor & 20 & template & 71.95 & 43.70 & 43.70 \\
+anchor & 40 & template & 103.91 & 44.87 & 44.87 \\
+anchor & 80 & template & 215.66 & 49.15 & 49.15 \\
+anchor & 160 & template & 337.87 & 63.22 & 63.22 \\
+\end{longtable}
+}
+\end{center}

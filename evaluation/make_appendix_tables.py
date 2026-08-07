@@ -38,6 +38,129 @@ def longtable(caption, label, spec, header, rows, note=None):
     return "\n".join(out)
 
 
+def _opt(rel):
+    """Load an artifact, or None if that experiment has not been run here."""
+    try:
+        return load(rel)
+    except (IOError, OSError, ValueError):
+        return None
+
+
+def post_freeze_tables():
+    """
+    Tables for the eight experiments run after the report was frozen.
+
+    Each is emitted only if its artifact exists, so a fresh clone that has not
+    run them still produces a valid appendix.
+    """
+    out = []
+
+    for tag, lab in (("", "MotionAGFormer-XS"), ("_motionbert", "MotionBERT")):
+        bf = _opt("bestframe/bestframe%s.json" % tag)
+        if not bf:
+            continue
+        rows = []
+        for v, d in bf["scored_9"]["variants"].items():
+            rows.append("%s & %.2f & %+.2f & [%+.2f, %+.2f] & %s"
+                        % (v.replace("_", " "), d["mean_mm"],
+                           d["mean_gain_vs_template_mm"], d["gain_ci95"][0],
+                           d["gain_ci95"][1], d["verdict"].replace("_", " ")))
+        rows.append(r"\hline")
+        rows.append("Kabsch to fixed template & %.2f & --- & --- & ---"
+                    % bf["scored_9"]["mean_template_mm"])
+        out.append(longtable(
+            "Every frame construction against the template baseline, %s, "
+            "scored on the nine joints no construction builds from." % lab,
+            "tab:appbestframe%s" % (tag or "_xs"), "lrrrl",
+            r"\textbf{Construction} & \textbf{mm} & \textbf{Gain} & "
+            r"\textbf{CI95} & \textbf{Verdict}", rows))
+
+    for name, key, cols in (
+            ("occlusion", "Distal joint corruption", ("mean_anatomical_mm",
+             "mean_template17_mm", "mean_template4_mm")),
+            ("asymmetric", "Left-side-only distal corruption",
+             ("mean_anatomical_mm", "mean_template17_mm", "mean_template4_mm")),
+            ("anchor_corruption", "Anchor joint corruption",
+             ("mean_anatomical_mm", "mean_template17_mm", "mean_template4_mm"))):
+        for tag, lab in (("", "MotionAGFormer-XS"), ("_motionbert", "MotionBERT")):
+            d = _opt("%s/%s%s.json" % (name, name, tag))
+            if not d:
+                continue
+            rows = []
+            for l in d["levels"]:
+                rows.append("%.0f & %.2f & %.2f & %.2f & %s"
+                            % (l["sigma_mm"],
+                               l[cols[0]], l[cols[1]], l[cols[2]],
+                               l["verdict_vs_template17"].replace("_", " ")))
+            out.append(longtable(
+                "%s, %s." % (key, lab), "tab:app%s%s" % (name, tag or "_xs"),
+                "rrrrl",
+                r"\textbf{$\sigma$ (mm)} & \textbf{Anatomical} & "
+                r"\textbf{Template-17} & \textbf{Template-4} & \textbf{Verdict}",
+                rows))
+
+    for tag, lab in (("", "MotionAGFormer-XS"), ("_motionbert", "MotionBERT")):
+        d = _opt("laterality/laterality%s.json" % tag)
+        if not d:
+            continue
+        rows = []
+        for l in d["levels"]:
+            b = l["onesided_minus_balanced"]
+            rows.append("%.0f & %.2f & %.2f & %+.2f & [%+.2f, %+.2f]"
+                        % (l["sigma_mm"], l["mean_one_sided_mm"],
+                           l["mean_balanced_mm"], b["mean"], b["ci95"][0],
+                           b["ci95"][1]))
+        out.append(longtable(
+            "Laterality at matched joint count, %s. A negative difference means "
+            "one-sided corruption damages the template alignment less." % lab,
+            "tab:applaterality%s" % (tag or "_xs"), "rrrrr",
+            r"\textbf{$\sigma$ (mm)} & \textbf{One-sided} & \textbf{Balanced} & "
+            r"\textbf{Difference} & \textbf{CI95}", rows))
+
+    mm = _opt("mismatch/mismatch.json")
+    if mm:
+        rows = ["%.1f & %.2f & %.2f"
+                % (l["limb_factor"], l["mean_anatomical_mm"],
+                   l["mean_template17_mm"]) for l in mm["levels"]]
+        out.append(longtable(
+            "Template proportion mismatch. Scaling the template's limbs across "
+            "the full range moves the baseline by a fraction of a millimetre.",
+            "tab:appmismatch", "rrr",
+            r"\textbf{Limb factor} & \textbf{Anatomical (mm)} & "
+            r"\textbf{Template (mm)}", rows))
+
+    md = _opt("misdetect/misdetect.json")
+    if md:
+        rows = []
+        for cam, c in sorted(md["per_camera"].items()):
+            for cond, v in sorted(c["conditions"].items()):
+                rows.append("%s & %s & %.2f & %.2f"
+                            % (cam.replace("_", " "), cond.replace("_", " "),
+                               v["mean_mm"], v["max_mm"]))
+        out.append(longtable(
+            "Invariance of the frozen lifter to 2D keypoint displacement, "
+            "through the real detection path.",
+            "tab:appmisdetect", "llrr",
+            r"\textbf{Camera} & \textbf{Condition} & \textbf{Mean $|\Delta|$ "
+            r"(mm)} & \textbf{Max (mm)}", rows))
+
+    sl = _opt("selection/selection.json")
+    if sl:
+        rows = ["%s & %.0f & %s & %.2f & %.2f & %.2f"
+                % (c["regime"], c["sigma_mm"],
+                   "anatomical" if c["route_anatomical"] else "template",
+                   c["mean_anatomical_mm"], c["mean_template17_mm"],
+                   c["mean_routed_mm"]) for c in sl["cells"]]
+        out.append(longtable(
+            "The confidence-gated routing rule, evaluated under a simulated "
+            "gate. Reported as exploratory.",
+            "tab:appselection", "lrlrrr",
+            r"\textbf{Regime} & \textbf{$\sigma$} & \textbf{Routes to} & "
+            r"\textbf{Anatomical} & \textbf{Template} & \textbf{Routed}", rows))
+
+    return out
+
+
 def main():
     parts = []
 
@@ -174,6 +297,8 @@ def main():
         rows,
         note="All five pass criteria are met on MPI-INF-3DHP and none on "
              "Human3.6M. See Section \\ref{sec:h36m}."))
+
+    parts += post_freeze_tables()
 
     with open(OUT, "w") as f:
         f.write("\n\n\\vspace{0.6cm}\n\n".join(parts) + "\n")
