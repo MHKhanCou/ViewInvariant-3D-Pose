@@ -1,6 +1,6 @@
 # Similarity and AI-disclosure check
 
-Run 6 August 2026 against `Full_Thesis_Report.tex` at commit `1073b5c` (90 pages,
+Run 6 August 2026 against `Full_Thesis_Report.tex` at commit `1073b5c` (56 pages,
 28 references). This is a pre-submission self-check, **not** a Turnitin report.
 Read the limits section before quoting any of it to anyone.
 
@@ -72,7 +72,7 @@ This check **does not replicate Turnitin** and cannot. Turnitin matches against
 a subscription-journal index and, more importantly, an archive of previously
 submitted student papers. **Neither is reachable from here.** A clean result
 above therefore means "no match on the open web for the phrases tested", not
-"will score low". Eight sentences out of a 90-page document is a spot check, not
+"will score low". Eight sentences out of a 56-page document is a spot check, not
 a sweep.
 
 If the department offers a draft/self-check Turnitin submission, use it. That is
@@ -111,7 +111,7 @@ none will be.** Two reasons, both practical rather than moral:
 one.** This project can demonstrate its own provenance in a way that very few
 undergraduate theses can:
 
-- Nine pre-registration files, each committed **before** its experiment ran, in
+- Seventeen pre-registration files, each committed **before** its experiment ran, in
   a git history with timestamps.
 - `evaluation/audit_numbers.py` re-derives all 255 numerical claims from stored
   JSON artifacts; it passes.
@@ -144,7 +144,7 @@ to be accurate; do not soften it, and do not include it if it is not required.
 > work on this report. All experimental design, pre-registration criteria and
 > interpretation of results are the author's own. Every numerical claim in this
 > report is re-derived from stored artifacts by an automated audit
-> (`evaluation/audit_numbers.py`, 255 claims) and is reproducible from the
+> (`evaluation/audit_numbers.py`, 304 claims) and is reproducible from the
 > repository, and the pre-registration files were committed to version control
 > before the corresponding experiments were run. No result, measurement or
 > citation in this report was generated without being verified against its

@@ -62,9 +62,10 @@ Five things, in ascending order of how hard they are to fake.
 3. **Two backbones.** MotionAGFormer-XS and MotionBERT, 72.2 % and 75.8 %. A
    result on one network is a property of that network.
 4. **Pre-registration.** Criteria committed to git *before* each run, timestamps
-   visible in the log. Nine in the report, and a tenth run after the freeze.
-   Six failed their own criteria; one returned a competing method as better.
-5. **An automated audit of 255 numerical claims** against the stored result
+   visible in the log. Seventeen experiments in sixteen documents, one of which
+   covers two. More than half failed their own criteria, one returned a
+   competing method as better, and a script verifies the ordering on all sixteen.
+5. **An automated audit of 304 numerical claims** against the stored result
    files, plus 76 unit tests. Both pass. If any number in the report drifts from
    its artifact, the audit fails.
 
@@ -89,7 +90,7 @@ canonicalization.
 that dataset. I learned this the expensive way. A bone-length error signal
 reached ρ = +0.492 on MPI-INF-3DHP and looked like a genuine finding; on
 Human3.6M it fell to **ρ = +0.098** and failed every criterion. I retracted it in
-§4.9. Had I used one dataset, that retraction would instead be a claim in my
+the report. Had I used one dataset, that retraction would instead be a claim in my
 abstract.
 
 ## 7. How did you approach it from the beginning?
@@ -243,9 +244,9 @@ of exactly my family, **and beats it**. I cite that rather than hide it.
 
 ### "How do I know these numbers are real?"
 
-> Open the git log, Sir. Nine pre-registrations with timestamps preceding their
+> Open the git log, Sir. Seventeen pre-registered experiments with timestamps preceding their
 > own results, five of which failed. Nobody fabricates failures. Then run
-> `audit_numbers.py`: it recomputes all 255 claims from the stored result files
+> `audit_numbers.py`: it recomputes all 304 claims from the stored result files
 > and fails if a single one has drifted.
 
 ### "What is the single biggest weakness?"

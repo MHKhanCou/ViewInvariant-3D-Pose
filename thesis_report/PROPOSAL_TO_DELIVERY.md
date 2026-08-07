@@ -126,7 +126,7 @@ is entitled to ask what you added. **The answer is checkable in one command**
 | The published evaluation script | `tests/` — 10 files, 1,245 lines, 76 tests |
 | | `presentation/` — figure generation, 4 files, 1,049 lines |
 | | `demo_live/` + `app.py` — the working demonstrator, 1,510 lines |
-| | `thesis_artifacts/` — 152 files of results and nine pre-registrations |
+| | `thesis_artifacts/` — 152 files of results and seventeen pre-registered experiments |
 
 **Roughly 15,500 lines across 75 files are yours.** The backbone is used
 deliberately frozen — never fine-tuned, never modified — which is the whole point
@@ -145,7 +145,7 @@ of the method and is itself a claim the report makes.
 | 3 | Canonicalization module, ablations | Done, and became the core |
 | 4 | Bone-length loss, tune λ | **Diverged.** Bone length was tested as a signal and retracted; the time went to pre-registered experiments instead |
 | 5 | Full experiments, cross-view tests, error analysis | Done, on two datasets and two backbones |
-| 6 | Final report, presentation, submit | Done — 90 pages, 255 audited claims |
+| 6 | Final report, presentation, submit | Done — 56 pages, 255 audited claims |
 
 ## 8. How to open, if he asks about the proposal
 

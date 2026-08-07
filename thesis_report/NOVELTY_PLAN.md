@@ -151,11 +151,11 @@ detector confidence.)
   pre-registration already burned that criterion; the routing rule is the
   honest version of the same idea.
 - **Do not add any more experiments.** The map is complete for this defence
-  (fourteen pre-registrations, three post-freeze and established); every
+  (seventeen pre-registered experiments, three post-freeze and established); every
   additional run is another number to defend. Experiment 14 closed the 2D
   channel — there is nothing left to measure tonight.
 - **Do not tune the routing threshold** to fix the 5.4 mm transition cell. That
   is tuning on the test split — the exact failure mode the pre-registrations
   exist to prevent.
-- **Do not touch the frozen report's 258 claims.** The new experiments are
+- **Do not touch the frozen report's 304 claims.** The new experiments are
   recorded separately and cited by the minimal report only.

@@ -65,3 +65,5 @@ None required. The pre-registration fixed in advance that readings 2 and 3
 change no existing sentence. Both this and the tenth were run after the report
 was frozen; the report describes nine pre-registrations and 255 audited claims,
 and both remain accurate.
+
+*Updated 7 Aug 2026: the report has since been extended to report this experiment, and the audit now stands at 304 claims across seventeen pre-registered experiments. The statement above describes the state at the time of the run.*

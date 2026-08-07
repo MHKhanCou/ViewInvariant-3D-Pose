@@ -12,12 +12,12 @@ Scored on the nine joints that are a constructor for no variant.
 
 | variant | XS mm | gain vs template | MB mm | gain vs template |
 |---|---|---|---|---|
-| `both` (published default) | 115.01 | −49.17 | — | — |
-| `hip_only` | 114.46 | −48.62 | — | — |
-| `shoulder_only` | 108.16 | −42.32 | — | — |
-| `weighted` | 109.67 | −43.83 | — | — |
-| **`svd`** | **107.33** | **−41.49** | — | — |
-| template Kabsch | **65.84** | — | — | — |
+| `both` (published default) | 115.01 | −49.17 | 91.74 | −27.32 |
+| `hip_only` | 114.46 | −48.62 | 91.01 | −26.59 |
+| `shoulder_only` | 108.16 | −42.32 | **86.87** | −22.45 |
+| `weighted` | 109.67 | −43.83 | 93.43 | −29.01 |
+| **`svd`** | **107.33** | **−41.49** | 101.94 | −37.52 |
+| template Kabsch | **65.84** | — | **64.42** | — |
 
 All-seventeen joints, where the published figures live:
 
@@ -34,7 +34,8 @@ zero.**
 **What it does establish, and it is worth having.** The published comparison used
 `both`, and this report's own confirmed level-one result says that is not the
 best construction. Running the best one closes the question: the best variant
-is **7.68 mm better than the default on XS** and 2.64 mm on MB, and the gap to
+is **7.68 mm better than the default on XS** and 4.87 mm on MB at the nine-joint
+scoring set (2.64 mm over all seventeen), and the gap to
 Kabsch narrows from 49.17 to 41.49 mm (XS, nine joints) and from 22.28 to 18.33
 (XS, all seventeen). **The conclusion survives the correction, with a smaller
 margin than the report currently states.**
@@ -86,17 +87,18 @@ here against eight there — not whether the corruption is one-sided.**
 
 **This comparison is confounded and the confound is fatal to the inference.**
 Halving the corrupted set halves the displaced mass, so laterality and joint
-count move together and nothing here isolates asymmetry. A clean test would
-compare four left-side joints against four joints split two-and-two, which was
-not pre-registered and is not being run now to avoid fishing after the fact.
-What can be said is narrow and negative: **corrupting one side rather than both
-produced no earlier crossover, so the asymmetry hypothesis gains no support
-here.**
+count move together and nothing here isolates asymmetry. A clean test compares four left-side joints against four joints split
+two-and-two. **That test was subsequently pre-registered and run as the
+seventeenth experiment** (`thesis_artifacts/laterality/`), and it refutes the
+hypothesis outright: at matched joint count, one-sided corruption damages the
+template alignment *less*, by 0.52 mm at σ=80 and 1.53 mm at σ=160, on both
+backbones. What can be said from this experiment alone is narrower: corrupting
+one side rather than both produced no earlier crossover.
 
 That hypothesis was mine, generated from the mechanism the tenth and eleventh
 experiments implied, and a 104-agent literature sweep had already found no
-documented regime of the kind. It should be recorded as the sixth failed search
-in this family and not revived.
+documented regime of the kind. It is recorded as the sixth failed search in this
+family, and the seventeenth experiment closed it.
 
 ---
 
@@ -113,5 +115,5 @@ tested every frame construction the report knows how to build.** That is a
 substantially stronger statement of the limitation than the report currently
 makes, and it is the honest direction for it to move.
 
-Nothing here changes an existing number. Sixteen pre-registrations; the tally of
+Nothing here changes an existing number. Seventeen pre-registered experiments; the tally of
 failures grows by two.

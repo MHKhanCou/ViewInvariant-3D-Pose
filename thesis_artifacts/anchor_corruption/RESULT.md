@@ -55,3 +55,5 @@ routing rule in `thesis_artifacts/selection/RESULT.md` exploits exactly this.
 
 None — the report's 255 audited claims and nine pre-registrations are
 unchanged. This is the twelfth pre-registration overall, run after the freeze.
+
+*Updated 7 Aug 2026: the report has since been extended to report this experiment, and the audit now stands at 304 claims across seventeen pre-registered experiments. The statement above describes the state at the time of the run.*

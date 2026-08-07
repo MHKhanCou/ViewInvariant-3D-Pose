@@ -137,7 +137,7 @@ Geometric Canonicalization Framework for Cross-View Comparability of Frozen
 Monocular 3D Pose Predictions"* costs nothing and I would prefer that to
 defending it at the viva. Your call, and I am glad either way.
 
-The report is 35 pages, with a 92-page technical version attached as a supplement in case you want the full evidence. Seventeen experiments were pre-registered with their criteria
+The report is 56 pages, of which 33 are the thesis proper and the rest appendices and references, with a 97-page technical version attached as a supplement in case you want the full evidence. Seventeen experiments were pre-registered with their criteria
 committed to version history before each run; **more than half failed their own
 criteria, and one returned a competing method as the better one**. Every
 reported number is recomputed from stored result files by an automated audit
@@ -165,12 +165,12 @@ Session 2020–21, Department of Computer Science and Engineering
 
 ---
 
-**Attach:** `Thesis_12108004.pdf` (the 35-page submission), `WORKFLOW.md`, and
-`fig_realview.png`. Optionally `Thesis_12108004_supplement.pdf`, the 92-page
+**Attach:** `Thesis_12108004.pdf` (the 56-page submission), `WORKFLOW.md`, and
+`fig_realview.png`. Optionally `Thesis_12108004_supplement.pdf`, the 97-page
 technical version, if you want him to have the complete evidence.
 
 **Add one question before sending:** whether the department sets a minimum page
-count for the report. Thirty-five clears most rules, but it is his to confirm
+count for the report. Fifty-six clears most rules, but it is his to confirm
 and it costs one sentence to ask.
 
 ---

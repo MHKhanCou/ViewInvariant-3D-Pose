@@ -136,7 +136,7 @@ Most undergraduate theses cannot say any of this:
   multi-scale figure found to be circular.
 
 If anyone questions whether the work is yours, this is the answer: open the git
-log. Nobody fakes nine pre-registrations with timestamps preceding their results.
+log. Nobody fakes seventeen pre-registered experiments with timestamps preceding their results.
 
 ---
 

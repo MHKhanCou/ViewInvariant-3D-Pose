@@ -96,7 +96,7 @@ report §5.2–5.3 + Appendix A of the minimal report, and collected in
 - `thesis_artifacts/anchor_corruption/`, `thesis_artifacts/selection/`,
   `thesis_artifacts/misdetect/` — PREREGISTRATION.md + RESULT.md + JSON each
 - `thesis_report/Minimal_Thesis_Report.tex` (+`.pdf`) — **the submission doc,
-  28 pages, compiles clean** (0 errors/overfull/underfull/undefined)
+  56 pages, compiles clean** (0 errors/overfull/underfull/undefined)
 - `thesis_report/SIR_CONCERNS.md` — supervisor concerns + comparison answers
 - `thesis_report/NOVELTY_PLAN.md` — the 2-night plan, claims + anti-claims
 - `REPO_MAP.md` — updated with experiments 12–14
@@ -134,7 +134,7 @@ Windows paths: venv is `MotionAGFormer/venv/Scripts/python.exe`; MPI data at
    PREREGISTRATION.md + commit, THEN run, THEN commit the result. Never the
    reverse — the commit ordering is defense evidence.
 3. **Do NOT** retrain, tune the routing threshold, add more experiments, or
-   touch the frozen report's 258 claims. The map is complete; every extra run
+   touch the frozen report's 304 claims. The map is complete; every extra run
    is another number to defend.
 4. **Honest framing is the thesis.** Never claim the frame wins — claim the
    *combination* is never worse. Keep every "honest boundary" paragraph.

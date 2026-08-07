@@ -3,7 +3,7 @@
 Defense: 9 August 2026. Read this the night before and the morning of.
 
 Every number here is verified by `python -m evaluation.audit_numbers`
-(255 claims). If a question asks for a figure not in this document, say you will
+(304 claims). If a question asks for a figure not in this document, say you will
 check it rather than guess — you have never once quoted a number you could not
 trace, and that is worth more than one recalled digit.
 
@@ -80,7 +80,7 @@ trace, and that is worth more than one recalled digit.
 >    seventeen joints makes their errors dependent.
 >
 > Then the apparatus: 255 numerical claims recomputed from stored artifacts by an
-> automated audit, 76 tests, nine pre-registrations timestamped ahead of their
+> automated audit, 76 tests, seventeen pre-registered experiments timestamped ahead of their
 > results, and two claims withdrawn during the final week because they did not
 > survive a check I should have run earlier.
 
@@ -568,7 +568,7 @@ coherent.
 | Backbone reproduction | 45.149 mm vs 45.1 published (their own script gives 45.149) |
 | Added trainable parameters | **0** |
 | Canonicalization cost | 402 FLOPs/frame, 0.0005% of backbone |
-| Audit / tests | 255 claims, 76 tests |
+| Audit / tests | 304 claims, 76 tests |
 
 **Two datasets: 209 camera pairs total. Four subjects.**
 

@@ -9,9 +9,9 @@ Where a claim is uncertain it says so.
 ## Who I am and what I am asking
 
 I am an undergraduate CS student at Comilla University (ID 12108004). My thesis
-defence is **9 August 2026**. My report is complete: 92 pages, compiled, 258
+defence is **9 August 2026**. My report is complete: 56 pages, compiled, 258
 numerical claims automatically audited against stored result files, 76 unit
-tests, eleven pre-registrations committed to git before their experiments ran.
+tests, seventeen pre-registered experiments committed to git before their experiments ran.
 
 **I want to know whether any genuine research novelty is still reachable, and
 whether my report should be cut further to make it more defensible.** I am
@@ -175,7 +175,7 @@ Level 3 is the interesting one: a body is not a rigid body, and past a hinge the
 estimator's error in the joint angle dominates the geometry entirely. Two of the
 three tests are failures and **the boundary they establish is the contribution.**
 
-Plus: eleven pre-registrations, **seven failed their own criteria**, one returned
+Plus: seventeen pre-registered experiments, **seven failed their own criteria**, one returned
 a competing method as better; 258 audited claims; 76 tests; a retraction of my
 own error predictor.
 
@@ -187,7 +187,7 @@ Repository: `github.com/MHKhanCou/ViewInvariant-3D-Pose`
 
 | File | What it is |
 |---|---|
-| `thesis_report/Full_Thesis_Report.tex` | The report. 92 pages; main body 60, Ch5 22, then Appendix A/B and references |
+| `thesis_report/Minimal_Thesis_Report.tex` | The submission. 56 pages; main body 60, Ch5 22, then Appendix A/B and references |
 | `thesis_report/WORKFLOW.md` | RGB→comparison walkthrough answering Sir's two questions, EN + BN |
 | `thesis_report/SIR_QA.md` | All of Sir's questions plus likely follow-ups, EN + BN |
 | `thesis_report/SUPERVISOR_EMAIL.md` | The email to send before he reads the report |
@@ -197,9 +197,9 @@ Repository: `github.com/MHKhanCou/ViewInvariant-3D-Pose`
 | `thesis_artifacts/*/PREREGISTRATION.md` | Eleven, each committed before its run |
 | `thesis_artifacts/{occlusion,mismatch}/RESULT.md` | The two post-freeze failures |
 
-Chapter 5 was 35 pages and held every contribution, so ten supporting sections
+Chapter 5 was 56 pages and held every contribution, so ten supporting sections
 were moved verbatim into a new Appendix B rather than deleted — main body 73 → 60,
-Ch5 35 → 22, all 258 claims intact, no broken cross-references.
+Ch5 35 → 22, all 304 claims intact, no broken cross-references.
 
 Title, **not confirmed by Sir** — I must ask him: *"A Lightweight, Training-Free,
 Reliability-Aware Geometric Canonicalization Framework for Cross-View

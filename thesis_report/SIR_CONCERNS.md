@@ -59,14 +59,14 @@ Kabsch baseline."*
 
 ---
 
-## Concern 2 — "90 pages for an undergraduate report, where is the novelty?"
+## Concern 2 — "56 pages for an undergraduate report, where is the novelty?"
 
 Two separate things are being objected to, and they need two answers.
 
 **The length.** The full report is being reduced. Chapter 5 is already cut to
 ~16 pages; the companion **Minimal Thesis Report** (`Minimal_Thesis_Report.tex`,
 ~20 pages) is the submission document — full report structure, every headline
-number, every honest negative result, none of the scaffolding. The 90-page
+number, every honest negative result, none of the scaffolding. The 56-page
 document becomes the extended version, kept for the record.
 
 **The novelty.** Say the honest thing, which is now stronger than it was two
@@ -101,8 +101,8 @@ days ago:
    and `NOVELTY_PLAN.md` in this directory.
 
 **If he asks "is that enough novelty for an undergraduate thesis?"** — yes, and
-it is rarer than a manufactured method: thirteen pre-registrations in version
-history, seven failed, an automated audit of 258 claims, 76 tests. The
+it is rarer than a manufactured method: seventeen pre-registered experiments in version
+history, seven failed, an automated audit of 304 claims, 76 tests. The
 contribution is the boundary map plus the routing rule, not a claim that the
 frame wins.
 
@@ -138,9 +138,9 @@ Cross-View Comparability of Frozen Monocular 3D Pose Predictions.*
 
 ## Concern 5 — "Are you sure these numbers are real?"
 
-> "Open the git log, Sir. Thirteen pre-registrations, each criterion committed
+> "Open the git log, Sir. Seventeen pre-registered experiments, each criterion committed
 > before its experiment ran, seven failed. Nobody fabricates failures. Then run
-> `audit_numbers.py` — it recomputes all 258 claims from stored files and fails
+> `audit_numbers.py` — it recomputes all 304 claims from stored files and fails
 > if one drifts."
 
 ---
