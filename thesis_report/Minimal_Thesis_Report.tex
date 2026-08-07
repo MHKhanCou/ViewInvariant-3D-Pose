@@ -2,7 +2,7 @@
 %  Minimal_Thesis_Report.tex
 %  The submission document (~20 pages). Every number traces to a stored
 %  artifact in thesis_artifacts/ and is checked by evaluation.audit_numbers
-%  (the 282-claim audit covers the full report; the tables here use the
+%  (the 292-claim audit covers the full report; the tables here use the
 %  same artifact values). Compile with pdfLaTeX, run TWICE.
 %
 %  This is the condensed companion to Full_Thesis_Report.tex. Same
@@ -200,7 +200,7 @@ The geometry this project builds on is not ours: the frame is TRIAD \cite{triad}
 \item \textbf{[Empirical finding]} \textbf{The falsified reliability score gates canonicalization quality.} Falsified as an accuracy predictor along five independent axes, the same score triages the quantity its own specification names, cutting mean cross-view distance by 22 percent at thirty percent abstention and surviving a confound control on both backbones. Reported as exploratory throughout.
 \item \textbf{[Negative result]} \textbf{Retraction of our own error predictor.} A temporal bone-length signal reaching $\rho = +0.492$ on one dataset falls to $+0.098$ on the other and fails every criterion; we retract the general claim.
 \item \textbf{[Engineering]} \textbf{Calibration-free multi-view fusion in the shared frame}, with a qualification that matters more than the headline: with few views the choice of statistic decides whether fusion helps, and across actions the mean gain is negative.
-\item \textbf{[Systems]} \textbf{An evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added, 402 floating-point operations per frame, 282 numerical claims checked against stored artifacts by an automated audit, 76 tests, and fourteen pre-registrations committed to version history before the experiments they governed, several of which failed.
+\item \textbf{[Systems]} \textbf{An evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added, 402 floating-point operations per frame, 292 numerical claims checked against stored artifacts by an automated audit, 76 tests, and fourteen pre-registrations committed to version history before the experiments they governed, several of which failed.
 \end{itemize}
 
 \section{Report Organization}
@@ -347,7 +347,7 @@ Frames within a camera stream are not independent, so intervals come from a clus
 
 \section{Pre-registration and the Audit}
 
-Every experiment in this report was pre-registered: its criterion and all plausible readings were written down and committed to version control \emph{before} the experiment ran. Nine such pre-registrations govern Chapter 5, several of which failed their own criteria; five more were run after the freeze (Section 5.8), three of which are reported there. Every reported number is recomputed from stored result files by an automated audit of 282 claims, alongside 76 unit tests; both pass. No number in the report was typed by hand.
+Every experiment in this report was pre-registered: its criterion and all plausible readings were written down and committed to version control \emph{before} the experiment ran. Nine such pre-registrations govern Chapter 5, several of which failed their own criteria; five more were run after the freeze (Section 5.8), three of which are reported there. Every reported number is recomputed from stored result files by an automated audit of 292 claims, alongside 76 unit tests; both pass. No number in the report was typed by hand.
 
 % ========================== CHAPTER 5 ================================
 \chapter{EXPERIMENTAL RESULTS}
@@ -499,7 +499,7 @@ frames with confidence $< 0.9$ & 100\% & 100\% \\
 
 Four weaknesses are stated rather than defended away. First, the core mechanism is a coordinate transform that predates this thesis by decades; the defence is the requirement profile and the boundary measurement, not the geometry. Second, the headline metric measures agreement, not correctness: two predictions wrong in the same way agree perfectly, and the oracle floor and the retained correlation with ground-truth error bound but do not eliminate this. Third, no downstream task succeeds---the retrieval experiment is negative---so the thesis improves a metric and never shows the metric buys anything; this is the honest ceiling on the work's significance. Fourth, two datasets, both laboratory multi-camera rigs, and two backbones is n = 2.
 
-Against that, the negative results are real science: more than half the pre-registered experiments failed their own criteria, the failures are reported in the same detail as the successes, one competing method is reported as beating the proposed method, and 282 numbers trace to stored artifacts. That discipline is the thesis's actual contribution to a reader, and it is rarer at this level than any single result would be.
+Against that, the negative results are real science: more than half the pre-registered experiments failed their own criteria, the failures are reported in the same detail as the successes, one competing method is reported as beating the proposed method, and 292 numbers trace to stored artifacts. That discipline is the thesis's actual contribution to a reader, and it is rarer at this level than any single result would be.
 
 The post-freeze addendum sharpens the positioning without settling it. The two alignments fail on disjoint joint supports---a structural consequence of the frame reading four joints and Kabsch fitting seventeen, measured on both backbones, and the one new fact here that is not conditional on anything. What it does not yet buy is a method: the rule that would exploit it needs to know which joints are corrupted, and the same addendum shows that this pipeline does not supply that knowledge. The frame would be the right instrument when the core is reliable and the periphery is not; whether that situation is detectable, or arises at all outside injected noise, is unestablished.
 

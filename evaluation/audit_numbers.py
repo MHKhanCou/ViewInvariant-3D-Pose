@@ -904,6 +904,34 @@ def main():
                              - min(l["mean_anatomical_mm"] for l in asy["levels"]),
                              src, tol=0.01, unit="mm"))
 
+    # ---------- experiment 17: laterality at matched joint count -------------
+    for tag, lab, exp160, exp80 in (("", "XS", -1.53, -0.52),
+                                    ("_motionbert", "MB", -1.51, -0.53)):
+        lp = os.path.join(ART, "laterality", "laterality%s.json" % tag)
+        if not os.path.exists(lp):
+            continue
+        with io.open(lp, encoding="utf-8") as fh:
+            la = json.load(fh)
+        lv = {round(l["sigma_mm"], 2): l for l in la["levels"]}
+        src = "laterality/laterality%s.json" % tag
+        results.append(check("laterality %s: one-sided minus balanced at 160 (mm)"
+                             % lab, exp160,
+                             lv[160.0]["onesided_minus_balanced"]["mean"], src,
+                             tol=0.02, unit="mm"))
+        results.append(check("  %s at sigma=80 (mm)" % lab, exp80,
+                             lv[80.0]["onesided_minus_balanced"]["mean"], src,
+                             tol=0.02, unit="mm"))
+        results.append(check("  %s sign is negative, refuting the hypothesis" % lab,
+                             1.0,
+                             float(lv[160.0]["onesided_minus_balanced"]["ci95"][1] < 0),
+                             src, tol=0))
+        results.append(check("  %s arms identical at sigma=0" % lab, 1.0,
+                             float(la["verdict"]["sanity_identical_at_zero"]),
+                             src, tol=0))
+        results.append(check("  %s anatomical flat across severities" % lab, 1.0,
+                             float(la["verdict"]["sanity_anatomical_flat"]),
+                             src, tol=0))
+
     # ---------- the report's own self-referential counts ---------------------
     # These have gone stale four times: 131, 167, 180, 192, 216, 230, 240, 248.
     # They are the one class of number outside the audit, which is exactly why

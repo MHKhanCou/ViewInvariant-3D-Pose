@@ -1,0 +1,117 @@
+{
+ "verdict": {
+  "sanity_identical_at_zero": true,
+  "sanity_anatomical_flat": true,
+  "sigmas_where_onesided_worse": [],
+  "reading": "3: balanced damages Kabsch more; the mechanism is backwards"
+ },
+ "levels": [
+  {
+   "sigma_mm": 0.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 53.44914895701612,
+   "mean_one_sided_mm": 43.30261667433071,
+   "mean_balanced_mm": 43.30261667433071,
+   "onesided_minus_balanced": {
+    "mean": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict": "no_difference"
+  },
+  {
+   "sigma_mm": 20.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 53.44914895701612,
+   "mean_one_sided_mm": 43.91792940746934,
+   "mean_balanced_mm": 43.928181600206166,
+   "onesided_minus_balanced": {
+    "mean": -0.010252192736831015,
+    "ci95": [
+     -0.03460844848637946,
+     0.01459594992781939
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict": "no_difference"
+  },
+  {
+   "sigma_mm": 40.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 53.44914895701612,
+   "mean_one_sided_mm": 45.72035426653278,
+   "mean_balanced_mm": 45.72318853823404,
+   "onesided_minus_balanced": {
+    "mean": -0.0028342717012659136,
+    "ci95": [
+     -0.04613999835863244,
+     0.041585584807824476
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict": "no_difference"
+  },
+  {
+   "sigma_mm": 80.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 53.44914895701612,
+   "mean_one_sided_mm": 51.71134350551229,
+   "mean_balanced_mm": 52.2302433487349,
+   "onesided_minus_balanced": {
+    "mean": -0.5188998432226255,
+    "ci95": [
+     -0.6587370069052634,
+     -0.37593081518143473
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict": "balanced_worse_for_kabsch"
+  },
+  {
+   "sigma_mm": 160.0,
+   "n_pairs": 180,
+   "mean_anatomical_mm": 53.44914895701612,
+   "mean_one_sided_mm": 70.68057530283909,
+   "mean_balanced_mm": 72.20988541585716,
+   "onesided_minus_balanced": {
+    "mean": -1.5293101130180655,
+    "ci95": [
+     -1.8608538333948943,
+     -1.1671875743235927
+    ],
+    "n_clusters": 30,
+    "draws": 10000
+   },
+   "verdict": "balanced_worse_for_kabsch"
+  }
+ ],
+ "arms": {
+  "one_sided": [
+   5,
+   6,
+   12,
+   13
+  ],
+  "balanced": [
+   5,
+   3,
+   12,
+   16
+  ]
+ },
+ "scored_joints": [
+  9,
+  10,
+  11,
+  14
+ ],
+ "template_frames": 2460,
+ "prediction_cache": "preds.npz"
+}
