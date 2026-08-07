@@ -260,6 +260,14 @@ The complete pipeline is not training-free: both the 2D detector and the lifting
 
 \section{Body-Frame Canonicalization}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/fig_pipeline.png}
+\caption{The pipeline end to end. RGB video enters a frozen 2D detector; the keypoints are converted to the Human3.6M layout and lifted by a frozen MotionAGFormer. The only step this thesis adds is the last one, where the predicted skeleton is re-expressed in a frame built from the subject's own hips and torso. Nothing here is trained, no camera parameters are used at any stage, and the estimator is never modified.}
+\label{fig:pipeline}
+\end{figure}
+
+
 Let $P \in \mathbb{R}^{17\times 3}$ be a root-relative predicted pose in the H36M-17 joint convention. We construct a body-fixed orthonormal frame as
 \begin{align}
 \mathbf{y} &= \frac{P_{8} - P_{0}}{\lVert P_{8} - P_{0} \rVert}, \qquad
@@ -273,6 +281,14 @@ P_{\text{can}} = P R .
 Here $\mathbf{y}$ is the torso vertical axis (pelvis to thorax, joints 0 and 8) and $\mathbf{x}_{\text{raw}}$ the hip axis (right hip to left hip, joints 1 and 4). The construction is closed form, costs $O(17)$ operations per frame, and has no free parameters. It is TRIAD with the torso axis primary, named rather than claimed. The construction is deliberately asymmetric: $\mathbf{y}$ is reproduced exactly while $\mathbf{x}_{\text{raw}}$ influences only the rotation about it, so the choice of primary axis is a design decision, and the established guidance is to make the more accurately known direction primary---for a skeleton, the longer segment.
 
 \subsection{Why This Construction Achieves View Invariance}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{images/fig_frame_construction.png}
+\caption{The frame construction. The torso axis runs from pelvis to thorax and the hip axis from one hip to the other, and Gram-Schmidt orthonormalizes them. Both are read from the joints themselves, so they rotate with the body: if a second camera sees the same pose under an unknown rotation, the frame rotates identically and the two cancel exactly. The unknown camera rotation is removed without ever being estimated, which is why no calibration is required.}
+\label{fig:framecon}
+\end{figure}
+
 
 Suppose cameras $A$ and $B$ observe one configuration, so their root-relative predictions are related by an unknown rotation, $P^{(B)} = P^{(A)} Q$ for some $Q \in SO(3)$. Because the axes are built from the joint positions themselves, each axis rotates with the pose, so the frames satisfy $R^{(B)} = Q^{\top} R^{(A)}$, and
 \begin{equation}
@@ -358,6 +374,14 @@ Every experiment in this report was pre-registered: its criterion and all plausi
 The baseline reproduces the published MotionAGFormer-XS figures to three decimals: MPJPE 45.149~mm against the reported 45.1, and P-MPJPE 36.892~mm against 36.9. This is what makes the negative results interpretable: a negative result is only informative if the apparatus is not what failed.
 
 \section{The Central Claim: Cross-View Comparability}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/fig_realview.png}
+\caption{What the method does, on photographs rather than stick figures. One instant of MPI-INF-3DHP seen by all eight synchronized cameras. Below left, the eight predictions in their own camera frames: the same pose eight times, and they do not overlap. Below right, the same eight after canonicalization, each camera processed independently, in ignorance of the others and without calibration. Mean pairwise distance falls from 0.149 to 0.095 in the normalised units the cache stores, a reduction of 36.6 percent. This is a single frame and it illustrates rather than measures; the measured figures over 180 held-out camera pairs are in Table \ref{tab:baseproposed}.}
+\label{fig:realview}
+\end{figure}
+
 \label{sec:h36mcv}
 
 Table \ref{tab:crossview} is the answer to the question a reader asks first---how does the proposed output compare to the base output. Accuracy is identical by construction: the estimator is frozen and canonicalization adds zero parameters. What changes is agreement between cameras.
@@ -403,6 +427,14 @@ Camera pairs where it wins & 0 / 180 & \textbf{180 / 180} \\
 The baseline wins on both backbones, all fifteen actions, under three unrelated templates and every centring tested, with the paired-difference interval excluding zero. It is in this abstract, here, the limitations and the conclusion. The method is kept because the baseline \emph{cannot run the experiment this report is about}: Kabsch alignment has no anatomical axis, so there is no axis to hold fixed and vary, and the question of what governs frame consistency cannot be posed inside it. As a way of reducing cross-view distance on this data, the simpler method is better, and we say so plainly. Section 5.8 returns to this with an experimental answer rather than a rhetorical one.
 
 \section{The Axis-Length Boundary}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{images/fig_three_levels.png}
+\caption{The three levels at which the axis-length principle was tested, and the two at which it fails. It governs the choice between frame constructions; it does not govern which frame instance to trust, nor which joint will disagree. Two of the three tests are failures, and the boundary they establish is the contribution of this thesis.}
+\label{fig:threelevels}
+\end{figure}
+
 
 The derived law ($\theta \approx 2\sigma/L$) is tested at three levels, each pre-registered.
 
