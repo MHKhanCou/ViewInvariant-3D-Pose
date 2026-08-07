@@ -8,8 +8,8 @@
 %  This is the condensed companion to Full_Thesis_Report.tex. Same
 %  preamble, same title page, same headline results, same negative
 %  results, none of the scaffolding. Section 5.8 is the post-freeze
-%  addendum: the failure-support map and the routing rule (pre-registered
-%  7 Aug 2026).
+%  addendum: the failure-support map, the routing rule and the 2D-channel
+%  boundary (pre-registered 7 Aug 2026).
 % =====================================================================
 \documentclass[12pt,a4paper]{report}
 \usepackage[left=1.2in,right=0.8in,top=1in,bottom=1in]{geometry}
@@ -139,7 +139,7 @@ Certified that this project report is the bonafide work of \textbf{MEHEDI HASAN 
 
 \doublespacing
 {\fontsize{12}{15}\selectfont
-Monocular 3D pose estimators express skeletons in the observing camera's frame, so one motion recorded from two viewpoints yields two different sets of coordinates, preventing direct comparison in gait and sports analysis. Existing remedies retrain the estimator, require calibration, or learn a canonicalization network. We build a body-fixed frame from anatomical axes and apply it after prediction, adding no trained parameters to a frozen estimator, and ask what determines whether such a frame is consistent across viewpoints. The construction is the TRIAD algorithm of spacecraft attitude determination, and how accurately an anatomical direction is known comes from biomechanics: a direction from two joints $L$ apart, each with noise $\sigma$, is uncertain by about $2\sigma/L$. We claim neither, and ask how far they carry to network-inferred joints. On Human3.6M, which played no part in developing it, canonicalization cuts cross-view distance by 72.2 percent over 180 held-out camera pairs, improving 179. A single-view baseline meeting the same requirements, Kabsch alignment to one fixed skeleton, beats our frame on all 180 pairs under both backbones, and we report that in the abstract rather than hide it. A reliability score is falsified as an accuracy predictor five ways, though it does gate canonicalization quality; a bone-length signal reaching $+0.492$ on one dataset falls to $+0.098$ on the other and is retracted. The contribution is the experimental boundary of how far the geometry carries, and, post-freeze, a pre-registered map of where the two alignments fail: distal corruption is invisible to the frame and visible to the template, anchor corruption is the reverse. A confidence-gated routing rule exploiting this attains the better single alignment's aggregate mean cross-view distance at 19 of 20 (regime, severity, backbone) cells, trails it by 5.4~mm in the single transition cell (within a pre-registered 7~mm allowance), and is 38--47~mm better than template alignment alone under severe distal corruption --- evaluated under a simulated confidence signal that is labelled as such.
+Monocular 3D pose estimators express skeletons in the observing camera's frame, so one motion recorded from two viewpoints yields two different sets of coordinates, preventing direct comparison in gait and sports analysis. Existing remedies retrain the estimator, require calibration, or learn a canonicalization network. We build a body-fixed frame from anatomical axes and apply it after prediction, adding no trained parameters to a frozen estimator, and ask what determines whether such a frame is consistent across viewpoints. The construction is the TRIAD algorithm of spacecraft attitude determination, and how accurately an anatomical direction is known comes from biomechanics: a direction from two joints $L$ apart, each with noise $\sigma$, is uncertain by about $2\sigma/L$. We claim neither, and ask how far they carry to network-inferred joints. On Human3.6M, which played no part in developing it, canonicalization cuts cross-view distance by 72.2 percent over 180 held-out camera pairs, improving 179. A single-view baseline meeting the same requirements, Kabsch alignment to one fixed skeleton, beats our frame on all 180 pairs under both backbones, and we report that in the abstract rather than hide it. A reliability score is falsified as an accuracy predictor five ways, though it does gate canonicalization quality; a bone-length signal reaching $+0.492$ on one dataset falls to $+0.098$ on the other and is retracted. The contribution is the experimental boundary of how far the geometry carries, and, post-freeze, a pre-registered map of where the two alignments fail: distal corruption is invisible to the frame and visible to the template, anchor corruption is the reverse. A confidence-gated routing rule exploiting this attains the better single alignment's aggregate mean cross-view distance at 19 of 20 (regime, severity, backbone) cells, trails it by 5.4~mm in the single transition cell (within a pre-registered 7~mm allowance), and is 38--47~mm better than template alignment alone under severe distal corruption --- evaluated under a simulated confidence signal that is labelled as such. Through the real detection and lifting path, 2D keypoint corruption up to 21 percent of the frame width leaves the lifted pose unchanged (mean $\le 0.33$~mm), and the real detector-confidence channel carries no usable gate signal, so the map is confined to the 3D level.
 }
 
 % ======================== ACKNOWLEDGEMENT ============================
@@ -200,7 +200,7 @@ The geometry this project builds on is not ours: the frame is TRIAD \cite{triad}
 \item \textbf{[Empirical finding]} \textbf{The falsified reliability score gates canonicalization quality.} Falsified as an accuracy predictor along five independent axes, the same score triages the quantity its own specification names, cutting mean cross-view distance by 22 percent at thirty percent abstention and surviving a confound control on both backbones. Reported as exploratory throughout.
 \item \textbf{[Negative result]} \textbf{Retraction of our own error predictor.} A temporal bone-length signal reaching $\rho = +0.492$ on one dataset falls to $+0.098$ on the other and fails every criterion; we retract the general claim.
 \item \textbf{[Engineering]} \textbf{Calibration-free multi-view fusion in the shared frame}, with a qualification that matters more than the headline: with few views the choice of statistic decides whether fusion helps, and across actions the mean gain is negative.
-\item \textbf{[Systems]} \textbf{An evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added, 402 floating-point operations per frame, 258 numerical claims checked against stored artifacts by an automated audit, 76 tests, and nine pre-registrations committed to version history before the experiments they governed, several of which failed.
+\item \textbf{[Systems]} \textbf{An evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added, 402 floating-point operations per frame, 258 numerical claims checked against stored artifacts by an automated audit, 76 tests, and fourteen pre-registrations committed to version history before the experiments they governed, several of which failed.
 \end{itemize}
 
 \section{Report Organization}
@@ -347,7 +347,7 @@ Frames within a camera stream are not independent, so intervals come from a clus
 
 \section{Pre-registration and the Audit}
 
-Every experiment in this report was pre-registered: its criterion and all plausible readings were written down and committed to version control \emph{before} the experiment ran. Nine such pre-registrations govern Chapter 5, several of which failed their own criteria; four more were run after the freeze (Sections 5.8), two of which are the subject of this report's addendum. Every reported number is recomputed from stored result files by an automated audit of 258 claims, alongside 76 unit tests; both pass. No number in the report was typed by hand.
+Every experiment in this report was pre-registered: its criterion and all plausible readings were written down and committed to version control \emph{before} the experiment ran. Nine such pre-registrations govern Chapter 5, several of which failed their own criteria; five more were run after the freeze (Section 5.8), three of which are reported there. Every reported number is recomputed from stored result files by an automated audit of 258 claims, alongside 76 unit tests; both pass. No number in the report was typed by hand.
 
 % ========================== CHAPTER 5 ================================
 \chapter{EXPERIMENTAL RESULTS}
@@ -469,6 +469,29 @@ anchor & 160 & t17 & 63.22 & 337.87 & 61.63 \\
 
 The honest boundaries are stated alongside the result: the confidence signal is simulated, not measured, and noiseless---an upper bound on a real confidence channel; the corruption is injected Gaussian noise rather than real occlusion; ``never worse'' is mean-level within a pre-registered 7~mm transition allowance on one dataset and two backbones; the 5.4~mm transition shortfall is a point estimate whose interval is not established (at the neighbouring severity the XS interval spans zero); and the threshold is fixed, not tuned. The rule does not make the anatomical frame win---it makes the \emph{combination} no worse, in aggregate mean, than the better single alignment, and strictly better where the two are separated.
 
+A fourteenth pre-registration (same date) closes the last avenue an examiner is likely to try: does the corruption matter end-to-end, through the real detection path? Re-running the real YOLOv8 detection on MPI-INF-3DHP S1/Seq1 cameras 0 and 1 (the clean re-lift reproduces the cached predictions to 0.00~mm) and displacing the 2D keypoints of the distal and core joint groups by up to 21 percent of the frame width---0.6 in the normalized input space at the wrist---changes the lifted 3D pose by at most 0.33~mm mean (per-joint worst case 0.77~mm), at every magnitude tested (Table \ref{tab:misdetect}). The frozen lifter absorbs 2D keypoint error entirely; the pipeline's failure surface is at the 3D alignment level, exactly where the map and the rule operate. The same run measures the real confidence channel: mean per-keypoint confidence is 0.74 and 0.81 on the two cameras with \emph{every} frame below 0.9, so no threshold can separate frames on clean data. The routing rule's simulated confidence gate is therefore explicitly a stand-in for a channel that carries no usable signal on clean data, and the measured signal that does vary is the analytic reliability score.
+
+\begin{table}[H]
+\centering
+\caption{2D-input invariance of the frozen lifter through the real detection path (MPI-INF-3DHP S1/Seq1; mean per-joint $|\Delta|$ vs clean lift, mm).}
+\label{tab:misdetect}
+\begin{tabular}{lcc}
+\toprule
+Condition & cam0 & cam1 \\
+\midrule
+distal, f=0.03 (87 px) & 0.06 & 0.06 \\
+distal, f=0.10 (290 px) & 0.15 & 0.18 \\
+distal, f=0.15 (434 px) & 0.21 & 0.25 \\
+core, f=0.03 & 0.15 & 0.08 \\
+core, f=0.10 & 0.26 & 0.23 \\
+core, f=0.15 & 0.32 & 0.33 \\
+\midrule
+detector confidence (mean) & 0.74 & 0.81 \\
+frames with confidence $< 0.9$ & 100\% & 100\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 % ========================== CHAPTER 6 ================================
 \chapter{DISCUSSION, CONCLUSION AND FUTURE WORK}
 
@@ -537,6 +560,6 @@ Requirements & detector + lifter & + no training, no labels, no calibration \\
 \end{tabular}
 \end{table}
 
-The pre-registered experiments: nine govern the body of this report (several failed their own criteria, and the template comparison of Section 5.3 returned a competing method as the better one); the tenth and eleventh (distal corruption, template mismatch) failed; the twelfth and thirteenth (anchor corruption, routing rule) were established. All thirteen are recorded in \texttt{thesis\_artifacts/} with criteria committed to version history before their runs.
+The pre-registered experiments: nine govern the body of this report (several failed their own criteria, and the template comparison of Section 5.3 returned a competing method as the better one); the tenth and eleventh (distal corruption, template mismatch) failed; the twelfth and thirteenth (anchor corruption, routing rule) and the fourteenth (2D-input invariance) were established. All fourteen are recorded in \texttt{thesis\_artifacts/} with criteria committed to version history before their runs.
 
 \end{document}

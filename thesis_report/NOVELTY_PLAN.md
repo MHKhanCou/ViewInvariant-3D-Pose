@@ -39,6 +39,29 @@ fixed rule — *use the frame iff core confidence ≥ 0.7 AND distal confidence
 - Never routes into the collapsed arm under anchor corruption.
 - Uses Kabsch at clean data (the better method there).
 
+**Experiment 3 — `evaluation/misdetect_invariance.py` (14th pre-registration).**
+The end-to-end question an examiner will ask: does the corruption matter
+through the *real* detection path, and is there a real confidence signal to
+gate on? Re-detected MPI-INF-3DHP S1/Seq1 cams 0–1 with real YOLOv8, displaced
+the 2D keypoints of distal and core joints by up to 434 px (0.6 in normalized
+input space), re-lifted with the frozen lifter:
+
+| condition | cam0 | cam1 |
+|---|---|---|
+| distal f=0.15 (434 px) | 0.21 mm | 0.25 mm |
+| core f=0.15 | 0.32 mm | 0.33 mm |
+| detector confidence (mean) | 0.74 | 0.81 |
+| frames with confidence < 0.9 | 100% | 100% |
+
+**Reading 1.** The lifter is invariant to 2D keypoint error at any magnitude
+(≤ 0.33 mm vs 53 → 338 mm for the same joints corrupted at the 3D level), and
+the real confidence channel is flat (all frames < 0.9 — no threshold can
+separate frames on clean data). The failure surface is at the 3D alignment
+level, end to end, and the measured signal that actually varies is the
+analytic reliability score. (One correction was documented in the
+pre-registration: the cached `components[:,0]` is a reliability component, not
+detector confidence.)
+
 ## The claim, one sentence (memorise)
 
 > **The two training-free alignments have disjoint failure supports — distal
@@ -58,7 +81,10 @@ fixed rule — *use the frame iff core confidence ≥ 0.7 AND distal confidence
    whose per-keypoint confidence drops linearly with localization error. In
    deployment it consumes the detector's real per-joint confidence (YOLOv8
    keypoint scores). Say: *"the mapping from noise to confidence is a model, and
-   I label it as one"*.
+   I label it as one. The fourteenth experiment measured the real channel: on
+   clean data it is flat (every frame below 0.9), so the gate is a stand-in for
+   a channel that carries no usable signal — the signal that does vary is the
+   analytic reliability score"*.
 2. **"The frame still loses at clean data."** True, and the rule agrees: it
    uses Kabsch at clean.
 3. **"The thresholds are tuned to the result."** False — fixed and
@@ -80,6 +106,11 @@ fixed rule — *use the frame iff core confidence ≥ 0.7 AND distal confidence
    the decision is per corruption level (confidence is constant within a
    level). Per-frame deployment with noisy real detector confidence is the
    assumption the rule makes, not something the synthetic experiment measures.
+8. **"Real detection errors would break your map."** Measured, not assumed
+   (Experiment 14, Reading 1): 2D keypoint displacement up to 21% of the frame
+   width moves the lifted pose ≤ 0.33 mm — the 2D channel cannot create a 3D
+   corruption regime, so the map is confined to the 3D level. What is *not*
+   covered: missed person, truncation, motion blur (stated as out of scope).
 
 ## Why this is defensible as undergraduate novelty
 
@@ -93,14 +124,15 @@ fixed rule — *use the frame iff core confidence ≥ 0.7 AND distal confidence
 
 ## The two nights
 
-**Night 1 (tonight, 7 Aug — mostly done).**
+**Night 1 (tonight, 7 Aug — done).**
 - [x] Anchor-corruption experiment, both backbones, pre-registered, Reading 1.
 - [x] Routing experiment, both backbones, pre-registered, Reading 1.
-- [x] RESULT.md for both; results committed after the pre-registrations.
-- [ ] Add the two experiments as a short section of the minimal report (Ch. 5
-      or a compact "post-freeze addendum" — draft included in
-      `Minimal_Thesis_Report.tex`).
-- [ ] Compile the minimal report, check page count, read it once aloud.
+- [x] 2D-input invariance experiment (14th), real detection path, Reading 1;
+      P2 amended with a documented measurement correction.
+- [x] RESULT.md for all three; results committed after the pre-registrations.
+- [x] All three in the minimal report's post-freeze addendum (§5.8);
+      report recompiled clean.
+- [ ] Read the compiled report once aloud.
 
 **Night 2 (8 Aug).**
 - [ ] Rehearse the three answers from `SIR_CONCERNS.md` aloud, plus the
@@ -118,8 +150,10 @@ fixed rule — *use the frame iff core confidence ≥ 0.7 AND distal confidence
 - **Do not claim a regime where the anatomical frame wins.** The occlusion
   pre-registration already burned that criterion; the routing rule is the
   honest version of the same idea.
-- **Do not add more experiments.** The map is complete for this defence; every
-  additional run is another number to defend.
+- **Do not add any more experiments.** The map is complete for this defence
+  (fourteen pre-registrations, three post-freeze and established); every
+  additional run is another number to defend. Experiment 14 closed the 2D
+  channel — there is nothing left to measure tonight.
 - **Do not tune the routing threshold** to fix the 5.4 mm transition cell. That
   is tuning on the test split — the exact failure mode the pre-registrations
   exist to prevent.

@@ -70,6 +70,7 @@ hand.**
 | `template_mismatch.py` | `mismatch/` | The eleventh. Failed - the baseline needs no matching template |
 | `anchor_corruption.py` | `anchor_corruption/` | The twelfth (post-freeze). **Holds** - corrupt the frame's support joints {1,4,8} and it collapses 53.45 -> 337.87 mm while the 17-joint fit degrades gracefully |
 | `selection_rule.py` | `selection/` | The thirteenth (post-freeze). **Holds** - confidence-gated routing is never worse than the better single alignment, 38-47 mm better than template alone at sigma=160 distal |
+| `misdetect_invariance.py` | `misdetect/` | The fourteenth (post-freeze). **Holds** - the frozen lifter is invariant to 2D keypoint displacement through the real detection path (<=0.33 mm at 434 px), and the real confidence channel is flat (all frames < 0.9) |
 
 ### Supporting
 
