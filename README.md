@@ -70,14 +70,14 @@ All improvement figures are the mean over camera pairs of each pair's own percen
 | Does the frame survive distal corruption better than Kabsch? | **Fails its own criterion** — required a crossover on both backbones at ≤ 80 mm noise; got MotionBERT at 40 mm, MotionAGFormer only at 160 mm |
 | Does the baseline need a template matching the subject's build? | **No** — scaling the template's limbs to child-like proportions moves it 0.12 mm, 0.2 %. The competitor came out of this stronger |
 
-**Fourteen pre-registrations** were committed to version history **before** the experiments they govern, timestamps visible in the git log. **More than half failed their own criteria, and one returned a competing method as the better one** — the report's own wording, so it can be checked against the document rather than against this file. The frozen report describes nine; five more were run after it (`occlusion`, `mismatch`, `anchor_corruption`, `selection`, `misdetect`). Two of those five looked for a regime where this method beats the Kabsch baseline, and neither found one.
+**Seventeen pre-registered experiments** were committed to version history **before** the experiments they govern, timestamps visible in the git log. **More than half failed their own criteria, and one returned a competing method as the better one** — the report's own wording, so it can be checked against the document rather than against this file. The frozen report describes nine; five more were run after it (`occlusion`, `mismatch`, `anchor_corruption`, `selection`, `misdetect`). Two of those five looked for a regime where this method beats the Kabsch baseline, and neither found one.
 
 ---
 
 ## Reproducing the claims
 
 ```bash
-python -m evaluation.audit_numbers      # 292 claims checked against thesis_artifacts/
+python -m evaluation.audit_numbers      # 293 claims checked against thesis_artifacts/
 python -m unittest discover -s tests -q # 76 tests, no model or dataset required
 python -m presentation.render --teaser  # regenerate every figure from the artifacts
 ```
@@ -95,7 +95,7 @@ Regenerating the predictions themselves requires the Human3.6M preprocessing and
 ```
 canonical/        body-frame construction, multi-scale and multi-landmark variants
 evaluation/       one module per experiment, each writing a JSON artifact
-  audit_numbers.py        checks all 292 reported claims against artifacts
+  audit_numbers.py        checks all 293 reported claims against artifacts
   h36m_crossview.py       the central cross-view result
   axis_length_law.py      the quantitative fit and its bootstrap
   conditioning_abstention.py  pre-registered abstention test (failed)
@@ -103,7 +103,7 @@ evaluation/       one module per experiment, each writing a JSON artifact
 presentation/
   render.py         all report figures + the two-view comparison, from artifacts
   bvh_export.py     body-relative BVH export
-thesis_artifacts/ stored results + the fourteen PREREGISTRATION.md files
+thesis_artifacts/ stored results + sixteen PREREGISTRATION.md files covering seventeen experiments
 thesis_report/    the report, DEFENSE_QA.md, FREEZE_CHECKLIST.md
 tests/            76 tests, no dataset required
 ```

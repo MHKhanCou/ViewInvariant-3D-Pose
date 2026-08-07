@@ -13,12 +13,12 @@ this page. Ordered by how likely you are to need it, not alphabetically.
 | 2 | `canonical/body_frame.py` | The entire method. The thesis is this file plus what was learned from testing it |
 | 3 | `evaluation/h36m_crossview.py` | The central result: 372.7 → 93.4 mm |
 | 4 | `evaluation/template_baseline.py` | The baseline that beats you. Know this one cold |
-| 5 | `evaluation/audit_numbers.py` | Re-derives all 292 reported claims from stored artifacts |
+| 5 | `evaluation/audit_numbers.py` | Re-derives all 293 reported claims from stored artifacts |
 
 **One command proves the whole report is internally consistent:**
 
 ```bash
-./venv/Scripts/python.exe -m evaluation.audit_numbers        # 292/292, exit 0
+./venv/Scripts/python.exe -m evaluation.audit_numbers        # 293/293, exit 0
 ./venv/Scripts/python.exe -m unittest discover -s tests -q   # 76 tests
 ```
 
@@ -102,7 +102,7 @@ thesis_report/
 
 ```
 thesis_artifacts/
-  <experiment>/PREREGISTRATION.md   fourteen of them, each committed BEFORE its run
+  <experiment>/PREREGISTRATION.md   sixteen documents covering seventeen experiments, each committed BEFORE its run
   occlusion/RESULT.md               the tenth, and why it failed
   defense_deck.html                 16 slides
   planning/                         superseded working notes - do not quote these
@@ -150,4 +150,4 @@ them before the defence.**
 | "How do I know the numbers are real?" | Run `audit_numbers.py`, then `git log` for the pre-registration timestamps |
 | "Where is the base vs proposed comparison?" | `thesis_artifacts/figures/fig_realview.png` and Table `tab:h36mcv` |
 | "You said a baseline beats you — where?" | Report the section "A Single-View Baseline, and It Wins", `thesis_artifacts/template/template.json` |
-| "What did you pre-register?" | `ls thesis_artifacts/*/PREREGISTRATION.md` — fourteen files, all timestamped before their results |
+| "What did you pre-register?" | `ls thesis_artifacts/*/PREREGISTRATION.md` — sixteen files covering seventeen experiments, all timestamped before their results |

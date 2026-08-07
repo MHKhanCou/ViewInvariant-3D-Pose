@@ -932,6 +932,17 @@ def main():
                              float(la["verdict"]["sanity_anatomical_flat"]),
                              src, tol=0))
 
+    # ---------- pre-registration ordering ------------------------------------
+    # The claim the whole evidence trail rests on, and the one an examiner can
+    # check in a single command. Verified here so it cannot silently rot.
+    import subprocess
+    _vpo = subprocess.run(
+        [sys.executable, "-m", "evaluation.verify_prereg_order", "--json"],
+        cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        capture_output=True, text=True)
+    results.append(check("every pre-registration precedes its own result", 1.0,
+                         float(_vpo.returncode == 0), "git history", tol=0))
+
     # ---------- the report's own self-referential counts ---------------------
     # These have gone stale four times: 131, 167, 180, 192, 216, 230, 240, 248.
     # They are the one class of number outside the audit, which is exactly why
