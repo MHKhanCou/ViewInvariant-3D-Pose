@@ -1,0 +1,96 @@
+{
+ "n_poses": 52900,
+ "stride": 10,
+ "mean_hip_axis_mm": 275.8195529448824,
+ "mean_shoulder_axis_mm": 302.21022178794703,
+ "shoulder_minus_hip_mm": 26.390668843064645,
+ "per_action": {
+  "Directions": {
+   "hip_axis_mm": 269.9575114100972,
+   "shoulder_axis_mm": 299.19524414311167,
+   "n_poses": 3244
+  },
+  "Discussion": {
+   "hip_axis_mm": 270.1632714313657,
+   "shoulder_axis_mm": 294.9447161446367,
+   "n_poses": 6412
+  },
+  "Eating": {
+   "hip_axis_mm": 282.6409513694616,
+   "shoulder_axis_mm": 301.7658208600918,
+   "n_poses": 3916
+  },
+  "Greeting": {
+   "hip_axis_mm": 271.73642832057516,
+   "shoulder_axis_mm": 304.1865804061478,
+   "n_poses": 2468
+  },
+  "Phoning": {
+   "hip_axis_mm": 277.49924128725206,
+   "shoulder_axis_mm": 307.4611908774855,
+   "n_poses": 5592
+  },
+  "Posing": {
+   "hip_axis_mm": 273.2190039302208,
+   "shoulder_axis_mm": 302.6952581059977,
+   "n_poses": 2708
+  },
+  "Purchases": {
+   "hip_axis_mm": 279.5213768873518,
+   "shoulder_axis_mm": 306.5862384356042,
+   "n_poses": 1920
+  },
+  "Sitting": {
+   "hip_axis_mm": 285.677881619686,
+   "shoulder_axis_mm": 305.9223705784067,
+   "n_poses": 4004
+  },
+  "SittingDown": {
+   "hip_axis_mm": 285.20964919132797,
+   "shoulder_axis_mm": 315.68089578846826,
+   "n_poses": 2704
+  },
+  "Smoking": {
+   "hip_axis_mm": 279.23449290741394,
+   "shoulder_axis_mm": 300.52366933954727,
+   "n_poses": 5548
+  },
+  "Photo": {
+   "hip_axis_mm": 271.98708011784186,
+   "shoulder_axis_mm": 306.26925661663284,
+   "n_poses": 2916
+  },
+  "Waiting": {
+   "hip_axis_mm": 274.8619269947377,
+   "shoulder_axis_mm": 305.14149637363425,
+   "n_poses": 3128
+  },
+  "Walking": {
+   "hip_axis_mm": 272.70717537991806,
+   "shoulder_axis_mm": 296.06389510308946,
+   "n_poses": 2908
+  },
+  "WalkDog": {
+   "hip_axis_mm": 268.4172488699698,
+   "shoulder_axis_mm": 292.34901107808,
+   "n_poses": 2820
+  },
+  "WalkTogether": {
+   "hip_axis_mm": 271.79108575756413,
+   "shoulder_axis_mm": 301.0220853535132,
+   "n_poses": 2612
+  }
+ },
+ "longest_hip_actions": [
+  "Sitting",
+  "SittingDown",
+  "Eating"
+ ],
+ "shortest_hip_action": "WalkDog",
+ "crossview_selection": {
+  "n_poses": 28132,
+  "mean_hip_axis_mm": 275.47148581262945,
+  "mean_shoulder_axis_mm": 301.90446597306544
+ },
+ "prediction_cache": "preds.npz"
+}

@@ -932,6 +932,56 @@ def main():
                              float(la["verdict"]["sanity_anatomical_flat"]),
                              src, tol=0))
 
+    # ---------- cross-backbone sign flip -------------------------------------
+    # One of the five falsifications of the reliability score. The report
+    # asserts "five ways" without quoting this one's numbers, so nothing traced
+    # it until verify_documents.py reported the artifact as unreferenced.
+    btp = os.path.join(ART, "backbone_transfer", "backbone_transfer.json")
+    if os.path.exists(btp):
+        with io.open(btp, encoding="utf-8") as fh:
+            bt = json.load(fh)
+        by = {b["backbone"]: b for b in bt["backbones"]}
+        src = "backbone_transfer/backbone_transfer.json"
+        rhos = [b["spearman_reliability_vs_error"] for b in bt["backbones"]
+                if b.get("spearman_reliability_vs_error") is not None]
+        results.append(check("sign flip: MotionBERT rho", -0.707,
+                             by["MotionBERT (DSTformer)"]["spearman_reliability_vs_error"],
+                             src, tol=0.005))
+        results.append(check("  the correlation changes sign across backbones",
+                             1.0, float(min(rhos) < 0 < max(rhos)), src, tol=0))
+        results.append(check("  parameters added by the module", 0.0,
+                             float(bt["module_params_added"]), src, tol=0))
+        results.append(check("  backbones tested", float(len(bt["backbones"])),
+                             float(len(bt["backbones"])), src, tol=0))
+
+    # ---------- axis lengths -------------------------------------------------
+    # Four figures the report quoted with no artifact behind them until
+    # verify_documents.py found them. Two were unreproducible as written and
+    # the text now quotes the measured values.
+    alp = os.path.join(ART, "axis_lengths", "axis_lengths.json")
+    if os.path.exists(alp):
+        with io.open(alp, encoding="utf-8") as fh:
+            al = json.load(fh)
+        src = "axis_lengths/axis_lengths.json"
+        results.append(check("mean hip axis (mm)", 275.8,
+                             al["mean_hip_axis_mm"], src, tol=0.05, unit="mm"))
+        results.append(check("  mean shoulder axis (mm)", 302.2,
+                             al["mean_shoulder_axis_mm"], src, tol=0.05,
+                             unit="mm"))
+        results.append(check("  shoulder axis is the longer one", 1.0,
+                             float(al["shoulder_minus_hip_mm"] > 0), src, tol=0))
+        results.append(check("  poses measured over", 52900.0,
+                             float(al["n_poses"]), src, tol=0))
+        results.append(check("  SittingDown hip axis (mm)", 285.2,
+                             al["per_action"]["SittingDown"]["hip_axis_mm"],
+                             src, tol=0.05, unit="mm"))
+        results.append(check("  WalkDog hip axis, the shortest (mm)", 268.4,
+                             al["per_action"]["WalkDog"]["hip_axis_mm"], src,
+                             tol=0.05, unit="mm"))
+        results.append(check("  WalkDog is the shortest-hip action", 1.0,
+                             float(al["shortest_hip_action"] == "WalkDog"),
+                             src, tol=0))
+
     # ---------- pre-registration ordering ------------------------------------
     # The claim the whole evidence trail rests on, and the one an examiner can
     # check in a single command. Verified here so it cannot silently rot.
