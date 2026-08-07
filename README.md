@@ -157,7 +157,7 @@ The demo's **Coordinate System** toggle offers exactly two options, and the diff
 
 On CPU, a single image takes about 0.7 s once the models are warm. **Video is far slower — roughly 8 minutes for a 30-second clip** — so render demonstration videos in advance rather than live.
 
-The baseline reproduces the published MotionAGFormer-XS figure to three decimals (45.149 mm against 45.1 mm reported), which is what makes the failed replications in this project interpretable — a negative result is only informative if the apparatus is not what failed.
+The baseline reproduces the published MotionAGFormer-XS figure to within 0.05 mm (45.149 mm against 45.1 mm reported). The published figure carries one decimal, so a tighter comparison is only meaningful against the backbone's own evaluation script, which this pipeline matches to three decimals. That is what makes the failed replications in this project interpretable — a negative result is only informative if the apparatus is not what failed.
 
 ---
 

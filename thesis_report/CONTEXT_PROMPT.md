@@ -175,7 +175,7 @@ Level 3 is the interesting one: a body is not a rigid body, and past a hinge the
 estimator's error in the joint angle dominates the geometry entirely. Two of the
 three tests are failures and **the boundary they establish is the contribution.**
 
-Plus: seventeen pre-registered experiments, **seven failed their own criteria**, one returned
+Plus: seventeen pre-registered experiments, **more than half failed their own criteria**, one returned
 a competing method as better; 304 audited claims; 76 tests; a retraction of my
 own error predictor.
 
@@ -194,7 +194,7 @@ Repository: `github.com/MHKhanCou/ViewInvariant-3D-Pose`
 | `thesis_report/DEFENSE_QA.md` | Long viva prep: timed pitches, hard questions |
 | `thesis_report/EXPLAIN.md`, `EXPLAIN_SIMPLE.md` | Plain-language, EN + BN |
 | `REPO_MAP.md` | Every module, its artifact, its report section |
-| `thesis_artifacts/*/PREREGISTRATION.md` | Eleven, each committed before its run |
+| `thesis_artifacts/*/PREREGISTRATION.md` | Sixteen, covering seventeen experiments, each committed before its run |
 | `thesis_artifacts/{occlusion,mismatch}/RESULT.md` | The two post-freeze failures |
 
 Chapter 5 was 56 pages and held every contribution, so ten supporting sections

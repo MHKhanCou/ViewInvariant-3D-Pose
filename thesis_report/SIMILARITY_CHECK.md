@@ -4,6 +4,16 @@ Run 6 August 2026 against `Full_Thesis_Report.tex` at commit `1073b5c` (56 pages
 28 references). This is a pre-submission self-check, **not** a Turnitin report.
 Read the limits section before quoting any of it to anyone.
 
+> *Updated 8 Aug 2026 — this scan is superseded and was **not** re-run.* It covered
+> `Full_Thesis_Report.tex`, which is now the 97-page supplement; the submission is
+> `Minimal_Thesis_Report.tex` (55 pages) → `Thesis_12108004.pdf`. Two thirds of the
+> check — the verbatim web searches and the attribution reading — are manual by
+> construction (see the closing line of this file), so there is no script to re-run
+> and no claim here of a fresh result. Search item 8 below, "the full title as a
+> phrase", is void: that title no longer exists, since "Reliability-Aware" was
+> removed on 8 Aug 2026. **Sections 3 (expected matches) and 6 (AI-use disclosure
+> draft) do not depend on the scan date and remain current.**
+
 ---
 
 ## 1. What was checked, and what came back

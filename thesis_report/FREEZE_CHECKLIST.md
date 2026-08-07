@@ -23,7 +23,8 @@ thing to look at; nothing here is "check it looks right".
       frame by equal aspect, a null result made to look dramatic by a 2 mm y-axis,
       and panels at different scales making the canonical column look tighter than
       it is.
-- [ ] `fig_teaser.png` reads in under ten seconds with no caption.
+- [ ] `fig_realview.png` (the README hero) and `fig_teaser.png` (the report's
+      Figure 1.1) each read in under ten seconds with no caption.
 - [ ] Every figure's numbers match the artifact it was drawn from — they are read
       from the same JSON, so this is a check that the JSON is current.
 
@@ -36,7 +37,9 @@ thing to look at; nothing here is "check it looks right".
 - [ ] **List of Figures and List of Tables are one page each**, and the contents
       lists are inside the `spacing{1.0}` block. If either spills, the block was
       dropped.
-- [ ] Page count recorded: **90**.
+- [ ] Page count recorded: **55** for the submission (`Thesis_12108004.pdf`, from
+      `Minimal_Thesis_Report.tex`) and **97** for the supplement
+      (`Thesis_12108004_supplement.pdf`, from `Full_Thesis_Report.tex`).
 - [ ] Table of contents regenerated after the last edit.
 
 ## 4. Citations
@@ -82,13 +85,16 @@ the last round of edits:
 
 ## 7. Pre-registrations
 
-- [ ] **Nine** `PREREGISTRATION.md` files under `thesis_artifacts/`: tta,
-      multilandmark, conditioning, radial, noncon, template, template_ablation,
-      translation_ablation, template_action.
-- [ ] Five of the nine failed their own criteria and a sixth returned a
-      competing method as better. If the report ever says "two of four", it has
-      drifted — this count is outside the automated audit and has gone stale
-      three times.
+- [ ] **Sixteen** `PREREGISTRATION.md` files under `thesis_artifacts/`, covering
+      **seventeen** experiments (`bestframe/` covers both the fifteenth and the
+      sixteenth): tta, multilandmark, conditioning, radial, noncon, template,
+      template_ablation, translation_ablation, template_action, occlusion,
+      mismatch, misdetect, bestframe, laterality, anchor_corruption, selection.
+      `ls thesis_artifacts/*/PREREGISTRATION.md | wc -l` → 16.
+- [ ] **More than half of the seventeen** failed their own criteria, and one
+      returned a competing method as better. If the report ever says "two of
+      four", "five of nine" or "seven", it has drifted — this count is outside
+      the automated audit and has now gone stale four times.
 - [ ] `git log --follow` on each shows the pre-registration commit **precedes**
       the commit containing its result. This is the whole point; verify it.
 

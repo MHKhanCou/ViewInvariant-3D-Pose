@@ -133,7 +133,7 @@ on this data, use the simpler method.**
 
 - I decided what would count as success **before** each of my nine experiments,
   and saved it with a timestamp so nobody can claim I changed my mind afterwards.
-- **Five of the nine failed.** I reported all five.
+- **More than half of the seventeen failed.** I reported every one of them.
 - A sixth showed a rival method was better. I put that in the abstract.
 - A computer program re-checks all **304 numbers** in my report against the raw
   data files, and fails if even one of them drifts.

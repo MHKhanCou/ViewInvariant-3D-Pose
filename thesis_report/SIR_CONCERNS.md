@@ -103,7 +103,7 @@ days ago:
 
 **If he asks "is that enough novelty for an undergraduate thesis?"** — yes, and
 it is rarer than a manufactured method: seventeen pre-registered experiments in version
-history, seven failed, an automated audit of 304 claims, 76 tests. The
+history, more than half failed, an automated audit of 304 claims, 76 tests. The
 contribution is the boundary map plus the routing rule, not a claim that the
 frame wins.
 
@@ -150,7 +150,8 @@ it, not because someone objected.
 ## Concern 5 — "Are you sure these numbers are real?"
 
 > "Open the git log, Sir. Seventeen pre-registered experiments, each criterion committed
-> before its experiment ran, seven failed. Nobody fabricates failures. Then run
+> before its experiment ran, more than half failed. Nobody fabricates failures.
+> Then run
 > `audit_numbers.py` — it recomputes all 304 claims from stored files and fails
 > if one drifts."
 

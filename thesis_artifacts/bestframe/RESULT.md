@@ -109,6 +109,19 @@ Kabsch-to-template have now failed: distal corruption, template mismatch, the
 literature, anchor corruption (which found the frame *worse*), best-frame
 construction, and asymmetric corruption.
 
+*Updated 8 Aug 2026: this list is loose about the word "pre-registered", and the
+report no longer quotes a count because of it. Two of the six named here are not
+failed pre-registered searches: the literature sweep has no `PREREGISTRATION.md`
+at all, and `anchor_corruption` met its own criteria (Reading 1) and its
+pre-registration explicitly disclaims being such a search ("This is the failure
+half of the map"). One genuine search is missing: `template_action`, the
+per-action breakdown, which found no action favouring the frame on either
+backbone. The pre-registered searches that looked for such a regime and failed
+are `template_action`, `occlusion`, `mismatch`, best-frame (Exp 15) and
+`asymmetric` (Exp 16), with `laterality` (Exp 17) closing the family by measuring
+why. The sentence above is left unedited as the record of what was written at the
+time.*
+
 **The report's sentence "we found no pose regime in which our construction is
 preferable" is now backed by six searches rather than none, and one of them
 tested every frame construction the report knows how to build.** That is a

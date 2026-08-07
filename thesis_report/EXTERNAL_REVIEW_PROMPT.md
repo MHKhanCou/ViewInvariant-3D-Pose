@@ -62,7 +62,7 @@ finding:
    single-view, and it wins on **all 180 pairs under both backbones** and on
    **all fifteen actions**. Stated in the abstract, contributions, §5.10,
    Limitations and the conclusion.
-5. **Five of the nine pre-registered experiments failed their own criteria**, and
+5. **More than half of the seventeen pre-registered experiments failed their own criteria**, and
    a sixth returned the competing method as better. Reported as failures.
 6. **The reliability score is falsified as an accuracy predictor five independent
    ways.** It is retained because its failure is a finding, and because it does

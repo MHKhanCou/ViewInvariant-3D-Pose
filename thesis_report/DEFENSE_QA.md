@@ -526,8 +526,9 @@ everything else you say more credible.
 > all five criteria. I retract the general claim.
 >
 > The result is trustworthy because the apparatus is verified: my pipeline
-> reproduces the backbone's published accuracy to three decimal places, 45.149
-> against 45.149 from its own evaluation script. And I tested the convenient
+> matches the backbone's own evaluation script to three decimal places, 45.149
+> against 45.149, and the paper's published 45.1 to within 0.05 mm — the paper
+> reports one decimal, so that is the closest a comparison to it can get. And I tested the convenient
 > excuse — that Human3.6M is in-domain so there is little error to predict — by
 > comparing per-video correlation against per-video error. Flat. The hardest
 > third of videos gives +0.156, the easiest +0.136.
