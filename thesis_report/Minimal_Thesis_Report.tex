@@ -109,9 +109,14 @@ ID: 12108004 \quad\textbullet\quad Session: 2020-21
 \newpage
 \thispagestyle{empty}
 \begin{center}
-{\fontsize{18}{22}\bfseries COMILLA UNIVERSITY :: COMILLA-3506}
+{\fontsize{18}{22}\bfseries
+COMILLA UNIVERSITY :: COMILLA-3506
+}
 \vspace{1cm}
-{\fontsize{16}{19}\bfseries BONAFIDE CERTIFICATE}
+
+{\fontsize{16}{19}\bfseries
+BONAFIDE CERTIFICATE
+}
 \end{center}
 \vspace{2cm}
 \doublespacing
@@ -198,6 +203,19 @@ The question this project sets out to answer is:
 \end{quote}
 
 The framework is the vehicle for answering it rather than the end in itself: building a frame that is cheap, frozen and free of calibration is what makes the question testable, because every variable except the frame's own construction can then be held fixed. The specific objectives are to construct a viewpoint-independent coordinate frame over a frozen estimator with no training, labels or camera parameters; to identify the design variable that governs frame consistency and establish where the derivation holds and where it stops; to score prediction reliability analytically and abstain when it is low; and to evaluate under an auditable protocol in which every number this project measures is recomputed from stored artifacts.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.72\textwidth]{images/fig_architecture.png}
+\caption[Where the contribution sits in the pipeline]{Where the contribution
+sits in the pipeline. Everything above the dashed line is trained by its
+authors and used here frozen and unmodified. Everything below it is this work,
+and it adds no trained parameters, consumes no labels and uses no camera
+parameters. The identity beneath the diagram is why: the frame is built from
+the joints, so it rotates with them, and the unknown rotation between two
+cameras cancels rather than being estimated.}
+\label{fig:architecture}
+\end{figure}
 
 \section{Contributions}
 
