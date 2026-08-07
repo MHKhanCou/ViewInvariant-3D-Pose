@@ -4,13 +4,19 @@
 
 Making the output of a *frozen* monocular 3D pose estimator comparable across camera viewpoints, with **no training, no labels, no camera calibration, and zero added parameters.** The estimator is untouched; only the coordinate frame its predictions are expressed in changes.
 
-![teaser](thesis_report/images/fig_teaser.png)
+![One instant, eight real cameras: raw predictions scatter, canonicalized ones converge](thesis_report/images/fig_realview.png)
+
+<sub>One instant of MPI-INF-3DHP seen by eight real cameras. **Top:** the actual photographs. **Bottom left:** the eight predictions made from them, each in its own camera's frame, overlaid. **Bottom right:** the same eight after canonicalization — each camera processed independently, with no knowledge of the others and no calibration.</sub>
 
 ---
 
 ## What this is
 
 Monocular 3D pose estimators return skeletons in the observing camera's coordinate frame, so two cameras watching the same person at the same instant produce two different sets of numbers for the same pose. This project builds a body-fixed frame from the predicted anatomy and applies it *after* prediction, which cancels the camera rotation exactly.
+
+![How the frame is built and what it does to two views](thesis_report/images/fig_teaser.png)
+
+<sub>The same operation on two cameras, with the mechanism in the middle. The left and right panels are drawn **from above**, because two views of one instant differ mainly in azimuth and that difference is invisible from the front. The frame's primary axis is the torso (pelvis→thorax) and its secondary is the hip axis; Gram-Schmidt makes them orthonormal.</sub>
 
 The frame construction is not new — it is the **TRIAD** algorithm from spacecraft attitude determination (Black, 1964), and the rule that the better-determined axis should be primary is due to Shuster & Oh (1981). The propagation of landmark error into frame orientation is established in biomechanics (Della Croce et al., 1999, 2005). **None of that is claimed here.**
 
