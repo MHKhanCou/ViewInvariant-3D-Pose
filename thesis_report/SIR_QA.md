@@ -257,11 +257,84 @@ of exactly my family, **and beats it**. I cite that rather than hide it.
 
 ### "What would you do with six more months?"
 
-> Test the frame where the baseline's assumption breaks rather than where mine
-> holds — non-standard body proportions, children, wheelchair users, anyone the
-> fixed template does not describe. The template baseline needs a skeleton that
-> resembles the subject; mine needs only that the subject *has* hips and a torso.
-> That is the honest place to look for an advantage, and I did not get to it.
+*(Rewritten 7 Aug. The earlier version named child proportions as the gap.
+Experiment 11 has since measured that gap at 0.12 mm, so the old answer was
+refuted by my own artifact.)*
+
+> Asymmetric morphology — unilateral prosthetics, scoliosis, hemiplegic gait.
+> Not *symmetric* proportion difference: I tested that in Experiment 11 by
+> scaling the template's limbs to child-like proportions, and Kabsch moved
+> 0.12 millimetres. Templates are far more robust to that than I expected. What
+> no template can represent is a body that is asymmetric, and neither method has
+> been evaluated there by anyone, as far as I could find. I would also want real
+> occlusion rather than injected noise, and a downstream task that consumes
+> cross-view comparability, so the improved agreement is shown to buy something.
+
+---
+
+## The three answers to have word-perfect
+
+These are the ones a hard examiner walks toward. Every figure is audited.
+
+### 1. The laterality shield — why the search is over
+
+**Do not say "no corruption can make the frame win." It can, and my own
+`occlusion.json` shows it at σ = 160 on both backbones and at σ = 40 on
+MotionBERT. Claiming a universal negative that my artifact refutes is a worse
+error than the loss it tries to cover.**
+
+> I tested whether the anatomical frame could win under asymmetric corruption.
+> The effect of laterality on alignment is 1.5 millimetres, against a
+> 41.5 millimetre gap between the two methods — twenty-seven times too small.
+> The reason is that a rigid-body fit absorbs asymmetric error into its
+> rotation, while balanced error offers it no such relief. So that particular
+> avenue is closed by measurement rather than by my giving up on it.
+>
+> The frame does win under severe distal corruption — at 160 millimetres on
+> MotionAGFormer and 40 on MotionBERT. But 160 was ruled out in advance in the
+> pre-registration, and a crossover on one backbone is not two, which is the
+> same rule by which I rejected the conditioning index. So I report it as a
+> failure, and the honest summary is that no regime crossed over at a severity
+> I had committed to beforehand.
+
+### 2. Subject-agnosticism — what the frame actually avoids
+
+**Drop "the only choice" and "fundamentally invalid". You could build an
+asymmetric template, a per-subject template, or several. And for scoliosis the
+pelvis-to-thorax axis is itself deformed, so my frame may degrade too — do not
+claim a regime I have not reasoned through.**
+
+> Kabsch needs a reference skeleton. My frame needs none, so template mismatch
+> cannot arise for it at all. That said, Experiment 11 showed Kabsch is robust
+> to symmetric proportion mismatch — 0.12 millimetres at child-like proportions
+> — so that is not where the difference lies. Asymmetric morphology is untested
+> by me and, as far as my literature search went, by anyone. It is the honest
+> place for future work and I am not claiming a result there.
+
+### 3. Scientific integrity
+
+> Every number in this report — all 304 headline claims — is re-derived from
+> stored artifacts by an automated audit, and a second checker confirms no
+> figure in the text lacks an artifact behind it. Seventeen pre-registered
+> experiments, recorded in sixteen documents because one covers two, each
+> committed to git before the run it governs. A script verifies that ordering
+> and it passes on all sixteen. More than half failed their own criteria, and
+> one returned a competing method as the better one. This is not a report about
+> a method that wins. It is a map of where the geometry holds and where it
+> breaks.
+
+### If asked about circularity
+
+> Table 5.9 already carries the torso row at 1.22 times its own Procrustes
+> floor, inside the band that demotes the limb frames — so the torso frame is
+> circular too, and the table says so. That is exactly why the headline figures,
+> 72.2 and 75.8 percent, exclude the four constructor joints and are measured on
+> the thirteen the frame never touches.
+
+### If asked whether it generalises
+
+> It is cross-backbone consistent across MotionAGFormer and MotionBERT. I do not
+> claim that proves model-independence — it establishes it for n equals two.
 
 ---
 ---
