@@ -1,15 +1,16 @@
 % =====================================================================
 %  Minimal_Thesis_Report.tex
-%  The submission document (~20 pages). Every number traces to a stored
-%  artifact in thesis_artifacts/ and is checked by evaluation.audit_numbers
-%  (the 304-claim audit covers the full report; the tables here use the
-%  same artifact values). Compile with pdfLaTeX, run TWICE.
+%  THE SUBMISSION DOCUMENT. 35 pages: 20 pages of body, then Appendix A
+%  (base versus proposed at a glance) and Appendix B (the complete result
+%  tables, generated from artifacts by make_appendix_tables).
 %
-%  This is the condensed companion to Full_Thesis_Report.tex. Same
-%  preamble, same title page, same headline results, same negative
-%  results, none of the scaffolding. Section 5.8 is the post-freeze
-%  addendum: the failure-support map, the routing rule and the 2D-channel
-%  boundary (pre-registered 7 Aug 2026).
+%  Full_Thesis_Report.tex is the 92-page technical version and is retained
+%  as a supplement, not as the submission. Both draw every number from the
+%  same artifacts in thesis_artifacts/ and both are covered by the
+%  304-claim audit in evaluation.audit_numbers, so they cannot disagree.
+%
+%  Compile with pdfLaTeX, run TWICE (three times after adding a label).
+%  Not latexmk: no Perl on the build machine.
 % =====================================================================
 \documentclass[12pt,a4paper]{report}
 \usepackage[left=1.2in,right=0.8in,top=1in,bottom=1in]{geometry}
@@ -357,6 +358,7 @@ Every experiment in this report was pre-registered: its criterion and all plausi
 The baseline reproduces the published MotionAGFormer-XS figures to three decimals: MPJPE 45.149~mm against the reported 45.1, and P-MPJPE 36.892~mm against 36.9. This is what makes the negative results interpretable: a negative result is only informative if the apparatus is not what failed.
 
 \section{The Central Claim: Cross-View Comparability}
+\label{sec:h36mcv}
 
 Table \ref{tab:crossview} is the answer to the question a reader asks first---how does the proposed output compare to the base output. Accuracy is identical by construction: the estimator is frozen and canonicalization adds zero parameters. What changes is agreement between cameras.
 
@@ -417,6 +419,7 @@ The analytic reliability score was falsified as an accuracy predictor along five
 The same score, however, gates the quantity its own specification names---canonicalization quality. Dropping the worst thirty percent of frames by score reduces mean cross-view distance by 22 percent, against a random baseline that does not move it, and the triage survives a bone-deviation confound control on both backbones (gain at ten percent abstention 5.4~mm, interval $[+1.5, +9.3]$). This was a comparator in its pre-registration, not its subject, and is reported as exploratory.
 
 \section{Retractions and Failed Pre-registrations}
+\label{sec:h36m}
 
 A temporal bone-length signal reached $\rho = +0.492$ on MPI-INF-3DHP and fell to $+0.098$ on Human3.6M, failing every criterion; it is retracted, and the narrower condition under which it holds is stated in the full report. Two post-freeze pre-registrations also failed. Corrupting the eight distal joints of the predicted pose leaves the anatomical frame exactly flat at 53.45~mm at every severity (it never reads them) while the Kabsch baseline degrades from 43.3 to 92.3~mm---but the crossover the pre-registration required at $\sigma \le 80$~mm on both backbones fired on MotionBERT at 40~mm and on MotionAGFormer only at 160~mm, so the regime was not established at the committed severity. And scaling the template's limbs to child-like proportions moves the baseline by 0.12~mm (0.2 percent): the baseline needs no matching template.
 
@@ -560,6 +563,22 @@ Requirements & detector + lifter & + no training, no labels, no calibration \\
 \end{tabular}
 \end{table}
 
-The pre-registered experiments: nine govern the body of this report (several failed their own criteria, and the template comparison of Section 5.3 returned a competing method as the better one); the tenth and eleventh (distal corruption, template mismatch) failed; the twelfth (anchor corruption) and fourteenth (2D-input invariance) were established, and the thirteenth (routing rule) met its criteria under a simulated gate and is reported as exploratory because the fourteenth shows that gate has no real counterpart. All fourteen are recorded in \texttt{thesis\_artifacts/} with criteria committed to version history before their runs.
+The pre-registered experiments: nine govern the body of this report, several of which failed their own criteria and one of which returned a competing method as the better one. Eight more were run after the freeze. Two were established --- anchor corruption, and the invariance of the frozen lifter to two-dimensional keypoint error. One, the routing rule, met its criteria under a simulated confidence gate and is reported as exploratory, because the experiment that followed it measured the real gate and found no usable signal on clean data. The remaining five failed: distal corruption, template proportion mismatch, a comparison of every frame construction against the baseline, one-sided corruption, and a laterality control that refuted its own mechanism. Seventeen experiments in sixteen documents, one of which covers two; every criterion was committed to version history before the run it governs, and \texttt{evaluation/verify\_prereg\_order.py} verifies that ordering and passes on all sixteen.
+
+\newpage
+\chapter*{APPENDIX B: COMPLETE RESULT TABLES}
+\label{sec:h36mms}
+\addcontentsline{toc}{chapter}{APPENDIX B: COMPLETE RESULT TABLES}
+\markboth{APPENDIX B}{APPENDIX B}
+\setcounter{table}{0}
+\renewcommand{\thetable}{B.\arabic{table}}
+
+Every table in this appendix is generated from the stored JSON artifacts by
+\texttt{python -m evaluation.make\_appendix\_tables} rather than typed by hand,
+so it cannot drift from the figures the automated audit verifies. They are
+reproduced here so a reader can trace any number in the body to its source
+without leaving the document.
+
+\input{appendix_tables}
 
 \end{document}
