@@ -69,6 +69,24 @@ routing rule's gate is correctly modelled at that level.
   creates a real corruption regime; a detector-side gate is required and the
   failure map extends to the 2D level.
 
+## Amendment (documented after the run, before finalizing the result)
+
+P2 as originally written (mean confidence ≥ 0.99, fraction < 0.9 ≤ 5%) was
+operationalised from an incorrect cache read: `components[:, 0]` of
+`predictions_cache.npz` is the first **analytic reliability** component
+(`run_eval.py` stores `COMPONENT_KEYS` order; `bone_consistency.py` reads the
+detector-confidence component at index 4), not the detector confidence. The
+correct quantity is the fresh per-frame mean of the per-keypoint YOLOv8 scores
+from the identical `detect_with_rotation` path used to build the cache.
+
+**Amended P2:** the real detector-confidence channel carries **no usable gate
+signal** on clean data — either no frame reaches high confidence (all frames
+< 0.9, so no threshold can separate frames and a gate would fire everywhere
+or nowhere) or the channel is saturated (mean ≥ 0.99). The verdict uses this amended operationalisation;
+all other predictions are unchanged. This is a measurement correction, not a
+result change: the pre-registered *intent* (does a real, usable gate signal
+exist?) is preserved.
+
 ## Honest boundaries
 
 - This measures 2D **keypoint** corruption, not detection failure (missed

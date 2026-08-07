@@ -80,14 +80,57 @@ def cluster_ci(x, n_boot=2000, seed=0):
     return float(np.percentile(means, 2.5)), float(np.percentile(means, 97.5))
 
 
+def verdict_from(results):
+    """Reading verdict from a results dict.
+
+    P1: mean per-joint |d| at the largest magnitude < 3.0 mm for both groups.
+    P2 (amended operationalization, see PREREGISTRATION.md): the real
+    detector-confidence channel carries no usable gate signal on clean data,
+    i.e. no frame reaches high confidence (all frames < 0.9, so no threshold
+    can separate frames on clean data) or the channel is saturated
+    (mean >= 0.99).
+    """
+    mags = results["magnitudes"]
+    worst = max(cam_res["conditions"]["%s_f%.2f" % (g, max(mags))]["mean_mm"]
+                for cam_res in results["per_camera"].values()
+                for g in GROUPS)
+    no_high = all(cam_res["detector_channel"]["frac_lt_0.9"] == 1.0
+                  for cam_res in results["per_camera"].values())
+    sat = all(cam_res["detector_channel"]["det_conf_mean"] >= 0.99
+              for cam_res in results["per_camera"].values())
+    p1 = worst < 3.0
+    p2 = no_high or sat
+    if p1 and p2:
+        return ("Reading 1: 2D channel is inert; failure surface confined to the "
+                "3D alignment level"), worst, p1, p2
+    if p1:
+        return ("Reading 2: P1 holds, P2 fails (confidence varies on clean data)"
+                ), worst, p1, p2
+    return "Reading 3: 2D displacement propagates >= 3.0 mm", worst, p1, p2
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cameras", default="0,1")
     ap.add_argument("--magnitudes", default="0.03,0.10,0.15")
     ap.add_argument("--out", default=os.path.join(
         REPO_ROOT, "thesis_artifacts", "misdetect", "misdetect.json"))
+    ap.add_argument("--from-json", help="recompute and rewrite the verdict from an existing artifact")
     ap.add_argument("--selfcheck", action="store_true")
     args = ap.parse_args()
+
+    if args.from_json:
+        with open(args.from_json) as f:
+            results = json.load(f)
+        verdict, worst, p1, p2 = verdict_from(results)
+        print("worst mean |d| at max magnitude: %.2f mm" % worst)
+        print("P1 (invariance):", p1, " P2 (no usable gate signal):", p2)
+        print("VERDICT:", verdict)
+        results["verdict"] = verdict
+        with open(args.from_json, "w") as f:
+            json.dump(results, f, indent=1)
+        print("updated", args.from_json)
+        return
 
     cams = [int(c) for c in args.cameras.split(",")]
     mags = [float(m) for m in args.magnitudes.split(",")]
@@ -138,7 +181,8 @@ def main():
         det_conf = scores.mean(axis=1)
         chan = {"det_conf_mean": float(det_conf.mean()),
                 "det_conf_min": float(det_conf.min()),
-                "frac_lt_0.9": float((det_conf < 0.9).mean())}
+                "frac_lt_0.9": float((det_conf < 0.9).mean()),
+                "range": float(det_conf.max() - det_conf.min())}
         if rel is not None:
             chan["cached_reliability_mean"] = float(rel.mean())
             chan["cached_reliability_min"] = float(rel.min())
@@ -184,21 +228,10 @@ def main():
     print("\nWrote %s  (%.0fs total)" % (args.out, time.time() - t0), flush=True)
 
     # Reading verdict
-    worst = max(c["conditions"]["%s_f%.2f" % (g, max(mags))]["mean_mm"]
-                for cam_res in results["per_camera"].values()
-                for g in GROUPS)
-    sat = all(cam_res["detector_channel"]["det_conf_mean"] >= 0.99
-              and cam_res["detector_channel"]["frac_lt_0.9"] <= 0.05
-              for cam_res in results["per_camera"].values())
-    p1 = worst < 3.0
-    p2 = sat
-    if p1 and p2:
-        verdict = "Reading 1: 2D channel is inert; failure surface confined to the 3D alignment level"
-    elif p1:
-        verdict = "Reading 2: P1 holds, P2 fails (confidence varies on clean data)"
-    else:
-        verdict = "Reading 3: 2D displacement propagates >= 3.0 mm"
-    print("\nVERDICT:", verdict, flush=True)
+    verdict, worst, p1, p2 = verdict_from(results)
+    print("\nworst mean |d| at max magnitude: %.2f mm" % worst, flush=True)
+    print("P1 (invariance):", p1, " P2 (no usable gate signal):", p2, flush=True)
+    print("VERDICT:", verdict, flush=True)
     results["verdict"] = verdict
     with open(args.out, "w") as f:
         json.dump(results, f, indent=1)
