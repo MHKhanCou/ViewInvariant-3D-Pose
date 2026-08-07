@@ -54,8 +54,8 @@ NOTES ON THE CONTENT
 --------------------------------------------------------------------
 - Every number in Chapter 5 comes from a JSON artifact under
   MotionAGFormer/thesis_artifacts/ and is verified by
-  `python -m evaluation.audit_numbers`  (65 claims, all passing).
-  The test suite is 90 tests, all passing.
+  `python -m evaluation.audit_numbers`  (304 claims, all passing).
+  The test suite is 76 tests, all passing.
 
 - THE HEADLINE IS NOW THE CROSS-DATASET REPLICATION (Section 5.9).
   Canonicalization was re-tested on Human3.6M, which played no part in

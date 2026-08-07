@@ -135,7 +135,7 @@ on this data, use the simpler method.**
   and saved it with a timestamp so nobody can claim I changed my mind afterwards.
 - **Five of the nine failed.** I reported all five.
 - A sixth showed a rival method was better. I put that in the abstract.
-- A computer program re-checks all **255 numbers** in my report against the raw
+- A computer program re-checks all **304 numbers** in my report against the raw
   data files, and fails if even one of them drifts.
 - When I found one of my own results was measuring the wrong thing, I said so and
   took it back.

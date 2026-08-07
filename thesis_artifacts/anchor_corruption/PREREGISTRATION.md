@@ -77,3 +77,5 @@ None. The report's 255 audited claims, its nine pre-registrations and its
 section structure are unchanged. This is a post-freeze experiment recorded in
 `thesis_artifacts/anchor_corruption/`, cited by the minimal report and the
 defence prep only.
+
+*Updated 8 Aug 2026: the report has since been extended to report this experiment, and the audit now stands at 304 claims across seventeen pre-registered experiments. The statement above describes the state at the time this pre-registration was committed and is left unedited for that reason.*

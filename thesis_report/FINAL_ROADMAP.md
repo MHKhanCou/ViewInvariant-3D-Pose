@@ -11,11 +11,13 @@ Report due 6 Aug. Defense 9 Aug. Deliverable A is done and committed (`63ddd6e`)
 | 3 | Send report + email supervisor re: title wording | 30 m | — | high | none | none |
 
 **Item 1 is the highest-value 40 minutes available.** The examiner's sharpest
-question is "your title says Reliability-Aware and Chapter 5 destroys the
-reliability score." Until today the only answer was a retraction. Now the
-answer is a result: the score fails at predicting pose error and succeeds at
-gating canonicalization, on both backbones, with the confound controlled. The
-distinction must be delivered in one sentence without hedging.
+question here is "you built a reliability score and Chapter 5 destroys it."
+("Reliability-Aware" has since been removed from the title, so the sharper
+version of that question can no longer be asked.) Until recently the only answer
+was a retraction. Now the answer is a result: the score fails at predicting pose
+error and succeeds at gating canonicalization, on both backbones, with the
+confound controlled. The distinction must be delivered in one sentence without
+hedging.
 
 **Item 2 is the only demonstrator worth building** — see below.
 
@@ -51,7 +53,7 @@ tested. Item 7 is a good demo and a bad use of the last day.
   negative in a report that already carries three. The §3.7/§5.14 contradiction
   it was going to fix should instead be fixed by one sentence marking §5.14 as
   superseded protocol — 10 minutes, same outcome.
-- **Any pipeline change.** 255 audit claims are frozen against artifacts.
+- **Any pipeline change.** 304 audit claims are frozen against artifacts.
 - **Rewriting prose to lower an AI-detector score.** Would misrepresent
   authorship. Check the university policy and disclose if required.
 - **A second conditioning variant.** The criterion failed; trying variants until
@@ -153,7 +155,7 @@ real science and there are now four of them, three pre-registered before the
 number existed, with the pre-registrations in version history. The bone-length
 retraction removed the project's most attractive claim on cross-dataset evidence
 rather than defending it. The multi-scale left/right error was self-found and
-disclosed. 255 numbers trace to artifacts and 76 tests pass. That discipline is
+disclosed. 304 numbers trace to artifacts and 76 tests pass. That discipline is
 the thesis's actual contribution to a reader, and it is rarer at this level than
 any result would be.
 

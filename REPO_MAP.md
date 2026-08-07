@@ -85,7 +85,7 @@ hand.**
 
 ```
 thesis_report/
-  Minimal_Thesis_Report.tex the ~20-page submission report
+  Minimal_Thesis_Report.tex the 55-page submission report
   Full_Thesis_Report.tex     the extended report
   SIR_CONCERNS.md            supervisor feedback, answered (base vs proposal included)
   NOVELTY_PLAN.md            the two-night novelty plan and exact claims

@@ -138,7 +138,7 @@ detector confidence.)
 - [ ] Rehearse the three answers from `SIR_CONCERNS.md` aloud, plus the
       3DPCNet answer and the Q4 answer ("I define cross-view agreement in my
       protocol; I have not established it is a named standard").
-- [ ] Run `audit_numbers.py` (258/258) and `python -m unittest discover -s
+- [ ] Run `audit_numbers.py` (304/304) and `python -m unittest discover -s
       tests -q` (76+ tests) once more after the report edits.
 - [ ] Send the supervisor email (`SUPERVISOR_EMAIL.md`) with the two-page
       `WORKFLOW.md` and the minimal report.

@@ -26,7 +26,7 @@ examiner will check against.
 | **1** | "Implement a reproducible baseline 2D-to-3D lifting model on the Human3.6M dataset" | **✅ Done.** 45.149 mm against the published 45.1 mm — matching the backbone's own evaluation script to three decimal places | §5.9 |
 | **2** | "Design a lightweight canonicalization step to reduce sensitivity to camera rotation" | **✅ Done, and it became the whole thesis.** 402 FLOPs, zero parameters, 72.2% cross-view reduction over 180 held-out pairs | §3.2, §5.10 |
 | **3** | "Incorporate bone-length consistency as an auxiliary loss to enforce anatomical plausibility" | **⚠️ Changed, then retracted.** Not built as a loss — tested as a test-time signal instead. ρ = +0.492 on the first dataset, +0.098 on the second. **Retracted in the report** | §5.12 |
-| **4** | "Evaluate cross-view generalization and perform ablation studies …" | **✅ Exceeded.** Nine pre-registered experiments, two datasets, two backbones, 209 camera pairs, cluster bootstrap intervals throughout | Ch. 5 |
+| **4** | "Evaluate cross-view generalization and perform ablation studies …" | **✅ Exceeded.** Seventeen pre-registered experiments, two datasets, two backbones, 209 camera pairs, cluster bootstrap intervals throughout | Ch. 5 |
 | **5** | "Analyze failure modes such as occlusions and noisy 2D detections" | **✅ Done — and this became the contribution.** The boundary: where the geometric principle holds and where it stops | §5.16, §6.1 |
 
 **Four of five delivered. One changed direction and was retracted, and the report
@@ -145,7 +145,7 @@ of the method and is itself a claim the report makes.
 | 3 | Canonicalization module, ablations | Done, and became the core |
 | 4 | Bone-length loss, tune λ | **Diverged.** Bone length was tested as a signal and retracted; the time went to pre-registered experiments instead |
 | 5 | Full experiments, cross-view tests, error analysis | Done, on two datasets and two backbones |
-| 6 | Final report, presentation, submit | Done — 56 pages, 255 audited claims |
+| 6 | Final report, presentation, submit | Done — 55 pages, 304 audited claims |
 
 ## 8. How to open, if he asks about the proposal
 

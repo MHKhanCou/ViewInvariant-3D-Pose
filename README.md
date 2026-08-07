@@ -186,9 +186,9 @@ The baseline reproduces the published MotionAGFormer-XS figure to three decimals
 
 ```bibtex
 @thesis{khan2026canonicalization,
-  title  = {A Lightweight, Training-Free, Reliability-Aware Geometric
-            Canonicalization Framework for Cross-View Comparability of
-            Frozen Monocular 3D Pose Predictions},
+  title  = {A Lightweight, Training-Free Geometric Canonicalization
+            Framework for Cross-View Comparability of Frozen Monocular
+            3D Pose Predictions},
   author = {Mehedi Hasan Khan},
   school = {Comilla University},
   type   = {Undergraduate thesis},

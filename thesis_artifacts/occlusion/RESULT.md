@@ -62,3 +62,5 @@ None. The pre-registration fixed this in advance: "Reading 3 changes no existing
 sentence in the report." The report's 255 audited claims and its nine
 pre-registrations are unchanged; this is the tenth, run after the freeze, and it
 failed.
+
+*Updated 8 Aug 2026: the report has since been extended to report this experiment, and the audit now stands at 304 claims across seventeen pre-registered experiments. The statement above describes the state at the time of the run.*

@@ -1,7 +1,7 @@
 # evaluation/
 
 Every module writes a JSON artifact under `thesis_artifacts/` and is runnable on
-its own. `audit_numbers.py` re-derives 80 headline claims from those artifacts
+its own. `audit_numbers.py` re-derives 304 headline claims from those artifacts
 and fails on drift, so the artifacts are the source of truth and the report
 quotes them rather than restating them.
 
@@ -54,7 +54,7 @@ only `h36m_replication --stage infer` costs real time.
 
 | Module | What it produces |
 |---|---|
-| `audit_numbers.py` | re-derives 80 claims from artifacts; fails on drift |
+| `audit_numbers.py` | re-derives 304 claims from artifacts; fails on drift |
 | `make_figures.py` | MPI-INF-3DHP figures |
 | `make_h36m_figures.py` | Human3.6M figures |
 | `make_appendix_tables.py` | Appendix A of the report, generated not typed |

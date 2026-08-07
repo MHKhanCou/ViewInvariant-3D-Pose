@@ -1,7 +1,7 @@
 # FINAL REPORT
 
-Training-free, reliability-aware geometric canonicalization for cross-view
-comparability of frozen monocular 3D pose predictions.
+Training-free geometric canonicalization for cross-view comparability of frozen
+monocular 3D pose predictions.
 
 All numbers below are traceable to JSON artifacts in `thesis_artifacts/`
 (file cited per claim). Predictions derive from frozen MotionAGFormer-XS;

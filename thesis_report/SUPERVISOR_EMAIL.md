@@ -115,29 +115,26 @@ the 29 the section reports on, which made the plotted mean disagree with the
 figure quoted in the text. The text was correct throughout; the figures were not.
 Both are regenerated and the generator now asserts the record count.
 
-**On the title.** The report reads *"A Lightweight, Training-Free,
-Reliability-Aware Geometric Canonicalization Framework for Cross-View
-Comparability of Frozen Monocular 3D Pose Predictions."* I would like your
-confirmation rather than assuming it stands, as I do not believe it was formally
-approved. It says *canonicalization framework* rather than pose estimation
-because the estimator is untouched, and *cross-view comparability* rather than
-view-invariant estimation because what improves is agreement between two
-camera-relative predictions, not their accuracy.
+**On the title.** The report reads *"A Lightweight, Training-Free Geometric
+Canonicalization Framework for Cross-View Comparability of Frozen Monocular 3D
+Pose Predictions."* I would like your confirmation rather than assuming it
+stands, as I do not believe it was formally approved. It says *canonicalization
+framework* rather than pose estimation because the estimator is untouched, and
+*cross-view comparability* rather than view-invariant estimation because what
+improves is agreement between two camera-relative predictions, not their
+accuracy.
 
-**One word in it I am not certain of, and would rather raise than defend
-later: "Reliability-Aware".** The report falsifies the reliability score as an
-accuracy predictor along five independent axes, and the pre-registered
-conditioning criterion fails. What survives is narrower: the score does gate
-canonicalization *quality* on both backbones, which is the function its own
-specification names. So the word is defensible for that narrower claim and the
-report states plainly which claim it is — but it sits in the most prominent
-position in the document and describes a component the body largely falsifies.
-If you think it overstates, dropping it to *"A Lightweight, Training-Free
-Geometric Canonicalization Framework for Cross-View Comparability of Frozen
-Monocular 3D Pose Predictions"* costs nothing and I would prefer that to
-defending it at the viva. Your call, and I am glad either way.
+**One change I made to it myself, and would rather report than be asked about.**
+An earlier draft included the word *"Reliability-Aware"*. I have removed it. The
+report falsifies the reliability score as an accuracy predictor along five
+independent axes, and the pre-registered conditioning criterion fails. What
+survives is narrower: the score does gate canonicalization *quality* on both
+backbones, which is the function its own specification names. That narrower
+finding belongs in Chapter 5, where it is reported with its controls — but it did
+not belong in the most prominent line of the document, describing a component the
+body largely disproves. The shorter title claims only what the evidence supports.
 
-The report is 56 pages, of which 33 are the thesis proper and the rest appendices and references, with a 97-page technical version attached as a supplement in case you want the full evidence. Seventeen experiments were pre-registered with their criteria
+The report is 55 pages, of which 33 are the thesis proper and the rest appendices and references, with a 97-page technical version attached as a supplement in case you want the full evidence. Seventeen experiments were pre-registered with their criteria
 committed to version history before each run; **more than half failed their own
 criteria, and one returned a competing method as the better one**. Every
 reported number is recomputed from stored result files by an automated audit
@@ -165,12 +162,12 @@ Session 2020–21, Department of Computer Science and Engineering
 
 ---
 
-**Attach:** `Thesis_12108004.pdf` (the 56-page submission), `WORKFLOW.md`, and
+**Attach:** `Thesis_12108004.pdf` (the 55-page submission), `WORKFLOW.md`, and
 `fig_realview.png`. Optionally `Thesis_12108004_supplement.pdf`, the 97-page
 technical version, if you want him to have the complete evidence.
 
 **Add one question before sending:** whether the department sets a minimum page
-count for the report. Fifty-six clears most rules, but it is his to confirm
+count for the report. Fifty-five clears most rules, but it is his to confirm
 and it costs one sentence to ask.
 
 ---

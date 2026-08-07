@@ -1,7 +1,7 @@
 # Context prompt — paste this whole file into any model
 
 Written 7 Aug 2026, two days before the defence. Everything below is verified
-against stored artifacts by `evaluation/audit_numbers.py` (258/258 passing).
+against stored artifacts by `evaluation/audit_numbers.py` (304/304 passing).
 Where a claim is uncertain it says so.
 
 ---
@@ -9,7 +9,7 @@ Where a claim is uncertain it says so.
 ## Who I am and what I am asking
 
 I am an undergraduate CS student at Comilla University (ID 12108004). My thesis
-defence is **9 August 2026**. My report is complete: 56 pages, compiled, 258
+defence is **9 August 2026**. My report is complete: 55 pages, compiled, 304
 numerical claims automatically audited against stored result files, 76 unit
 tests, seventeen pre-registered experiments committed to git before their experiments ran.
 
@@ -176,7 +176,7 @@ estimator's error in the joint angle dominates the geometry entirely. Two of the
 three tests are failures and **the boundary they establish is the contribution.**
 
 Plus: seventeen pre-registered experiments, **seven failed their own criteria**, one returned
-a competing method as better; 258 audited claims; 76 tests; a retraction of my
+a competing method as better; 304 audited claims; 76 tests; a retraction of my
 own error predictor.
 
 ---
@@ -187,7 +187,7 @@ Repository: `github.com/MHKhanCou/ViewInvariant-3D-Pose`
 
 | File | What it is |
 |---|---|
-| `thesis_report/Minimal_Thesis_Report.tex` | The submission. 56 pages; main body 60, Ch5 22, then Appendix A/B and references |
+| `thesis_report/Minimal_Thesis_Report.tex` | The submission. 55 pages; body, then the single appendix and references |
 | `thesis_report/WORKFLOW.md` | RGB→comparison walkthrough answering Sir's two questions, EN + BN |
 | `thesis_report/SIR_QA.md` | All of Sir's questions plus likely follow-ups, EN + BN |
 | `thesis_report/SUPERVISOR_EMAIL.md` | The email to send before he reads the report |
@@ -201,11 +201,12 @@ Chapter 5 was 56 pages and held every contribution, so ten supporting sections
 were moved verbatim into a new Appendix B rather than deleted — main body 73 → 60,
 Ch5 35 → 22, all 304 claims intact, no broken cross-references.
 
-Title, **not confirmed by Sir** — I must ask him: *"A Lightweight, Training-Free,
-Reliability-Aware Geometric Canonicalization Framework for Cross-View
-Comparability of Frozen Monocular 3D Pose Predictions."* I doubt
-"Reliability-Aware", since the report falsifies that score as an accuracy
-predictor five ways and it survives only against a narrower target.
+Title, **not confirmed by Sir** — I must still ask him to confirm: *"A Lightweight,
+Training-Free Geometric Canonicalization Framework for Cross-View Comparability of
+Frozen Monocular 3D Pose Predictions."* An earlier draft read "Training-Free,
+Reliability-Aware …"; I removed "Reliability-Aware" myself, since the report
+falsifies that score as an accuracy predictor five ways and it survives only
+against a narrower target that belongs in Chapter 5, not in the title.
 
 ---
 
@@ -218,7 +219,7 @@ Answer these directly, and disagree with me where you think I am wrong.
    occlusion, single-limb dropout, hemiplegic or amputee gait — because that is
    the one thing that actually rotates a Kabsch fit. Is that worth running, or am
    I chasing a result I have already failed to find twice?
-2. **Should I change the pipeline?** Be blunt. I have a compiled report with 258
+2. **Should I change the pipeline?** Be blunt. I have a compiled report with 304
    audited claims and a defence in two days.
 3. **How much further should the report be cut, and what specifically?** The goal
    is defensibility — fewer pages I must be able to answer for.

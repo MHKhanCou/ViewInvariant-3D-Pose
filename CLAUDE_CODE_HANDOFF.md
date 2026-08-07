@@ -8,7 +8,7 @@ commit `b4d86e8` (working tree clean).
 
 ## 1. The project in one paragraph
 
-A training-free, reliability-aware **geometric canonicalization** framework for
+A training-free **geometric canonicalization** framework for
 cross-view comparability of frozen monocular 3D pose predictions. The core is a
 **body-fixed anatomical reference frame** built from predicted joints — this is
 the **TRIAD algorithm (Black 1964)** with the torso axis primary, plus an
@@ -30,7 +30,7 @@ better single one.
 - **Every experiment is pre-registered**: criterion + all readings committed to
   git **before** the run. Commit history shows pre-registration commits
   (`5dbc47a`, `4ccee2f`) preceding result commits (`2a97b2e`, `027dc13`).
-- **258/258** numerical claims recomputed from stored artifacts by
+- **304/304** numerical claims recomputed from stored artifacts by
   `python -m evaluation.audit_numbers`; **76+ unit tests** pass.
 - **No number in the report was typed by hand** — all trace to
   `thesis_artifacts/*.json` / `.npz`.
@@ -90,13 +90,13 @@ report §5.2–5.3 + Appendix A of the minimal report, and collected in
 
 ## 5. Files created/changed this session
 
-**In `MotionAGFormer/` (own git repo, 14 pre-registrations):**
+**In `MotionAGFormer/` (own git repo, 16 pre-registration documents covering 17 experiments):**
 - `evaluation/anchor_corruption.py`, `evaluation/selection_rule.py`,
   `evaluation/misdetect_invariance.py` — the three new experiments
 - `thesis_artifacts/anchor_corruption/`, `thesis_artifacts/selection/`,
   `thesis_artifacts/misdetect/` — PREREGISTRATION.md + RESULT.md + JSON each
 - `thesis_report/Minimal_Thesis_Report.tex` (+`.pdf`) — **the submission doc,
-  56 pages, compiles clean** (0 errors/overfull/underfull/undefined)
+  55 pages, compiles clean** (0 errors/overfull/underfull/undefined)
 - `thesis_report/SIR_CONCERNS.md` — supervisor concerns + comparison answers
 - `thesis_report/NOVELTY_PLAN.md` — the 2-night plan, claims + anti-claims
 - `REPO_MAP.md` — updated with experiments 12–14
@@ -111,7 +111,7 @@ report §5.2–5.3 + Appendix A of the minimal report, and collected in
 
 ```bash
 cd /e/thesis/MotionAGFormer
-./venv/Scripts/python.exe -m evaluation.audit_numbers          # 258/258
+./venv/Scripts/python.exe -m evaluation.audit_numbers          # 304/304
 ./venv/Scripts/python.exe -m unittest discover -s tests -q     # OK
 ./venv/Scripts/python.exe -m evaluation.anchor_corruption --selfcheck
 ./venv/Scripts/python.exe -m evaluation.selection_rule --selfcheck

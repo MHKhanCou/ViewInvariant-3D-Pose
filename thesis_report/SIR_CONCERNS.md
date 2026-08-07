@@ -1,7 +1,7 @@
 # Sir's concerns — what they are, and the exact answers
 
 Every number here is recomputed from stored artifacts by
-`evaluation.audit_numbers.py` (258/258 pass) or is a post-freeze pre-registered
+`evaluation.audit_numbers.py` (304/304 pass) or is a post-freeze pre-registered
 experiment recorded in `thesis_artifacts/`. English first, Bengali at the end.
 
 ---
@@ -59,15 +59,16 @@ Kabsch baseline."*
 
 ---
 
-## Concern 2 — "56 pages for an undergraduate report, where is the novelty?"
+## Concern 2 — "too long for an undergraduate report, where is the novelty?"
 
 Two separate things are being objected to, and they need two answers.
 
-**The length.** The full report is being reduced. Chapter 5 is already cut to
-~16 pages; the companion **Minimal Thesis Report** (`Minimal_Thesis_Report.tex`,
-~20 pages) is the submission document — full report structure, every headline
-number, every honest negative result, none of the scaffolding. The 56-page
-document becomes the extended version, kept for the record.
+**The length.** This is resolved. The submission is the **Minimal Thesis Report**
+(`Minimal_Thesis_Report.tex` → `Thesis_12108004.pdf`, **55 pages**): full report
+structure, every headline number, every honest negative result, none of the
+scaffolding. The earlier long version survives as the **97-page technical
+supplement** (`Thesis_12108004_supplement.pdf`), kept for the record and attached
+only if he wants the complete evidence.
 
 **The novelty.** Say the honest thing, which is now stronger than it was two
 days ago:
@@ -124,15 +125,25 @@ ICASSP 2026, §3.3). The answer has three qualifications and one admission:
 
 ---
 
-## Concern 4 — the word "Reliability-Aware" in the title
+## Concern 4 — the word "Reliability-Aware" in the title (RESOLVED — removed)
 
-The report falsifies the reliability score as an accuracy predictor and shows
-it gates canonicalization quality instead. If he objects, say: *"The word is
-defensible for the narrower claim — the score gates whether a canonical frame
-is fit to use, on both backbones, with the confound controlled. But if you
-think it overstates, dropping it costs nothing."* The shorter title is ready:
+**This question can no longer be asked. The word is gone.** The title is now:
 *A Lightweight, Training-Free Geometric Canonicalization Framework for
 Cross-View Comparability of Frozen Monocular 3D Pose Predictions.*
+
+Do not rehearse a defense of the old word. Volunteer the removal instead, which
+is the stronger move:
+
+> *"I removed 'Reliability-Aware' from the title myself. The report falsifies
+> that score as an accuracy predictor five different ways, so leaving the word
+> in the most prominent line of the document would have overstated a component
+> the body largely disproves. What survives is narrower and is reported as
+> exactly that: the score gates canonicalization quality — the function its own
+> specification names — on both backbones, with the confound controlled. That
+> finding is in Chapter 5; it is not a title claim."*
+
+The point to land: the title was corrected because the evidence did not support
+it, not because someone objected.
 
 ---
 

@@ -5,7 +5,7 @@ thing to look at; nothing here is "check it looks right".
 
 ## 1. Numbers
 
-- [ ] `python -m evaluation.audit_numbers` → **255/255**, exit 0.
+- [ ] `python -m evaluation.audit_numbers` → **304/304**, exit 0.
       Fails loudly if any reported figure drifts from its JSON artifact.
 - [ ] `python -m unittest discover -s tests -q` → **76 tests, OK**.
 - [ ] Spot-check by hand that the two averaging conventions still disagree the way

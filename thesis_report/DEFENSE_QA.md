@@ -79,7 +79,7 @@ trace, and that is worth more than one recalled digit.
 >    fail here — my axes span 138 to 461 mm, and one network predicting all
 >    seventeen joints makes their errors dependent.
 >
-> Then the apparatus: 255 numerical claims recomputed from stored artifacts by an
+> Then the apparatus: 304 numerical claims recomputed from stored artifacts by an
 > automated audit, 76 tests, seventeen pre-registered experiments timestamped ahead of their
 > results, and two claims withdrawn during the final week because they did not
 > survive a check I should have run earlier.
@@ -177,9 +177,14 @@ Two things wrong with the premise. Say both.
 
 ---
 
-### 4. "Your title says Reliability-Aware, but you falsified the reliability score."
+### 4. "You built a reliability score and then falsified it. Why is it still in the thesis?"
 
-Do not be defensive. This is your best evidence of rigour.
+**First, the title.** "Reliability-Aware" is no longer in it — it was removed
+because the evidence did not support that prominence. If he raises the old title
+from an earlier draft, say so plainly and move to the science below. Volunteering
+the removal is stronger than defending the word.
+
+Then, do not be defensive. This is your best evidence of rigour.
 
 > I falsified it as a predictor of accuracy, along five independent axes, and I
 > report every one. Then I tested it against the target its own specification

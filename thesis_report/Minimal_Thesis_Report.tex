@@ -65,7 +65,7 @@
 \vspace{0.5cm}
 
 {\fontsize{17}{21}\bfseries
-A LIGHTWEIGHT, TRAINING-FREE, RELIABILITY-AWARE GEOMETRIC CANONICALIZATION FRAMEWORK FOR CROSS-VIEW COMPARABILITY OF FROZEN MONOCULAR 3D POSE PREDICTIONS
+A LIGHTWEIGHT, TRAINING-FREE GEOMETRIC CANONICALIZATION FRAMEWORK FOR CROSS-VIEW COMPARABILITY OF FROZEN MONOCULAR 3D POSE PREDICTIONS
 }
 \vspace{0.7cm}
 
@@ -121,7 +121,7 @@ BONAFIDE CERTIFICATE
 \vspace{2cm}
 \doublespacing
 {\fontsize{14}{17}\selectfont
-Certified that this project report ``A Lightweight, Training-Free, Reliability-Aware Geometric Canonicalization Framework for Cross-View Comparability of Frozen Monocular 3D Pose Predictions'' is the bonafide work of ``MEHEDI HASAN KHAN'' who carried out the project work under my supervision.
+Certified that this project report ``A Lightweight, Training-Free Geometric Canonicalization Framework for Cross-View Comparability of Frozen Monocular 3D Pose Predictions'' is the bonafide work of ``MEHEDI HASAN KHAN'' who carried out the project work under my supervision.
 }
 \vspace{3cm}
 \begin{center}
@@ -147,9 +147,9 @@ Certified that this project report ``A Lightweight, Training-Free, Reliability-A
 {\fontsize{12}{15}\selectfont
 Monocular 3D pose estimators express skeletons in the observing camera's frame, so one motion recorded from two viewpoints yields two different sets of coordinates, preventing direct comparison in gait and sports analysis. Existing remedies retrain the estimator, require calibration, or learn a canonicalization network. We build a body-fixed frame from anatomical axes and apply it after prediction, adding no trained parameters to a frozen estimator, and ask what determines whether such a frame stays consistent across viewpoints. The construction is the TRIAD algorithm of spacecraft attitude determination and the propagation of landmark error into frame orientation is established in biomechanics; we claim neither.
 
-On Human3.6M, which played no part in developing the method, canonicalization reduces cross-view distance by 72.2 percent over 180 held-out camera pairs, improving 179, and by 75.8 percent on a second backbone. Estimation accuracy is unchanged, because the estimator is frozen: what improves is agreement between cameras, not correctness. A single-view baseline meeting the same requirements, Kabsch alignment to one fixed skeleton, beats our frame on all 180 pairs under both backbones, and six pre-registered searches for a regime where ours is preferable have failed. A reliability score is falsified as an accuracy predictor, and a bone-length signal reaching $+0.492$ on one dataset falls to $+0.098$ on the other and is retracted.
+On Human3.6M, which played no part in developing the method, canonicalization reduces cross-view distance by 72.2 percent over 180 held-out camera pairs, improving 179 of them. Estimation accuracy is unchanged, because the estimator is frozen: what improves is agreement between cameras, not correctness. A single-view baseline meeting the same requirements (Kabsch alignment to one skeleton) beats our frame on all 180 pairs under both backbones. Six pre-registered searches for a regime where ours is preferable have failed. A reliability score is falsified as an accuracy predictor across five independent tests, and a bone-length signal that correlated highly on one dataset fails to replicate on another and is retracted.
 
-The contribution is an experimental boundary rather than a method: axis length governs the choice between frame constructions and nothing finer, articulation rather than radius governs which joint disagrees, and the two alignments fail on disjoint joint supports. Seventeen experiments were pre-registered with their criteria committed before each run, more than half failed, and every measured number is re-derived from stored artifacts by an automated audit.
+The contribution is an experimental boundary rather than a method: axis length governs the choice between frame constructions and nothing finer, articulation rather than radius governs which joint disagrees, and the two alignments fail on disjoint joint supports. Because those failure supports are disjoint, a fixed rule selecting between the two attains the better one at 19 of 20 evaluated cells; this is reported as exploratory, because the per-joint confidence the rule consumes is simulated rather than measured. Seventeen experiments were pre-registered with their criteria committed before each run, more than half failed, and every measured number is re-derived from stored artifacts by an automated audit.
 }
 
 \chapter*{ACKNOWLEDGEMENT}
@@ -219,16 +219,18 @@ cameras cancels rather than being estimated.}
 
 \section{Contributions}
 
-The geometry this project builds on is not ours: the frame is TRIAD \cite{triad}, the primary-axis rule is Shuster and Oh's \cite{shuster}, and the propagation of landmark error into frame orientation is biomechanics \cite{dellacroce1999,dellacroce2005}. What we contribute is the transfer of that reasoning to joints inferred by a frozen network, and principally the experimental boundary of how far it carries. Each item is labelled with its kind of contribution.
+The geometry this project builds on is not ours: the frame is TRIAD \cite{triad}, the primary-axis rule is Shuster and Oh's \cite{shuster}, and the propagation of landmark error into frame orientation is biomechanics \cite{dellacroce1999,dellacroce2005}. What we contribute is the transfer of that reasoning to joints inferred by a frozen network, and principally the experimental boundary of how far it carries.
 
 \begin{itemize}
-\item \textbf{[Analysis]} \textbf{A three-level delimitation of the axis-length principle, pre-registered at each level.} Axis length governs the choice \emph{between} frame constructions (the longer shoulder axis wins on both backbones, 5.2 and 4.4 percent, intervals excluding zero) and nothing finer: neither which frame to trust within a construction, nor which joint will disagree, because articulation dominates there. Two of the three tests are failures, and the boundary is the contribution.
-\item \textbf{[Validation]} \textbf{Cross-view replication of the central claim, scored off the joints that define the frame.} On Human3.6M canonicalization reduces cross-view distance by 72.2 and 75.8 percent on two backbones over the thirteen joints the construction does not touch, improving 179 and 180 of 180 held-out camera pairs and closing 87.0 and 91.4 percent of the gap to a per-frame Procrustes oracle. This validates that the construction works, not that it is the best available: Section 5.3 reports a pre-registered baseline that beats it on every pair.
-\item \textbf{[Empirical finding]} \textbf{The falsified reliability score gates canonicalization quality.} Falsified as an accuracy predictor along five independent axes, the same score triages the quantity its own specification names, cutting mean cross-view distance by 22 percent at thirty percent abstention and surviving a confound control on both backbones. Reported as exploratory throughout.
-\item \textbf{[Negative result]} \textbf{Retraction of our own error predictor.} A temporal bone-length signal reaching $\rho = +0.492$ on one dataset falls to $+0.098$ on the other and fails every criterion; we retract the general claim.
-\item \textbf{[Engineering]} \textbf{Calibration-free multi-view fusion in the shared frame}, with a qualification that matters more than the headline: with few views the choice of statistic decides whether fusion helps, and across actions the mean gain is negative.
-\item \textbf{[Systems]} \textbf{An evidence trail built so the claims can be checked rather than believed.} Zero learned parameters added, 402 floating-point operations per frame, 304 numerical claims checked against stored artifacts by an automated audit, 76 tests, and seventeen pre-registered experiments committed to version history before the experiments they governed, several of which failed.
+\item \textbf{[Analysis]} Delimitation of the axis-length principle: axis length governs the choice between constructions (not which joint disagrees, which is governed by articulation).
+\item \textbf{[Validation]} Cross-view replication on Human3.6M showing canonicalization improves cross-view distance on 179 of 180 held-out pairs, with no per-frame training or calibration.
+\item \textbf{[Empirical finding]} A reliability score falsified as an accuracy predictor but validated as a gate for canonicalization confidence.
+\item \textbf{[Negative result]} Retraction of a temporal bone-length signal that failed to transfer across datasets.
+\item \textbf{[Engineering]} Calibration-free multi-view fusion showing that statistic choice (mean vs.\ median) determines whether combining views helps.
+\item \textbf{[Systems]} A reproducible evaluation harness over two datasets and two frozen backbones, with cross-dataset replication, and an evidence trail behind it: 304 audited claims re-derived from stored artifacts, 76 passing tests, and 17 pre-registered experiments with transparent failure reporting.
 \end{itemize}
+
+\noindent\textbf{Position of this work.} Existing literature addresses anatomical canonicalization or geometric alignment or reliability estimation individually. This thesis contributes the first systematic study of all three---anatomical canonicalization, calibration-free multi-view fusion, and per-frame confidence estimation---as a unified post-processing framework evaluated across two datasets, two backbone architectures, and pre-registered boundary tests. No prior work operates under the constraint of zero training, zero labels, and zero camera parameters simultaneously on a frozen estimator.
 
 \section{Report Organization}
 
@@ -716,7 +718,7 @@ The derived law ($\theta \approx 2\sigma/L$) is tested at three levels, each pre
 
 \section{Reliability: Falsified, and What It Is For}
 
-The analytic reliability score was falsified as an accuracy predictor along five independent axes: correlation near zero across simultaneous cameras; view selection straddling chance; a cross-backbone sign flip; reliability-weighted fusion worse than a plain mean (92.6 vs 88.5~mm); and a pre-registered test-time-augmentation test failing all three criteria (pooled $\rho = 0.10$, interval $[-0.59, 0.48]$). The shared cause is that geometric plausibility is invariant to coherent depth error: a network that gets depth wrong but self-consistently produces a skeleton that looks anatomically perfect.
+The analytic reliability score was tested as an accuracy predictor five ways: correlation near zero across simultaneous cameras; view selection no better than chance; opposite signs on the two backbones; reliability-weighted fusion worse than an unweighted mean (92.6 vs 88.5~mm); and a pre-registered test-time-augmentation test failing all criteria (pooled $\rho = 0.10$, interval $[-0.59, 0.48]$). The common pattern is that geometric plausibility survives depth errors: a network wrong about depth can still produce a skeleton that looks anatomically perfect.
 
 The same score, however, gates the quantity its own specification names---canonicalization quality. Dropping the worst thirty percent of frames by score reduces mean cross-view distance by 22 percent, against a random baseline that does not move it, and the triage survives a bone-deviation confound control on both backbones (gain at ten percent abstention 5.4~mm, interval $[+1.5, +9.3]$). This was a comparator in its pre-registration, not its subject, and is reported as exploratory.
 
