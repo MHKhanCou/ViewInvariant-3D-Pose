@@ -68,6 +68,8 @@ hand.**
 | `multiscale_control.py` | `h36m_multiscale/` | Circularity control that demoted the 55.1 % figure |
 | `occlusion_robustness.py` | `occlusion/` | The tenth, run after the freeze. Failed |
 | `template_mismatch.py` | `mismatch/` | The eleventh. Failed - the baseline needs no matching template |
+| `anchor_corruption.py` | `anchor_corruption/` | The twelfth (post-freeze). **Holds** - corrupt the frame's support joints {1,4,8} and it collapses 53.45 -> 337.87 mm while the 17-joint fit degrades gracefully |
+| `selection_rule.py` | `selection/` | The thirteenth (post-freeze). **Holds** - confidence-gated routing is never worse than the better single alignment, 38-47 mm better than template alone at sigma=160 distal |
 
 ### Supporting
 
@@ -82,7 +84,10 @@ hand.**
 
 ```
 thesis_report/
-  Full_Thesis_Report.tex     the report
+  Minimal_Thesis_Report.tex the ~20-page submission report
+  Full_Thesis_Report.tex     the extended report
+  SIR_CONCERNS.md            supervisor feedback, answered (base vs proposal included)
+  NOVELTY_PLAN.md            the two-night novelty plan and exact claims
   appendix_tables.tex        GENERATED - do not hand-edit
   WORKFLOW.md                RGB video -> comparison, end to end. Sir's two questions
   SIR_QA.md                  Sir's questions and the likely follow-ups, EN + BN

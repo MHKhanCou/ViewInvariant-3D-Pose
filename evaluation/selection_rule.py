@@ -59,6 +59,9 @@ from evaluation.anchor_corruption import (CORRUPTED_JOINTS as ANCHOR,
 OUT_DIR = os.path.join(REPO_ROOT, "thesis_artifacts", "selection")
 
 ANCHOR_SET = (1, 4, 8)          # the frame's support minus the root
+# note: imported DISTAL and ANCHOR above are the corrupted joint sets of the
+# two regimes; ANCHOR (the variable) re-defines the core set identically to
+# anchor_corruption.CORRUPTED_JOINTS, which is the frame's support.
 CONFIDENCE_SATURATION_MM = 80.0 # confidence hits zero at this noise level
 CONFIDENCE_THRESHOLD = 0.7      # "core reliable / periphery broken"
 TRANSITION_TOLERANCE_MM = 7.0   # allowed shortfall in the transition band
@@ -99,11 +102,42 @@ def evaluate_regime(name, collect_fn, videos, template, severities):
     return out
 
 
+def selfcheck():
+    """
+    Verify the rule and its confidence model on hand-computed values, so a
+    null result cannot be an implementation error.
+    """
+    # Confidence model: clean joint -> 1.0; 80 mm noise -> 0.0.
+    c = simulated_confidence(0.0, DISTAL)
+    assert all(v == 1.0 for v in c.values()), "clean confidences must be 1"
+    c = simulated_confidence(80.0, DISTAL)
+    assert c[DISTAL[0]] == 0.0 and c[ANCHOR_SET[0]] == 1.0, \
+        "corrupted joints must read 0 at 80 mm, clean joints 1"
+    c = simulated_confidence(40.0, DISTAL)
+    assert c[DISTAL[0]] == 0.5, "linear drop expected at 40 mm"
+
+    # Rule: anatomical iff core >= 0.7 AND periphery < 0.7.
+    clean = simulated_confidence(0.0, DISTAL)
+    assert route_to_anatomical(clean) is False, "clean must route to template"
+    distal_bad = simulated_confidence(160.0, DISTAL)
+    assert route_to_anatomical(distal_bad) is True, \
+        "broken periphery + clean core must route to the frame"
+    anchor_bad = simulated_confidence(160.0, ANCHOR)
+    assert route_to_anatomical(anchor_bad) is False, \
+        "broken core must never route to the frame"
+    print("selfcheck OK: confidence model and routing rule behave as specified")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--preds", default=None)
     ap.add_argument("--tag", default="")
+    ap.add_argument("--selfcheck", action="store_true")
     args = ap.parse_args()
+
+    if args.selfcheck:
+        selfcheck()
+        return
 
     template, n_frames, n_streams = build_template()
     meta = np.load(os.path.join(PRED_DIR, "meta.npz"), allow_pickle=True)
