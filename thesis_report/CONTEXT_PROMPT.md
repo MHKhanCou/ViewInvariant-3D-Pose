@@ -195,10 +195,10 @@ Repository: `github.com/MHKhanCou/ViewInvariant-3D-Pose`
 | `thesis_report/EXPLAIN.md`, `EXPLAIN_SIMPLE.md` | Plain-language, EN + BN |
 | `REPO_MAP.md` | Every module, its artifact, its report section |
 | `thesis_artifacts/*/PREREGISTRATION.md` | Sixteen, covering seventeen experiments, each committed before its run |
-| `thesis_artifacts/{occlusion,mismatch}/RESULT.md` | The two post-freeze failures |
+| `thesis_artifacts/{occlusion,mismatch,bestframe,asymmetric,laterality}/RESULT.md` | The five post-freeze failures |
 
-Chapter 5 was 56 pages and held every contribution, so ten supporting sections
-were moved verbatim into a new Appendix B rather than deleted — main body 73 → 60,
+Chapter 5 was 35 pages and held every contribution, so ten supporting sections
+were moved verbatim into an appendix rather than deleted — main body 73 → 60,
 Ch5 35 → 22, all 304 claims intact, no broken cross-references.
 
 Title, **not confirmed by Sir** — I must still ask him to confirm: *"A Lightweight,
