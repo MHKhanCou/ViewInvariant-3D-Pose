@@ -1,3 +1,91 @@
+# ★ SEND THIS ONE — final, agreed 8 Aug
+
+Two attachments: `Thesis_12108004.pdf` and the MotionAGFormer paper.
+Optionally `WORKFLOW.md`. Page and figure numbers below are checked against the
+compiled 57-page PDF; if you recompile, re-check them.
+
+**Subject:** Thesis report and the MotionAGFormer paper
+
+> Dear Sir,
+>
+> I am attaching my thesis report and the MotionAGFormer paper I built upon.
+>
+> **What I set out to do.** Your proposal gave the direction: when the same person
+> is seen by different cameras, each predicted 3D pose is expressed in that
+> camera's own coordinate frame. So even when the underlying pose is identical,
+> the predictions cannot be compared directly.
+>
+> I first ran the `pose-estimation-3d` repository you shared, and the output I
+> showed you earlier came from there. I then selected **MotionAGFormer-XS** myself
+> as the lifting model for my experiments.
+>
+> **What I built.** I kept the pose estimator frozen, so that the experiments
+> measure the effect of the canonicalization alone rather than any change in model
+> training. I later added MotionBERT as a second backbone to check whether my
+> findings were specific to one model.
+>
+> 1. YOLOv8 detects 2D keypoints — frozen, off the shelf.
+> 2. The keypoints are converted to the Human3.6M 17-joint format — no learned parameters.
+> 3. MotionAGFormer-XS lifts 2D to 3D — frozen and unmodified.
+> 4. Body-frame canonicalization — my contribution, zero learned parameters.
+> 5. The canonicalized predictions from two cameras are compared.
+>
+> Step 4 is the **implementation contribution**; the experimental analysis of when
+> and why it works is the **research contribution**. The idea is to build a
+> coordinate frame from the person's own hips and torso. Because the frame is built
+> from the body, it rotates with the body, so the unknown camera rotation cancels
+> without any calibration.
+>
+> The figures may be clearer than my description:
+>
+> - Figure 1.1, page 1 — the problem and the operation.
+> - Figure 3.1, page 9 — the full pipeline.
+> - Figure 3.2, page 10 — how the body frame is built.
+> - Figure 5.4, page 21 — eight real cameras, before and after.
+>
+> **What the experiments changed.** Four ideas I started with were later revised or
+> rejected, and I found each one myself. My canonicalization turned out to be the
+> classical TRIAD construction of Black (1964) rather than a new algorithm. My
+> reliability score does not predict pose accuracy — I tested it five separate
+> ways. A bone-length signal worked on one dataset and failed on the second, so I
+> retracted it. A multi-scale variant was built from the same joints it was scored
+> on, which made it circular, so I demoted it to exploratory.
+>
+> This led me to a sharper research question: **what actually determines whether an
+> anatomical reference frame stays consistent across viewpoints?** That is what the
+> thesis answers.
+>
+> **Main result.** The pose estimator's accuracy does not change, and cannot: it is
+> frozen, and the canonicalization adds no learned parameters. Accuracy is
+> identical by construction. MPJPE stays at **45.149 mm** before and after. What
+> changes is cross-view agreement, which improves from **372.7 mm to 93.4 mm**,
+> with **179 of 180 camera pairs improving**. This is Table 5.2 on page 22.
+>
+> **An important negative result.** A simpler baseline — Kabsch-aligning each
+> predicted pose onto one fixed reference skeleton — reaches **57.5 mm** against my
+> **93.4 mm**, and beats my method on every pair. It is in my abstract and in
+> Section 5.3 on page 23. I report it rather than present my method as the best
+> available.
+>
+> The later experiments therefore do not claim that the anatomical frame is
+> optimal. They establish **where the geometric reasoning holds and where it
+> stops**.
+>
+> Could you please confirm whether the current title is appropriate, and whether
+> there is a minimum page requirement?
+>
+> Thank you, Sir, for your guidance.
+>
+> Best regards,
+> **Mehedi Hasan Khan**
+> ID: 12108004
+
+---
+
+*Everything below is earlier drafts, kept for reference. The version above supersedes them.*
+
+---
+
 # Draft email to supervisor — send before he reads the report
 
 Send this **before** the report, not with it. Item 1 is a result that goes
