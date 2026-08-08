@@ -6,6 +6,72 @@ the defence.
 
 ---
 
+# ⇩ SHORT VERSION — send this one if you send only one thing
+
+Everything below the line is the full version. This is the same content in a
+quarter of the words. It keeps the one thing that must not be cut: the baseline
+result, volunteered rather than discovered.
+
+**Subject:** Thesis report — attached, and one result that goes against my method
+
+> Dear Sir,
+>
+> My thesis report is attached (55 pages), along with a one-page walkthrough that
+> answers the two questions you asked me.
+>
+> **What the system does.** The pose estimator is left completely frozen. My work
+> only re-expresses its output in a coordinate system built from the person's own
+> body — the hips and the torso — so that the same pose seen by two different
+> cameras produces the same numbers. No training, no labels, no camera
+> calibration.
+>
+> **How it compares to base MotionAGFormer.** Accuracy does not change, and
+> cannot: the estimator is frozen and my step adds zero parameters. MPJPE on
+> Human3.6M is **45.149 mm before and after**. What improves is agreement between
+> cameras — mean cross-view distance falls from **372.7 mm to 93.4 mm**, a 72.2
+> percent reduction, improving 179 of 180 held-out camera pairs.
+>
+> **One result that goes against my method, which I would rather you hear from
+> me.** A simpler baseline — aligning each predicted pose to a single fixed
+> reference skeleton — scores **57.5 mm against my 93.4 mm** and beats my method
+> on all 180 pairs. It is stated in my abstract. The thesis therefore reports a
+> boundary: where this kind of geometric reasoning transfers to network-predicted
+> joints, and where it stops.
+>
+> I have also removed the word "Reliability-Aware" from the title, because the
+> report itself shows that score does not predict accuracy.
+>
+> Could you confirm the title, and whether the department sets a minimum page
+> count?
+>
+> Thank you, Sir, for the direction you set and for the repository you shared.
+>
+> Best regards,
+> Mehedi Hasan Khan
+> ID 12108004
+
+**Attach:** `Thesis_12108004.pdf`, `WORKFLOW.md`, `fig_realview.png`.
+
+---
+
+## ⇩ EVEN SHORTER — if this goes by message rather than email
+
+> Sir, my thesis report is attached (55 pages).
+>
+> In short: the pose estimator is frozen, so accuracy is unchanged — 45.149 mm
+> before and after. What improves is agreement between cameras, 372.7 mm down to
+> 93.4 mm, on 179 of 180 camera pairs.
+>
+> One thing I should tell you directly rather than let you find it: a simpler
+> baseline beats my method, 57.5 mm against my 93.4 mm. It is in my abstract, and
+> the thesis reports the boundary rather than claiming a win.
+>
+> Could you confirm the title? Thank you, Sir.
+
+---
+
+# ⇩ FULL VERSION
+
 **Subject:** Thesis report — how the work developed, and a result against my own method
 
 Dear Sir,
