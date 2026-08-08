@@ -25,6 +25,11 @@ flatter.
 Kabsch have failed. This is not expected to be the seventh success, and it is
 not designed to be — it is designed to explain the sixth failure.**
 
+*Updated 8 Aug 2026: "six pre-registered" is loose here, in the same way it is in
+`../bestframe/RESULT.md`, where the tally is set out and corrected. The report no
+longer quotes a count for that reason. This pre-registration is left unedited as
+the record of what was committed before the run.*
+
 ## Design
 
 Identical to `evaluation/asymmetric_corruption.py` in every respect — same 180

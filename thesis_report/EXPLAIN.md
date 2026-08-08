@@ -124,9 +124,9 @@ simpler method is better.** Say that. Do not argue it away.
 
 Most undergraduate theses cannot say any of this:
 
-- **Nine experiments pre-registered**, each criterion committed to git *before*
-  the run. Timestamps prove it.
-- **Five failed their own criteria. A sixth returned a competing method as
+- **Seventeen experiments pre-registered** across sixteen documents, each
+  criterion committed to git *before* the run. Timestamps prove it.
+- **More than half failed their own criteria. One returned a competing method as
   better.** All reported as failures.
 - **304 numerical claims** re-derived from stored data files by an automated
   audit that fails if any number drifts. It passes.

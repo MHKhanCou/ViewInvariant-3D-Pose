@@ -107,9 +107,9 @@ a viva is an argument.
 **No prose in this report has been rewritten to lower an AI-detector score, and
 none will be.** Two reasons, both practical rather than moral:
 
-1. The text describes what was actually done, by whom, including five failed
-   pre-registered experiments, a sixth that returned a competing method as
-   better, and a retraction. Editing it to alter an
+1. The text describes what was actually done, by whom, including more than half
+   of the seventeen pre-registered experiments failing, one that returned a
+   competing method as better, and a retraction. Editing it to alter an
    authorship signal would make it less accurate in exchange for a number that
    no examiner is entitled to treat as evidence on its own.
 2. AI detectors have a well-documented false-positive problem on exactly this

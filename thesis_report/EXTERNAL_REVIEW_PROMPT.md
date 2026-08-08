@@ -32,8 +32,9 @@ sets. The thesis builds a body-fixed orthonormal frame from anatomical axes
 retraining, no calibration, no labels, no new parameters.
 
 It then asks what governs whether such a frame is consistent across viewpoints,
-and tests that at three levels with **nine pre-registered experiments**, each
-criterion committed to version control before the run.
+and tests that at three levels with **seventeen pre-registered experiments**
+across sixteen documents, each criterion committed to version control before the
+run.
 
 Headline: on Human3.6M, which played no part in developing the method,
 canonicalization cuts cross-view distance by **72.2%** over 180 held-out pairs
