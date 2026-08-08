@@ -75,11 +75,20 @@ thesis_report/*.lot
 thesis_report/*.synctex.gz
 thesis_report/*.fls
 thesis_report/*.fdb_latexmk
-# The report PDF and its figures are the deliverable, so override the global
-# image and PDF rules for this directory only.
-!thesis_report/Full_Thesis_Report.pdf
+# pdflatex writes these two; each is byte-identical to the tracked deliverable it
+# is copied to, so tracking both sides stored the same 15.6 MB twice.
+thesis_report/Full_Thesis_Report.pdf
+thesis_report/Minimal_Thesis_Report.pdf
+
+# The submission PDFs and the report figures ARE the deliverable, so override the
+# global image and PDF rules for this directory only.
+!thesis_report/Thesis_12108004.pdf
+!thesis_report/Thesis_12108004_supplement.pdf
 !thesis_report/images/*.png
 !thesis_report/images/*.jpg
+# Written at runtime by backend/twoview.py, not a source figure. Must come after
+# the negation above, since the last matching rule wins.
+thesis_report/images/_app_twoview.png
 
 # Bulky/diagnostic artifacts (not defense evidence)
 thesis_artifacts/rotation_analysis/
