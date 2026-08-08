@@ -186,23 +186,31 @@ I would like to express my deepest gratitude to my project supervisor, \textbf{D
 
 \section{Background}
 
-Three-dimensional human pose estimation recovers the spatial coordinates of body joints from visual input. Monocular estimation from ordinary RGB video is of considerable practical interest, and modern transformer-based lifting networks such as MotionAGFormer \cite{motionagformer} and MotionBERT \cite{motionbert} reach mean per-joint position errors near 45~mm on the Human3.6M benchmark \cite{h36m}.
+Three-dimensional human pose estimation aims to recover the spatial coordinates of human body joints from visual input. Among the available approaches, monocular 3D pose estimation from a single RGB camera is especially attractive because it requires only inexpensive and widely available imaging devices. Recent transformer-based lifting models, including MotionAGFormer \cite{motionagformer} and MotionBERT \cite{motionbert}, achieve mean per-joint position errors of approximately 45~mm on the Human3.6M benchmark \cite{h36m}, demonstrating that high-quality 3D pose estimation is now possible from ordinary monocular video.
 
-These estimators share a property that limits their use in comparative analysis. The predicted skeleton is expressed relative to the observing camera, so two cameras viewing the same subject at the same instant produce two different sets of coordinates for the same physical pose. Applications that compare poses across viewpoints---gait analysis across sessions, sports analytics across camera positions---must first reconcile those coordinate frames.
+Despite their strong accuracy, these models share an important limitation. Their predicted poses are represented in the coordinate system of the observing camera. Consequently, two synchronized cameras capturing the same person at the same instant produce different coordinate representations of an identical physical pose. This viewpoint dependency makes direct comparison across cameras impossible without first transforming the predictions into a common reference frame. Such a capability is essential in applications including gait analysis across recording sessions, sports performance analysis from multiple camera positions, and other cross-view motion analysis tasks.
 
 \section{Motivation}
 
-Three practical constraints motivate the approach. First, practitioners frequently cannot retrain the estimator: it is a third-party artifact, the deployment data has no labels, and no training budget is available. Second, camera calibration is often impossible, as in footage from uncontrolled devices. Third, a system that silently produces a wrong pose is more dangerous than one that declines to answer, so a deployable framework should indicate when its output should not be trusted.
+This work is motivated by three practical deployment constraints.
+
+First, retraining the underlying pose estimator is often infeasible. In many real-world settings, the model is a frozen third-party component, labeled training data is unavailable, and the computational resources required for retraining are impractical.
+
+Second, accurate camera calibration cannot always be assumed. Many applications rely on videos collected from consumer devices or uncontrolled environments where intrinsic and extrinsic camera parameters are unknown.
+
+Third, reliability is as important as accuracy. A system that confidently produces an incorrect pose can be more harmful than one that acknowledges uncertainty. Therefore, a practical canonicalization framework should not only improve cross-view consistency but also provide an indication of when its output should not be trusted.
 
 \section{Research Question and Objectives}
 
-The question this project sets out to answer is:
+This project is guided by the following research question:
 
 \begin{quote}
-\textbf{What determines whether an anatomical reference frame is consistent across viewpoints?}
+\textbf{What determines whether an anatomical reference frame remains consistent across viewpoints?}
 \end{quote}
 
-The framework is the vehicle for answering it rather than the end in itself: building a frame that is cheap, frozen and free of calibration is what makes the question testable, because every variable except the frame's own construction can then be held fixed. The specific objectives are to construct a viewpoint-independent coordinate frame over a frozen estimator with no training, labels or camera parameters; to identify the design variable that governs frame consistency and establish where the derivation holds and where it stops; to score prediction reliability analytically and abstain when it is low; and to evaluate under an auditable protocol in which every number this project measures is recomputed from stored artifacts.
+The proposed framework is not the primary contribution but rather the means of investigating this question. By constructing a lightweight body-fixed reference frame that operates on a frozen pose estimator without retraining, camera calibration, or additional supervision, all other variables can be held constant. This isolation allows the consistency of the reference frame itself to be studied directly.
+
+The objectives of this work are fourfold. First, to construct a viewpoint-independent coordinate frame that operates on the outputs of a frozen monocular 3D pose estimator without requiring training, labeled data, or camera parameters. Second, to identify the design factor that governs cross-view consistency and determine the conditions under which the derivation remains valid, as well as its limitations. Third, to develop an analytical reliability score that enables the system to abstain when the estimated frame is unreliable. Finally, to evaluate the framework under a fully auditable experimental protocol in which every reported result can be reproduced automatically from stored artifacts.
 
 \begin{figure}[htbp]
 \centering
@@ -219,43 +227,64 @@ cameras cancels rather than being estimated.}
 
 \section{Contributions}
 
-The geometry this project builds on is not ours: the frame is TRIAD \cite{triad}, the primary-axis rule is Shuster and Oh's \cite{shuster}, and the propagation of landmark error into frame orientation is biomechanics \cite{dellacroce1999,dellacroce2005}. What we contribute is the transfer of that reasoning to joints inferred by a frozen network, and principally the experimental boundary of how far it carries.
+The geometric foundations used in this work are not original. The reference frame is based on the TRIAD algorithm \cite{triad}, the primary-axis selection follows the method of Shuster and Oh \cite{shuster}, and the propagation of landmark error into frame orientation is established in biomechanics \cite{dellacroce1999,dellacroce2005}. Our contribution lies in applying these principles to joint predictions produced by a frozen monocular 3D pose estimator and, more importantly, in experimentally establishing the limits of their applicability.
+
+The main contributions of this thesis are summarized below.
 
 \begin{itemize}
-\item \textbf{[Analysis]} Delimitation of the axis-length principle: axis length governs the choice between constructions (not which joint disagrees, which is governed by articulation).
-\item \textbf{[Validation]} Cross-view replication on Human3.6M showing canonicalization improves cross-view distance on 179 of 180 held-out pairs, with no per-frame training or calibration.
-\item \textbf{[Empirical finding]} A reliability score falsified as an accuracy predictor but validated as a gate for canonicalization confidence.
-\item \textbf{[Negative result]} Retraction of a temporal bone-length signal that failed to transfer across datasets.
-\item \textbf{[Engineering]} Calibration-free multi-view fusion showing that statistic choice (mean vs.\ median) determines whether combining views helps.
-\item \textbf{[Systems]} A reproducible evaluation harness over two datasets and two frozen backbones, with cross-dataset replication, and an evidence trail behind it: 304 audited claims re-derived from stored artifacts, 76 passing tests, and 17 pre-registered experiments with transparent failure reporting.
+\item \textbf{Analysis.} We identify the axis-length principle as the key factor governing the choice between reference-frame constructions, while showing that joint disagreement is primarily determined by articulation rather than axis length.
+
+\item \textbf{Validation.} We demonstrate cross-view consistency on the Human3.6M benchmark, where canonicalization improves cross-view distance for 179 of 180 held-out camera pairs without retraining, camera calibration, or additional supervision.
+
+\item \textbf{Empirical finding.} We show that the proposed reliability score is not a reliable predictor of pose accuracy but is effective as a confidence measure for deciding when canonicalization should be trusted.
+
+\item \textbf{Negative result.} We demonstrate that a temporal bone-length signal, which appeared promising on one dataset, does not generalize across datasets and is therefore rejected as a reliable indicator.
+
+\item \textbf{Engineering contribution.} We develop a calibration-free multi-view fusion strategy and show that the choice of aggregation statistic, specifically the mean versus the median, determines whether combining multiple views is beneficial.
+
+\item \textbf{Systems contribution.} We build a fully reproducible evaluation framework spanning two datasets and two frozen backbone architectures. The evaluation includes cross-dataset replication, 304 audited claims automatically re-derived from stored artifacts, 76 passing verification tests, and 17 pre-registered experiments with transparent reporting of both successful and unsuccessful outcomes.
 \end{itemize}
 
-\noindent\textbf{Position of this work.} Existing literature addresses anatomical canonicalization or geometric alignment or reliability estimation individually. This thesis contributes the first systematic study of all three---anatomical canonicalization, calibration-free multi-view fusion, and per-frame confidence estimation---as a unified post-processing framework evaluated across two datasets, two backbone architectures, and pre-registered boundary tests. No prior work operates under the constraint of zero training, zero labels, and zero camera parameters simultaneously on a frozen estimator.
+\noindent\textbf{Position of this work.} Existing research has studied anatomical canonicalization, geometric alignment, and reliability estimation separately. This thesis brings these three components together within a single post-processing framework that operates on frozen monocular 3D pose estimators. The framework is evaluated across two datasets, two backbone architectures, and a series of pre-registered boundary experiments. To the best of our knowledge, no previous work has investigated this combination under the simultaneous constraints of requiring no retraining, no labeled data, and no camera calibration.
 
 \section{Report Organization}
 
-Chapter 2 reviews related work and positions this project against it. Chapter 3 describes the methodology. Chapter 4 describes the datasets and the evaluation protocol. Chapter 5 presents the results, including the negative results and the post-freeze failure-support map and routing rule. Chapter 6 concludes.
+The remainder of this thesis is organized as follows. Chapter~2 reviews the relevant literature and positions the proposed work within the existing body of research. Chapter~3 presents the proposed methodology. Chapter~4 describes the datasets, evaluation protocol, and experimental setup. Chapter~5 reports the experimental results, including negative findings, the post-freeze failure-support analysis, and the routing rule. Finally, Chapter~6 concludes the thesis and discusses future directions.
 
 % ========================== CHAPTER 2 ================================
 \chapter{LITERATURE REVIEW}
 
 \section{Monocular 3D Pose Estimation}
 
-Contemporary monocular pipelines follow a two-stage design: a 2D keypoint detector locates joints, and a lifting network maps the 2D sequence to 3D coordinates. The division persists because the two stages fail differently---detection on occlusion and motion blur, lifting on depth ambiguity. Martinez et al. \cite{martinez} showed that a network of two residual blocks given ground-truth 2D keypoints outperformed contemporary image-based systems, establishing that most of the difficulty is the lifting problem itself.
+Modern monocular 3D human pose estimation pipelines typically follow a two-stage architecture. A 2D keypoint detector first identifies body joints in the image, after which a lifting network reconstructs their corresponding 3D coordinates. This separation remains effective because the two stages fail for different reasons: the detector is primarily affected by occlusion and motion blur, whereas the lifting stage must resolve the inherent depth ambiguity of monocular images. Martinez et al.~\cite{martinez} demonstrated that a simple network consisting of two residual blocks, when provided with ground-truth 2D keypoints, outperformed contemporary end-to-end image-based methods. Their results established that much of the challenge lies in the 2D-to-3D lifting problem rather than in image feature extraction.
 
-Temporal context resolves much of the depth ambiguity, and the field moved to sequence models: dilated temporal convolutions \cite{videopose}, and dual-stream spatio-temporal transformers such as MotionBERT \cite{motionbert} and MotionAGFormer \cite{motionagformer}, which combines a transformer stream with a graph-convolutional stream and reaches 45.1~mm MPJPE on Human3.6M with 2.2 million parameters. We use the extra-small variant of the latter as a frozen component throughout. Two observations matter for this work: reported accuracies are in-domain averages that vary by a factor of two across actions, and no architecture produces output comparable across cameras, because each predicts in the observing camera's frame. Accuracy and comparability are separate properties, and progress on the first has not delivered the second.
+Subsequent research focused on exploiting temporal information to reduce depth ambiguity. This led to sequence-based models such as VideoPose3D \cite{videopose}, which uses dilated temporal convolutions, and transformer-based approaches including MotionBERT \cite{motionbert} and MotionAGFormer \cite{motionagformer}. MotionAGFormer combines transformer and graph-convolutional streams and achieves an MPJPE of 45.1~mm on the Human3.6M benchmark while using only 2.2 million parameters. The extra-small variant of MotionAGFormer is used as the frozen backbone throughout this work.
+
+Two observations are particularly relevant to this thesis. First, reported benchmark accuracy represents an average performance and can vary substantially across different human actions. Second, existing methods express predicted poses in the coordinate system of the observing camera, making direct comparison across viewpoints impossible. Consequently, estimation accuracy and cross-view comparability are distinct properties, and improvements in one do not automatically lead to improvements in the other.
 
 \section{Canonicalization and View-Invariant Representations}
 
-The closest prior work addresses the same problem statement. 3DPCNet \cite{3dpcnet} performs estimator-agnostic canonicalization of 3D pose with a learned network trained on synthetically rotated poses, and it benchmarks a hand-built anatomical-landmark baseline of the same family as ours---which its learned module beats by roughly six times in rotation error. We cite this rather than hide it, and Section 6 discusses the qualifications. MoViD \cite{3dpcnet2} disentangles motion from viewpoint with a learned orthogonal projection under SMPL supervision. V-VIPE \cite{vvipe} learns a variational view-invariant embedding and uses Kabsch alignment of hips and spine as preprocessing. Wei et al. \cite{vihc} transform predicted poses into consistent views to feed a trained refinement network and discriminator. All of these require training, labels, or both; what differs in the present work is everything around the geometry---the requirement profile of a frozen estimator with no training, no labels and no calibration.
+Several previous studies have addressed viewpoint dependence in monocular 3D pose estimation. Among them, 3DPCNet \cite{3dpcnet} is the closest to the present work. It performs estimator-agnostic pose canonicalization using a neural network trained on synthetically rotated poses, and evaluates a handcrafted anatomical-landmark baseline that is conceptually similar to ours. Their learned model achieves approximately six times lower rotation error than the handcrafted alternative. Rather than overlooking this result, we use it as an important point of comparison and discuss its implications in Section~\ref{sec:positioning}.
+
+Other approaches also rely on learning-based representations. MoViD \cite{3dpcnet2} disentangles motion from viewpoint through an orthogonal projection learned under SMPL supervision. V-VIPE \cite{vvipe} learns a variational view-invariant embedding and applies Kabsch alignment using the hip and spine joints as preprocessing. Wei et al.~\cite{vihc} transform predicted poses into a common coordinate system before refining them with a learned network and discriminator. Although these methods differ in architecture, they all require training, supervision, or both. In contrast, the distinguishing feature of the present work is not the underlying geometry itself, but the deployment setting: a frozen pose estimator operating without retraining, labeled data, or camera calibration.
 
 \section{Quality and Uncertainty Estimation for Pose}
 
-A system that abstains on unreliable predictions needs a signal correlated with its own error. Learned uncertainty trains a variance head or ensemble to predict error, and Khanal and Zhou \cite{khanal} report the motivating failure mode in the adjacent setting of skeleton action recognition: under severe domain shift, energy-based scoring detects that the distribution has changed while the model stays confidently incorrect on individual predictions. Conformal prediction \cite{yangpavone} offers a coverage guarantee at the cost of a labelled calibration set from the deployment distribution. The third family is analytic and training-free, scoring a prediction by its geometric plausibility. This family requires nothing at deployment, which is why we adopt it; Chapter 5 reports at length that our instance of it does not predict accuracy, and why.
+For a pose estimation system to abstain from unreliable predictions, it must estimate the confidence of its own output. Existing approaches generally fall into three categories.
+
+The first category consists of learned uncertainty estimation, where additional prediction heads or ensembles are trained to estimate model error. Khanal and Zhou \cite{khanal} describe an important limitation of such approaches in the related task of skeleton-based action recognition. Under severe domain shift, energy-based methods successfully detect distribution changes while the model remains confidently incorrect on individual predictions.
+
+The second category is conformal prediction \cite{yangpavone}, which provides statistical coverage guarantees but requires a labeled calibration dataset drawn from the deployment distribution.
+
+The third category uses analytic, training-free confidence measures based on geometric consistency. Because these methods require neither retraining nor labeled deployment data, they are particularly attractive for frozen models. This work adopts an analytic approach. As shown in Chapter~5, however, the proposed reliability measure does not accurately predict pose error, although it remains useful for determining when canonicalization should be trusted.
 
 \section{What This Work Inherits From Attitude Determination}
 
-Building an orthonormal frame from two measured directions by taking one as primary, removing its component from the second, and completing with a cross product is the TRIAD algorithm of Black \cite{triad} (1964). Shuster and Oh \cite{shuster} established that the more accurately known direction should be primary, and that the attitude is most accurately determined when the two observations are orthogonal. The least-squares generalization to more than two observations is Wahba's problem \cite{wahba}, whose optimality is conditional on inverse-variance weighting. The uncertainty of a direction read from two joints $L$ apart, each noisy by $\sigma$, is approximately $2\sigma/L$; the specific question of how landmark error propagates into anatomical frame orientation is developed in biomechanics \cite{dellacroce1999,dellacroce2005}. Table \ref{tab:requirements} summarizes what each approach requires at deployment. No prior method operates on a frozen estimator with no training, no labels and no camera parameters simultaneously; that requirement profile, rather than any individual mechanism, is the position this project occupies.
+Constructing an orthonormal reference frame from two measured directions by selecting one as the primary axis, orthogonalizing the second, and obtaining the third through a cross product is the basis of the TRIAD algorithm introduced by Black \cite{triad} in 1964. Shuster and Oh \cite{shuster} later showed that the most reliable direction should be chosen as the primary axis and that orientation accuracy is maximized when the measured directions are nearly orthogonal. For more than two observations, Wahba's problem \cite{wahba} provides the corresponding least-squares formulation, whose optimality depends on inverse-variance weighting.
+
+The uncertainty of a direction estimated from two joints separated by a distance $L$, each affected by measurement noise $\sigma$, is approximately $2\sigma/L$. The propagation of landmark uncertainty into anatomical reference-frame orientation has been studied extensively in biomechanics \cite{dellacroce1999,dellacroce2005}. This thesis applies these established geometric principles to joint coordinates predicted by frozen neural networks and investigates the conditions under which they remain effective.
+
+Table~\ref{tab:requirements} summarizes the deployment requirements of representative approaches. To the best of our knowledge, no previous method combines the simultaneous constraints of requiring no retraining, no labeled data, and no camera calibration while operating as a post-processing stage on a frozen pose estimator.
 
 \begin{table}[H]
 \centering
@@ -350,7 +379,9 @@ boundary measurable.
 
 \section{Scope of the Term Training-Free}
 
-The complete pipeline is not training-free: both the 2D detector and the lifting network are trained by their authors and used here in frozen form. What is training-free is everything this project adds on top of them. The property claimed is a property of the deployment requirement, not of the pipeline's history: to apply this framework to a new estimator, a practitioner needs no training data, no labels, no calibration and no gradient step. The claim is falsified if the method turns out to require tuning per dataset; the Human3.6M results are the strongest evidence that it does not, since the constants were fixed on MPI-INF-3DHP and applied unchanged to 180 unseen camera pairs.
+The complete pose estimation pipeline is not training-free. Both the 2D keypoint detector and the 3D lifting network are pretrained models developed by their respective authors and are used here without modification. The term \emph{training-free} refers only to the components introduced in this work.
+
+More precisely, the claim concerns the deployment requirements rather than the history of the pipeline. Applying the proposed framework to a different pose estimator requires no additional training data, labeled examples, camera calibration, or gradient-based optimization. This claim would be invalidated if the framework required dataset-specific tuning. The strongest evidence against that possibility is provided by the Human3.6M evaluation, where all constants were fixed on MPI-INF-3DHP and applied unchanged to 180 previously unseen camera pairs.
 
 \section{Body-Frame Canonicalization}
 
@@ -405,26 +436,53 @@ which is falsifiable and is tested in Section 5.4.
 
 \subsection{Degeneracy Handling}
 
-Three configurations are detected and reported as invalid rather than silently returned: a torso axis shorter than five percent of the median bone length, a hip axis nearly parallel to the torso axis, and a frame failing an orthonormality check. Invalid frames are excluded from every aggregate. On Human3.6M the construction is valid on every frame evaluated.
+Three degenerate configurations are detected explicitly and treated as invalid rather than producing potentially misleading outputs.
+
+\begin{itemize}
+\item The torso axis is shorter than 5\% of the median bone length.
+\item The hip axis is nearly parallel to the torso axis.
+\item The constructed reference frame fails the orthonormality check.
+\end{itemize}
+
+Frames satisfying any of these conditions are excluded from all aggregate analyses. On the Human3.6M dataset, however, none of these degeneracies occurred, and the construction was valid for every evaluated frame.
 
 \section{Analytic Reliability Score}
 
-Six quantities are computed from the predicted pose alone: axis conditioning, the torso--hip angle, bilateral symmetry of limb lengths, the fraction of anatomically abnormal bone ratios, the minimum detector keypoint confidence, and temporal stability of the frame. They are normalized to $[0,1]$ with hand-set constants and combined by geometric mean, so that any single catastrophic component drives the score to zero; four hard geometric gates trigger abstention regardless of the combined score. Chapter 5 reports that this does not predict pose error, and why: every quantity is computed from a single frame's geometry, and a pose wrong purely in depth remains symmetric, correctly proportioned and well conditioned.
+The proposed reliability score is computed entirely from the predicted pose without requiring ground-truth annotations or additional training. Six geometric indicators are evaluated:
+
+\begin{itemize}
+\item axis conditioning,
+\item the torso--hip angle,
+\item bilateral symmetry of limb lengths,
+\item the fraction of anatomically abnormal bone-length ratios,
+\item the minimum detector keypoint confidence, and
+\item temporal stability of the body frame.
+\end{itemize}
+
+Each indicator is normalized to the interval $[0,1]$ using fixed constants and combined through a geometric mean, ensuring that a single severely degraded component drives the overall score toward zero. In addition, four hard geometric validity checks trigger abstention regardless of the combined score.
+
+As shown in Chapter~5, this reliability score does not accurately predict pose estimation error. The reason is structural rather than empirical: every component is computed solely from the geometry of a single predicted skeleton. Consequently, a pose that is incorrect primarily along the depth dimension may still appear anatomically plausible, well-conditioned, symmetric, and proportionally consistent, resulting in a high reliability score despite a large reconstruction error.
 
 \section{Calibration-Free Multi-View Fusion}
 
-Because canonicalization expresses every camera's prediction in the same body-fixed frame, predictions from several uncalibrated cameras become directly comparable and may be combined without extrinsics or correspondence search. We evaluate the reliability-weighted mean, the unweighted mean and the coordinate-wise median. The choice matters because of a difference in breakdown behaviour: a mean has breakdown point zero, while a median is unaffected until nearly half the views fail. Section 5.7 reports that with few views this decides whether fusion helps or hurts.
+Once canonicalization expresses the predictions from all cameras in a common body-fixed reference frame, poses from multiple uncalibrated viewpoints become directly comparable. This enables multi-view fusion without estimating camera extrinsics, performing correspondence search, or requiring camera calibration.
+
+Three aggregation strategies are evaluated: the unweighted mean, the reliability-weighted mean, and the coordinate-wise median. The choice of aggregation function is important because these estimators differ in robustness to outliers. The arithmetic mean has a breakdown point of zero, meaning that even a single severely corrupted prediction can substantially influence the result. In contrast, the coordinate-wise median remains stable until nearly half of the input views become unreliable. As demonstrated in Section~5.7, this difference determines whether multi-view fusion improves or degrades performance when only a small number of camera views are available.
 
 \section{Temporal Bone-Length Inconsistency}
 
-A person's bones do not change length, so temporal variation in predicted bone length is evidence of error. For each frame the sixteen bone lengths are divided by the frame's mean bone length, and the signal is the mean relative deviation from a label-free reference skeleton estimated as the median over a window.
+Human bone lengths remain effectively constant over time. Consequently, temporal variation in predicted bone lengths provides a geometric indicator of pose estimation error.
+
+For each frame, the sixteen bone lengths are normalized by the mean bone length of that frame to remove scale variation. A label-free reference skeleton is then estimated as the median normalized skeleton over a temporal window. The temporal inconsistency signal is defined as the mean relative deviation of the current normalized bone lengths from this reference.
 
 % ========================== CHAPTER 4 ================================
 \chapter{DATASETS AND EVALUATION PROTOCOL}
 
 \section{MPI-INF-3DHP}
 
-MPI-INF-3DHP \cite{mpi} is a markerless multi-camera capture dataset with fourteen cameras, of which eight observe the subject from positions distributed around the room. We use subjects S1 and S2 under static and dynamic conditions, treated as separate strata throughout. Twenty-nine camera pairs are formed: one is reserved as the development pair on which all tuning was performed, twenty-seven are held out on S1, and one pair covers held-out subject S2. The dataset is the development set: it is where the method's constants were fixed.
+MPI-INF-3DHP \cite{mpi} is a multi-camera markerless motion capture dataset consisting of fourteen synchronized cameras, eight of which observe the subject from distributed viewpoints around the capture space. This work uses subjects S1 and S2 under both static and dynamic recording conditions, which are treated as separate evaluation strata throughout the experiments.
+
+A total of twenty-nine camera pairs are considered. One pair is reserved exclusively for method development and parameter selection, twenty-seven pairs are held out on subject S1, and one additional pair is reserved for the unseen subject S2. MPI-INF-3DHP therefore serves as the development dataset, where all algorithmic constants are determined before validation.
 
 \section{Human3.6M}
 
@@ -436,7 +494,9 @@ MPI-INF-3DHP \cite{mpi} is a markerless multi-camera capture dataset with fourte
 \end{figure}
 
 
-Human3.6M \cite{h36m} is the standard benchmark for monocular 3D pose estimation. Eleven subjects perform fifteen actions while recorded by four hardware-synchronized cameras at fifty frames per second. Following the established protocol we evaluate on subjects S9 and S11 using the backbone's preprocessing (20872 non-overlapping twenty-seven-frame windows). Two properties make it the right second dataset: the cameras are synchronized, so pairing needs no interpolation, and it played no part in developing the method, so all 180 camera pairs are held out in a stronger sense than the MPI pairs.
+Human3.6M \cite{h36m} is the standard benchmark for monocular 3D human pose estimation. It contains eleven subjects performing fifteen activities, recorded simultaneously by four synchronized cameras operating at fifty frames per second. Following the standard evaluation protocol, experiments are conducted on subjects S9 and S11 using the preprocessing pipeline of the selected backbone, resulting in 20872 non-overlapping twenty-seven-frame sequences.
+
+Human3.6M serves as the independent validation dataset for two reasons. First, all cameras are hardware synchronized, allowing frame-level correspondence without temporal interpolation. Second, the dataset plays no role in method development. Consequently, all 180 evaluated camera pairs constitute a fully held-out validation set.
 
 \begin{table}[H]
 \centering
@@ -458,26 +518,45 @@ Role & development & validation \\
 
 \section{Metrics}
 
-Three distinct quantities appear in Chapter 5 and conflating them would be an error. \emph{Cross-view joint distance} is the mean Euclidean distance between two root-relative predictions of the same instant from different cameras: it measures agreement, never accuracy, and two views can agree perfectly while both are wrong. The \emph{per-frame Procrustes oracle} aligns one prediction onto the other with the optimal rigid transform; it requires the second view and is therefore a floor no single-view method can reach. \emph{MPJPE} (error against ground truth) is reported in exactly one place: the pipeline verification, where reproducing the published figure is the purpose.
+Three evaluation metrics are reported throughout Chapter~5, and they measure different properties of the system.
+
+\begin{itemize}
+\item \textbf{Cross-view joint distance} is the mean Euclidean distance between two root-relative predictions of the same instant captured from different camera viewpoints. It measures cross-view agreement rather than pose accuracy. Two predictions may agree perfectly while both remain inaccurate.
+
+\item \textbf{Per-frame Procrustes oracle} aligns one prediction to another using the optimal rigid transformation. Because it requires access to both camera views, it serves only as an oracle lower bound and cannot be achieved by any single-view method.
+
+\item \textbf{Mean Per-Joint Position Error (MPJPE)} measures reconstruction error with respect to ground-truth 3D joint locations. In this thesis, MPJPE is reported only during pipeline verification, where reproducing the published benchmark result is the objective.
+\end{itemize}
+
+Keeping these quantities conceptually separate is essential, since agreement between viewpoints and accuracy with respect to ground truth evaluate different aspects of system performance.
 
 \section{Statistical Treatment}
 
-Frames within a camera stream are not independent, so intervals come from a cluster bootstrap of ten thousand draws that resamples whole subject--action groups---thirty clusters on Human3.6M rather than 180 camera pairs or 52900 frames. Intervals changed two conclusions, and both are flagged in the text rather than hidden.
+Individual video frames within a sequence are not statistically independent. Confidence intervals are therefore estimated using a cluster bootstrap with ten thousand resamples, where entire subject--action groups are sampled rather than individual frames or camera pairs. For Human3.6M, this corresponds to resampling thirty subject--action clusters instead of 180 camera pairs or 52900 individual frames.
+
+This statistical treatment changes the interpretation of two experimental results. Both cases are explicitly discussed in Chapter~5 rather than omitted.
 
 \section{Pre-registration and the Audit}
 
-Every experiment in this report was pre-registered: its criterion and all plausible readings were written down and committed to version control \emph{before} the experiment ran. Nine such pre-registrations govern the body of this report, several of which failed their own criteria; eight more were run after the freeze. Every number this project measured is recomputed from stored result files by an automated audit of 304 claims, alongside 76 unit tests, and both pass. A second checker confirms that no measured figure in the text lacks an artifact behind it, and a third verifies that every pre-registration was committed before its own result. The only figures in this report not produced by that pipeline are those quoted from other authors' papers, which are cited to their source.
+Every experiment reported in this thesis was pre-registered. Before each experiment was executed, its evaluation criterion and all anticipated interpretations were documented and committed to version control.
+
+Nine pre-registered experiments govern the main body of this thesis, several of which did not satisfy their original success criteria. An additional eight experiments were conducted after the methodology had been frozen.
+
+To ensure reproducibility, every reported numerical result is automatically regenerated from stored experimental artifacts through an audit pipeline covering 304 individual claims together with 76 unit tests. All audits and tests pass successfully. A second verification stage confirms that every measured quantity reported in the thesis is backed by a corresponding stored artifact, while a third verifies that each pre-registration predates its associated experimental results. The only numerical values not reproduced by this pipeline are those quoted directly from previously published work, which are cited to their original sources.
 
 % ========================== CHAPTER 5 ================================
 \chapter{EXPERIMENTAL RESULTS}
 \label{ch:results}
 
-\noindent \textbf{How to read this chapter.} Table \ref{tab:summary} states every
-claim this project tested and how it came out, before any of them is argued.
-Seventeen experiments were pre-registered, more than half failed their own
-criteria, and one returned a competing method as the better one. The failures are
-reported at the same length as the confirmations, because a pre-registration that
-only counts when it succeeds is not a pre-registration.
+\noindent\textbf{Reading guide.} Table~\ref{tab:summary} summarizes every hypothesis
+evaluated in this work together with its supporting evidence and final outcome,
+before the individual experiments are discussed in detail. Seventeen experiments
+were pre-registered, more than half did not satisfy their original success
+criteria, and one demonstrated that a competing approach outperformed the
+proposed method. These outcomes are reported symmetrically: unsuccessful
+experiments receive the same level of analysis as successful ones, because the
+value of pre-registration lies in documenting evidence rather than confirming
+expectations.
 
 {\fontsize{9}{11}\selectfont
 \setlength{\tabcolsep}{4pt}
@@ -577,7 +656,9 @@ Canonicalization aids cross-view retrieval
 \end{figure}
 
 
-The baseline reproduces the published MotionAGFormer-XS figures to within 0.05~mm: MPJPE 45.149~mm against the reported 45.1, and P-MPJPE 36.892~mm against 36.9. The published figures carry one decimal, so a closer comparison is available only against the backbone's own evaluation script, which our pipeline matches to three decimals. This is what makes the negative results interpretable: a negative result is only informative if the apparatus is not what failed.
+The reproduced MotionAGFormer-XS baseline matches the published benchmark results to within 0.05~mm, achieving an MPJPE of 45.149~mm compared with the reported 45.1~mm and a P-MPJPE of 36.892~mm compared with the reported 36.9~mm. Because the original publication reports values to only one decimal place, a more precise comparison is possible only against the official evaluation code provided by the backbone authors, which our implementation reproduces to three decimal places.
+
+This verification establishes that the experimental pipeline faithfully reproduces the reference implementation. Consequently, the negative findings reported throughout this chapter can be attributed to the evaluated hypotheses rather than to implementation errors in the underlying pose estimation system.
 
 \section{The Central Claim: Cross-View Comparability}
 
@@ -621,7 +702,9 @@ Requirements & detector + lifter & unchanged & no training, labels or calibratio
 \end{tabular}
 \end{table}
 
-The headline excludes the four joints the frame is built from, because the construction pins them by construction (the thorax canonicalizes at 22.1~mm against 197.5~mm for articulated joints); including them flatters the method. The improvement is 72.2 percent with cluster-bootstrap interval $[+67.9, +75.5]$, clustered over the thirty subject--action groups. On the second backbone, MotionBERT, the improvement is 75.8 percent over 180 of 180 pairs. A caveat is stated rather than waited for: MotionAGFormer-XS was trained on Human3.6M, so the \emph{backbone} is in-domain; held out is the \emph{method}.
+The headline result excludes the four joints used to construct the reference frame, because those joints are partially constrained by the construction itself (the thorax canonicalizes at 22.1~mm against 197.5~mm for articulated joints). Including them would therefore overstate the improvement. Under this evaluation protocol, canonicalization reduces the mean cross-view distance by 72.2 percent, with a cluster-bootstrap confidence interval of $[+67.9, +75.5]$ computed over the thirty subject--action clusters.
+
+The same algorithm was applied without modification to the second backbone, MotionBERT, where it improved cross-view distance by 75.8 percent across 180 of 180 evaluated camera pairs. One qualification should be stated rather than waited for. Although MotionAGFormer-XS was trained on Human3.6M, only the \emph{backbone} is in-domain; the \emph{method} itself was developed exclusively on MPI-INF-3DHP and applied here without further tuning.
 
 \section{A Single-View Baseline, and It Wins}
 
