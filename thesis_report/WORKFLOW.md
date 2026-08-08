@@ -40,8 +40,10 @@ from stored result files by `evaluation/audit_numbers.py`.
 | 4 canonicalization | **No — zero parameters** | coordinate frame only |
 | 5–6 comparison | Measurement, not a model | — |
 
-**Nothing in this pipeline was trained by me.** Step 4 is the whole thesis, and it
-is arithmetic: a rotation built from the person's own joints.
+**Nothing in this pipeline was trained by me.** Step 4 is the implementation
+contribution, and it is arithmetic rather than a model: a rotation built from the
+person's own joints. The research contribution is the experimental analysis of
+when that construction holds and where it stops.
 
 ## Why step 4 removes the viewpoint
 
@@ -161,8 +163,10 @@ data, the simpler method is better — I say that plainly rather than argue it a
 | ৪ canonicalization | **না — শূন্য parameter** | শুধু coordinate frame |
 | ৫–৬ তুলনা | পরিমাপ, model না | — |
 
-**এই pipeline-এর কোনো অংশ আমি train করিনি।** ৪ নম্বর ধাপটাই পুরো thesis, আর
-সেটা নিছক গণিত — মানুষের নিজের joint থেকে বানানো একটা rotation।
+**এই pipeline-এর কোনো অংশ আমি train করিনি।** ৪ নম্বর ধাপটা implementation-এর
+অবদান, আর সেটা model না — নিছক গণিত, মানুষের নিজের joint থেকে বানানো একটা
+rotation। গবেষণার অবদান হলো সেই পরীক্ষামূলক বিশ্লেষণ: এই construction কোথায়
+কাজ করে, আর কোথায় গিয়ে থেমে যায়।
 
 ## ৪ নম্বর ধাপ কেন viewpoint মুছে দেয়
 
