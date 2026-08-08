@@ -24,7 +24,7 @@ examiner will check against.
 | # | Objective as written | Delivered | Where |
 |---|---|---|---|
 | **1** | "Implement a reproducible baseline 2D-to-3D lifting model on the Human3.6M dataset" | **✅ Done.** 45.149 mm against the published 45.1 mm — matching the backbone's own evaluation script to three decimal places | §5.9 |
-| **2** | "Design a lightweight canonicalization step to reduce sensitivity to camera rotation" | **✅ Done, and it became the whole thesis.** 402 FLOPs, zero parameters, 72.2% cross-view reduction over 180 held-out pairs | §3.2, §5.10 |
+| **2** | "Design a lightweight canonicalization step to reduce sensitivity to camera rotation" | **✅ Done, and it became the instrument the thesis is built around.** 402 FLOPs, zero parameters, 72.2% cross-view reduction over 180 held-out pairs | §3.2, §5.10 |
 | **3** | "Incorporate bone-length consistency as an auxiliary loss to enforce anatomical plausibility" | **⚠️ Changed, then retracted.** Not built as a loss — tested as a test-time signal instead. ρ = +0.492 on the first dataset, +0.098 on the second. **Retracted in the report** | §5.12 |
 | **4** | "Evaluate cross-view generalization and perform ablation studies …" | **✅ Exceeded.** Seventeen pre-registered experiments, two datasets, two backbones, 209 camera pairs, cluster bootstrap intervals throughout | Ch. 5 |
 | **5** | "Analyze failure modes such as occlusions and noisy 2D detections" | **✅ Done — and this became the contribution.** The boundary: where the geometric principle holds and where it stops | §5.16, §6.1 |
@@ -181,7 +181,7 @@ Do not wait to be asked. Say it in this order:
 | # | যা বলেছিলেন | যা হয়েছে |
 |---|---|---|
 | ১ | H36M-এ reproducible baseline | **✅ হয়েছে** — ৪৫.১৪৯ মিমি, প্রকাশিত ৪৫.১-এর সাথে তিন দশমিক পর্যন্ত মিল |
-| ২ | Lightweight canonicalization | **✅ হয়েছে, এবং এটাই পুরো thesis** — ৭২.২% উন্নতি |
+| ২ | Lightweight canonicalization | **✅ হয়েছে, আর এটাই সেই instrument যাকে ঘিরে thesis দাঁড়িয়েছে** — ৭২.২% উন্নতি |
 | ৩ | Bone-length auxiliary loss | **⚠️ বদলেছে, তারপর প্রত্যাহার** — loss হিসেবে না, signal হিসেবে পরীক্ষা; ০.৪৯২ → ০.০৯৮ |
 | ৪ | Cross-view generalization + ablation | **✅ প্রতিশ্রুতির বেশি** — নয়টা pre-registered পরীক্ষা |
 | ৫ | Failure mode বিশ্লেষণ | **✅ হয়েছে — আর এখান থেকেই আসল অবদান এসেছে** |
