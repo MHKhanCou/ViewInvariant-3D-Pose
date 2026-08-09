@@ -141,6 +141,33 @@ why no calibration is needed. *Third why:* it is exact only if both cameras give
 the same pose up to rotation; in practice each carries its own error, and the
 residual 93.4 mm **is** that error.
 
+**If he points at the equation and says "explain this".**
+
+You do not need to be fluent in the notation. Explain it in words first, then
+read the symbols off your own slide — the legend is there for exactly this.
+
+> "The frame is built out of the body itself, Sir. So if the camera moves, the
+> whole prediction turns — and the frame turns by the same amount, because it is
+> made from the same joints. When I express the pose in that frame, the turn
+> appears on both sides and divides out."
+
+Then, only if he wants the algebra, point at the slide:
+
+- **P** is the predicted skeleton, **R** is the frame built from it, **Q** is the
+  unknown rotation between the two cameras, **⊤** means transpose.
+- For a rotation, the transpose *is* the inverse — so `Q` multiplied by `Q⊤`
+  gives the identity, and the two cancel.
+- That is the whole proof. Camera B's pose times camera B's frame equals camera
+  A's pose times camera A's frame.
+
+An analogy that lands, if he is not pressing for rigour:
+
+> "It is like giving a person's height from their own feet instead of from sea
+> level. It stops mattering which floor of the building they are standing on."
+
+**Never** say "I don't know the maths." You do know it — the sentence above *is*
+the maths. Say it in words and let the slide carry the symbols.
+
 **Why should the longer axis be primary?**
 A direction read from two joints `L` apart, each noisy by `σ`, has angular error
 ≈ `2σ/L`. Longer baseline, smaller angular error. The shoulder axis is longer than

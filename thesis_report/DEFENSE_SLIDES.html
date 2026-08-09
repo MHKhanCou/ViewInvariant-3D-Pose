@@ -104,6 +104,18 @@
   }
   .eq strong{font-weight:600;}
 
+  /* symbol legend, so the slide can be read aloud without prior notation */
+  .legend{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:5px 26px;
+    font-family:var(--sans);font-size:clamp(12px,1.28vw,16px);
+    color:var(--muted);margin:6px 0 4px;
+  }
+  .legend .sym{
+    font-family:var(--serif);font-style:italic;font-size:1.22em;
+    color:var(--ink);font-weight:600;display:inline-block;
+    min-width:1.5em;text-align:center;
+  }
+
   /* the one number the examiner should leave with */
   .headline{text-align:center;margin:10px 0 22px;}
   .headline .big{
@@ -235,11 +247,19 @@
   <div class="rail"><div class="n">05</div><div class="phase">Method</div><div class="tick"></div></div>
   <div class="body">
     <h2>Why the camera rotation cancels</h2><div class="underline"></div>
-    <p>Both axes are read <em>from the joints</em>, so the frame rotates with the body. If camera B sees the same pose under an unknown rotation <em>Q</em>:</p>
-    <div class="eq">P<sup>(B)</sup> = P<sup>(A)</sup>Q &nbsp;&nbsp;and&nbsp;&nbsp; R<sup>(B)</sup> = Q<sup>⊤</sup>R<sup>(A)</sup></div>
-    <div class="eq"><strong>P<sup>(B)</sup>R<sup>(B)</sup> = (P<sup>(A)</sup>Q)(Q<sup>⊤</sup>R<sup>(A)</sup>) = P<sup>(A)</sup>R<sup>(A)</sup></strong></div>
-    <div class="note"><em>Q</em> is never estimated — it cancels. That is why no calibration is required.</div>
-    <p class="sub">Exact only if both cameras give the same pose up to rotation. In practice each carries its own error, and the residual distance measured throughout this work <em>is</em> that error.</p>
+    <p><strong>In words:</strong> the frame is built out of the body itself. Move the camera and the whole prediction turns — but the frame, being made of the same joints, turns by exactly the same amount. Measuring the pose <em>in that frame</em> divides the turn out on both sides.</p>
+
+    <div class="legend">
+      <div><span class="sym">P</span> the predicted skeleton</div>
+      <div><span class="sym">R</span> the body frame built from it</div>
+      <div><span class="sym">Q</span> the unknown rotation between the two cameras</div>
+      <div><span class="sym">⊤</span> transpose — for a rotation, its inverse</div>
+    </div>
+
+    <div class="eq">P<sup>(B)</sup> = P<sup>(A)</sup>Q &nbsp;&nbsp;so&nbsp;&nbsp; R<sup>(B)</sup> = Q<sup>⊤</sup>R<sup>(A)</sup></div>
+    <div class="eq"><strong>P<sup>(B)</sup>R<sup>(B)</sup> = (P<sup>(A)</sup>Q)(Q<sup>⊤</sup>R<sup>(A)</sup>) = P<sup>(A)</sup>R<sup>(A)</sup></strong>
+      &nbsp;<span class="sub">since QQ<sup>⊤</sup> = I</span></div>
+    <div class="note"><em>Q</em> is never estimated. It meets its own inverse and disappears — which is why no calibration is required.</div>
   </div>
 </section>
 
@@ -288,7 +308,7 @@
       <tr><td>Which <strong>joint</strong> disagrees</td><td>slope 0.218 against a predicted band of [0.038, 0.073]</td><td class="r"><span class="fails">FAILS</span></td></tr>
     </table>
     <div class="note">Joints rigid with the torso sit at a <em>larger</em> radius than articulated joints, yet disagree <strong>two and a half times less</strong> — the opposite of the rigid-segment prediction. <strong>A human is not a rigid body.</strong></div>
-    <p class="sub">Two of the three levels are failures, and the boundary is the finding.</p>
+    <p class="sub">The principle holds at the construction level and does not extend reliably to the finer two.</p>
   </div>
 </section>
 
@@ -303,7 +323,7 @@
       <tr><td>Bone length predicts error</td><td>ρ = +0.492, then +0.098 on the second dataset. <span class="fails">RETRACTED</span></td></tr>
       <tr><td>Multi-scale per-limb frames</td><td>Scored on the joints they were built from. <span class="fails">DEMOTED</span></td></tr>
     </table>
-    <div class="note"><strong>A common limitation runs through the two error predictors:</strong> geometric consistency can survive a depth error. A pose wrong only in depth is still symmetric, proportioned and well conditioned — geometry cannot see the error, because the error is what geometry preserves. The other two failed differently: one was prior art, the other was circular.</div>
+    <div class="note"><strong>A common limitation runs through the two error predictors:</strong> geometric consistency can survive a depth error. A pose wrong only in depth still looks anatomically correct, so geometry-only signals cannot reliably detect every pose error. The other two failed differently: one was prior art, the other was circular.</div>
     <p class="sub">I found each of these myself, and reported them rather than removing them.</p>
   </div>
 </section>
@@ -373,7 +393,7 @@
     <h1>Cross-view comparability for frozen monocular 3D pose — training-free, and honestly scoped.</h1>
     <div class="hairline"></div>
     <div class="meta">
-      Accuracy unchanged at <strong>45.149 mm</strong> &nbsp;·&nbsp; cross-view <strong>372.7 → 93.4 mm</strong>, 179 of 180 pairs<br>
+      Pose-estimator MPJPE unchanged at <strong>45.149 mm</strong> &nbsp;·&nbsp; cross-view <strong>372.7 → 93.4 mm</strong>, 179 of 180 pairs<br>
       A simpler baseline wins on the headline metric, and the report says so<br>
       <strong>The contribution is the boundary, not the method.</strong>
     </div>
