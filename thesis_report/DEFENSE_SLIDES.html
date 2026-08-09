@@ -116,6 +116,12 @@
     min-width:1.5em;text-align:center;
   }
 
+
+  /* backup slides: denser tables, they are reference not narrative */
+  table.tight{font-size:clamp(10px,1.06vw,13.5px);}
+  table.tight td{padding:3.5px 10px 3.5px 0;}
+  table.tight th{padding:0 10px 5px 0;}
+
   /* the one number the examiner should leave with */
   .headline{text-align:center;margin:10px 0 22px;}
   .headline .big{
@@ -409,6 +415,71 @@
       <strong>The contribution is the boundary, not the method.</strong>
     </div>
     <div class="meta" style="margin-top:26px;">Thank you. Questions welcome.</div>
+  </div>
+</section>
+
+<!-- ================= BACKUP — not presented unless asked ================= -->
+
+<section class="slide">
+  <div class="rail"><div class="n">B1</div><div class="phase">Backup</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>All seventeen pre-registered experiments</h2><div class="underline"></div>
+    <table class="tight">
+      <tr><th>#</th><th>Experiment</th><th>Outcome</th></tr>
+      <tr><td>1</td><td>Test-time augmentation as an error signal</td><td class="against">failed all three criteria</td></tr>
+      <tr><td>2</td><td>Multi-landmark frame</td><td class="against">criterion failed</td></tr>
+      <tr><td>3</td><td>Conditioning-based abstention</td><td class="against">passed on one backbone only</td></tr>
+      <tr><td>4</td><td>Joint-level radial law</td><td class="against">slope outside the predicted band</td></tr>
+      <tr><td>5</td><td>Non-constructor recomputation</td><td>no pass criterion; lowered the headline</td></tr>
+      <tr><td>6</td><td>Kabsch-to-template baseline</td><td class="against">baseline better, both backbones</td></tr>
+      <tr><td>7</td><td>Template ablation, three templates</td><td class="against">part B prediction failed</td></tr>
+      <tr><td>8</td><td>Centring ablation</td><td>no pass criterion; baseline still wins</td></tr>
+      <tr><td>9</td><td>Per-action breakdown</td><td class="against">no action favours the frame</td></tr>
+      <tr><td>10</td><td>Distal-joint corruption</td><td class="against">crossover on one backbone only</td></tr>
+      <tr><td>11</td><td>Template proportion mismatch</td><td class="against">baseline moves 0.12 mm</td></tr>
+      <tr><td>12</td><td>Anchor-joint corruption</td><td class="method">established</td></tr>
+      <tr><td>13</td><td>Confidence-gated routing</td><td class="method">met criteria; demoted to exploratory</td></tr>
+      <tr><td>14</td><td>2D mis-detection sensitivity</td><td class="method">established; criterion amended, disclosed</td></tr>
+      <tr><td>15</td><td>Every frame construction vs baseline</td><td class="against">none beats the baseline</td></tr>
+      <tr><td>16</td><td>Asymmetric, one-sided corruption</td><td class="against">crossover on one backbone only</td></tr>
+      <tr><td>17</td><td>Laterality control</td><td class="against">refuted — effect has the wrong sign</td></tr>
+    </table>
+    <p class="sub">Ten failed their own criterion, three were established, four fixed no pass criterion in advance. Sixteen documents: 15 and 16 share one.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">B2</div><div class="phase">Backup</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>Where the 402 FLOPs come from</h2><div class="underline"></div>
+    <table>
+      <tr><th>Step</th><th class="r">FLOPs</th></tr>
+      <tr><td>Root-centring the 17 joints</td><td class="r">51</td></tr>
+      <tr><td>Two axis vectors</td><td class="r">6</td></tr>
+      <tr><td>Normalisation</td><td class="r">27</td></tr>
+      <tr><td>Cross products</td><td class="r">18</td></tr>
+      <tr><td>Projecting the pose into the frame</td><td class="r">255</td></tr>
+      <tr><td>Orthonormality check</td><td class="r">45</td></tr>
+      <tr><td><strong>Total per frame</strong></td><td class="r"><strong>402</strong></td></tr>
+    </table>
+    <div class="note">The backbone is about <strong>76.2 M</strong> FLOPs per frame, at two FLOPs per parameter per token. Canonicalization is <strong>0.00053%</strong> of it — median 269 µs against 11.4 ms, and 7,560 bytes of extra memory.</div>
+    <p class="sub">Stored in <code>thesis_artifacts/cost/cost_benchmark.json</code>; the audit checks it exactly.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">B3</div><div class="phase">Backup</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>What exactly the Kabsch baseline is</h2><div class="underline"></div>
+    <p>For each predicted pose independently, find the rotation that minimises squared distance to <em>one fixed reference skeleton</em>, then apply it. Closed form via SVD — no training, no labels, no calibration, one view.</p>
+    <table>
+      <tr><th>Robustness tested</th><th>Result</th></tr>
+      <tr><td>Three unrelated reference skeletons</td><td class="against">baseline wins under all three</td></tr>
+      <tr><td>Every centring convention tested</td><td class="against">baseline wins under all</td></tr>
+      <tr><td>Reference scaled to child proportions</td><td class="against">moves 0.12 mm — no matched template needed</td></tr>
+      <tr><td>All fifteen Human3.6M actions</td><td class="against">baseline wins 15 / 15</td></tr>
+    </table>
+    <div class="note">Why it wins: it fits one rotation over all seventeen joints, so no single joint dominates. My frame reads four, so those four carry the whole orientation — which is also why the two fail on different joints.</div>
   </div>
 </section>
 
