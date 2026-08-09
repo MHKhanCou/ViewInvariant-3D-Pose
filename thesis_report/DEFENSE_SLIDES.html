@@ -104,6 +104,20 @@
   }
   .eq strong{font-weight:600;}
 
+  /* the one number the examiner should leave with */
+  .headline{text-align:center;margin:10px 0 22px;}
+  .headline .big{
+    font-family:var(--sans);font-weight:600;letter-spacing:-.02em;
+    font-size:clamp(30px,4.4vw,58px);font-variant-numeric:tabular-nums;
+    line-height:1.1;
+  }
+  .headline .was{color:var(--muted);}
+  .headline .arrow{color:var(--rule);margin:0 .18em;}
+  .headline .cap{
+    font-family:var(--sans);font-size:clamp(12.5px,1.35vw,17px);
+    color:var(--muted);margin-top:10px;
+  }
+
   /* problem diagram — set in CSS, not SVG presentation attributes,
      so custom properties resolve reliably */
   .dia{width:100%;height:100%;}
@@ -213,7 +227,7 @@
              autoplay loop muted playsinline controls
              aria-label="Eight camera predictions rotating into one shared body frame"></video>
     </div>
-    <p class="sub">Each camera canonicalized independently — no calibration, and no knowledge of the other seven. Mean pairwise distance <strong>0.149 → 0.095</strong> in the normalised units the cache stores.</p>
+    <p class="sub">Each camera canonicalized independently — no calibration, and no knowledge of the other seven. The quantitative result is measured on held-out Human3.6M, two slides on.</p>
   </div>
 </section>
 
@@ -233,16 +247,17 @@
   <div class="rail"><div class="n">06</div><div class="phase">Evidence</div><div class="tick"></div></div>
   <div class="body">
     <h2>Main result — Human3.6M, 180 held-out pairs</h2><div class="underline"></div>
+    <div class="headline">
+      <div class="big"><span class="was">372.7 mm</span> <span class="arrow">→</span> <span class="method">93.4 mm</span></div>
+      <div class="cap">mean cross-view disagreement &nbsp;·&nbsp; <strong class="method">−72.2%</strong> &nbsp;·&nbsp; <strong class="method">179 of 180 pairs improved</strong></div>
+    </div>
     <table>
-      <tr><th></th><th class="r">Base</th><th class="r">Proposed</th><th class="r">Change</th></tr>
-      <tr><td>MPJPE vs ground truth</td><td class="r">45.149 mm</td><td class="r">45.149 mm</td><td class="r">identical</td></tr>
-      <tr><td>Cross-view distance, 13 joints</td><td class="r">372.7 mm</td><td class="r">93.4 mm</td><td class="r method">−72.2%</td></tr>
-      <tr><td>Pairs improved</td><td class="r">—</td><td class="r method">179 / 180</td><td class="r"></td></tr>
-      <tr><td>Second backbone, MotionBERT</td><td class="r">—</td><td class="r method">180 / 180</td><td class="r method">−75.8%</td></tr>
-      <tr><td>Trained parameters added</td><td class="r">0</td><td class="r">0</td><td class="r">none</td></tr>
+      <tr><th>What did not change</th><th class="r">Base</th><th class="r">Proposed</th></tr>
+      <tr><td>MPJPE against ground truth</td><td class="r">45.149 mm</td><td class="r">45.149 mm</td></tr>
+      <tr><td>Trained parameters</td><td class="r">0 added</td><td class="r">0 added</td></tr>
+      <tr><td>Second backbone, MotionBERT</td><td class="r">—</td><td class="r method">−75.8%, 180 / 180</td></tr>
     </table>
-    <div class="note"><strong>Accuracy does not change, and cannot</strong> — the estimator is frozen. What improves is <em>agreement between cameras</em>, not correctness.</div>
-    <p class="sub">−72.2% is the mean of the <em>per-pair</em> improvements, the conservative convention. The ratio of the two mean distances would read −74.9%.</p>
+    <div class="note"><strong>Same estimator, same weights, same 2D input, same 3D predictions.</strong> Only the coordinate representation changes — which is why MPJPE is identical and cross-view agreement is not.</div>
   </div>
 </section>
 
@@ -288,7 +303,7 @@
       <tr><td>Bone length predicts error</td><td>ρ = +0.492, then +0.098 on the second dataset. <span class="fails">RETRACTED</span></td></tr>
       <tr><td>Multi-scale per-limb frames</td><td>Scored on the joints they were built from. <span class="fails">DEMOTED</span></td></tr>
     </table>
-    <div class="note"><strong>The two error predictors failed for the same reason:</strong> geometric plausibility survives depth errors. A pose wrong only in depth is still symmetric, proportioned and well conditioned — geometry cannot see the error, because the error is what geometry preserves. The other two failed differently: one was prior art, the other was circular.</div>
+    <div class="note"><strong>A common limitation runs through the two error predictors:</strong> geometric consistency can survive a depth error. A pose wrong only in depth is still symmetric, proportioned and well conditioned — geometry cannot see the error, because the error is what geometry preserves. The other two failed differently: one was prior art, the other was circular.</div>
     <p class="sub">I found each of these myself, and reported them rather than removing them.</p>
   </div>
 </section>
@@ -296,7 +311,7 @@
 <section class="slide">
   <div class="rail"><div class="n">10</div><div class="phase">Boundary</div><div class="tick"></div></div>
   <div class="body">
-    <h2>The two alignments fail on disjoint joints</h2><div class="underline"></div>
+    <h2>The two alignments have different failure modes</h2><div class="underline"></div>
     <table>
       <tr><th>Corruption</th><th class="r">Anatomical frame</th><th class="r">Kabsch, 17-joint</th></tr>
       <tr><td>Clean</td><td class="r">53.45 mm</td><td class="r">43.3 mm</td></tr>
@@ -342,11 +357,11 @@
   <div class="body">
     <h2>How the claims were kept honest</h2><div class="underline"></div>
     <table>
-      <tr><td><strong>17</strong></td><td>experiments pre-registered — criteria committed to version control <em>before</em> each run</td></tr>
+      <tr><td><strong>17</strong></td><td>experiments pre-registered, in <strong>16 documents</strong> — one covers two — with criteria committed to version control <em>before</em> each run</td></tr>
       <tr><td><strong>&gt; half</strong></td><td>failed their own criteria, and every one is reported</td></tr>
       <tr><td><strong>304</strong></td><td>numerical claims re-derived from stored artifacts by an automated audit</td></tr>
       <tr><td><strong>76</strong></td><td>unit tests, all passing</td></tr>
-      <tr><td><strong>16 / 16</strong></td><td>pre-registrations verified to precede their own results in git history</td></tr>
+      <tr><td><strong>16 / 16</strong></td><td>of those documents verified to precede their own results in git history</td></tr>
     </table>
     <div class="note">A pre-registration that only counts when it succeeds is not a pre-registration. The failures are reported at the same length as the confirmations.</div>
   </div>

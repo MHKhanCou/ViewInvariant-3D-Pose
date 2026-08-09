@@ -173,6 +173,26 @@ on a plain MLP — which is part of why it is reported as falsified.
 
 ---
 
+## Part 4b — Two counts to have exact, in case he asks
+
+**"How many experiments, and how many pre-registrations?"** They are different
+numbers and both are right. **Seventeen experiments in sixteen documents** —
+`bestframe/PREREGISTRATION.md` is titled *"the fifteenth and sixteenth
+experiments"* and covers both, which is why the ordering check reports 16 / 16.
+Say it as one sentence and the apparent mismatch never becomes a question.
+
+**"More than half failed — how many exactly?"** The report says *more than half*
+and that is what the slide says, because it is true under either counting. If
+pressed:
+
+> "Ten of the seventeen failed their own pre-registered criterion. Three passed.
+> The remaining four were recomputations or comparisons that fixed no pass
+> criterion in advance — and all four returned outcomes adverse to my method
+> anyway, including the template baseline result."
+
+Do not volunteer the exact split. *More than half* is the reported figure; the
+breakdown is there if he wants it.
+
 ## Part 5 — Numbers, verified tonight
 
 Re-checked at 21:50 on 9 August: **304/304 claims, 76 tests, 16/16 pre-registrations
