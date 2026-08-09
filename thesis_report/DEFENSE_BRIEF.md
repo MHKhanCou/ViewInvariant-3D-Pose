@@ -93,7 +93,24 @@ This is the strongest scientific objection. Agree with it immediately.
 That last sentence is not a weakness. Volunteering it is what makes the rest
 credible.
 
-### Attack 3 — "TRIAD is from 1964. What is novel?"
+### Attack 3 — "Your table says 372.7 to 93.4. That's 74.9%, not 72.2%."
+
+Somebody with a calculator will find this. The submitted report does **not** explain
+it, so you must. It is a good answer — you reported the number that flatters you
+less.
+
+> "Both are correct, Sir, and they are different conventions. 72.2 percent is the
+> mean of the per-pair improvements — I compute the improvement for each of the 180
+> pairs and average those. 74.9 percent is the ratio of the two mean distances. The
+> mean of ratios is not the ratio of means, so they differ by about two and a half
+> points. I report the per-pair mean because it is the conservative of the two, and
+> the bootstrap interval is computed on that same per-pair quantity over the thirty
+> subject-action clusters. The stored artifact records both, so the choice is
+> auditable."
+
+Same at seventeen joints: 320.4 to 75.3 is 76.5 percent by ratio; I report 74.1.
+
+### Attack 4 — "TRIAD is from 1964. What is novel?"
 
 Memorise this one.
 
