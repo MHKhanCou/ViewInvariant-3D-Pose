@@ -156,8 +156,14 @@ about twofold in canonical distance. So articulation, not radius, dominates.
 **Why did the reliability score fail?**
 Every component is computed from one frame's geometry. A pose that is wrong purely
 in depth is still symmetric, correctly proportioned and well conditioned. Geometry
-cannot see the error because the error is what geometry preserves. That single
-sentence explains all four collapsed ideas — it is the deepest thing in the thesis.
+cannot see the error because the error is what geometry preserves.
+
+**Careful here — it does not explain all four.** It explains the two *error
+predictors*, the reliability score and the bone-length signal, which both asked a
+geometric quantity to predict a non-geometric failure. The other two failed for
+different reasons: TRIAD was a literature finding, not an experimental failure, and
+the multi-scale variant was circular. If you claim one cause for all four, an
+examiner who separates them has caught you.
 
 **Why is n = 2 enough?**
 It is not, and I say so. Two datasets and two backbones is replication, not

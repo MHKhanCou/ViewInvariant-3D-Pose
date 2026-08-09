@@ -65,7 +65,9 @@
   em{font-style:italic;}
 
   .fill{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;margin:4px 0 12px;}
-  .fill img{max-width:100%;max-height:100%;object-fit:contain;}
+  .fill img,.fill video{max-width:100%;max-height:100%;object-fit:contain;}
+  /* print falls back to the poster frame, so PDF export still carries the figure */
+  @media print{.fill video{content:none;}}
 
   table{
     border-collapse:collapse;width:100%;font-family:var(--sans);
@@ -205,6 +207,19 @@
 <section class="slide">
   <div class="rail"><div class="n">04</div><div class="phase">Method</div><div class="tick"></div></div>
   <div class="body">
+    <h2>The same instant, eight real cameras</h2><div class="underline"></div>
+    <div class="fill">
+      <video src="images/anim_realview.mp4" poster="images/fig_realview.png"
+             autoplay loop muted playsinline controls
+             aria-label="Eight camera predictions rotating into one shared body frame"></video>
+    </div>
+    <p class="sub">Each camera canonicalized independently — no calibration, and no knowledge of the other seven. Mean pairwise distance <strong>0.149 → 0.095</strong> in the normalised units the cache stores.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">05</div><div class="phase">Method</div><div class="tick"></div></div>
+  <div class="body">
     <h2>Why the camera rotation cancels</h2><div class="underline"></div>
     <p>Both axes are read <em>from the joints</em>, so the frame rotates with the body. If camera B sees the same pose under an unknown rotation <em>Q</em>:</p>
     <div class="eq">P<sup>(B)</sup> = P<sup>(A)</sup>Q &nbsp;&nbsp;and&nbsp;&nbsp; R<sup>(B)</sup> = Q<sup>⊤</sup>R<sup>(A)</sup></div>
@@ -215,7 +230,7 @@
 </section>
 
 <section class="slide">
-  <div class="rail"><div class="n">05</div><div class="phase">Evidence</div><div class="tick"></div></div>
+  <div class="rail"><div class="n">06</div><div class="phase">Evidence</div><div class="tick"></div></div>
   <div class="body">
     <h2>Main result — Human3.6M, 180 held-out pairs</h2><div class="underline"></div>
     <table>
@@ -228,15 +243,6 @@
     </table>
     <div class="note"><strong>Accuracy does not change, and cannot</strong> — the estimator is frozen. What improves is <em>agreement between cameras</em>, not correctness.</div>
     <p class="sub">−72.2% is the mean of the <em>per-pair</em> improvements, the conservative convention. The ratio of the two mean distances would read −74.9%.</p>
-  </div>
-</section>
-
-<section class="slide">
-  <div class="rail"><div class="n">06</div><div class="phase">Evidence</div><div class="tick"></div></div>
-  <div class="body">
-    <h2>The same instant, eight real cameras</h2><div class="underline"></div>
-    <div class="fill"><img src="images/fig_realview.png" alt="Eight synchronized cameras, predictions before and after canonicalization"></div>
-    <p class="sub">Each camera canonicalized independently — no calibration, and no knowledge of the other seven.</p>
   </div>
 </section>
 
@@ -282,7 +288,7 @@
       <tr><td>Bone length predicts error</td><td>ρ = +0.492, then +0.098 on the second dataset. <span class="fails">RETRACTED</span></td></tr>
       <tr><td>Multi-scale per-limb frames</td><td>Scored on the joints they were built from. <span class="fails">DEMOTED</span></td></tr>
     </table>
-    <div class="note"><strong>One shared cause:</strong> geometric plausibility is invariant to coherent depth error. A pose wrong only in depth is still symmetric, proportioned and well conditioned — geometry cannot see the error, because the error is what geometry preserves.</div>
+    <div class="note"><strong>The two error predictors failed for the same reason:</strong> geometric plausibility survives depth errors. A pose wrong only in depth is still symmetric, proportioned and well conditioned — geometry cannot see the error, because the error is what geometry preserves. The other two failed differently: one was prior art, the other was circular.</div>
     <p class="sub">I found each of these myself, and reported them rather than removing them.</p>
   </div>
 </section>
@@ -297,7 +303,7 @@
       <tr><td><strong>Distal</strong> joints corrupted</td><td class="r method">53.45 mm — flat</td><td class="r against">→ 92.3 mm</td></tr>
       <tr><td><strong>Anchor</strong> joints corrupted</td><td class="r against">→ 337.9 mm</td><td class="r method">→ 63.2 mm</td></tr>
     </table>
-    <p>The frame reads four joints; Kabsch fits seventeen. Their failure supports do not overlap — measured on both backbones. This is the one new finding not conditional on a regime.</p>
+    <p>The frame reads four joints; Kabsch fits seventeen, so their errors respond differently to localised corruption. Measured on both backbones — and unlike the rule below, this holds without assuming any particular regime.</p>
     <div class="note warn">A rule exploiting this is <strong>exploratory only</strong>: its confidence signal is simulated, and the real detector channel carries no usable signal on clean data.</div>
   </div>
 </section>
@@ -327,7 +333,22 @@
       <li><strong>No downstream task succeeded</strong> — cross-view retrieval recall fell, and that claim is withdrawn.</li>
       <li><em>n</em> = 2 datasets, both laboratory rigs, and 2 backbones, both temporal transformers. Replication, not universality.</li>
     </ul>
-    <div class="note">17 experiments pre-registered with criteria committed to version control <em>before</em> each run. <strong>More than half failed.</strong> 304 numerical claims re-derived from stored artifacts by an automated audit; 76 tests; every pre-registration verified to precede its own result.</div>
+    <p class="sub">Each of these is stated in the report, not only here.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">13</div><div class="phase">Limits</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>How the claims were kept honest</h2><div class="underline"></div>
+    <table>
+      <tr><td><strong>17</strong></td><td>experiments pre-registered — criteria committed to version control <em>before</em> each run</td></tr>
+      <tr><td><strong>&gt; half</strong></td><td>failed their own criteria, and every one is reported</td></tr>
+      <tr><td><strong>304</strong></td><td>numerical claims re-derived from stored artifacts by an automated audit</td></tr>
+      <tr><td><strong>76</strong></td><td>unit tests, all passing</td></tr>
+      <tr><td><strong>16 / 16</strong></td><td>pre-registrations verified to precede their own results in git history</td></tr>
+    </table>
+    <div class="note">A pre-registration that only counts when it succeeds is not a pre-registration. The failures are reported at the same length as the confirmations.</div>
   </div>
 </section>
 

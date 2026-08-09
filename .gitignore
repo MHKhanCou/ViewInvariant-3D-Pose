@@ -98,3 +98,6 @@ thesis_artifacts/diagnostic_v2/
 thesis_artifacts/diagnostic_v3/
 thesis_artifacts/app_log.txt
 thesis_artifacts/benchmark/results/
+
+# animation scratch frames
+thesis_artifacts/figures/_anim/
