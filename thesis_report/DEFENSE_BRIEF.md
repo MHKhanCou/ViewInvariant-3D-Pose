@@ -264,6 +264,40 @@ Where things live: **Table 5.1 p18** (every claim + verdict) · **Table 5.2 p22*
 
 ---
 
+## Part 6b — In the room
+
+Knowing the content is only half of it. These are the mechanics.
+
+**Pace.** Nerves double your speed. Deliberately slow the first two sentences; the
+rest follows. Silence while you think reads as consideration, not ignorance — a
+two-second pause before answering makes you sound more senior, not less.
+
+**When you don't know.** Say so, and say where the answer lives:
+*"I'd have to check the table, Sir — it's in Appendix A."* That is a complete,
+professional answer. Guessing a number in a thesis whose entire claim is
+auditability is the one unrecoverable mistake. You have never needed to guess:
+every number is in the report or the backup slides.
+
+**When you're interrupted.** Let him finish, answer the question he asked, then
+ask *"shall I continue, Sir?"* Do not defend the slide you were on. Examiners
+interrupt because they're engaged, not because you're failing.
+
+**When a premise sounds wrong.** Don't concede reflexively and don't argue.
+*"I think that may differ from what I measured — may I check the table?"* Then
+look. Seven external reviews of this work stated something the repository
+contradicted; examiners are not immune. Politely checking is not rudeness, it is
+the discipline the thesis is about.
+
+**When you're pushed on a weakness.** Agree, then bound it.
+*"That's correct, and it's a limitation I state in Chapter 6. What I can say is…"*
+Never defend a result the report already concedes — you lose the credibility that
+conceding it bought you.
+
+**If you go blank.** Drink water. Say *"the contribution is the boundary, not the
+method"* and work outward. It's true, it's the thesis, and it buys ten seconds.
+
+**Ending.** When questions stop, stop. Don't fill silence with more thesis.
+
 ## Part 7 — If you blank
 
 Say: **"The contribution is the boundary, not the method."**
