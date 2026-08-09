@@ -102,6 +102,19 @@
   }
   .eq strong{font-weight:600;}
 
+  /* problem diagram — set in CSS, not SVG presentation attributes,
+     so custom properties resolve reliably */
+  .dia{width:100%;height:100%;}
+  .dia .rig{fill:none;stroke:var(--muted);stroke-width:1.6;}
+  .dia .figure{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;}
+  .dia .arrow{stroke:var(--rule);stroke-width:1.6;fill:none;}
+  .dia .head{fill:var(--rule);}
+  .dia text{font-family:var(--sans);fill:var(--muted);font-size:13px;}
+  .dia .coord{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;}
+  .dia .ca{fill:var(--against);}
+  .dia .cb{fill:var(--method);}
+  .dia .neq{fill:var(--ink);font-size:19px;font-weight:600;}
+
   /* opening + closing */
   .cover{grid-template-columns:1fr;}
   .cover .body{justify-content:center;padding:0 clamp(48px,7vw,110px);}
@@ -149,7 +162,33 @@
   <div class="body">
     <h2>The problem in the proposal</h2><div class="underline"></div>
     <p>A monocular estimator predicts the skeleton <em>in the observing camera's frame</em>. Two cameras, same person, same instant — two different sets of numbers.</p>
-    <div class="fill"><img src="images/fig_teaser.png" alt="One pose seen by two cameras, before and after canonicalization"></div>
+    <div class="fill">
+      <svg class="dia" viewBox="0 0 760 300" role="img" aria-label="One physical pose observed by two cameras yields two different coordinate representations">
+        <defs><marker id="ah" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path class="head" d="M0 0 L7 3.5 L0 7 z"/></marker></defs>
+
+        <g class="rig">
+          <path d="M96 118 l34-16 v46 l-34-16 z"/><rect x="130" y="96" width="52" height="58" rx="3"/>
+          <path d="M664 118 l-34-16 v46 l34-16 z"/><rect x="578" y="96" width="52" height="58" rx="3"/>
+        </g>
+        <text x="139" y="180">Camera A</text>
+        <text x="587" y="180">Camera B</text>
+
+        <g class="figure">
+          <circle cx="380" cy="74" r="11"/>
+          <path d="M380 85 v46 M380 96 l-26 20 M380 96 l26 20 M380 131 l-20 40 M380 131 l20 40"/>
+        </g>
+        <text x="380" y="196" text-anchor="middle">one physical pose</text>
+
+        <path class="arrow" d="M300 120 H196" marker-end="url(#ah)"/>
+        <path class="arrow" d="M460 120 H564" marker-end="url(#ah)"/>
+
+        <text class="coord ca" x="139" y="240">( 118, −42, 507 )</text>
+        <text class="coord cb" x="587" y="240">( −64, −41, 388 )</text>
+        <text class="neq" x="380" y="240" text-anchor="middle">≠</text>
+        <text x="380" y="272" text-anchor="middle">same joint, same instant, different coordinates</text>
+      </svg>
+    </div>
     <p class="sub">Gait analysis across sessions, sports across camera positions — every one of them needs a shared frame first.</p>
   </div>
 </section>
@@ -227,7 +266,8 @@
       <tr><td>Which <strong>frame</strong> to trust</td><td>the multi-scale gain was circular by construction</td><td class="r"><span class="fails">FAILS</span></td></tr>
       <tr><td>Which <strong>joint</strong> disagrees</td><td>slope 0.218 against a predicted band of [0.038, 0.073]</td><td class="r"><span class="fails">FAILS</span></td></tr>
     </table>
-    <p class="sub">Articulation, not radius, governs joint disagreement. Two of the three levels are failures — and the boundary is the finding.</p>
+    <div class="note">Joints rigid with the torso sit at a <em>larger</em> radius than articulated joints, yet disagree <strong>two and a half times less</strong> — the opposite of the rigid-segment prediction. <strong>A human is not a rigid body.</strong></div>
+    <p class="sub">Two of the three levels are failures, and the boundary is the finding.</p>
   </div>
 </section>
 
@@ -285,7 +325,7 @@
       <li>The geometry predates this thesis by decades. The contribution is the transfer and its boundary.</li>
       <li>Cross-view distance measures <strong>agreement, not correctness</strong>. Two predictions wrong the same way agree perfectly.</li>
       <li><strong>No downstream task succeeded</strong> — cross-view retrieval recall fell, and that claim is withdrawn.</li>
-      <li><em>n</em> = 2 datasets and 2 backbones. Replication, not universality.</li>
+      <li><em>n</em> = 2 datasets, both laboratory rigs, and 2 backbones, both temporal transformers. Replication, not universality.</li>
     </ul>
     <div class="note">17 experiments pre-registered with criteria committed to version control <em>before</em> each run. <strong>More than half failed.</strong> 304 numerical claims re-derived from stored artifacts by an automated audit; 76 tests; every pre-registration verified to precede its own result.</div>
   </div>
