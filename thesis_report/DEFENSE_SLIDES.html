@@ -1,223 +1,328 @@
 <!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Defense — Cross-View Comparability of Frozen Monocular 3D Pose</title>
 <style>
-  :root { --ink:#111; --mut:#555; --line:#ccc; --bad:#a3231d; --good:#14603a; --hi:#f4f1e8; }
-  * { box-sizing:border-box; }
-  body { margin:0; background:#666; font-family:Georgia,"Times New Roman",serif; color:var(--ink); }
-  .slide {
-    width:1024px; height:576px; margin:16px auto; padding:44px 56px; background:#fff;
-    position:relative; display:flex; flex-direction:column; overflow:hidden;
-    box-shadow:0 2px 12px rgba(0,0,0,.4);
+  :root{
+    --ground:#FCFDFE;
+    --panel:#F2F5F8;
+    --ink:#0F151D;
+    --muted:#586573;
+    --rule:#D3DBE3;
+    --method:#23408E;
+    --against:#A8321F;
+    --verdict:#0D6A57;
+    --serif:"Charter","Bitstream Charter","Sitka Text",Cambria,Georgia,"Times New Roman",serif;
+    --sans:"Inter","Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,sans-serif;
+    --rail:104px;
   }
-  h1 { font-size:34px; line-height:1.25; margin:0 0 10px; }
-  h2 { font-size:30px; margin:0 0 22px; padding-bottom:8px; border-bottom:2px solid var(--ink); }
-  p, li { font-size:21px; line-height:1.5; margin:0 0 12px; }
-  ul { margin:0 0 12px 26px; padding:0; }
-  .sub { color:var(--mut); font-size:19px; }
-  .num { font-size:15px; color:var(--mut); position:absolute; bottom:16px; right:24px; }
-  .fill { flex:1; display:flex; align-items:center; justify-content:center; min-height:0; }
-  .fill img { max-width:100%; max-height:100%; object-fit:contain; }
-  table { border-collapse:collapse; width:100%; font-size:20px; }
-  td, th { padding:7px 10px; border-bottom:1px solid var(--line); text-align:left; }
-  th { border-bottom:2px solid var(--ink); }
-  .r { text-align:right; font-variant-numeric:tabular-nums; }
-  .bad { color:var(--bad); font-weight:bold; }
-  .good { color:var(--good); font-weight:bold; }
-  .box { background:var(--hi); border-left:5px solid var(--ink); padding:14px 18px; margin:6px 0 12px; }
-  .eq { font-family:"Cambria Math",Cambria,Georgia,serif; font-size:25px; text-align:center; margin:16px 0; }
-  .title-slide { justify-content:center; text-align:center; }
-  .title-slide .meta { font-size:21px; color:var(--mut); margin-top:26px; line-height:1.7; }
-  .kicker { font-size:17px; letter-spacing:.13em; text-transform:uppercase; color:var(--mut); margin-bottom:8px; }
-  @media print {
-    body { background:#fff; }
-    .slide { margin:0; box-shadow:none; page-break-after:always; width:100%; height:100vh; }
+  *{box-sizing:border-box;}
+  html{scroll-snap-type:y mandatory;scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+  body{
+    margin:0;background:#454E58;color:var(--ink);
+    font-family:var(--serif);font-size:16px;
+  }
+
+  .slide{
+    position:relative;scroll-snap-align:center;
+    width:min(1160px,96vw);aspect-ratio:16/9;margin:22px auto;
+    background:var(--ground);display:grid;grid-template-columns:var(--rail) 1fr;
+    box-shadow:0 3px 20px rgba(0,0,0,.35);overflow:hidden;
+  }
+
+  /* left rail: where you are in the argument */
+  .rail{
+    border-right:1px solid var(--rule);
+    display:flex;flex-direction:column;justify-content:space-between;
+    padding:34px 0 26px;background:var(--panel);
+  }
+  .rail .n{
+    font-family:var(--sans);font-size:13px;font-weight:600;color:var(--muted);
+    font-variant-numeric:tabular-nums;text-align:center;
+  }
+  .rail .phase{
+    font-family:var(--sans);font-size:10.5px;font-weight:600;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--muted);
+    writing-mode:vertical-rl;transform:rotate(180deg);
+    margin:0 auto;white-space:nowrap;
+  }
+  .rail .tick{width:22px;height:2px;background:var(--method);margin:0 auto;}
+
+  .body{padding:46px 54px 40px;display:flex;flex-direction:column;min-width:0;}
+
+  h2{
+    font-size:clamp(24px,2.55vw,33px);line-height:1.15;margin:0 0 6px;
+    font-weight:600;text-wrap:balance;letter-spacing:-.008em;
+  }
+  .underline{height:2px;background:var(--ink);width:100%;margin:0 0 20px;}
+  p{font-size:clamp(15px,1.55vw,20px);line-height:1.5;margin:0 0 11px;max-width:62ch;}
+  ul{margin:0 0 11px;padding-left:20px;}
+  li{font-size:clamp(15px,1.5vw,19.5px);line-height:1.5;margin-bottom:8px;max-width:64ch;}
+  .sub{font-size:clamp(12.5px,1.25vw,16px);color:var(--muted);line-height:1.45;max-width:70ch;}
+  em{font-style:italic;}
+
+  .fill{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;margin:4px 0 12px;}
+  .fill img{max-width:100%;max-height:100%;object-fit:contain;}
+
+  table{
+    border-collapse:collapse;width:100%;font-family:var(--sans);
+    font-size:clamp(12.5px,1.34vw,17px);font-variant-numeric:tabular-nums;
+  }
+  th{
+    text-align:left;font-weight:600;font-size:.82em;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted);
+    padding:0 12px 7px 0;border-bottom:1.5px solid var(--ink);
+  }
+  td{padding:8px 12px 8px 0;border-bottom:1px solid var(--rule);vertical-align:baseline;}
+  .r{text-align:right;}
+  tr:last-child td{border-bottom:none;}
+
+  .method{color:var(--method);font-weight:600;}
+  .against{color:var(--against);font-weight:600;}
+  .holds,.fails{
+    font-family:var(--sans);font-size:.74em;font-weight:700;letter-spacing:.08em;
+    padding:2px 8px;border-radius:2px;white-space:nowrap;
+  }
+  .holds{color:var(--verdict);background:rgba(13,106,87,.10);}
+  .fails{color:var(--against);background:rgba(168,50,31,.10);}
+
+  .note{
+    border-left:3px solid var(--method);background:var(--panel);
+    padding:13px 18px;margin:12px 0 10px;
+    font-size:clamp(14px,1.45vw,18.5px);line-height:1.45;max-width:72ch;
+  }
+  .note.warn{border-left-color:var(--against);}
+
+  .eq{
+    font-family:var(--serif);font-size:clamp(17px,1.95vw,26px);
+    text-align:center;margin:14px 0;letter-spacing:.01em;
+  }
+  .eq strong{font-weight:600;}
+
+  /* opening + closing */
+  .cover{grid-template-columns:1fr;}
+  .cover .body{justify-content:center;padding:0 clamp(48px,7vw,110px);}
+  .eyebrow{
+    font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:20px;
+  }
+  h1{
+    font-size:clamp(26px,3.15vw,42px);line-height:1.16;font-weight:600;
+    margin:0;letter-spacing:-.014em;text-wrap:balance;max-width:22ch;
+  }
+  .hairline{width:64px;height:2px;background:var(--method);margin:26px 0;}
+  .meta{font-family:var(--sans);font-size:clamp(12.5px,1.3vw,16px);line-height:1.85;color:var(--muted);}
+  .meta strong{color:var(--ink);font-weight:600;}
+
+  .closing h1{max-width:26ch;}
+  .closing .meta{margin-top:22px;}
+
+  @media print{
+    html{scroll-snap-type:none;}
+    body{background:#fff;}
+    .slide{margin:0;box-shadow:none;width:100%;aspect-ratio:auto;height:100vh;
+           page-break-after:always;break-after:page;}
+    @page{size:landscape;margin:0;}
   }
 </style>
+</head>
+<body>
 
-<!-- 1 -->
-<section class="slide title-slide">
-  <div class="kicker">B.Sc. Thesis Defense &middot; Comilla University</div>
-  <h1>A Lightweight, Training-Free Geometric Canonicalization Framework<br>
-      for Cross-View Comparability of Frozen Monocular 3D Pose Predictions</h1>
-  <div class="meta">
-    <strong>Mehedi Hasan Khan</strong> &nbsp;&middot;&nbsp; ID 12108004<br>
-    Supervisor: Dr. Mahmudul Hasan, Associate Professor<br>
-    Department of Computer Science &amp; Engineering &nbsp;&middot;&nbsp; August 2026
+<section class="slide cover">
+  <div class="body">
+    <div class="eyebrow">B.Sc. Thesis Defense &middot; Comilla University</div>
+    <h1>A Lightweight, Training-Free Geometric Canonicalization Framework for Cross-View Comparability of Frozen Monocular 3D Pose Predictions</h1>
+    <div class="hairline"></div>
+    <div class="meta">
+      <strong>Mehedi Hasan Khan</strong> &nbsp;·&nbsp; ID 12108004<br>
+      Supervisor: Dr. Mahmudul Hasan, Associate Professor<br>
+      Department of Computer Science &amp; Engineering &nbsp;·&nbsp; August 2026
+    </div>
   </div>
 </section>
 
-<!-- 2 -->
 <section class="slide">
-  <h2>The problem in the proposal</h2>
-  <p>A monocular estimator predicts the skeleton <em>in the observing camera's frame</em>.
-     Two cameras, same person, same instant &rarr; two different sets of numbers.</p>
-  <div class="fill"><img src="images/fig_teaser.png" alt="problem and operation"></div>
-  <p class="sub">Gait analysis across sessions, sports across camera positions — all need one shared frame first.</p>
-  <div class="num">2</div>
-</section>
-
-<!-- 3 -->
-<section class="slide">
-  <h2>What I built — one step, after a frozen model</h2>
-  <div class="fill"><img src="images/fig_pipeline.png" alt="pipeline"></div>
-  <p><strong>Steps 1–3 are frozen and unmodified.</strong> Step 4 is mine: rebuild the
-     coordinate frame from the person's own hips and torso. Zero trained parameters, 402 FLOPs.</p>
-  <div class="num">3</div>
-</section>
-
-<!-- 4 -->
-<section class="slide">
-  <h2>Why the camera rotation cancels</h2>
-  <p>Both axes are read <em>from the joints</em>, so the frame rotates with the body.
-     If camera B sees the same pose under an unknown rotation <em>Q</em>:</p>
-  <div class="eq">P<sup>(B)</sup> = P<sup>(A)</sup>Q &nbsp;&nbsp;and&nbsp;&nbsp;
-       R<sup>(B)</sup> = Q<sup>&#8868;</sup>R<sup>(A)</sup></div>
-  <div class="eq"><strong>P<sup>(B)</sup>R<sup>(B)</sup> =
-       (P<sup>(A)</sup>Q)(Q<sup>&#8868;</sup>R<sup>(A)</sup>) = P<sup>(A)</sup>R<sup>(A)</sup></strong></div>
-  <div class="box"><em>Q</em> is never estimated — it cancels. That is why no calibration is needed.</div>
-  <p class="sub">Exact only if both cameras give the same pose up to rotation. In practice each carries
-     its own error, and the residual distance we measure <em>is</em> that error.</p>
-  <div class="num">4</div>
-</section>
-
-<!-- 5 -->
-<section class="slide">
-  <h2>Main result — Human3.6M, 180 held-out pairs</h2>
-  <table>
-    <tr><th></th><th class="r">Base</th><th class="r">Proposed</th><th class="r">Change</th></tr>
-    <tr><td>MPJPE vs ground truth</td><td class="r">45.149 mm</td><td class="r">45.149 mm</td><td class="r"><strong>identical</strong></td></tr>
-    <tr><td>Cross-view distance (13 joints)</td><td class="r">372.7 mm</td><td class="r">93.4 mm</td><td class="r good">&minus;72.2%</td></tr>
-    <tr><td>Pairs improved</td><td class="r">—</td><td class="r">179 / 180</td><td class="r"></td></tr>
-    <tr><td>Second backbone (MotionBERT)</td><td class="r">—</td><td class="r">180 / 180</td><td class="r good">&minus;75.8%</td></tr>
-    <tr><td>Trained parameters added</td><td class="r">0</td><td class="r">0</td><td class="r">none</td></tr>
-  </table>
-  <div class="box"><strong>Accuracy does not change, and cannot</strong> — the estimator is frozen.
-     What improves is <em>agreement between cameras</em>, not correctness.</div>
-  <p class="sub">&minus;72.2% is the <em>mean of the per-pair improvements</em>, the conservative
-     convention. The ratio of the two mean distances would read &minus;74.9%.</p>
-  <div class="num">5</div>
-</section>
-
-<!-- 6 -->
-<section class="slide">
-  <h2>The same instant, eight real cameras</h2>
-  <div class="fill"><img src="images/fig_realview.png" alt="eight cameras before and after"></div>
-  <p class="sub">Each camera canonicalized independently — no calibration, no knowledge of the others.</p>
-  <div class="num">6</div>
-</section>
-
-<!-- 7 -->
-<section class="slide">
-  <h2>A simpler baseline beats my method</h2>
-  <p>Kabsch-aligning each pose onto <em>one fixed reference skeleton</em> is also
-     training-free, label-free, calibration-free and single-view.</p>
-  <table>
-    <tr><th>Cross-view distance</th><th class="r">Anatomical frame</th><th class="r">Kabsch-to-template</th></tr>
-    <tr><td>MotionAGFormer-XS</td><td class="r">93.4 mm</td><td class="r bad">57.5 mm</td></tr>
-    <tr><td>Pairs won</td><td class="r">0 / 180</td><td class="r bad">180 / 180</td></tr>
-    <tr><td>Actions won</td><td class="r">0 / 15</td><td class="r bad">15 / 15</td></tr>
-  </table>
-  <div class="box">It wins on <strong>every pair, both backbones, all fifteen actions, three templates,
-     every centring tested.</strong> Pre-registered before it was run. Stated in my abstract.</div>
-  <p class="sub">So I do not claim this is the best alignment algorithm. The question then becomes: what
-     <em>is</em> the contribution?</p>
-  <div class="num">7</div>
-</section>
-
-<!-- 8 -->
-<section class="slide">
-  <h2>The contribution is a boundary, tested at three levels</h2>
-  <div class="fill"><img src="images/fig_three_levels.png" alt="three levels"></div>
-  <table>
-    <tr><td><strong>Choosing between constructions</strong></td>
-        <td>longer shoulder axis wins, 5.2% / 4.4%, both backbones</td><td class="good">HOLDS</td></tr>
-    <tr><td><strong>Which frame to trust</strong></td>
-        <td>the multi-scale gain was circular by construction</td><td class="bad">FAILS</td></tr>
-    <tr><td><strong>Which joint disagrees</strong></td>
-        <td>slope 0.218 vs predicted [0.038, 0.073]</td><td class="bad">FAILS</td></tr>
-  </table>
-  <p class="sub">Articulation, not radius, governs joint disagreement. Two of three levels are failures —
-     and the boundary is the finding.</p>
-  <div class="num">8</div>
-</section>
-
-<!-- 9 -->
-<section class="slide">
-  <h2>Four ideas I started with did not survive</h2>
-  <ul>
-    <li><strong>Novel canonicalization</strong> &rarr; it is TRIAD (Black, 1964). Prior art, cited.</li>
-    <li><strong>Reliability predicts pose error</strong> &rarr; falsified five independent ways.</li>
-    <li><strong>Bone-length predicts error</strong> &rarr; &rho; = +0.492 on one dataset, +0.098 on the other. <em>Retracted.</em></li>
-    <li><strong>Multi-scale per-limb frames</strong> &rarr; scored on the joints they were built from. <em>Demoted.</em></li>
-  </ul>
-  <div class="box"><strong>One shared cause:</strong> geometric plausibility is invariant to coherent depth
-     error. A pose wrong only in depth is still symmetric, proportioned and well conditioned —
-     geometry cannot see the error, because the error is what geometry preserves.</div>
-  <p class="sub">I found each of these myself, and reported them rather than removing them.</p>
-  <div class="num">9</div>
-</section>
-
-<!-- 10 -->
-<section class="slide">
-  <h2>The two alignments fail on disjoint joints</h2>
-  <table>
-    <tr><th>Corruption</th><th class="r">Anatomical frame</th><th class="r">Kabsch (17-joint)</th></tr>
-    <tr><td>Clean</td><td class="r">53.45 mm</td><td class="r">43.3 mm</td></tr>
-    <tr><td><strong>Distal</strong> joints corrupted</td><td class="r good">53.45 mm — flat</td><td class="r bad">&rarr; 92.3 mm</td></tr>
-    <tr><td><strong>Anchor</strong> joints corrupted</td><td class="r bad">&rarr; 337.9 mm</td><td class="r good">&rarr; 63.2 mm</td></tr>
-  </table>
-  <p>The frame reads four joints; Kabsch fits seventeen. Their failure supports do not overlap —
-     measured on both backbones. This is the one new finding that is not conditional on a regime.</p>
-  <div class="box">A rule exploiting this is <strong>exploratory only</strong>: its confidence signal is
-     simulated, and the real detector channel carries no usable signal on clean data.</div>
-  <div class="num">10</div>
-</section>
-
-<!-- 11 -->
-<section class="slide">
-  <h2>So what is actually new?</h2>
-  <p><strong>Not new</strong> — and all of it cited: the TRIAD construction (Black, 1964),
-     the primary-axis rule (Shuster &amp; Oh), the <em>2&sigma;/L</em> error propagation
-     (biomechanics), Kabsch alignment.</p>
-  <table>
-    <tr><td><strong>1. The transfer</strong></td>
-        <td>Does classical rigid-body geometry survive on joints inferred by a network?</td></tr>
-    <tr><td><strong>2. The boundary</strong></td>
-        <td>It survives at construction level and fails at the two finer levels</td></tr>
-    <tr><td><strong>3. The evidence</strong></td>
-        <td>372.7 &rarr; 93.4 mm, 179/180, replicated on a second backbone</td></tr>
-    <tr><td><strong>4. The negatives</strong></td>
-        <td>17 pre-registered experiments, more than half failed, all reported</td></tr>
-  </table>
-  <div class="box">The contribution is the <strong>experimentally established boundary</strong>
-     of the geometric approach — not the invention of the geometry.</div>
-  <div class="num">11</div>
-</section>
-
-<!-- 12 -->
-<section class="slide">
-  <h2>Limitations — stated, not defended away</h2>
-  <ul>
-    <li>The geometry predates this thesis by decades. The contribution is the transfer and its boundary.</li>
-    <li>Cross-view distance measures <strong>agreement, not correctness</strong>. Two predictions wrong the same way agree perfectly.</li>
-    <li><strong>No downstream task succeeded</strong> — cross-view retrieval recall fell, and that claim is withdrawn.</li>
-    <li><em>n</em> = 2 datasets and 2 backbones. Replication, not universality.</li>
-  </ul>
-  <div class="box">17 experiments pre-registered with criteria committed to git <em>before</em> each run.
-     <strong>More than half failed.</strong> 304 numerical claims re-derived from stored artifacts by an
-     automated audit; 76 tests; every pre-registration verified to precede its own result.</div>
-  <div class="num">12</div>
-</section>
-
-<!-- 12 -->
-<section class="slide title-slide">
-  <h1 style="font-size:30px;">Cross-view comparability for frozen monocular 3D pose —<br>
-    training-free, and honestly scoped.</h1>
-  <div class="meta" style="font-size:20px;">
-    Accuracy unchanged at 45.149 mm &nbsp;&middot;&nbsp; cross-view 372.7 &rarr; 93.4 mm, 179/180 pairs<br>
-    A simpler baseline wins on the headline metric, and the report says so<br>
-    <strong>The contribution is the boundary, not the method.</strong>
+  <div class="rail"><div class="n">02</div><div class="phase">Problem</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>The problem in the proposal</h2><div class="underline"></div>
+    <p>A monocular estimator predicts the skeleton <em>in the observing camera's frame</em>. Two cameras, same person, same instant — two different sets of numbers.</p>
+    <div class="fill"><img src="images/fig_teaser.png" alt="One pose seen by two cameras, before and after canonicalization"></div>
+    <p class="sub">Gait analysis across sessions, sports across camera positions — every one of them needs a shared frame first.</p>
   </div>
-  <p class="sub" style="margin-top:30px;">Thank you. Questions welcome.</p>
 </section>
+
+<section class="slide">
+  <div class="rail"><div class="n">03</div><div class="phase">Method</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>One step, added after a frozen model</h2><div class="underline"></div>
+    <div class="fill"><img src="images/fig_pipeline.png" alt="RGB to 2D detection to lifting to canonicalization"></div>
+    <p><strong>Steps 1–3 are frozen and unmodified.</strong> Step 4 is mine: rebuild the coordinate frame from the person's own hips and torso. <span class="method">Zero trained parameters, 402 FLOPs per frame.</span></p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">04</div><div class="phase">Method</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>Why the camera rotation cancels</h2><div class="underline"></div>
+    <p>Both axes are read <em>from the joints</em>, so the frame rotates with the body. If camera B sees the same pose under an unknown rotation <em>Q</em>:</p>
+    <div class="eq">P<sup>(B)</sup> = P<sup>(A)</sup>Q &nbsp;&nbsp;and&nbsp;&nbsp; R<sup>(B)</sup> = Q<sup>⊤</sup>R<sup>(A)</sup></div>
+    <div class="eq"><strong>P<sup>(B)</sup>R<sup>(B)</sup> = (P<sup>(A)</sup>Q)(Q<sup>⊤</sup>R<sup>(A)</sup>) = P<sup>(A)</sup>R<sup>(A)</sup></strong></div>
+    <div class="note"><em>Q</em> is never estimated — it cancels. That is why no calibration is required.</div>
+    <p class="sub">Exact only if both cameras give the same pose up to rotation. In practice each carries its own error, and the residual distance measured throughout this work <em>is</em> that error.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">05</div><div class="phase">Evidence</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>Main result — Human3.6M, 180 held-out pairs</h2><div class="underline"></div>
+    <table>
+      <tr><th></th><th class="r">Base</th><th class="r">Proposed</th><th class="r">Change</th></tr>
+      <tr><td>MPJPE vs ground truth</td><td class="r">45.149 mm</td><td class="r">45.149 mm</td><td class="r">identical</td></tr>
+      <tr><td>Cross-view distance, 13 joints</td><td class="r">372.7 mm</td><td class="r">93.4 mm</td><td class="r method">−72.2%</td></tr>
+      <tr><td>Pairs improved</td><td class="r">—</td><td class="r method">179 / 180</td><td class="r"></td></tr>
+      <tr><td>Second backbone, MotionBERT</td><td class="r">—</td><td class="r method">180 / 180</td><td class="r method">−75.8%</td></tr>
+      <tr><td>Trained parameters added</td><td class="r">0</td><td class="r">0</td><td class="r">none</td></tr>
+    </table>
+    <div class="note"><strong>Accuracy does not change, and cannot</strong> — the estimator is frozen. What improves is <em>agreement between cameras</em>, not correctness.</div>
+    <p class="sub">−72.2% is the mean of the <em>per-pair</em> improvements, the conservative convention. The ratio of the two mean distances would read −74.9%.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">06</div><div class="phase">Evidence</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>The same instant, eight real cameras</h2><div class="underline"></div>
+    <div class="fill"><img src="images/fig_realview.png" alt="Eight synchronized cameras, predictions before and after canonicalization"></div>
+    <p class="sub">Each camera canonicalized independently — no calibration, and no knowledge of the other seven.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">07</div><div class="phase">Evidence</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>A simpler baseline beats my method</h2><div class="underline"></div>
+    <p>Kabsch-aligning each pose onto <em>one fixed reference skeleton</em> is also training-free, label-free, calibration-free and single-view.</p>
+    <table>
+      <tr><th>Cross-view distance</th><th class="r">Anatomical frame</th><th class="r">Kabsch-to-template</th></tr>
+      <tr><td>MotionAGFormer-XS</td><td class="r">93.4 mm</td><td class="r against">57.5 mm</td></tr>
+      <tr><td>Pairs won</td><td class="r">0 / 180</td><td class="r against">180 / 180</td></tr>
+      <tr><td>Actions won</td><td class="r">0 / 15</td><td class="r against">15 / 15</td></tr>
+    </table>
+    <div class="note warn">It wins on <strong>every pair, both backbones, all fifteen actions, three templates, every centring tested.</strong> Pre-registered before it ran. Stated in my abstract.</div>
+    <p class="sub">So I do not claim this is the best alignment algorithm. The question becomes: what <em>is</em> the contribution?</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">08</div><div class="phase">Boundary</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>The contribution is a boundary, tested at three levels</h2><div class="underline"></div>
+    <div class="fill"><img src="images/fig_three_levels.png" alt="The three levels at which the axis-length principle was tested"></div>
+    <table>
+      <tr><td>Choosing <strong>between constructions</strong></td><td>longer shoulder axis wins, 5.2% / 4.4%, both backbones</td><td class="r"><span class="holds">HOLDS</span></td></tr>
+      <tr><td>Which <strong>frame</strong> to trust</td><td>the multi-scale gain was circular by construction</td><td class="r"><span class="fails">FAILS</span></td></tr>
+      <tr><td>Which <strong>joint</strong> disagrees</td><td>slope 0.218 against a predicted band of [0.038, 0.073]</td><td class="r"><span class="fails">FAILS</span></td></tr>
+    </table>
+    <p class="sub">Articulation, not radius, governs joint disagreement. Two of the three levels are failures — and the boundary is the finding.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">09</div><div class="phase">Boundary</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>Four ideas I started with did not survive</h2><div class="underline"></div>
+    <table>
+      <tr><th>Initial hypothesis</th><th>Outcome</th></tr>
+      <tr><td>A novel canonicalization</td><td>It is TRIAD — Black, 1964. Prior art, cited.</td></tr>
+      <tr><td>Reliability predicts pose error</td><td><span class="fails">FALSIFIED</span> five independent ways</td></tr>
+      <tr><td>Bone length predicts error</td><td>ρ = +0.492, then +0.098 on the second dataset. <span class="fails">RETRACTED</span></td></tr>
+      <tr><td>Multi-scale per-limb frames</td><td>Scored on the joints they were built from. <span class="fails">DEMOTED</span></td></tr>
+    </table>
+    <div class="note"><strong>One shared cause:</strong> geometric plausibility is invariant to coherent depth error. A pose wrong only in depth is still symmetric, proportioned and well conditioned — geometry cannot see the error, because the error is what geometry preserves.</div>
+    <p class="sub">I found each of these myself, and reported them rather than removing them.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">10</div><div class="phase">Boundary</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>The two alignments fail on disjoint joints</h2><div class="underline"></div>
+    <table>
+      <tr><th>Corruption</th><th class="r">Anatomical frame</th><th class="r">Kabsch, 17-joint</th></tr>
+      <tr><td>Clean</td><td class="r">53.45 mm</td><td class="r">43.3 mm</td></tr>
+      <tr><td><strong>Distal</strong> joints corrupted</td><td class="r method">53.45 mm — flat</td><td class="r against">→ 92.3 mm</td></tr>
+      <tr><td><strong>Anchor</strong> joints corrupted</td><td class="r against">→ 337.9 mm</td><td class="r method">→ 63.2 mm</td></tr>
+    </table>
+    <p>The frame reads four joints; Kabsch fits seventeen. Their failure supports do not overlap — measured on both backbones. This is the one new finding not conditional on a regime.</p>
+    <div class="note warn">A rule exploiting this is <strong>exploratory only</strong>: its confidence signal is simulated, and the real detector channel carries no usable signal on clean data.</div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">11</div><div class="phase">Boundary</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>So what is actually new?</h2><div class="underline"></div>
+    <p><strong>Not new</strong>, and all of it cited: the TRIAD construction (Black, 1964), the primary-axis rule (Shuster &amp; Oh), the 2σ⁄L error propagation from biomechanics, Kabsch alignment.</p>
+    <table>
+      <tr><td><strong>The transfer</strong></td><td>Does classical rigid-body geometry survive on joints inferred by a network?</td></tr>
+      <tr><td><strong>The boundary</strong></td><td>It survives at construction level; it fails at both finer levels</td></tr>
+      <tr><td><strong>The evidence</strong></td><td>372.7 → 93.4 mm, 179 of 180 pairs, replicated on a second backbone</td></tr>
+      <tr><td><strong>The negatives</strong></td><td>17 pre-registered experiments; more than half failed; all reported</td></tr>
+    </table>
+    <div class="note">The contribution is the <strong>experimentally established boundary</strong> of the geometric approach — not the invention of the geometry.</div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">12</div><div class="phase">Limits</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>Limitations — stated, not defended away</h2><div class="underline"></div>
+    <ul>
+      <li>The geometry predates this thesis by decades. The contribution is the transfer and its boundary.</li>
+      <li>Cross-view distance measures <strong>agreement, not correctness</strong>. Two predictions wrong the same way agree perfectly.</li>
+      <li><strong>No downstream task succeeded</strong> — cross-view retrieval recall fell, and that claim is withdrawn.</li>
+      <li><em>n</em> = 2 datasets and 2 backbones. Replication, not universality.</li>
+    </ul>
+    <div class="note">17 experiments pre-registered with criteria committed to version control <em>before</em> each run. <strong>More than half failed.</strong> 304 numerical claims re-derived from stored artifacts by an automated audit; 76 tests; every pre-registration verified to precede its own result.</div>
+  </div>
+</section>
+
+<section class="slide cover closing">
+  <div class="body">
+    <div class="eyebrow">In summary</div>
+    <h1>Cross-view comparability for frozen monocular 3D pose — training-free, and honestly scoped.</h1>
+    <div class="hairline"></div>
+    <div class="meta">
+      Accuracy unchanged at <strong>45.149 mm</strong> &nbsp;·&nbsp; cross-view <strong>372.7 → 93.4 mm</strong>, 179 of 180 pairs<br>
+      A simpler baseline wins on the headline metric, and the report says so<br>
+      <strong>The contribution is the boundary, not the method.</strong>
+    </div>
+    <div class="meta" style="margin-top:26px;">Thank you. Questions welcome.</div>
+  </div>
+</section>
+
+<script>
+  // arrow keys / space step one slide at a time
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  function go(dir){
+    var y = window.scrollY + window.innerHeight / 2, i = 0;
+    for (var k = 0; k < slides.length; k++){
+      if (slides[k].offsetTop <= y) i = k;
+    }
+    var t = Math.min(Math.max(i + dir, 0), slides.length - 1);
+    slides[t].scrollIntoView({behavior:'smooth', block:'center'});
+  }
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){
+      e.preventDefault(); go(1);
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp'){
+      e.preventDefault(); go(-1);
+    }
+  });
+</script>
+</body>
+</html>
