@@ -233,7 +233,16 @@
 <section class="slide">
   <div class="rail"><div class="n">04</div><div class="phase">Method</div><div class="tick"></div></div>
   <div class="body">
-    <h2>The same instant, eight real cameras</h2><div class="underline"></div>
+    <h2>Eight synchronized cameras, one instant</h2><div class="underline"></div>
+    <div class="fill"><img src="images/fig_realview.png" alt="Eight camera photographs, with the raw and canonicalized predictions below"></div>
+    <p class="sub">Top: the actual photographs, MPI-INF-3DHP. Bottom: the predictions made from them — raw on the left, canonicalized on the right. No camera knows about the other seven.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="rail"><div class="n">05</div><div class="phase">Method</div><div class="tick"></div></div>
+  <div class="body">
+    <h2>The same eight predictions, rotating into one frame</h2><div class="underline"></div>
     <div class="fill">
       <video src="images/anim_realview.mp4" poster="images/fig_realview.png"
              autoplay loop muted playsinline controls
@@ -244,7 +253,7 @@
 </section>
 
 <section class="slide">
-  <div class="rail"><div class="n">05</div><div class="phase">Method</div><div class="tick"></div></div>
+  <div class="rail"><div class="n">06</div><div class="phase">Method</div><div class="tick"></div></div>
   <div class="body">
     <h2>Why the camera rotation cancels</h2><div class="underline"></div>
     <p><strong>In words:</strong> the frame is built out of the body itself. Move the camera and the whole prediction turns — but the frame, being made of the same joints, turns by exactly the same amount. Measuring the pose <em>in that frame</em> divides the turn out on both sides.</p>
@@ -264,7 +273,7 @@
 </section>
 
 <section class="slide">
-  <div class="rail"><div class="n">06</div><div class="phase">Evidence</div><div class="tick"></div></div>
+  <div class="rail"><div class="n">07</div><div class="phase">Evidence</div><div class="tick"></div></div>
   <div class="body">
     <h2>Main result — Human3.6M, 180 held-out pairs</h2><div class="underline"></div>
     <div class="headline">
@@ -272,17 +281,19 @@
       <div class="cap">mean cross-view disagreement &nbsp;·&nbsp; <strong class="method">−72.2%</strong> &nbsp;·&nbsp; <strong class="method">179 of 180 pairs improved</strong></div>
     </div>
     <table>
-      <tr><th>What did not change</th><th class="r">Base</th><th class="r">Proposed</th></tr>
-      <tr><td>MPJPE against ground truth</td><td class="r">45.149 mm</td><td class="r">45.149 mm</td></tr>
-      <tr><td>Trained parameters</td><td class="r">0 added</td><td class="r">0 added</td></tr>
-      <tr><td>Second backbone, MotionBERT</td><td class="r">—</td><td class="r method">−75.8%, 180 / 180</td></tr>
+      <tr><th></th><th class="r">Base MotionAGFormer-XS</th><th class="r">+ our canonicalization</th></tr>
+      <tr><td>MPJPE against ground truth</td><td class="r">45.149 mm</td><td class="r">45.149 mm — unchanged</td></tr>
+      <tr><td>Cross-view distance</td><td class="r">372.7 mm</td><td class="r method">93.4 mm</td></tr>
+      <tr><td>Pairs improved</td><td class="r">—</td><td class="r method">179 / 180</td></tr>
+      <tr><td>Trained parameters</td><td class="r">2.2 M, frozen</td><td class="r">0 added</td></tr>
+      <tr><td>Same, on MotionBERT</td><td class="r">—</td><td class="r method">−75.8%, 180 / 180</td></tr>
     </table>
     <div class="note"><strong>Same estimator, same weights, same 2D input, same 3D predictions.</strong> Only the coordinate representation changes — which is why MPJPE is identical and cross-view agreement is not.</div>
   </div>
 </section>
 
 <section class="slide">
-  <div class="rail"><div class="n">07</div><div class="phase">Evidence</div><div class="tick"></div></div>
+  <div class="rail"><div class="n">08</div><div class="phase">Evidence</div><div class="tick"></div></div>
   <div class="body">
     <h2>A simpler baseline beats my method</h2><div class="underline"></div>
     <p>Kabsch-aligning each pose onto <em>one fixed reference skeleton</em> is also training-free, label-free, calibration-free and single-view.</p>
@@ -298,7 +309,7 @@
 </section>
 
 <section class="slide">
-  <div class="rail"><div class="n">08</div><div class="phase">Boundary</div><div class="tick"></div></div>
+  <div class="rail"><div class="n">09</div><div class="phase">Boundary</div><div class="tick"></div></div>
   <div class="body">
     <h2>The contribution is a boundary, tested at three levels</h2><div class="underline"></div>
     <div class="fill"><img src="images/fig_three_levels.png" alt="The three levels at which the axis-length principle was tested"></div>
@@ -313,7 +324,7 @@
 </section>
 
 <section class="slide">
-  <div class="rail"><div class="n">09</div><div class="phase">Boundary</div><div class="tick"></div></div>
+  <div class="rail"><div class="n">10</div><div class="phase">Boundary</div><div class="tick"></div></div>
   <div class="body">
     <h2>Four ideas I started with did not survive</h2><div class="underline"></div>
     <table>
@@ -329,7 +340,7 @@
 </section>
 
 <section class="slide">
-  <div class="rail"><div class="n">10</div><div class="phase">Boundary</div><div class="tick"></div></div>
+  <div class="rail"><div class="n">11</div><div class="phase">Boundary</div><div class="tick"></div></div>
   <div class="body">
     <h2>The two alignments have different failure modes</h2><div class="underline"></div>
     <table>
@@ -344,7 +355,7 @@
 </section>
 
 <section class="slide">
-  <div class="rail"><div class="n">11</div><div class="phase">Boundary</div><div class="tick"></div></div>
+  <div class="rail"><div class="n">12</div><div class="phase">Boundary</div><div class="tick"></div></div>
   <div class="body">
     <h2>So what is actually new?</h2><div class="underline"></div>
     <p><strong>Not new</strong>, and all of it cited: the TRIAD construction (Black, 1964), the primary-axis rule (Shuster &amp; Oh), the 2σ⁄L error propagation from biomechanics, Kabsch alignment.</p>
@@ -359,7 +370,7 @@
 </section>
 
 <section class="slide">
-  <div class="rail"><div class="n">12</div><div class="phase">Limits</div><div class="tick"></div></div>
+  <div class="rail"><div class="n">13</div><div class="phase">Limits</div><div class="tick"></div></div>
   <div class="body">
     <h2>Limitations — stated, not defended away</h2><div class="underline"></div>
     <ul>
@@ -373,7 +384,7 @@
 </section>
 
 <section class="slide">
-  <div class="rail"><div class="n">13</div><div class="phase">Limits</div><div class="tick"></div></div>
+  <div class="rail"><div class="n">14</div><div class="phase">Limits</div><div class="tick"></div></div>
   <div class="body">
     <h2>How the claims were kept honest</h2><div class="underline"></div>
     <table>
