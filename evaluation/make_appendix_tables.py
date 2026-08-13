@@ -263,8 +263,9 @@ def main():
         rows,
         note="The gain is largest on SittingDown, the action on which the "
              "global frame performs worst, because a limb frame does not "
-             "inherit the error in the torso and hip axes. See Section "
-             "\\ref{sec:h36mms}."))
+             "inherit the error in the torso and hip axes. This multi-scale "
+             "result is reported as exploratory; see Section "
+             "\\ref{sec:axisboundary}."))
 
     # --- A.6 bone-length replication --------------------------------------
     hr = load("h36m_replication/h36m_replication.json")
