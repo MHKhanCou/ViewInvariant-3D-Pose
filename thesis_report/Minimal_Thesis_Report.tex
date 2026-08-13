@@ -154,6 +154,10 @@ Comilla University, Cumilla & & Comilla University, Cumilla \\
 % ============================ ABSTRACT ===============================
 \newpage
 \setcounter{page}{3}
+% \phantomsection before every \addcontentsline: \chapter* creates no hyperref
+% anchor, so without it these entries inherit the previous one and the ToC and
+% bookmarks jump to the wrong heading.
+\phantomsection
 \chapter*{ABSTRACT}
 \addcontentsline{toc}{chapter}{ABSTRACT}
 
@@ -162,6 +166,7 @@ Comilla University, Cumilla & & Comilla University, Cumilla \\
 Monocular 3D pose estimators express skeletons in the observing camera's frame, so one motion recorded from two viewpoints yields two incomparable sets of coordinates, blocking gait and sports analysis across cameras. Existing remedies retrain the estimator, require calibration, or learn a canonicalization network. We instead build a body-fixed frame from anatomical axes and apply it after prediction, adding no trained parameters to a frozen estimator, and ask what determines whether such a frame stays consistent across viewpoints. On Human3.6M, which played no part in developing the method, canonicalization reduces cross-view distance by 72.2 percent over 180 held-out camera pairs, improving 179 of them. Pose-estimation accuracy is unchanged, because the estimator is frozen: what improves is agreement between cameras, not accuracy against ground truth. A single-view baseline meeting the same requirements, Kabsch alignment to one skeleton, beats our frame on all 180 pairs, and on both backbones no pre-registered search found a regime favouring ours at a corruption severity fixed in advance. The contribution is an experimental boundary rather than a method: axis length governs the choice between frame constructions and nothing finer, articulation rather than radius governs which joint disagrees, and the two alignments fail on disjoint joint supports. A reliability score is falsified as an accuracy predictor across five tests, and a bone-length signal that correlated strongly on one dataset does not replicate on another and is retracted. Seventeen experiments were pre-registered, more than half failed, and every number is re-derived from stored artifacts by an automated audit.
 }
 
+\phantomsection
 \chapter*{ACKNOWLEDGEMENT}
 \addcontentsline{toc}{chapter}{ACKNOWLEDGEMENT}
 \justifying
@@ -173,11 +178,15 @@ I would like to express my deepest gratitude to my project supervisor, \textbf{D
 \newpage
 \tableofcontents
 \newpage
-\listoffigures
+% Entry before the list, not after it: placed afterwards the anchor and the
+% recorded page are those of the list's last page, not its heading.
+\phantomsection
 \addcontentsline{toc}{chapter}{LIST OF FIGURES}
+\listoffigures
 \newpage
-\listoftables
+\phantomsection
 \addcontentsline{toc}{chapter}{LIST OF TABLES}
+\listoftables
 \end{spacing}
 
 \newpage
@@ -876,7 +885,7 @@ reported as falsified partly because of it.
 \end{figure}
 
 
-The derived law ($\theta \approx 2\sigma/L$) is tested at three levels, each pre-registered, and Figure~\ref{fig:threelevels} summarizes the three together with the two at which it fails.
+The derived law of Equation~\ref{eq:theta} is tested at three levels, each pre-registered, and Figure~\ref{fig:threelevels} summarizes the three together with the two at which it fails.
 
 \paragraph{Between constructions.} The principle holds. Holding the joint set, the scored set and the constructor count identical and replacing the hip axis with the longer shoulder axis improves the global frame on both backbones, by 5.2 and 4.4 percent, with intervals excluding zero.
 
@@ -1200,6 +1209,11 @@ Proportional differences in body size were tested and produced no crossover: sca
 
 % ========================== REFERENCES ===============================
 \renewcommand{\bibname}{REFERENCES}
+% \newpage first: thebibliography opens with \chapter*, which starts a new page,
+% so an entry added before it records the page BEFORE the heading. Starting the
+% page here puts the entry, the anchor and the printed heading on one page.
+\newpage
+\phantomsection
 \addcontentsline{toc}{chapter}{REFERENCES}
 \begin{thebibliography}{99}
 

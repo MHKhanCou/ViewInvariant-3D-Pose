@@ -23,6 +23,13 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, REPO_ROOT)
 ART = os.path.join(REPO_ROOT, "thesis_artifacts")
 
+# The document that is actually submitted. Every text check in this audit reads
+# this file and nothing else: the checks used to read Full_Thesis_Report.tex, the
+# longer working draft, so "304/304 verified" certified a document nobody hands
+# in. Point this at whatever is submitted and the text checks follow.
+SUBMISSION_NAME = "Minimal_Thesis_Report.tex"
+SUBMISSION_TEX = os.path.join(REPO_ROOT, "thesis_report", SUBMISSION_NAME)
+
 TOL = 0.05  # absolute tolerance on percentages / mm
 
 
@@ -541,12 +548,16 @@ def main():
                              src, tol=0))
     # The abstract must quote the artifact, not a remembered number. This is the
     # drift that let the seventeen-joint figure survive its own refutation.
-    _abs = open(os.path.join(REPO_ROOT, "thesis_report",
-                             "Full_Thesis_Report.tex"), encoding="utf-8").read()
+    with io.open(SUBMISSION_TEX, encoding="utf-8") as _fh:
+        _src = _fh.read()
+    # The abstract only. A whole-document search passes on the copy of this
+    # figure in Section 5.2 even when the abstract itself has drifted.
+    _abs = _src[_src.index(r"\chapter*{ABSTRACT}"):
+                _src.index(r"\chapter*{ACKNOWLEDGEMENT}")]
     _nc = load("noncon/noncon.json")["non_constructor"]["mean_improvement_pct"]
     results.append(check("  abstract quotes the non-constructor figure", 1.0,
                          float(("%.1f percent" % _nc) in _abs),
-                         "Full_Thesis_Report.tex", tol=0))
+                         SUBMISSION_NAME, tol=0))
 
     # ---------- template baseline: pre-registered, and OUR METHOD LOSES ------
     # Outcome 1 of the three fixed in thesis_artifacts/template/PREREGISTRATION.md.
@@ -1001,26 +1012,28 @@ def main():
     # them; get it wrong and this block fails against itself.
     SELF_CHECKS = 3
     total = len(results) + SELF_CHECKS
-    tex = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                       "thesis_report", "Full_Thesis_Report.tex")
-    with io.open(tex, encoding="utf-8") as fh:
+    with io.open(SUBMISSION_TEX, encoding="utf-8") as fh:
         body = fh.read()
 
+    # The submission says "audited claims" in one place and "individual claims" in
+    # another; the draft said "numerical" / "headline". All four are the same
+    # claim about the same count, so all four are matched.
     stated_claims = [int(m) for m in re.findall(
-        r"(\d+)\s+(?:numerical|headline)\s+claims", body)]
+        r"(\d+)\s+(?:numerical|headline|individual|audited)\s+claims", body)]
     results.append(check("report's stated claim count matches this audit",
                          float(total),
                          float(stated_claims[0]) if stated_claims else None,
-                         "Full_Thesis_Report.tex", tol=0))
+                         SUBMISSION_NAME, tol=0))
     results.append(check("  every site in the report quotes the same count",
                          1.0,
                          float(len(set(stated_claims)) == 1 and bool(stated_claims)),
-                         "Full_Thesis_Report.tex", tol=0))
+                         SUBMISSION_NAME, tol=0))
 
     n_tests = unittest.defaultTestLoader.discover(
         os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                      "tests")).countTestCases()
-    stated_tests = [int(m) for m in re.findall(r"(\d+)\s+tests", body)]
+    # The submission writes "76 unit tests"; the draft wrote "76 tests".
+    stated_tests = [int(m) for m in re.findall(r"(\d+)\s+(?:unit\s+)?tests", body)]
     results.append(check("report's stated test count matches the suite",
                          float(n_tests),
                          float(stated_tests[0]) if stated_tests else None,
