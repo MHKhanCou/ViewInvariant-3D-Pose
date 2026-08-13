@@ -35,7 +35,9 @@ def _load(rel):
 
 
 def _finish(fig, name, source):
-    fig.text(0.01, 0.01, "Source: %s" % source, fontsize=7, color=INK2)
+    # Below the canvas: the narrower figures bring two-line tick labels down to
+    # where this used to sit. bbox_inches="tight" still includes it.
+    fig.text(0.01, -0.035, "Source: %s" % source, fontsize=8, color=INK2)
     os.makedirs(OUT, exist_ok=True)
     p = os.path.join(OUT, name)
     fig.savefig(p, dpi=200, bbox_inches="tight")
@@ -73,13 +75,16 @@ def fig_crossview_distances(cv):
     """Raw vs canonical vs oracle, and where SittingDown sits."""
     s = cv["summary"]
     per = cv["per_pair"]
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8.4, 3.9),
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6.29, 2.92),
                                    gridspec_kw={"width_ratios": [1, 1.35]})
 
     bars = ["Raw", "Canonical", "Procrustes\noracle"]
     vals = [s["mean_raw_distance_mm"], s["mean_canonical_distance_mm"],
             s["mean_oracle_distance_mm"]]
     ax1.bar(bars, vals, color=[ORANGE, BLUE, AQUA], width=0.62)
+    # The narrower canvas brings "Canonical" and "Procrustes oracle" into
+    # contact; a smaller tick label separates them without shortening either.
+    ax1.tick_params(axis="x", labelsize=8.5)
     for i, v in enumerate(vals):
         ax1.text(i, v + 7, "%.1f" % v, ha="center", fontsize=9.5, color=INK)
     ax1.set_ylabel("Cross-view joint distance (mm)")
@@ -97,12 +102,12 @@ def fig_crossview_distances(cv):
     lim = max(max(r["raw_cross_view_distance"] for r in per),
               max(r["canonical_cross_view_distance"] for r in per)) * 1.05
     ax2.plot([0, lim], [0, lim], color=INK2, ls="--", lw=1.0, zorder=2)
-    ax2.text(lim * 0.52, lim * 0.60, "no change", fontsize=8, color=INK2, rotation=38)
+    ax2.text(lim * 0.52, lim * 0.60, "no change", fontsize=9.5, color=INK2, rotation=38)
     ax2.set_xlabel("Raw distance (mm)")
     ax2.set_ylabel("Canonical distance (mm)")
     ax2.set_xlim(0, lim)
     ax2.set_ylim(0, lim)
-    ax2.legend(frameon=False, fontsize=8.5, loc="upper left")
+    ax2.legend(frameon=False, fontsize=9.5, loc="upper left")
     ax2.set_title("Points below the line improved (179 of 180)",
                   fontsize=10, loc="left")
     fig.tight_layout()
@@ -161,18 +166,18 @@ def fig_bone_retraction(bc, hr):
            hr["pooled"]["spearman_reliability_vs_error"]]
 
     x = np.arange(len(labels))
-    fig, ax = plt.subplots(figsize=(7.6, 4.1))
+    fig, ax = plt.subplots(figsize=(6.16, 3.32))
     ax.bar(x - 0.19, mpi, 0.36, label="MPI-INF-3DHP", color=BLUE, zorder=3)
     ax.bar(x + 0.19, h36, 0.36, label="Human3.6M", color=ORANGE, zorder=3)
     ax.axhline(0.30, color=MAGENTA, ls="--", lw=1.2, zorder=4)
     ax.text(len(labels) - 0.5, 0.315, "pass threshold (+0.30)",
-            fontsize=8.5, color=MAGENTA, ha="right")
+            fontsize=9.5, color=MAGENTA, ha="right")
     ax.axhline(0, color=INK2, lw=0.9)
     for xi, (a, b) in enumerate(zip(mpi, h36)):
         ax.text(xi - 0.19, a + (0.02 if a >= 0 else -0.05), "%+.3f" % a,
-                ha="center", fontsize=8, color=INK)
+                ha="center", fontsize=9.5, color=INK)
         ax.text(xi + 0.19, b + (0.02 if b >= 0 else -0.05), "%+.3f" % b,
-                ha="center", fontsize=8, color=INK)
+                ha="center", fontsize=9.5, color=INK)
     ax.set_xticks(x)
     ax.set_xticklabels(labels, fontsize=9)
     ax.set_ylabel(r"Spearman $\rho$ against true error")

@@ -353,7 +353,7 @@ def figure_three():
     # Tall canvas on purpose: FancyBboxPatch adds its `pad` outside the height
     # given, so boxes occupy more vertical space than their nominal h. Stretching
     # the figure shrinks text in data units and keeps the labels clear of them.
-    fig, ax = plt.subplots(figsize=(8.6, 10.2))
+    fig, ax = plt.subplots(figsize=(7.0, 8.3))
     fig.patch.set_facecolor(SURFACE)
     ax.set_facecolor(SURFACE)
     ax.set_xlim(0, 10)
@@ -379,12 +379,14 @@ def figure_three():
     # --- frozen, trained by their authors -------------------------------
     box(5.0, 11.55, 4.0, 0.60, "RGB image or video", FROZEN_FC, GREY)
     arrow(5.0, 11.25, 5.0, 10.82)
-    box(5.0, 10.42, 5.8, 0.76,
+    # 6.9 units, not 5.8: the second line of each of these three boxes is about
+    # 3.25 in wide at 9 pt, which overflows a 5.8-unit box on this canvas.
+    box(5.0, 10.42, 6.9, 0.76,
         "2D keypoint detector  (frozen)\n"
         "YOLOv8-pose, or Stacked Hourglass on Human3.6M",
         FROZEN_FC, GREY, fs=9)
     arrow(5.0, 10.04, 5.0, 9.61)
-    box(5.0, 9.21, 5.8, 0.76,
+    box(5.0, 9.21, 6.9, 0.76,
         "Lifting network  (frozen)\n"
         "MotionAGFormer-XS, 2.24M parameters, 27-frame window",
         FROZEN_FC, GREY, fs=9)
@@ -401,7 +403,7 @@ def figure_three():
     arrow(5.0, 7.78, 5.0, 6.75, BLUE)
 
     # --- the contribution -------------------------------------------------
-    box(5.0, 6.44, 5.8, 0.78,
+    box(5.0, 6.44, 6.9, 0.78,
         "Body-frame canonicalization\n"
         "Gram-Schmidt frame from torso and hip axes, 402 FLOPs",
         "#dfe9f7", BLUE, fs=9)
@@ -453,7 +455,7 @@ def figure_four():
     y_ax = pose[8] - pose[0]                     # torso: pelvis -> thorax
     x_raw = pose[1] - pose[4]                    # hips: right -> left
 
-    fig = plt.figure(figsize=(10.2, 5.4))
+    fig = plt.figure(figsize=(8.0, 5.0))
     fig.patch.set_facecolor(SURFACE)
     r = _row_radius([pose], y_is_down=True)
     scale = 0.85 * r[1]
@@ -492,16 +494,16 @@ def figure_four():
              r"$\mathbf{z}=\mathbf{x}_{raw}\times\mathbf{y}$,  "
              r"$\mathbf{x}=\mathbf{y}\times\mathbf{z}$",
              ha="center", fontsize=10, color=INK2)
-    fig.text(0.5, 0.085,
-             "Both vectors come from the joints, so both rotate with the body. "
-             "The frame therefore rotates with it too, which is why an unknown "
+    fig.text(0.5, 0.26,
+             "Both vectors come from the joints, so both rotate with the body.\n"
+             "The frame therefore rotates with it too, which is why an unknown\n"
              "camera rotation cancels.",
-             ha="center", fontsize=9.5, color=INK)
-    fig.text(0.5, 0.042,
-             "Drawn on a real predicted pose: the hip axis really is about half "
+             ha="center", va="top", fontsize=9.5, color=INK)
+    fig.text(0.5, 0.13,
+             "Drawn on a real predicted pose: the hip axis really is about half\n"
              "the torso axis, which is why it is the weaker of the two.",
-             ha="center", fontsize=8.5, color=INK2)
-    fig.subplots_adjust(left=0.01, right=0.99, top=0.88, bottom=0.15, wspace=0.02)
+             ha="center", va="top", fontsize=9.5, color=INK2)
+    fig.subplots_adjust(left=0.01, right=0.99, top=0.88, bottom=0.34, wspace=0.02)
     _finish(fig, "fig_frame_construction.png", "canonical/body_frame.py")
 
 

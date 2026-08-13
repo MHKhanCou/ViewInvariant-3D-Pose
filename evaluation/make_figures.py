@@ -118,7 +118,9 @@ def fig_oracle():
     can = [r["canonical_cross_view_distance"] for r in rs]
     orc = [r["oracle_cross_view_distance"] for r in rs]
 
-    fig, ax = plt.subplots(figsize=(11, 6.4))
+    # 29 pair labels need vertical room: at 8 pt they occupy about 3.9 in, so a
+    # short canvas collapses them into each other whatever the font size.
+    fig, ax = plt.subplots(figsize=(6.3, 6.2))
     for i in range(len(rs)):
         ax.plot([orc[i], raw[i]], [y[i], y[i]], color=GRID,
                 linewidth=1.4, zorder=1)
@@ -126,7 +128,7 @@ def fig_oracle():
     ax.scatter(can, y, s=26, color=ORANGE, zorder=4, label="canonical")
     ax.scatter(orc, y, s=26, color=AQUA, zorder=2, marker="D",
                label="Procrustes oracle (lower bound)")
-    ax.set_yticks(y, labels, fontsize=7.5)
+    ax.set_yticks(y, labels, fontsize=8.0)
     ax.set_xlabel("Cross-view joint distance")
     ax.set_title("Canonical distance approaches the per-pair rigid-alignment\n"
                  "oracle without training", fontsize=11)

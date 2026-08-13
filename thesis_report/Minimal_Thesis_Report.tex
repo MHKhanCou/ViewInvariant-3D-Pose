@@ -224,20 +224,16 @@ This project is guided by the following research question:
 \textbf{What determines whether an anatomical reference frame remains consistent across viewpoints?}
 \end{quote}
 
-The proposed framework is not the primary contribution but rather the means of investigating this question. By constructing a lightweight body-fixed reference frame that operates on a frozen pose estimator without retraining, camera calibration, or additional supervision, all other variables can be held constant. This isolation allows the consistency of the reference frame itself to be studied directly. Figure~\ref{fig:architecture} shows where this stage sits relative to the frozen components it is applied to.
+The proposed framework is not the primary contribution but rather the means of investigating this question. By constructing a lightweight body-fixed reference frame that operates on a frozen pose estimator without retraining, camera calibration, or additional supervision, all other variables can be held constant. This isolation allows the consistency of the reference frame itself to be studied directly. Figure~\ref{fig:architecture} shows where this stage sits relative to the frozen components it is applied to. Everything above the dashed line is trained by its authors and used here frozen and unmodified; everything below it is this work, and it adds no trained parameters, consumes no labels and uses no camera parameters. The identity beneath the diagram is why: the frame is built from the joints, so it rotates with them, and the unknown rotation between two cameras cancels rather than being estimated.
 
 The objectives of this work are fourfold. First, to construct a viewpoint-independent coordinate frame that operates on the outputs of a frozen monocular 3D pose estimator without requiring training, labeled data, or camera parameters. Second, to identify the design factor that governs cross-view consistency and determine the conditions under which the derivation remains valid, as well as its limitations. Third, to develop an analytical reliability score that enables the system to abstain when the estimated frame is unreliable. Finally, to evaluate the framework under a fully auditable experimental protocol in which every reported result can be reproduced automatically from stored artifacts.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.72\textwidth]{images/fig_architecture.png}
+\includegraphics[width=\textwidth]{images/fig_architecture.png}
 \caption[Where the contribution sits in the pipeline]{Where the contribution
-sits in the pipeline. Everything above the dashed line is trained by its
-authors and used here frozen and unmodified. Everything below it is this work,
-and it adds no trained parameters, consumes no labels and uses no camera
-parameters. The identity beneath the diagram is why: the frame is built from
-the joints, so it rotates with them, and the unknown rotation between two
-cameras cancels rather than being estimated.}
+sits in the pipeline. Everything above the dashed line is frozen; everything
+below it is this work.}
 \label{fig:architecture}
 \end{figure}
 
@@ -431,7 +427,7 @@ More precisely, the claim concerns the deployment requirements rather than the h
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/fig_pipeline.png}
-\caption[The pipeline end to end]{The pipeline end to end. RGB video enters a frozen 2D detector; the keypoints are converted to the Human3.6M layout and lifted by a frozen MotionAGFormer. The only step this thesis adds is the last one, where the predicted skeleton is re-expressed in a frame built from the subject's own hips and torso. Nothing here is trained, no camera parameters are used at any stage, and the estimator is never modified.}
+\caption[The pipeline end to end]{The pipeline end to end: RGB video, a frozen 2D detector, conversion to the Human3.6M joint layout, a frozen lifter, and the canonicalization this thesis adds.}
 \label{fig:pipeline}
 \end{figure}
 
@@ -453,8 +449,8 @@ Here $\mathbf{y}$ is the torso vertical axis (pelvis to thorax, joints 0 and 8) 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{images/fig_frame_construction.png}
-\caption[The body-frame construction]{The frame construction. The torso axis runs from pelvis to thorax and the hip axis from one hip to the other, and Gram-Schmidt orthonormalizes them. Both are read from the joints themselves, so they rotate with the body: if a second camera sees the same pose under an unknown rotation, the frame rotates identically and the two cancel exactly. The unknown camera rotation is removed without ever being estimated, which is why no calibration is required.}
+\includegraphics[width=\textwidth]{images/fig_frame_construction.png}
+\caption[The body-frame construction]{The frame construction: the torso axis from pelvis to thorax, the hip axis between the hips, and Gram-Schmidt orthonormalization.}
 \label{fig:framecon}
 \end{figure}
 
@@ -541,7 +537,7 @@ A total of twenty-nine camera pairs are considered. One pair is reserved exclusi
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/fig_qualitative.png}
-\caption[The pipeline on uncontrolled footage]{The pipeline on uncontrolled footage, outside either evaluation dataset. Left: the input frame with the detected 2D keypoints. Middle: the lifted 3D prediction in the camera's frame. Right: the same prediction after canonicalization. The datasets below are laboratory multi-camera rigs; this is what the same code does on an ordinary video.}
+\caption[The pipeline on uncontrolled footage]{The pipeline on uncontrolled footage, outside either evaluation dataset. Left: the input frame with the detected 2D keypoints. Middle: the lifted 3D prediction in the camera's frame. Right: the same prediction after canonicalization.}
 \label{fig:qualitative}
 \end{figure}
 
@@ -732,7 +728,7 @@ Canonicalization aids cross-view retrieval
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{images/fig_app.png}
+\includegraphics[width=\textwidth]{images/fig_app.png}
 \caption[What the demonstration application returns]{What the demonstration application returns for a single frame, produced by calling the same entry point the evaluation uses. The reported numbers and the demonstrated behaviour therefore cannot diverge.}
 \label{fig:app}
 \end{figure}
@@ -741,12 +737,12 @@ Canonicalization aids cross-view retrieval
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/fig_interface.png}
-\caption[The demonstration interface]{The demonstration interface. The Representation control switches between the camera frame and the body-fixed frame, which is the operation this report measures at scale. The evaluation and the demonstration share the same lifting module, so what is shown and what is measured cannot diverge. The plausibility readout is displayed with its own caution: it is a degeneracy gate, not a confidence score, and this report falsifies it as a predictor of accuracy.}
+\caption[The demonstration interface]{The demonstration interface. The Representation control switches between the camera frame and the body-fixed frame.}
 \label{fig:interface}
 \end{figure}
 
 
-Figures~\ref{fig:app} and~\ref{fig:interface} show the demonstration application and its interface, both of which call the same entry point the evaluation uses. The reproduced MotionAGFormer-XS baseline matches the published benchmark results \cite{motionagformer} to within 0.05~mm, achieving an MPJPE of 45.149~mm compared with the reported 45.1~mm and a P-MPJPE of 36.892~mm compared with the reported 36.9~mm. Because the original publication reports values to only one decimal place, a more precise comparison is possible only against the official evaluation code provided by the backbone authors, which our implementation reproduces to three decimal places.
+Figures~\ref{fig:app} and~\ref{fig:interface} show the demonstration application and its interface, both of which call the same entry point the evaluation uses, so what is shown and what is measured cannot diverge. The interface displays the plausibility readout with its own caution: it is a degeneracy gate, not a confidence score, and this report falsifies it as a predictor of accuracy. The reproduced MotionAGFormer-XS baseline matches the published benchmark results \cite{motionagformer} to within 0.05~mm, achieving an MPJPE of 45.149~mm compared with the reported 45.1~mm and a P-MPJPE of 36.892~mm compared with the reported 36.9~mm. Because the original publication reports values to only one decimal place, a more precise comparison is possible only against the official evaluation code provided by the backbone authors, which our implementation reproduces to three decimal places.
 
 This verification establishes that the experimental pipeline faithfully reproduces the reference implementation. Consequently, the negative findings reported throughout this chapter can be attributed to the evaluated hypotheses rather than to implementation errors in the underlying pose estimation system.
 
@@ -761,14 +757,16 @@ This verification establishes that the experimental pipeline faithfully reproduc
 \end{figure}
 
 
+% [H] deliberately: at its two-row height this figure fills a page of its own, so
+% floating it only moves it away from the text that discusses it.
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/fig_realview.png}
-\caption[The effect on eight real cameras]{What the method does, on photographs rather than stick figures. One instant of MPI-INF-3DHP seen by all eight synchronized cameras. Below left, the eight predictions in their own camera frames: the same pose eight times, and they do not overlap. Below right, the same eight after canonicalization, each camera processed independently, in ignorance of the others and without calibration. Mean pairwise distance falls from 0.149 to 0.095 in the normalised units the cache stores, a reduction of 36.6 percent. This is a single frame and it illustrates rather than measures; the measured figures over 180 held-out camera pairs are in Table \ref{tab:crossview}.}
+\caption[The effect on eight real cameras]{What the method does, on photographs rather than stick figures. One instant of MPI-INF-3DHP seen by all eight synchronized cameras. Below left, the eight predictions in their own camera frames: the same pose eight times, and they do not overlap. Below right, the same eight after canonicalization, each camera processed independently, in ignorance of the others and without calibration. Mean pairwise distance falls from 0.149 to 0.095 in the normalised units the cache stores, a reduction of 36.6 percent.}
 \label{fig:realview}
 \end{figure}
 
-Table \ref{tab:crossview} is the answer to the question a reader asks first---how does the proposed output compare to the base output. Accuracy is identical by construction: the estimator is frozen and canonicalization adds zero parameters. What changes is agreement between cameras.
+Figure~\ref{fig:realview} is a single frame, and it illustrates rather than measures. Table \ref{tab:crossview} is the answer to the question a reader asks first---how does the proposed output compare to the base output. Accuracy is identical by construction: the estimator is frozen and canonicalization adds zero parameters. What changes is agreement between cameras.
 
 \begin{table}[H]
 \centering
@@ -800,7 +798,7 @@ The same algorithm was applied without modification to the second backbone, Moti
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{images/fig_oracle.png}
+\includegraphics[width=\textwidth]{images/fig_oracle.png}
 \caption[The method against the Procrustes floor]{Where the method sits against its floor. The per-frame Procrustes oracle is allowed to see both views and is therefore unreachable by any single-view method; it bounds how much of the remaining disagreement is removable by rotation at all.}
 \label{fig:oracle}
 \end{figure}
@@ -866,14 +864,14 @@ reported as falsified partly because of it.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{images/fig_matched_radius.png}
-\caption[Articulation, not radius, governs per-joint disagreement]{Articulation, not radius, governs which joint disagrees. Joints rigid with the torso sit at a larger mean radius than joints beyond a hinge and yet disagree by a factor of two and a half less, which is the opposite of what the rigid-segment model predicts. Matched-radius pairs differ by one to three percent in radius and roughly a factor of two in distance.}
+\caption[Articulation, not radius, governs per-joint disagreement]{Matched-radius joint pairs: joints rigid with the torso against joints beyond a hinge, at comparable mean radius.}
 \label{fig:matchedradius}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/fig_three_levels.png}
-\caption[The three levels of the axis-length boundary]{The three levels at which the axis-length principle was tested, and the two at which it fails. It governs the choice between frame constructions; it does not govern which frame instance to trust, nor which joint will disagree. Two of the three tests are failures, and the boundary they establish is the contribution of this thesis.}
+\caption[The three levels of the axis-length boundary]{The three levels at which the axis-length principle was tested, and the two at which it fails.}
 \label{fig:threelevels}
 \end{figure}
 

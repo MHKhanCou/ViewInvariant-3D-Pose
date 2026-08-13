@@ -112,7 +112,7 @@ def fig_three_levels(out="fig_three_levels.png"):
     xs = _load("axis_law/axis_law.json")["by_subset"]["limb_levels"]
     mb = _load("axis_law/axis_law_motionbert.json")["by_subset"]["limb_levels"]
 
-    fig = plt.figure(figsize=(12.5, 4.3))
+    fig = plt.figure(figsize=(7.54, 3.05))
     gs = GridSpec(1, 3, wspace=0.32, figure=fig)
 
     # Level 1 - between frame constructions. Holds.
@@ -128,8 +128,8 @@ def fig_three_levels(out="fig_three_levels.png"):
     ax.set_xlabel(r"lever arm over axis length  $\bar{r}/L$", fontsize=9)
     ax.set_ylabel("cross-view distance (mm)", fontsize=9)
     ax.set_title("Level 1  BETWEEN constructions\nHOLDS   " +
-                 r"$\rho=+0.90,\ +0.88$", fontsize=9.5, color="#1a7f37")
-    ax.legend(fontsize=7.5, frameon=False)
+                 r"$\rho=+0.90,\ +0.88$", fontsize=9.0, color="#1a7f37")
+    ax.legend(fontsize=8.0, frameon=False)
     _style(ax)
 
     # Level 2 - between frames of one construction. Fails.
@@ -150,10 +150,10 @@ def fig_three_levels(out="fig_three_levels.png"):
     ax.set_ylabel("mean canonical distance (mm)", fontsize=9)
     ax.text(0.97, 0.74, "conditioning gains\n%+.2f mm over random;\nCI spans zero"
             % cdj["gain_at_10pct_dropped_mm"], transform=ax.transAxes,
-            fontsize=7.8, color="#b3261e", ha="right", va="top")
+            fontsize=8.0, color="#b3261e", ha="right", va="top")
     ax.set_title("Level 2  BETWEEN frames\nFAILS   tracks the random null",
-                 fontsize=9.5, color="#b3261e")
-    ax.legend(fontsize=7.2, frameon=False, loc="lower left")
+                 fontsize=9.0, color="#b3261e")
+    ax.legend(fontsize=8.0, frameon=False, loc="lower left")
     _style(ax)
 
     # Level 3 - between joints of one frame. Fails, and in the wrong direction.
@@ -168,7 +168,7 @@ def fig_three_levels(out="fig_three_levels.png"):
                s=140, c="#b3261e", marker="s", zorder=3, label="beyond a hinge")
     ax.scatter([ph["mean_radius_torso_rigid_mm"]], [ph["canonical_torso_rigid_mm"]],
                s=140, c="#1a7f37", marker="o", zorder=3, label="rigid with torso")
-    ax.annotate("larger radius,\nyet 2.7x smaller error", fontsize=8.2,
+    ax.annotate("larger radius,\nyet 2.7x smaller error", fontsize=8.0,
                 color="#1a7f37", ha="center",
                 xy=(ph["mean_radius_torso_rigid_mm"],
                     ph["canonical_torso_rigid_mm"]),
@@ -179,12 +179,14 @@ def fig_three_levels(out="fig_three_levels.png"):
     ax.set_xlabel("mean radius from root (mm)", fontsize=9)
     ax.set_ylabel("cross-view distance (mm)", fontsize=9)
     ax.set_title("Level 3  BETWEEN joints\nFAILS   articulation dominates",
-                 fontsize=9.5, color="#b3261e")
-    ax.legend(fontsize=7.2, frameon=False, loc="lower left")
+                 fontsize=9.0, color="#b3261e")
+    # Lower left: the markers sit upper-middle and lower-right, and the
+    # annotation occupies the middle band. Axis limits are not touched.
+    ax.legend(fontsize=7.5, frameon=False, loc="lower left")
     _style(ax)
 
     fig.suptitle("Where the axis-length principle applies, and where it stops",
-                 fontsize=11.5, y=1.02)
+                 fontsize=11.5, y=1.06)
     fig.savefig(os.path.join(IMG, out), dpi=200, bbox_inches="tight")
     plt.close(fig)
     return out
@@ -195,7 +197,7 @@ def fig_three_levels(out="fig_three_levels.png"):
 # ---------------------------------------------------------------------------
 
 def fig_matched_radius(out="fig_matched_radius.png"):
-    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.0))
+    fig, axes = plt.subplots(1, 2, figsize=(6.72, 3.05))
     for ax, tag, name in ((axes[0], "", "MotionAGFormer-XS"),
                           (axes[1], "_motionbert", "MotionBERT")):
         ph = _load("radial/radial%s.json" % tag)["post_hoc"]
@@ -215,17 +217,17 @@ def fig_matched_radius(out="fig_matched_radius.png"):
         for k in i:
             ax.text(k, max(rig[k], art[k]) * 1.06,
                     "radius differs %.1f%%\nerror differs %.2fx"
-                    % (gaps[k], ratios[k]), ha="center", fontsize=7.6,
+                    % (gaps[k], ratios[k]), ha="center", fontsize=8.0,
                     color="#333333")
         ax.set_xticks(i)
-        ax.set_xticklabels(labels, fontsize=8)
-        ax.set_ylabel("cross-view distance (mm)", fontsize=9)
-        ax.set_ylim(0, max(art) * 1.42)
-        ax.set_title(name, fontsize=10)
-        ax.legend(fontsize=7.5, frameon=False, loc="upper right")
+        ax.set_xticklabels(labels, fontsize=8.5)
+        ax.set_ylabel("cross-view distance (mm)", fontsize=8.5)
+        ax.set_ylim(0, max(art) * 1.62)
+        ax.set_title(name, fontsize=9.5)
+        ax.legend(fontsize=8.0, frameon=False, loc="upper left")
         _style(ax)
     fig.suptitle("Matched radius, different chain position: radius is not the "
-                 "governing variable", fontsize=11)
+                 "governing variable", fontsize=10.5, y=1.02)
     fig.savefig(os.path.join(IMG, out), dpi=200, bbox_inches="tight")
     plt.close(fig)
     return out
@@ -271,7 +273,7 @@ def fig_triage(out="fig_triage.png"):
 # ---------------------------------------------------------------------------
 
 def fig_pipeline(out="fig_pipeline.png"):
-    fig, ax = plt.subplots(figsize=(12.0, 3.1))
+    fig, ax = plt.subplots(figsize=(7.92, 2.05))
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 30)
     ax.axis("off")
@@ -288,7 +290,7 @@ def fig_pipeline(out="fig_pipeline.png"):
         ax.add_patch(plt.Rectangle((x, 11), w, 10, facecolor=fc,
                                    edgecolor="#555555", lw=1.0))
         ax.text(x + w / 2, 16, label, ha="center", va="center", fontsize=9.5)
-        ax.text(x + w / 2, 8.4, note, ha="center", va="top", fontsize=7.8,
+        ax.text(x + w / 2, 8.4, note, ha="center", va="top", fontsize=9.0,
                 color="#555555")
         if i < len(stages) - 1:
             ax.annotate("", xy=(x + w + gap - 0.6, 16), xytext=(x + w + 0.6, 16),
@@ -299,7 +301,7 @@ def fig_pipeline(out="fig_pipeline.png"):
     ax.text(49.5, 25.4, "no camera calibration, no labels, no gradient step "
                         "anywhere on this path",
             ha="center", fontsize=8.4, color="#b3261e")
-    ax.text(49.5, 3.2, "the frame is built from the prediction itself, which is "
+    ax.text(49.5, 0.2, "the frame is built from the prediction itself, which is "
                        "why it needs nothing the deployment cannot supply",
             ha="center", fontsize=8.2, color="#333333", style="italic")
     fig.savefig(os.path.join(IMG, out), dpi=200, bbox_inches="tight")
@@ -447,7 +449,7 @@ def fig_teaser(out="fig_teaser.png", preds=None, dpi=300):
     d = two_view(out="_teaser_scratch.png", preds=preds)[1]
     A, B, cA, cB = d["poses"]
 
-    fig, axes = plt.subplots(1, 3, figsize=(13.0, 4.6))
+    fig, axes = plt.subplots(1, 3, figsize=(7.17, 2.53))
     for ax in axes:
         ax.set_aspect("equal")
         ax.set_xticks([])
@@ -491,10 +493,12 @@ def fig_teaser(out="fig_teaser.png", preds=None, dpi=300):
     draw_pose(axes[1], A, color="#b8b8b8", lw=2.0, flip_y=True, plane="front")
     draw_frame_axes(axes[1], A, scale=330.0, flip_y=True)
     axes[1].set_xlim(A[0, 0] - 430, A[0, 0] + 430)
-    axes[1].text(A[0, 0] + 55, -A[0, 1] + 340, "torso\n(primary)", fontsize=14,
-                 color="#2ca02c", ha="left", va="center", weight="bold")
-    axes[1].text(A[0, 0] + 360, -A[0, 1] + 35, "hip\n(secondary)", fontsize=14,
-                 color="#ff7f0e", ha="center", va="bottom", weight="bold")
+    axes[1].text(0.03, 0.97, "torso (primary)", transform=axes[1].transAxes,
+                 fontsize=9.5, color="#2ca02c", ha="left", va="top",
+                 weight="bold")
+    axes[1].text(0.97, 0.03, "hip (secondary)", transform=axes[1].transAxes,
+                 fontsize=9.5, color="#ff7f0e", ha="right", va="bottom",
+                 weight="bold")
     axes[1].set_title("TRIAD BODY FRAME\nbuilt from the prediction itself",
                       fontsize=11.5, pad=10)
 
@@ -514,15 +518,15 @@ def fig_teaser(out="fig_teaser.png", preds=None, dpi=300):
     for ax, mm, colour in ((axes[0], d["raw_mm"], "#b3261e"),
                            (axes[2], d["canonical_mm"], "#1a7f37")):
         ax.text(0.5, -0.09, "%.0f mm apart" % mm, transform=ax.transAxes,
-                ha="center", va="top", fontsize=20, color=colour)
+                ha="center", va="top", fontsize=15, color=colour)
 
     for x in (0.352, 0.655):
-        fig.text(x, 0.52, r"$\Longrightarrow$", fontsize=26, color="#555555",
+        fig.text(x, 0.52, r"$\Longrightarrow$", fontsize=16, color="#555555",
                  ha="center", va="center")
     fig.text(0.5, -0.02,
-             "no training  $\\cdot$  no labels  $\\cdot$  no camera calibration"
-             "  $\\cdot$  0 trained parameters  $\\cdot$  402 FLOPs per frame",
-             ha="center", fontsize=12, color="#333333")
+             "no training  $\\cdot$  no labels  $\\cdot$  no camera calibration\n"
+             "0 trained parameters  $\\cdot$  402 FLOPs per frame",
+             ha="center", va="top", fontsize=11.5, color="#333333")
     fig.savefig(os.path.join(IMG, out), dpi=dpi, bbox_inches="tight")
     plt.close(fig)
     try:
@@ -586,22 +590,26 @@ def fig_app(out="fig_app.png", image=None, dpi=200):
     m = re.search(r"plausibility\s+([0-9]+\.[0-9]+)", status)
     plaus = m.group(1) if m else "n/a"
 
-    fig, axes = plt.subplots(1, 3, figsize=(13.2, 5.0))
+    # Three side-by-side titles, the longest being "View-Invariant Coordinate
+    # System": below about 8 in they run into each other.
+    fig, axes = plt.subplots(1, 3, figsize=(8.0, 3.03))
     for ax, key, title in (
             (axes[0], "overlay", "2D detection\nYOLOv8-pose, COCO-17"),
             (axes[1], "camera", "3D pose\nCamera Coordinate System"),
             (axes[2], "canonical", "3D pose\nView-Invariant Coordinate System")):
         ax.imshow(panels[key])
-        ax.set_title(title, fontsize=10.5, pad=8)
+        # 9.5 pt: "View-Invariant Coordinate System" is wider than its own axes
+        # at 10.5, so adjacent titles touch. Wording unchanged.
+        ax.set_title(title, fontsize=9.5, pad=8)
         ax.set_xticks([])
         ax.set_yticks([])
         for s in ax.spines.values():
             s.set_color("#bbbbbb")
     fig.text(0.5, 0.015,
-             "Application status: geometry plausible, plausibility %s. "
-             "The two 3D panels hold the same predicted joints; only the frame "
-             "they are expressed in differs." % plaus,
-             ha="center", fontsize=9.5, color="#333333")
+             "Application status: geometry plausible, plausibility %s.\n"
+             "The two 3D panels hold the same predicted joints;\n"
+             "only the frame they are expressed in differs." % plaus,
+             ha="center", va="top", fontsize=9.5, color="#333333")
     fig.savefig(os.path.join(IMG, out), dpi=dpi, bbox_inches="tight")
     plt.close(fig)
     return out, plaus
@@ -637,7 +645,7 @@ def fig_interface(out="fig_interface.png", dpi=200):
     # Its content is given in the caption instead of showing a stale reference.
     read = frac(b, 0.0, 0.90, 0.0, 0.115)         # plausibility and components
 
-    fig = plt.figure(figsize=(13.0, 9.4))
+    fig = plt.figure(figsize=(7.93, 5.73))
     gs = GridSpec(2, 2, figure=fig, height_ratios=[3.1, 1.0],
                   width_ratios=[0.37, 0.63], hspace=0.14, wspace=0.05)
     ax = fig.add_subplot(gs[0, :])
