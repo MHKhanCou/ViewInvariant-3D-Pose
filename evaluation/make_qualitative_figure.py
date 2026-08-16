@@ -117,7 +117,9 @@ def main():
         raise SystemExit("no frame produced a usable detection")
 
     n = len(rows)
-    fig = plt.figure(figsize=(10.4, 3.5 * n))
+    # 6.3 in is too narrow for three column headers side by side: they collide,
+    # and the wrapped row labels clip. 7.8 in still prints at 0.8 scale.
+    fig = plt.figure(figsize=(7.8, 2.62 * n))
     fig.patch.set_facecolor(SURFACE)
 
     for i, r in enumerate(rows):
@@ -127,7 +129,7 @@ def main():
         ax.set_xticks([]); ax.set_yticks([])
         for s in ax.spines.values():
             s.set_visible(False)
-        ax.set_xlabel(r["label"], fontsize=8.5, color=INK2, labelpad=6,
+        ax.set_xlabel(r["label"], fontsize=10, color=INK2, labelpad=6,
                       wrap=True)
 
         ax = fig.add_subplot(n, 3, i * 3 + 2, projection="3d")
@@ -145,17 +147,17 @@ def main():
                  (0.85, "Same prediction, canonical frame")):
         fig.text(x, 0.965, t, ha="center", fontsize=11, color=INK)
 
-    fig.text(0.5, 0.022,
-             "Frames from the demonstration footage, neither evaluation dataset. "
-             "The canonical column is what a downstream task consumes: it does "
-             "not depend on where the camera stood.",
-             ha="center", fontsize=9, color=INK2)
-    fig.subplots_adjust(left=0.01, right=0.99, top=0.94, bottom=0.06,
+    fig.text(0.5, 0.055,
+             "Frames from the demonstration footage, neither evaluation dataset.\n"
+             "The canonical column is what a downstream task consumes:\n"
+             "it does not depend on where the camera stood.",
+             ha="center", va="top", fontsize=10, color=INK2)
+    fig.subplots_adjust(left=0.01, right=0.99, top=0.94, bottom=0.115,
                         wspace=0.02, hspace=0.12)
 
     os.makedirs(OUT, exist_ok=True)
-    fig.text(0.01, 0.002, "Source: examples/ via backend.estimate_poses",
-             fontsize=7, color=INK2)
+    fig.text(0.01, -0.022, "Source: examples/ via backend.estimate_poses",
+             fontsize=8.5, color=INK2)
     p = os.path.join(OUT, "fig_qualitative.png")
     fig.savefig(p, dpi=200, bbox_inches="tight", facecolor=SURFACE)
     plt.close(fig)
